@@ -8,7 +8,7 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="../css/main.css" />
     <title>Patient | Appointment</title>
 </head>
 
@@ -16,29 +16,29 @@
 
     <header>
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-            <a class="navbar-brand " i id="primaryColor" href="main.php">Company Name</a>
+            <a class="navbar-brand " i id="primaryColor" href="dashboard.php">Company Name</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="main.php">Home <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="dashboard.php">Home <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="appointment.php">Set an Appointment</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link " href="doctors.php">Doctors</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link " href="contactus.php">Contact Us</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link " href="healthLibrary.php">Health Library</a>
+                        <a class="nav-link" href="appointmentPending.php">Appointment Pending</a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link " href="myappointment.php">My Appointments</a>
+                        <a class="nav-link" href="patient.php">Patient</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="incomingAppointment.php">Upcoming Appointment</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="cancelledAppointment.php">Cancelled Appointment</a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link " href="doneAppointment.php">Done Appointment</a>
                     </li>
                 </ul>
                 <!-- search bar -->
@@ -47,15 +47,14 @@
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                 </form> -->
                 <ul class="navbar-nav ml-auto">
-                    <img src="upload/user_profile_img/q.jpg" width="50" style="border:1px solid #fff; border-radius: 50%;" alt="">
+                    <img src="../upload/doc_profile_img/doc1.jpg" width="50" style="border:1px solid #fff; border-radius: 50%;" alt="">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Qwerty Asdf
+                            Dr. Qwerty Asdf
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item disabled" href="">qwerty@gmail.com</a>
-                            <a class="dropdown-item" href="myaccount.php">My account</a>
-                            <a class="dropdown-item" href="myAppointmentHistory.php">My Appointment History</a>
+                            <a class="dropdown-item" href="doctorProfile.php">My account</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="logout.php">Logout</a>
                         </div>
@@ -70,32 +69,37 @@
         <div class="container">
 
             <div class="mt-4 mb-4">
-                <h1 class="Display-4" id="primaryColor">My appointments</h1>
+                <h1 class="Display-4" id="primaryColor">Add Prescription</h1>
             </div>
 
-            <table class="table table-hover">
-                <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">Appointment ID</th>
-                        <th scope="col">Patient Doctor</th>
-                        <th scope="col">Appointment Fee</th>
-                        <th scope="col">Appointment Reason</th>
-                        <th scope="col">Date</th>
-                        <th scope="col">Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Dr. Qwerty</td>
-                        <td>₱ 500.00</td>
-                        <td>Fever</td>
-                        <td>January 1, 2020 at 5:30 PM</td>
-                        <td><input type="submit" value="Cancel" class="btn btn-danger" name="appointmentStatus"></td>
-                    </tr>
-                </tbody>
-            </table>
+            <form action="contactus.php" method="post">
+                <div class="row">
+                    <div class="col">
+                        <label for="exampleInputEmail1">Patient Name</label>
+                        <input type="text" class="form-control" value="Qwerty" readonly>
+                    </div>
+                    <div class="col">
+                        <label for="exampleInputEmail1">Patient Disease</label>
+                        <input type="text" class="form-control" value="Fever" readonly>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label for="exampleInputEmail1">Address</label>
+                        <input type="text" class="form-control" value="12345 St." readonly>
+                    </div>
+                    <div class="col">
+                        <label for="exampleInputEmail1">Mobile Number</label>
+                        <input type="tel" class="form-control" value="09550192231" readonly>
+                    </div>
+                </div>
 
+                <label for="">Prescription</label>
+                <textarea name="reasonAppointment" class="form-control resize-0" cols="30" rows="10"></textarea>
+                <div class="text-center mt-3">
+                    <input type="submit" class="btn" id="docBtnApt" value="Submit" name="submitAppointment">
+                </div>
+            </form>
         </div>
 
 

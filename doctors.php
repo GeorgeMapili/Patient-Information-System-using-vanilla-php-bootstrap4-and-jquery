@@ -9,7 +9,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" href="css/main.css" />
-    <title>Main</title>
+    <title>Patient | Doctors</title>
 </head>
 
 <body>
@@ -74,9 +74,9 @@
             </div>
 
             <div class="row">
-                <div class="card col-lg-3 col-md-4 col-sm-6 my-3" style="width: 18rem;">
+                <div class="card col-lg-3 col-md-4 col-sm-6 my-3 mb-3" style="width: 18rem;">
                     <img class="card-img-top" src="upload/doc_profile_img/doc1.jpg" alt="Card image cap">
-                    <div class="card-body">
+                    <div class="card-body ">
                         <h5 class="card-title">Qwerty</h5>
                         <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                         <a href="#" class="btn " id="docBtnApt">Set an Appointment</a>
@@ -84,27 +84,27 @@
                 </div>
 
 
-                <div class="card col-lg-3 col-md-4 col-sm-6 my-3" style="width: 18rem;">
+                <div class="card col-lg-3 col-md-4 col-sm-6 my-3 mb-3" style="width: 18rem;">
                     <img class="card-img-top" src="upload/doc_profile_img/doc2.jpg" alt="Card image cap">
-                    <div class="card-body">
+                    <div class="card-body ">
                         <h5 class="card-title">Qwerty</h5>
                         <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                         <a href="#" class="btn " id="docBtnApt">Set an Appointment</a>
                     </div>
                 </div>
 
-                <div class="card col-lg-3 col-md-4 col-sm-6 my-3" style="width: 18rem;">
+                <div class="card col-lg-3 col-md-4 col-sm-6 my-3 mb-3" style="width: 18rem;">
                     <img class="card-img-top" src="upload/doc_profile_img/doc3.jpg" alt="Card image cap">
-                    <div class="card-body">
+                    <div class="card-body ">
                         <h5 class="card-title">Qwerty</h5>
                         <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                         <a href="#" class="btn " id="docBtnApt">Set an Appointment</a>
                     </div>
                 </div>
 
-                <div class="card col-lg-3 col-md-4 col-sm-6 my-3" style="width: 18rem;">
+                <div class="card col-lg-3 col-md-4 col-sm-6 my-3 mb-3" style="width: 18rem;">
                     <img class="card-img-top" src="upload/doc_profile_img/doc4.jpeg" alt="Card image cap">
-                    <div class="card-body">
+                    <div class="card-body ">
                         <h5 class="card-title">Qwerty</h5>
                         <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                         <a href="#" class="btn " id="docBtnApt">Set an Appointment</a>
@@ -112,36 +112,36 @@
                 </div>
 
 
-                <div class="card col-lg-3 col-md-4 col-sm-6 my-3" style="width: 18rem;">
+                <div class="card col-lg-3 col-md-4 col-sm-6 my-3 mb-3" style="width: 18rem;">
                     <img class="card-img-top" src="upload/doc_profile_img/doc5.jpeg" alt="Card image cap">
-                    <div class="card-body">
+                    <div class="card-body ">
                         <h5 class="card-title">Qwerty</h5>
                         <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                         <a href="#" class="btn " id="docBtnApt">Set an Appointment</a>
                     </div>
                 </div>
 
-                <div class="card col-lg-3 col-md-4 col-sm-6 my-3" style="width: 18rem;">
+                <div class="card col-lg-3 col-md-4 col-sm-6 my-3 mb-3" style="width: 18rem;">
                     <img class="card-img-top" src="upload/doc_profile_img/doc6.jpg" alt="Card image cap">
-                    <div class="card-body">
+                    <div class="card-body ">
                         <h5 class="card-title">Qwerty</h5>
                         <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                         <a href="#" class="btn " id="docBtnApt">Set an Appointment</a>
                     </div>
                 </div>
 
-                <div class="card col-lg-3 col-md-4 col-sm-6 my-3" style="width: 18rem;">
+                <div class="card col-lg-3 col-md-4 col-sm-6 my-3 mb-3" style="width: 18rem;">
                     <img class="card-img-top" src="upload/doc_profile_img/doc7.jpg" alt="Card image cap">
-                    <div class="card-body">
+                    <div class="card-body ">
                         <h5 class="card-title">Qwerty</h5>
                         <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                         <a href="#" class="btn " id="docBtnApt">Set an Appointment</a>
                     </div>
                 </div>
 
-                <div class="card col-lg-3 col-md-4 col-sm-6 my-3" style="width: 18rem;">
+                <div class="card col-lg-3 col-md-4 col-sm-6 my-3 mb-3" style="width: 18rem;">
                     <img class="card-img-top" src="upload/doc_profile_img/doc8.jpg" alt="Card image cap">
-                    <div class="card-body">
+                    <div class="card-body ">
                         <h5 class="card-title">Qwerty</h5>
                         <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                         <a href="#" class="btn " id="docBtnApt">Set an Appointment</a>

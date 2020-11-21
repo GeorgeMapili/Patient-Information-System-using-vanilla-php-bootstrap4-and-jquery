@@ -8,12 +8,12 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/style.css" />
-    <title>Patient | Login</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <title>Doctor | Login</title>
 </head>
 
 <body>
-    <h2 class="display-4 mb-3" style="color: rgb(15, 208, 214);">Patient Login</h2>
+    <h2 class="display-4 mb-3" style="color: rgb(15, 208, 214);">Doctor Login</h2>
     <form action="index.php" method="post">
 
         <div class="form-group">
@@ -26,10 +26,6 @@
         </div>
 
         <input type="submit" class="btn-block btn-info mt-4" value="Login" name="login">
-
-        <div class="text-center mt-5">
-            <a class="btn btn-danger" href="register.php">No account yet?</a>
-        </div>
     </form>
 
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
