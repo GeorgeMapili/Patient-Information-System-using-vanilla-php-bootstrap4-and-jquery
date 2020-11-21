@@ -73,6 +73,15 @@ body {
   text-shadow: 3px 6px 6px #f1f1f1;
 }
 
+#docBtnApt {
+  background: rgb(15, 208, 214);
+  color: #fff;
+}
+
+label {
+  padding: 5px 0;
+}
+
 /* RESPONSIVE CSS
   -------------------------------------------------- */
 

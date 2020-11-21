@@ -29,16 +29,16 @@
                         <a class="nav-link" href="appointment.php">Set an Appointment</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " href="#">Doctors</a>
+                        <a class="nav-link " href="doctors.php">Doctors</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " href="#">Contact Us</a>
+                        <a class="nav-link " href="contactus.php">Contact Us</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " href="#">Health Library</a>
+                        <a class="nav-link " href="healthLibrary.php">Health Library</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " href="#">My Appointments</a>
+                        <a class="nav-link " href="myappointment.php">My Appointments</a>
                     </li>
                 </ul>
                 <!-- search bar -->
@@ -54,8 +54,8 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item disabled" href="">qwerty@gmail.com</a>
-                            <a class="dropdown-item" href="#">My account</a>
-                            <a class="dropdown-item" href="#">My Appointment History</a>
+                            <a class="dropdown-item" href="myaccount.php">My account</a>
+                            <a class="dropdown-item" href="myAppointmentHistory.php">My Appointment History</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="logout.php">Logout</a>
                         </div>

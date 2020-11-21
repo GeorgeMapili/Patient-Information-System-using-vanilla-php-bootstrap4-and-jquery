@@ -25,7 +25,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="main.php">Home <span class="sr-only">(current)</span></a>
                     </li>
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="appointment.php">Set an Appointment</a>
                     </li>
                     <li class="nav-item">
@@ -34,7 +34,7 @@
                     <li class="nav-item">
                         <a class="nav-link " href="contactus.php">Contact Us</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item active">
                         <a class="nav-link " href="healthLibrary.php">Health Library</a>
                     </li>
                     <li class="nav-item">
@@ -68,55 +68,23 @@
     <main role="main">
 
         <div class="container">
+
             <div class="mt-4 mb-4">
-                <h1 class="Display-4" id="primaryColor">Set an Appointment</h1>
+                <h1 class="Display-4" id="primaryColor">Health Library</h1>
             </div>
 
-            <form action="appointment.php" method="post">
-                <div class="row">
-                    <div class="col">
-                        <label for="exampleInputEmail1">Name</label>
-                        <input type="text" class="form-control" value="Qwerty" readonly>
-                    </div>
-                    <div class="col">
-                        <label for="exampleInputEmail1">Email</label>
-                        <input type="email" class="form-control" value="qwerty@gmail.com" readonly>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <label for="exampleInputEmail1">Address</label>
-                        <input type="text" class="form-control" value="12345 St." readonly>
-                    </div>
-                    <div class="col">
-                        <label for="exampleInputEmail1">Mobile Number</label>
-                        <input type="tel" class="form-control" value="09550192231" readonly>
-                    </div>
-                </div>
-                <label for="">Choose a physician</label>
-                <select class="form-control" name="selectDoctor">
-                    <option value="">Select</option>
-                    <option value="">Dr. Stone Arc -> Cardiologists</option>
-                    <option value="">Dr. Stone Arc -> Dermatologists</option>
-                    <option value="">Dr. Stone Arc</option>
-                    <option value="">Dr. Stone Arc</option>
-                    <option value="">Dr. Stone Arc</option>
-                    <option value="">Dr. Stone Arc</option>
-                    <option value="">Dr. Stone Arc</option>
-                    <option value="">Dr. Stone Arc</option>
-                </select>
+            <input type="text" class="form-control" name="search" placeholder="Search Treatment or Diseases...">
+            <div class="list-group">
+                <a href="#" class="list-group-item list-group-item-action">
+                    Cancer
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">HeartAttack</a>
+                <a href="#" class="list-group-item list-group-item-action">Asthma</a>
+                <a href="#" class="list-group-item list-group-item-action">Fever</a>
+            </div>
 
-                <label for="">Date</label>
-                <input type="date" class="form-control" name="dateOfAppointment">
-                <input type="time" class="form-control" name="timeOfAppointment">
-
-                <label for="">Reason for Appointment or Diagnosis</label>
-                <textarea name="reasonAppointment" class="form-control resize-0" cols="30" rows="10"></textarea>
-                <div class="text-center mt-3">
-                    <input type="submit" class="btn" id="docBtnApt" value="Submit" name="submitAppointment">
-                </div>
-            </form>
         </div>
+
 
         <hr class="featurette-divider">
 

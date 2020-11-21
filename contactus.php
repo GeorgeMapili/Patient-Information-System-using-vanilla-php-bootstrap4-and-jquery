@@ -25,13 +25,13 @@
                     <li class="nav-item">
                         <a class="nav-link" href="main.php">Home <span class="sr-only">(current)</span></a>
                     </li>
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="appointment.php">Set an Appointment</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link " href="doctors.php">Doctors</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item active">
                         <a class="nav-link " href="contactus.php">Contact Us</a>
                     </li>
                     <li class="nav-item">
@@ -68,11 +68,12 @@
     <main role="main">
 
         <div class="container">
+
             <div class="mt-4 mb-4">
-                <h1 class="Display-4" id="primaryColor">Set an Appointment</h1>
+                <h1 class="Display-4" id="primaryColor">Contact Us</h1>
             </div>
 
-            <form action="appointment.php" method="post">
+            <form action="contactus.php" method="post">
                 <div class="row">
                     <div class="col">
                         <label for="exampleInputEmail1">Name</label>
@@ -93,30 +94,15 @@
                         <input type="tel" class="form-control" value="09550192231" readonly>
                     </div>
                 </div>
-                <label for="">Choose a physician</label>
-                <select class="form-control" name="selectDoctor">
-                    <option value="">Select</option>
-                    <option value="">Dr. Stone Arc -> Cardiologists</option>
-                    <option value="">Dr. Stone Arc -> Dermatologists</option>
-                    <option value="">Dr. Stone Arc</option>
-                    <option value="">Dr. Stone Arc</option>
-                    <option value="">Dr. Stone Arc</option>
-                    <option value="">Dr. Stone Arc</option>
-                    <option value="">Dr. Stone Arc</option>
-                    <option value="">Dr. Stone Arc</option>
-                </select>
 
-                <label for="">Date</label>
-                <input type="date" class="form-control" name="dateOfAppointment">
-                <input type="time" class="form-control" name="timeOfAppointment">
-
-                <label for="">Reason for Appointment or Diagnosis</label>
+                <label for="">Message or Report an Issue</label>
                 <textarea name="reasonAppointment" class="form-control resize-0" cols="30" rows="10"></textarea>
                 <div class="text-center mt-3">
                     <input type="submit" class="btn" id="docBtnApt" value="Submit" name="submitAppointment">
                 </div>
             </form>
         </div>
+
 
         <hr class="featurette-divider">
 

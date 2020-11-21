@@ -22,10 +22,10 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
+                    <li class="nav-item active">
                         <a class="nav-link" href="main.php">Home <span class="sr-only">(current)</span></a>
                     </li>
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="appointment.php">Set an Appointment</a>
                     </li>
                     <li class="nav-item">
@@ -67,59 +67,80 @@
 
     <main role="main">
 
-        <div class="container">
+
+
+        <div class="container marketing">
+
             <div class="mt-4 mb-4">
-                <h1 class="Display-4" id="primaryColor">Set an Appointment</h1>
+                <h1 class="display-4" id="primaryColor">Overview</h1>
             </div>
 
-            <form action="appointment.php" method="post">
-                <div class="row">
-                    <div class="col">
-                        <label for="exampleInputEmail1">Name</label>
-                        <input type="text" class="form-control" value="Qwerty" readonly>
-                    </div>
-                    <div class="col">
-                        <label for="exampleInputEmail1">Email</label>
-                        <input type="email" class="form-control" value="qwerty@gmail.com" readonly>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <label for="exampleInputEmail1">Address</label>
-                        <input type="text" class="form-control" value="12345 St." readonly>
-                    </div>
-                    <div class="col">
-                        <label for="exampleInputEmail1">Mobile Number</label>
-                        <input type="tel" class="form-control" value="09550192231" readonly>
-                    </div>
-                </div>
-                <label for="">Choose a physician</label>
-                <select class="form-control" name="selectDoctor">
-                    <option value="">Select</option>
-                    <option value="">Dr. Stone Arc -> Cardiologists</option>
-                    <option value="">Dr. Stone Arc -> Dermatologists</option>
-                    <option value="">Dr. Stone Arc</option>
-                    <option value="">Dr. Stone Arc</option>
-                    <option value="">Dr. Stone Arc</option>
-                    <option value="">Dr. Stone Arc</option>
-                    <option value="">Dr. Stone Arc</option>
-                    <option value="">Dr. Stone Arc</option>
-                </select>
+            <hr class="featurette-divider">
+            <div>
+                <h2 class="display-3 my-3">What is Fever ?</h2>
+            </div>
 
-                <label for="">Date</label>
-                <input type="date" class="form-control" name="dateOfAppointment">
-                <input type="time" class="form-control" name="timeOfAppointment">
+            <div class="text-left">
+                <p>A fever is a temporary increase in your body temperature, often due to an illness. Having a fever is a sign that something out of the ordinary is going on in your body.</p>
 
-                <label for="">Reason for Appointment or Diagnosis</label>
-                <textarea name="reasonAppointment" class="form-control resize-0" cols="30" rows="10"></textarea>
-                <div class="text-center mt-3">
-                    <input type="submit" class="btn" id="docBtnApt" value="Submit" name="submitAppointment">
-                </div>
-            </form>
+                <p> For an adult, a fever may be uncomfortable, but usually isn't a cause for concern unless it reaches 103 F (39.4 C) or higher. For infants and toddlers, a slightly elevated temperature may indicate a serious infection.</p>
+
+                <p> Fevers generally go away within a few days. A number of over-the-counter medications lower a fever, but sometimes it's better left untreated. Fever seems to play a key role in helping your body fight off a number of infections.</p>
+            </div>
+
+
+            <hr class="featurette-divider">
+
+            <div>
+                <h2 class="display-4 my-3">Symptoms</h2>
+            </div>
+
+            <div class="text-left">
+                <ul>
+                    <li>Sweating</li>
+                    <li>Chills and shivering</li>
+                    <li>Headache</li>
+                    <li>Muscle aches</li>
+                    <li>Loss of appetite</li>
+                    <li>Irritability</li>
+                    <li>Dehydration</li>
+                    <li>General weakness</li>
+                </ul>
+            </div>
+
+
+            <hr class="featurette-divider">
+
+            <div>
+                <h2 class="display-4 my-3">Prevention</h2>
+            </div>
+
+            <div class="text-left">
+                <ul>
+                    <li>Wash your hands often and teach your children to do the same, especially before eating, after using the toilet, after spending time in a crowd or around someone who's sick, after petting animals, and during travel on public transportation.</li>
+                    <li>Show your children how to wash their hands thoroughly, covering both the front and back of each hand with soap and rinsing completely under running water.</li>
+                    <li>Carry hand sanitizer with you for times when you don't have access to soap and water.</li>
+                    <li>Try to avoid touching your nose, mouth or eyes, as these are the main ways that viruses and bacteria can enter your body and cause infection.</li>
+                    <li>Cover your mouth when you cough and your nose when you sneeze, and teach your children to do likewise. Whenever possible, turn away from others when coughing or sneezing to avoid passing germs along to them.</li>
+                    <li>Avoid sharing cups, water bottles and utensils with your child or children.</li>
+                </ul>
+            </div>
+
+            <hr class="featurette-divider">
+
+            <div>
+                <h2 class="display-4 my-3">Treatment</h2>
+            </div>
+
+            <div class="text-left">
+                <p>In the case of a high fever, or a low fever that's causing discomfort, your doctor may recommend an over-the-counter medication, such as acetaminophen (Tylenol, others) or ibuprofen (Advil, Motrin IB, others).</p>
+                <p>Use these medications according to the label instructions or as recommended by your doctor. Be careful to avoid taking too much. High doses or long-term use of acetaminophen or ibuprofen may cause liver or kidney damage, and acute overdoses can be fatal. If your child's fever remains high after a dose, don't give more medication; call your doctor instead.</p>
+                <p>Don't give aspirin to children, because it may trigger a rare, but potentially fatal, disorder known as Reye's syndrome.</p>
+
+                <p>Depending on the cause of your fever, your doctor may prescribe an antibiotic, especially if he or she suspects a bacterial infection, such as pneumonia or strep throat.</p>
+            </div>
+
         </div>
-
-        <hr class="featurette-divider">
-
 
 
         <!-- FOOTER -->
