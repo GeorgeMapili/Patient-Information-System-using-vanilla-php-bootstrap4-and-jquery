@@ -30,6 +30,21 @@
         </div>
 
         <div class="form-group">
+            <label for="exampleInputPassword1">Age</label>
+            <input type="number" class="form-control" name="age" min="1" required>
+        </div>
+
+        <div class="form-group">
+            <label for="exampleInputPassword1">Gender</label>
+            <select name="gender" id="" class="form-control">
+                <option value="0">Select a gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+        </div>
+        </div>
+
+        <div class="form-group">
             <label for="exampleInputPassword1">Mobile Number</label>
             <input type="tel" class="form-control" name="mobileNumber" placeholder="+639876543210 or 09876543210" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" required>
         </div>

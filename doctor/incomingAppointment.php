@@ -9,7 +9,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/main.css" />
-    <title>Patient | Appointment</title>
+    <title>Doctor | Incoming Appointment</title>
 </head>
 
 <body>
@@ -81,6 +81,7 @@
                         <th scope="col">Patient Mobile</th>
                         <th scope="col">Appointment Reason</th>
                         <th scope="col">Date</th>
+                        <th scope="col">Updated Disease</th>
                         <th scope="col">Status</th>
                     </tr>
                 </thead>
@@ -93,7 +94,10 @@
                         <td>Fever</td>
                         <td>January 1, 2020 at 5:30 PM</td>
                         <td>
-                            <input type="submit" value="Upcoming" class="btn btn-success" name="appointmentStatus">
+                            <input type="submit" value="Update Disease" class="btn btn-info" name="appointmentStatus">
+                        </td>
+                        <td>
+                            <input type="submit" value="Done" class="btn btn-success" name="appointmentStatus">
                         </td>
                     </tr>
                     <tr>
@@ -104,7 +108,10 @@
                         <td>Fever</td>
                         <td>January 1, 2020 at 5:30 PM</td>
                         <td>
-                            <input type="submit" value="Upcoming" class="btn btn-success" name="appointmentStatus">
+                            <input type="submit" value="Update Disease" class="btn btn-info" name="appointmentStatus">
+                        </td>
+                        <td>
+                            <input type="submit" value="Done" class="btn btn-success" name="appointmentStatus">
                         </td>
                     </tr>
                     <tr>
@@ -115,7 +122,10 @@
                         <td>Fever</td>
                         <td>January 1, 2020 at 5:30 PM</td>
                         <td>
-                            <input type="submit" value="Upcoming" class="btn btn-success" name="appointmentStatus">
+                            <input type="submit" value="Update Disease" class="btn btn-info" name="appointmentStatus">
+                        </td>
+                        <td>
+                            <input type="submit" value="Done" class="btn btn-success" name="appointmentStatus">
                         </td>
                     </tr>
                 </tbody>

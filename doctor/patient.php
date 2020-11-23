@@ -9,7 +9,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/main.css" />
-    <title>Patient | Appointment</title>
+    <title>Doctor | Patient</title>
 </head>
 
 <body>
@@ -69,7 +69,7 @@
         <div class="container-fluid">
 
             <div class="mt-4 mb-4">
-                <h1 class="Display-4 my-4" id="primaryColor">My Patient</h1>
+                <h1 class="Display-4 my-4" id="primaryColor">My Patient from Appointment</h1>
             </div>
 
             <table class="table table-hover">
@@ -92,7 +92,7 @@
                         <td>09510195578</td>
                         <td>Fever</td>
                         <td>
-                            <input type="submit" value="Add Prescription" class="btn btn-primary" name="appointmentStatus">
+                            <input type="submit" value="Add Prescription" class="btn btn-primary disabled" name="appointmentStatus">
                         </td>
                         <td>
                             <input type="submit" value="Watch Medical History" class="btn btn-info" name="appointmentStatus">
@@ -105,7 +105,7 @@
                         <td>09510195578</td>
                         <td>Fever</td>
                         <td>
-                            <input type="submit" value="Add Prescription" class="btn btn-primary" name="appointmentStatus">
+                            <input type="submit" value="Add Prescription" class="btn btn-primary disabled" name="appointmentStatus">
                         </td>
                         <td>
                             <input type="submit" value="Watch Medical History" class="btn btn-info" name="appointmentStatus">
@@ -118,7 +118,7 @@
                         <td>09510195578</td>
                         <td>Fever</td>
                         <td>
-                            <input type="submit" value="Add Prescription" class="btn btn-primary" name="appointmentStatus">
+                            <input type="submit" value="Add Prescription" class="btn btn-primary disabled" name="appointmentStatus">
                         </td>
                         <td>
                             <input type="submit" value="Watch Medical History" class="btn btn-info" name="appointmentStatus">
@@ -131,6 +131,90 @@
 
 
         <hr class="featurette-divider">
+
+
+        <div class="container-fluid">
+
+            <div class="mt-4 mb-4">
+                <h1 class="Display-4 my-4" id="primaryColor">My Walkin Patient</h1>
+            </div>
+
+            <table class="table table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Patient ID</th>
+                        <th scope="col">Patient Name</th>
+                        <th scope="col">Patient Address</th>
+                        <th scope="col">Patient Mobile</th>
+                        <th scope="col">Patient Disease</th>
+                        <th scope="col">Prescription</th>
+                        <th scope="col">Update</th>
+                        <th scope="col">Information</th>
+                        <th scope="col">History</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>Qwerty</td>
+                        <td>12345 St.</td>
+                        <td>09510195578</td>
+                        <td>Fever</td>
+                        <td>
+                            <input type="submit" value="Add Prescription" class="btn btn-primary" name="appointmentStatus">
+                        </td>
+                        <td>
+                            <input type="submit" value="Update Disease" class="btn btn-primary" name="appointmentStatus">
+                        </td>
+                        <td>
+                            <input type="submit" value="Watch Medical Information" class="btn btn-primary" name="appointmentStatus">
+                        </td>
+                        <td>
+                            <input type="submit" value="Watch Medical History" class="btn btn-info" name="appointmentStatus">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>Qwerty</td>
+                        <td>12345 St.</td>
+                        <td>09510195578</td>
+                        <td>Fever</td>
+                        <td>
+                            <input type="submit" value="Add Prescription" class="btn btn-primary" name="appointmentStatus">
+                        </td>
+                        <td>
+                            <input type="submit" value="Update Disease" class="btn btn-primary" name="appointmentStatus">
+                        </td>
+                        <td>
+                            <input type="submit" value="Watch Medical Information" class="btn btn-primary" name="appointmentStatus">
+                        </td>
+                        <td>
+                            <input type="submit" value="Watch Medical History" class="btn btn-info" name="appointmentStatus">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>Qwerty</td>
+                        <td>12345 St.</td>
+                        <td>09510195578</td>
+                        <td>Fever</td>
+                        <td>
+                            <input type="submit" value="Add Prescription" class="btn btn-primary" name="appointmentStatus">
+                        </td>
+                        <td>
+                            <input type="submit" value="Update Disease" class="btn btn-primary" name="appointmentStatus">
+                        </td>
+                        <td>
+                            <input type="submit" value="Watch Medical Information" class="btn btn-primary" name="appointmentStatus">
+                        </td>
+                        <td>
+                            <input type="submit" value="Watch Medical History" class="btn btn-info" name="appointmentStatus">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
 
 
 
