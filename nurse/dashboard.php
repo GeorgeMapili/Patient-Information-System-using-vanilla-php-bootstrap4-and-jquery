@@ -80,6 +80,14 @@
                     </div>
                 </div>
 
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <div class="card text-white bg-dark mb-3">
+                        <div class="card-header h2">Discharged Patient</div>
+                        <div class="card-body">
+                            <h5 class="card-title">1</h5>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <hr class="featurette-divider">

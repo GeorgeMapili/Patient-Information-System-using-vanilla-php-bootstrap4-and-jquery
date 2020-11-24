@@ -89,7 +89,7 @@
                             <div class="col">
                                 <div class="form-group mt-3">
                                     <!-- <input type="submit" name="placeorder" class="btn btn-primary" value="Show Bill"> -->
-                                    <a href="pdfDischarge.php" class="btn btn-primary">Print Billings</a>
+                                    <a href="pdfDischarge.php" class="btn btn-primary" target="_blank">Print Billings</a>
                                 </div>
                             </div>
                         </form>
