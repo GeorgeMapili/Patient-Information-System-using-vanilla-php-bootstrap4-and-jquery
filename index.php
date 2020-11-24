@@ -1,3 +1,12 @@
+<?php
+session_start();
+require_once 'connect.php';
+
+if (isset($_SESSION['id'])) {
+    header("location:main.php");
+    exit(0);
+}
+?>
 <!doctype html>
 <html lang="en">
 
@@ -12,17 +21,58 @@
     <title>Patient | Login</title>
 </head>
 
+<?php
+
+if (isset($_POST['login'])) {
+    $email = trim(htmlspecialchars($_POST['email']));
+    $password = trim(htmlspecialchars($_POST['password']));
+
+    $sql = "SELECT * FROM patientappointment WHERE pEmail = :email";
+    $stmt = $con->prepare($sql);
+    $stmt->bindParam(":email", $email, PDO::PARAM_STR);
+    $stmt->execute();
+
+    while ($patientUser = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        if (password_verify($password, $patientUser['pPassword'])) {
+            $_SESSION['id'] = $patientUser['pId'];
+            $_SESSION['name'] = $patientUser['pName'];
+            $_SESSION['email'] = $patientUser['pEmail'];
+            $_SESSION['address'] = $patientUser['pAddress'];
+            $_SESSION['age'] = $patientUser['pAge'];
+            $_SESSION['gender'] = $patientUser['pGender'];
+            $_SESSION['mobile'] = $patientUser['pMobile'];
+            header("location:main.php");
+            exit(0);
+        } else {
+            header("location:index.php?errPass=Incorrect_password");
+            exit(0);
+        }
+    }
+
+    $patientCount = $stmt->rowCount();
+
+    if ($patientCount == 0) {
+        header("location:index.php?errEmail=Incorrect_email");
+        exit(0);
+    }
+}
+
+?>
+
 <body>
     <h2 class="display-4 mb-3" style="color: rgb(15, 208, 214);">Patient Login</h2>
+    <?= (isset($_GET['RegSuccess'])) ? '<span class="text-success my-4">Register Successfully</span>' : ""; ?>
     <form action="index.php" method="post">
 
         <div class="form-group">
-            <label for="exampleInputEmail1">Email address</label>
-            <input type="email" name="email" class="form-control is-invalid" required>
+            <label>Email address</label>
+            <?= (isset($_GET['errEmail'])) ? '<input type="email" name="email" class="form-control is-invalid" required>' : '<input type="email" name="email" class="form-control" required>'; ?>
+            <?= (isset($_GET['errEmail'])) ? '<span class="text-danger">Incorrect Email</span>' : ''; ?>
         </div>
         <div class="form-group">
-            <label for="exampleInputPassword1">Password</label>
-            <input type="password" name="password" class="form-control is-valid" required>
+            <label>Password</label>
+            <?= (isset($_GET['errPass'])) ? '<input type="password" name="password" class="form-control is-invalid" required>' : '<input type="password" name="password" class="form-control" required>'; ?>
+            <?= (isset($_GET['errPass'])) ? '<span class="text-danger">Incorrect Password</span>' : ''; ?>
         </div>
 
         <input type="submit" class="btn-block btn-info mt-4" value="Login" name="login">

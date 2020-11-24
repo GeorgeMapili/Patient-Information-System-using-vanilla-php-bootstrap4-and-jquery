@@ -1,3 +1,12 @@
+<?php
+session_start();
+require_once 'connect.php';
+
+if (isset($_SESSION['id'])) {
+    header("location:main.php");
+    exit(0);
+}
+?>
 <!doctype html>
 <html lang="en">
 
@@ -12,32 +21,137 @@
     <title>Patient | Register</title>
 </head>
 
+<?php
+
+if (isset($_POST['register'])) {
+    $name = trim(htmlspecialchars($_POST['name']));
+    $email = trim(htmlspecialchars($_POST['email']));
+    $address = trim(htmlspecialchars($_POST['address']));
+    $age = trim(htmlspecialchars($_POST['age']));
+    $gender = trim(htmlspecialchars($_POST['gender']));
+    $mobileNumber = trim(htmlspecialchars($_POST['mobileNumber']));
+    $password = trim(htmlspecialchars($_POST['password']));
+    $confirmPassword = trim(htmlspecialchars($_POST['confirmPassword']));
+    $profileImg = $_FILES['profileImg'];
+
+    // Check the name if valid
+    if (!preg_match("/^([a-zA-Z' ]+)$/", $name)) {
+        header("location:register.php?errName=name_is_not_valid");
+        exit(0);
+    }
+
+    // Check the email if valid
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        header("location:register.php?errEmail1=email_is_not_valid");
+        exit(0);
+    }
+
+    // Check if the email is already taken
+    $sql = "SELECT * FROM patientappointment WHERE pEmail = :email";
+    $stmt = $con->prepare($sql);
+    $stmt->bindParam(":email", $email, PDO::PARAM_STR);
+    $stmt->execute();
+
+    $emailCount = $stmt->rowCount();
+
+    if ($emailCount >= 1) {
+        header("location:register.php?errEmail2=email_already_taken");
+        exit(0);
+    }
+
+    // Check if the mobile number is already existed
+    $sql = "SELECT * FROM patientappointment WHERE pMobile = :mobile";
+    $stmt = $con->prepare($sql);
+    $stmt->bindParam(":mobile", $mobileNumber, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $mobileCount = $stmt->rowCount();
+
+    if ($mobileCount >= 1) {
+        header("location:register.php?errMobile=mobile_number_already_taken");
+        exit(0);
+    }
+
+    // Check if the password does not match
+
+    if ($password !== $confirmPassword) {
+        header("location:register.php?errPass=password_do_not_match");
+        exit(0);
+    }
+
+    // Check Image
+    $profileName = $profileImg['name'];
+    $ext = $profileImg['type'];
+    $extF = explode('/', $ext);
+    $tmpname = $profileImg['tmp_name'];
+    $dest = __DIR__ . "/upload/user_profile_img/" . $profileName;
+
+    // Check if the Extension of image is valid
+    $allowed = array('jpg', 'jpeg', 'png');
+
+    if (!in_array(strtolower($extF[1]), $allowed)) {
+        header("location:register.php?errorImg1=image_is_not_valid");
+        exit(0);
+    }
+
+    // Check if the image size is valid
+
+    if ($profileImg['size'] > 5000000) {
+        header("location:register.php?errorImg2=image_is_only_less_than_5MB");
+        exit(0);
+    }
+
+    // Hash the password
+    $hashPass = password_hash($password, PASSWORD_DEFAULT);
+
+    $sql = "INSERT into patientappointment (pName,pEmail,pAddress,pAge,pGender,pMobile,pPassword,pProfile)VALUES(:name,:email,:address,:age,:gender,:mobile,:password,:profile)";
+    $stmt = $con->prepare($sql);
+    $stmt->bindParam(":name", $name, PDO::PARAM_STR);
+    $stmt->bindParam(":email", $email, PDO::PARAM_STR);
+    $stmt->bindParam(":address", $address, PDO::PARAM_STR);
+    $stmt->bindParam(":age", $age, PDO::PARAM_STR);
+    $stmt->bindParam(":gender", $gender, PDO::PARAM_STR);
+    $stmt->bindParam(":mobile", $mobileNumber, PDO::PARAM_STR);
+    $stmt->bindParam(":password", $hashPass, PDO::PARAM_STR);
+    $stmt->bindParam(":profile", $profileName, PDO::PARAM_STR);
+
+    if ($stmt->execute()) {
+        move_uploaded_file($tmpname, $dest);
+        header("location:index.php?RegSuccess=Register_success");
+    }
+}
+
+?>
+
 <body>
     <h2 class="display-4 mb-3 text-center" style="color: rgb(15, 208, 214);">Create an account</h2>
-    <form class="form-registration" action="register.php" method="post">
 
+    <form class="form-registration" action="register.php" method="post" enctype="multipart/form-data">
         <div class="form-group">
-            <label for="exampleInputEmail1">Name</label>
-            <input type="text" name="name" class="form-control" required>
+            <label>Name</label>
+            <?= (isset($_GET['errName'])) ? '<input type="text" name="name" class="form-control is-invalid" required>' : '<input type="text" name="name" class="form-control" required>'; ?>
+            <?= (isset($_GET['errName'])) ? '<small class="text-danger">Name is not valid!</small>' : ""; ?>
         </div>
         <div class="form-group">
-            <label for="exampleInputPassword1">Email</label>
-            <input type="email" name="email" class="form-control" required>
+            <label>Email</label>
+            <?= (isset($_GET['errEmail1']) || isset($_GET['errEmail2'])) ? '<input type="text" name="email" class="form-control is-invalid" required>' : '<input type="text" name="email" class="form-control" required>'; ?>
+            <?= (isset($_GET['errEmail1'])) ? '<small class="text-danger">Email is not valid!</small>' : ""; ?>
+            <?= (isset($_GET['errEmail2'])) ? '<small class="text-danger">Email is already taken!</small>' : ""; ?>
         </div>
         <div class="form-group">
-            <label for="exampleInputPassword1">Address</label>
+            <label>Address</label>
             <input type="text" name="address" class="form-control" required>
         </div>
 
         <div class="form-group">
-            <label for="exampleInputPassword1">Age</label>
+            <label>Age</label>
             <input type="number" class="form-control" name="age" min="1" required>
         </div>
 
         <div class="form-group">
-            <label for="exampleInputPassword1">Gender</label>
+            <label>Gender</label>
             <select name="gender" id="" class="form-control">
-                <option value="0">Select a gender</option>
+                <option value="">Select a gender</option>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
             </select>
@@ -45,26 +159,31 @@
         </div>
 
         <div class="form-group">
-            <label for="exampleInputPassword1">Mobile Number</label>
-            <input type="tel" class="form-control" name="mobileNumber" placeholder="+639876543210 or 09876543210" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" required>
+            <label>Mobile Number</label>
+            <?= (isset($_GET['errMobile'])) ? '<input type="tel" class="form-control is-invalid" name="mobileNumber" placeholder="+639876543210 or 09876543210" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" required>' : '<input type="tel" class="form-control" name="mobileNumber" placeholder="+639876543210 or 09876543210" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" required>'; ?>
+            <?= (isset($_GET['errMobile'])) ? '<small class="text-danger">Mobile number is already taken!</small>' : ""; ?>
         </div>
 
         <div class="form-group">
-            <label for="exampleInputPassword1">Password</label>
+            <label>Password</label>
             <input type="password" name="password" minlength="6" class="form-control" required>
         </div>
 
         <div class="form-group">
-            <label for="exampleInputPassword1">Confirm Password</label>
-            <input type="password" name="confirmPassword" minlength="6" class="form-control" required>
+            <label>Confirm Password</label>
+            <?= (isset($_GET['errPass'])) ? '<input type="password" name="confirmPassword" minlength="6" class="form-control is-invalid" required>' : '<input type="password" name="confirmPassword" minlength="6" class="form-control" required>'; ?>
+            <?= (isset($_GET['errPass'])) ? '<small class="text-danger">Password do not match!</small>' : ""; ?>
         </div>
 
         <div class="form-group">
-            <label for="exampleInputPassword1">Profile Image</label>
-            <input type="file" name="profileImg" class="form-control" required>
+            <label>Profile Image</label>
+            <!-- <input type="file" name="profileImg" class="form-control" required> -->
+            <?= (isset($_GET['errorImg1']) || isset($_GET['errorImg2'])) ? '<input type="file" name="profileImg" class="form-control is-invalid" required>' : '<input type="file" name="profileImg" class="form-control" required>'; ?>
+            <?= (isset($_GET['errorImg1'])) ? '<small class="text-danger">Image is not valid ONLY(JPG,JPEG,PNG)!</small>' : "";  ?>
+            <?= (isset($_GET['errorImg2'])) ? '<small class="text-danger">Image file size is required less than 5MB!</small>' : "";  ?>
         </div>
 
-        <input type="submit" class="btn-block btn-info mt-4" value="Register" name="login">
+        <input type="submit" class="btn-block btn-info mt-4" value="Register" name="register">
 
         <div class="text-center mt-3">
             <a class="btn btn-danger" href="index.php">Already have an account?</a>

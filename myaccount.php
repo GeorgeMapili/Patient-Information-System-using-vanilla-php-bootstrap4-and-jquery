@@ -1,3 +1,12 @@
+<?php
+session_start();
+require_once 'connect.php';
+
+if (!isset($_SESSION['id'])) {
+    header("location:index.php");
+    exit(0);
+}
+?>
 <!doctype html>
 <html lang="en">
 

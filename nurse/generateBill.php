@@ -90,10 +90,10 @@
                                 <label for="">Patient Status</label>
                                 <select name="" id="" class="form-control">
                                     <option value="0">Select</option>
-                                    <option value="well">Worse</option>
-                                    <option value="well">Well</option>
-                                    <option value="better">Getting Better</option>
-                                    <option value="died">Died</option>
+                                    <option value="well">Died</option>
+                                    <option value="well">Awful</option>
+                                    <option value="better">Good</option>
+                                    <option value="died">Getting better</option>
                                 </select>
                             </div>
 

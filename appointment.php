@@ -1,3 +1,12 @@
+<?php
+session_start();
+require_once 'connect.php';
+
+if (!isset($_SESSION['id'])) {
+    header("location:index.php");
+    exit(0);
+}
+?>
 <!doctype html>
 <html lang="en">
 
@@ -76,21 +85,21 @@
                 <div class="row">
                     <div class="col">
                         <label for="exampleInputEmail1">Name</label>
-                        <input type="text" class="form-control" value="Qwerty" readonly>
+                        <input type="text" class="form-control" value="<?= $_SESSION['name']; ?>" readonly>
                     </div>
                     <div class="col">
                         <label for="exampleInputEmail1">Email</label>
-                        <input type="email" class="form-control" value="qwerty@gmail.com" readonly>
+                        <input type="email" class="form-control" value="<?= $_SESSION['email']; ?>" readonly>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
                         <label for="exampleInputEmail1">Address</label>
-                        <input type="text" class="form-control" value="12345 St." readonly>
+                        <input type="text" class="form-control" value="<?= $_SESSION['address']; ?>" readonly>
                     </div>
                     <div class="col">
                         <label for="exampleInputEmail1">Mobile Number</label>
-                        <input type="tel" class="form-control" value="09550192231" readonly>
+                        <input type="tel" class="form-control" value="<?= $_SESSION['mobile']; ?>" readonly>
                     </div>
                 </div>
                 <label for="">Choose a physician</label>
