@@ -50,19 +50,14 @@ if (!isset($_SESSION['id'])) {
                         <a class="nav-link " href="myappointment.php">My Appointments</a>
                     </li>
                 </ul>
-                <!-- search bar -->
-                <!-- <form class="form-inline mt-2 mt-md-0">
-                    <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                </form> -->
                 <ul class="navbar-nav ml-auto">
-                    <img src="upload/user_profile_img/q.jpg" width="50" style="border:1px solid #fff; border-radius: 50%;" alt="">
+                    <img src="upload/user_profile_img/<?= $_SESSION['profile']; ?>" width="50" style="border:1px solid #fff; border-radius: 50%;" alt="">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Qwerty Asdf
+                            <?= $_SESSION['name']; ?>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item disabled" href="">qwerty@gmail.com</a>
+                            <a class="dropdown-item disabled" href=""><?= $_SESSION['email']; ?></a>
                             <a class="dropdown-item" href="myaccount.php">My account</a>
                             <a class="dropdown-item" href="myAppointmentHistory.php">My Appointment History</a>
                             <div class="dropdown-divider"></div>
@@ -76,60 +71,167 @@ if (!isset($_SESSION['id'])) {
 
     <main role="main">
 
+        <?php
+
+        if (isset($_POST['submitAppointment'])) {
+            $pId = $_POST['id'];
+            $pName = $_POST['name'];
+            $pEmail = $_POST['email'];
+            $pAddress = $_POST['address'];
+            $pMobile = $_POST['mobileNumber'];
+            $pDoctor = $_POST['selectDoctor'];
+            $aDate = $_POST['dateOfAppointment'];
+            $aTime = $_POST['timeOfAppointment'];
+            $aReason = trim(htmlspecialchars($_POST['reasonAppointment']));
+
+            // Get the Doctor Fee
+            $sql = "SELECT * FROM doctor WHERE dName = :name";
+            $stmt = $con->prepare($sql);
+            $stmt->bindParam(":name", $pDoctor, PDO::PARAM_STR);
+            $stmt->execute();
+            $doctor = $stmt->fetch(PDO::FETCH_ASSOC);
+            $dFee = $doctor['dFee'];
+
+            $sql = "INSERT INTO appointment (pId,pName,pEmail,pAddress,pMobile,pDoctor,dFee,aReason,aDate,aTime)VALUES(:id,:name,:email,:address,:mobile,:doctor,:fee,:reason,:date,:time)";
+            $stmt = $con->prepare($sql);
+            $stmt->bindParam(":id", $pId, PDO::PARAM_INT);
+            $stmt->bindParam(":name", $pName, PDO::PARAM_STR);
+            $stmt->bindParam(":email", $pEmail, PDO::PARAM_STR);
+            $stmt->bindParam(":address", $pAddress, PDO::PARAM_STR);
+            $stmt->bindParam(":mobile", $pMobile, PDO::PARAM_STR);
+            $stmt->bindParam(":doctor", $pDoctor, PDO::PARAM_STR);
+            $stmt->bindParam(":fee", $dFee, PDO::PARAM_STR);
+            $stmt->bindParam(":reason", $aReason, PDO::PARAM_STR);
+            $stmt->bindParam(":date", $aDate, PDO::PARAM_STR);
+            $stmt->bindParam(":time", $aTime, PDO::PARAM_STR);
+
+            if ($stmt->execute()) {
+                header("location:appointment.php?AppointmentSuccess=Successully_request_an_appointment");
+                exit(0);
+            }
+        }
+
+        ?>
+
         <div class="container">
+
+            <?php if (isset($_GET['AppointmentSuccess'])) : ?>
+                <div class="alert alert-success alert-dismissible my-4">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>Successfully request an appointment!</strong>
+                </div>
+            <?php endif; ?>
+
             <div class="mt-4 mb-4">
                 <h1 class="Display-4" id="primaryColor">Set an Appointment</h1>
             </div>
 
             <form action="appointment.php" method="post">
                 <div class="row">
+                    <input type="hidden" name="id" value="<?= $_SESSION['id']; ?>">
                     <div class="col">
-                        <label for="exampleInputEmail1">Name</label>
-                        <input type="text" class="form-control" value="<?= $_SESSION['name']; ?>" readonly>
+                        <label>Name</label>
+                        <input type="text" name="name" class="form-control" value="<?= $_SESSION['name']; ?>" readonly>
                     </div>
                     <div class="col">
-                        <label for="exampleInputEmail1">Email</label>
-                        <input type="email" class="form-control" value="<?= $_SESSION['email']; ?>" readonly>
+                        <label>Email</label>
+                        <input type="text" name="email" class="form-control" value="<?= $_SESSION['email']; ?>" readonly>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
-                        <label for="exampleInputEmail1">Address</label>
-                        <input type="text" class="form-control" value="<?= $_SESSION['address']; ?>" readonly>
+                        <label>Address</label>
+                        <input type="text" name="address" class="form-control" value="<?= $_SESSION['address']; ?>" readonly>
                     </div>
                     <div class="col">
-                        <label for="exampleInputEmail1">Mobile Number</label>
-                        <input type="tel" class="form-control" value="<?= $_SESSION['mobile']; ?>" readonly>
+                        <label>Mobile Number</label>
+                        <input type="tel" name="mobileNumber" class="form-control" value="<?= $_SESSION['mobile']; ?>" readonly>
                     </div>
                 </div>
-                <label for="">Choose a physician</label>
-                <select class="form-control" name="selectDoctor">
-                    <option value="">Select</option>
-                    <option value="">Dr. Stone Arc -> Cardiologists</option>
-                    <option value="">Dr. Stone Arc -> Dermatologists</option>
-                    <option value="">Dr. Stone Arc</option>
-                    <option value="">Dr. Stone Arc</option>
-                    <option value="">Dr. Stone Arc</option>
-                    <option value="">Dr. Stone Arc</option>
-                    <option value="">Dr. Stone Arc</option>
-                    <option value="">Dr. Stone Arc</option>
-                </select>
+                <?php
+                if (isset($_GET['docId'])) {
+                    $dId = $_GET['docId'];
+                ?>
+
+                    <label for="">Choose a physician</label>
+                    <select class="form-control" name="selectDoctor" required>
+                        <?php
+                        $sql = "SELECT * FROM doctor";
+                        $stmt = $con->prepare($sql);
+                        $stmt->execute();
+
+                        while ($doctor = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                        ?>
+                            <?php
+                            if ($doctor['dId'] == $_GET['docId']) {
+                            ?>
+                                <option value="<?= $doctor['dName']; ?>" selected><?= $doctor['dName']; ?> -> <?= $doctor['dSpecialization']; ?> </option>
+                            <?php
+                            } else {
+                            ?>
+                                <option value="<?= $doctor['dName']; ?>"><?= $doctor['dName']; ?> -> <?= $doctor['dSpecialization']; ?> </option>
+                            <?php
+                            }
+                            ?>
+
+                        <?php endwhile; ?>
+                    </select>
+
+                <?php
+                } else {
+                ?>
+                    <label for="">Choose a physician</label>
+                    <select class="form-control" name="selectDoctor" required>
+                        <option value="">Select</option>
+                        <?php
+                        $sql = "SELECT * FROM doctor";
+                        $stmt = $con->prepare($sql);
+                        $stmt->execute();
+
+                        while ($doctor = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                        ?>
+                            <option value="<?= $doctor['dName']; ?>"><?= $doctor['dName']; ?> -> <?= $doctor['dSpecialization']; ?> </option>
+                        <?php endwhile; ?>
+                    </select>
+                <?php
+                }
+                ?>
+                <div>
+                    <small>Read specialization info below</small>
+                </div>
 
                 <label for="">Date</label>
-                <input type="date" class="form-control" name="dateOfAppointment">
-                <input type="time" class="form-control" name="timeOfAppointment">
+                <input type="date" class="form-control" name="dateOfAppointment" required>
+                <input type="time" class="form-control" name="timeOfAppointment" required>
 
                 <label for="">Reason for Appointment or Diagnosis</label>
-                <textarea name="reasonAppointment" class="form-control resize-0" cols="30" rows="10"></textarea>
+                <textarea name="reasonAppointment" class="form-control resize-0" cols="30" rows="10" required></textarea>
                 <div class="text-center mt-3">
                     <input type="submit" class="btn" id="docBtnApt" value="Submit" name="submitAppointment">
                 </div>
             </form>
         </div>
 
+
+        <div class="container">
+            <h4 class="lead my-5">Doctor Specialization</h4>
+
+            <?php
+            $sql = "SELECT * FROM doctor";
+            $stmt = $con->prepare($sql);
+            $stmt->execute();
+
+            while ($doctorSpec = $stmt->fetch(PDO::FETCH_ASSOC)) :
+            ?>
+                <div class="my-5">
+                    <h6><?= $doctorSpec['dSpecialization']; ?></h6>
+                    <p><?= $doctorSpec['dSpecializationInfo']; ?></p>
+                </div>
+            <?php endwhile; ?>
+        </div>
+
+
         <hr class="featurette-divider">
-
-
 
         <!-- FOOTER -->
         <footer class="container text-center">

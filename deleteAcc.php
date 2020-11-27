@@ -6,6 +6,7 @@ if (!isset($_SESSION['id'])) {
     header("location:index.php");
     exit(0);
 }
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -18,7 +19,7 @@ if (!isset($_SESSION['id'])) {
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" href="css/main.css" />
-    <title>Patient | Appointment</title>
+    <title>Patient | Home</title>
 </head>
 
 <body>
@@ -31,7 +32,7 @@ if (!isset($_SESSION['id'])) {
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
+                    <li class="nav-item active">
                         <a class="nav-link" href="main.php">Home <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
@@ -46,7 +47,7 @@ if (!isset($_SESSION['id'])) {
                     <li class="nav-item">
                         <a class="nav-link " href="healthLibrary.php">Health Library</a>
                     </li>
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link " href="myappointment.php">My Appointments</a>
                     </li>
                 </ul>
@@ -61,6 +62,8 @@ if (!isset($_SESSION['id'])) {
                             <a class="dropdown-item" href="myaccount.php">My account</a>
                             <a class="dropdown-item" href="myAppointmentHistory.php">My Appointment History</a>
                             <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="deleteAcc.php" onclick="return confirm('Are you sure?')">Delete Account</a>
+                            <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="logout.php">Logout</a>
                         </div>
                     </li>
@@ -71,72 +74,82 @@ if (!isset($_SESSION['id'])) {
 
     <main role="main">
 
-        <?php
-        if (isset($_POST['appointmentStatus'])) {
-            $id = $_POST['id'];
-            $status = "cancelled";
-            $sql = "UPDATE appointment set aStatus = :status WHERE aId = :id";
-            $stmt = $con->prepare($sql);
-            $stmt->bindParam(":status", $status, PDO::PARAM_STR);
-            $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-            $stmt->execute();
-        }
-        ?>
-
         <div class="container">
-
             <div class="mt-4 mb-4">
-                <h1 class="Display-4" id="primaryColor">My appointments</h1>
+                <h1 class="Display-4" id="primaryColor">Delete an account</h1>
             </div>
 
-            <table class="table table-hover">
-                <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">Patient Doctor</th>
-                        <th scope="col">Appointment Fee</th>
-                        <th scope="col">Appointment Reason</th>
-                        <th scope="col">Date</th>
-                        <th scope="col">Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    $status = "pending";
-                    $sql = "SELECT * FROM appointment WHERE pId = :id and aStatus = :status";
-                    $stmt = $con->prepare($sql);
-                    $stmt->bindParam(":id", $_SESSION['id'], PDO::PARAM_INT);
-                    $stmt->bindParam(":status", $status, PDO::PARAM_STR);
-                    $stmt->execute();
+            <div class="mt-4 mb-4 text-center">
+                <h5>Please verfiy with password</h5>
+            </div>
 
-                    while ($appointment = $stmt->fetch(PDO::FETCH_ASSOC)) :
-                    ?>
-                        <tr>
-                            <td><?= $appointment['pDoctor']; ?></td>
-                            <td>₱ <?= number_format($appointment['dFee'], 2); ?></td>
-                            <td><?= $appointment['aReason']; ?></td>
-                            <td><?= date("M d, Y", strtotime($appointment['aDate'])); ?> at <?= date("h:i A", strtotime($appointment['aTime'])); ?></td>
-                            <td>
-                                <form action="myappointment.php" method="post">
-                                    <input type="hidden" name="id" value="<?= $appointment['aId']; ?>">
-                                    <input type="submit" value="Cancel" class="btn btn-danger" name="appointmentStatus" onclick="return confirm('Are you sure?')">
-                                </form>
-                            </td>
-                        </tr>
-                    <?php endwhile; ?>
-                </tbody>
-            </table>
+            <?php
 
+            if (isset($_POST['deleteAcc'])) {
+
+                $password = trim(htmlspecialchars($_POST['password']));
+
+                $sql = "SELECT * FROM patientappointment WHERE pId = :id";
+                $stmt = $con->prepare($sql);
+                $stmt->bindParam(":id", $_SESSION['id'], PDO::PARAM_INT);
+                $stmt->execute();
+
+                while ($acc = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    if (password_verify($password, $acc['pPassword'])) {
+                        $sql = "DELETE FROM patientappointment WHERE pId = :id";
+                        $stmt = $con->prepare($sql);
+                        $stmt->bindParam(":id", $_SESSION['id'], PDO::PARAM_INT);
+                        $stmt->execute();
+                        // Delete the user profile img
+                        $path = __DIR__ . "/upload/user_profile_img/" . $_SESSION['profile'];
+                        unlink($path);
+
+                        unset($_SESSION['id']);
+                        unset($_SESSION['name']);
+                        unset($_SESSION['email']);
+                        unset($_SESSION['address']);
+                        unset($_SESSION['age']);
+                        unset($_SESSION['gender']);
+                        unset($_SESSION['mobile']);
+                        unset($_SESSION['profile']);
+
+
+
+                        header("location:index.php");
+                        exit(0);
+                    } else {
+                        header("location:deleteAcc.php?errPass=Incorrect_password");
+                        exit(0);
+                    }
+                }
+            }
+
+
+            ?>
+            <form action="deleteAcc.php" method="post">
+
+                <input type="hidden" name="id" value="<?= $_SESSION['id']; ?>">
+                <div class="col">
+                    <label>Password</label>
+                    <?= (isset($_GET['errPass']) && $_GET['errPass'] == "Incorrect_password") ? '<input type="password" name="password" class="form-control is-invalid">' : '<input type="password" name="password" class="form-control">'; ?>
+                    <?= (isset($_GET['errPass']) && $_GET['errPass'] == "Incorrect_password") ? '<span class="text-danger">Incorrect Password</span>' : ''; ?>
+                </div>
+
+                <div class="text-center mt-5">
+                    <input type="submit" value="Delete Account" name="deleteAcc" class="btn btn-danger">
+                </div>
         </div>
 
-
-        <hr class="featurette-divider">
-
-
+        </form>
+        </div>
 
         <!-- FOOTER -->
-        <footer class="container text-center">
+        <!-- <footer class="container">
+            <p class="float-right"><a href="#">Back to top</a></p>
             <p>&copy; 2017-2018 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
-        </footer>
+        </footer> -->
+
+
     </main>
 
 

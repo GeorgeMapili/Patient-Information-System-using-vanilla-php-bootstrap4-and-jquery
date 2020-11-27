@@ -40,6 +40,19 @@ if (isset($_POST['register'])) {
         exit(0);
     }
 
+    // Check if the name is already existed
+    $sql = "SELECT * FROM patientappointment WHERE pName= :name";
+    $stmt = $con->prepare($sql);
+    $stmt->bindParam(":name", $name, PDO::PARAM_STR);
+    $stmt->execute();
+
+    $nameCount = $stmt->rowCount();
+
+    if ($nameCount >= 1) {
+        header("location:register.php?errName1=Name_is_already_existed");
+        exit(0);
+    }
+
     // Check the email if valid
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         header("location:register.php?errEmail1=email_is_not_valid");
@@ -128,9 +141,10 @@ if (isset($_POST['register'])) {
 
     <form class="form-registration" action="register.php" method="post" enctype="multipart/form-data">
         <div class="form-group">
-            <label>Name</label>
-            <?= (isset($_GET['errName'])) ? '<input type="text" name="name" class="form-control is-invalid" required>' : '<input type="text" name="name" class="form-control" required>'; ?>
+            <label>Full Name</label>
+            <?= (isset($_GET['errName']) || isset($_GET['errName1'])) ? '<input type="text" name="name" class="form-control is-invalid" required>' : '<input type="text" name="name" class="form-control" required>'; ?>
             <?= (isset($_GET['errName'])) ? '<small class="text-danger">Name is not valid!</small>' : ""; ?>
+            <?= (isset($_GET['errName1'])) ? '<small class="text-danger">Name is already taken!</small>' : ""; ?>
         </div>
         <div class="form-group">
             <label>Email</label>

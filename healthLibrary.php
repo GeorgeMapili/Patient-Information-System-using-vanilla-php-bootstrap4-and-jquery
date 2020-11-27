@@ -50,19 +50,14 @@ if (!isset($_SESSION['id'])) {
                         <a class="nav-link " href="myappointment.php">My Appointments</a>
                     </li>
                 </ul>
-                <!-- search bar -->
-                <!-- <form class="form-inline mt-2 mt-md-0">
-                    <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                </form> -->
                 <ul class="navbar-nav ml-auto">
-                    <img src="upload/user_profile_img/q.jpg" width="50" style="border:1px solid #fff; border-radius: 50%;" alt="">
+                    <img src="upload/user_profile_img/<?= $_SESSION['profile']; ?>" width="50" style="border:1px solid #fff; border-radius: 50%;" alt="">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Qwerty Asdf
+                            <?= $_SESSION['name']; ?>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item disabled" href="">qwerty@gmail.com</a>
+                            <a class="dropdown-item disabled" href=""><?= $_SESSION['email']; ?></a>
                             <a class="dropdown-item" href="myaccount.php">My account</a>
                             <a class="dropdown-item" href="myAppointmentHistory.php">My Appointment History</a>
                             <div class="dropdown-divider"></div>
@@ -77,19 +72,11 @@ if (!isset($_SESSION['id'])) {
     <main role="main">
 
         <div class="container">
-
             <div class="mt-4 mb-4">
                 <h1 class="Display-4" id="primaryColor">Health Library</h1>
             </div>
-
-            <input type="text" class="form-control" name="search" placeholder="Search Treatment or Diseases...">
-            <div class="list-group">
-                <a href="#" class="list-group-item list-group-item-action">
-                    Cancer
-                </a>
-                <a href="#" class="list-group-item list-group-item-action">HeartAttack</a>
-                <a href="#" class="list-group-item list-group-item-action">Asthma</a>
-                <a href="#" class="list-group-item list-group-item-action">Fever</a>
+            <input class="form-control mr-sm-2" type="search" name="search" id="search" placeholder="Search Treatment or Diseases..." autocomplete="off" aria-label="Search">
+            <div class="list-group" id="data">
             </div>
 
         </div>
@@ -109,6 +96,34 @@ if (!isset($_SESSION['id'])) {
     <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#search').keyup(function() {
+                // Get input value on change
+                var inputVal = $(this).val();
+                var resultDropdown = $(this).siblings("#data");
+
+                if (inputVal.length) {
+                    $.get("action.php", {
+                        term: inputVal
+                    }).done(function(data) {
+                        // Display the returned data in browser
+                        resultDropdown.html(data);
+                    });
+                } else {
+                    resultDropdown.empty();
+                }
+            });
+            // Set search input value on click of result item
+            $(document).on("click", "#data", function() {
+                $(this).parents("#search-box").find('input[type="text"]').val($(this).text());
+                $(this).parent("#result").empty();
+            });
+        });
+    </script>
 </body>
 
 </html>

@@ -50,19 +50,14 @@ if (!isset($_SESSION['id'])) {
                         <a class="nav-link " href="myappointment.php">My Appointments</a>
                     </li>
                 </ul>
-                <!-- search bar -->
-                <!-- <form class="form-inline mt-2 mt-md-0">
-                    <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                </form> -->
                 <ul class="navbar-nav ml-auto">
-                    <img src="upload/user_profile_img/q.jpg" width="50" style="border:1px solid #fff; border-radius: 50%;" alt="">
+                    <img src="upload/user_profile_img/<?= $_SESSION['profile']; ?>" width="50" style="border:1px solid #fff; border-radius: 50%;" alt="">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Qwerty Asdf
+                            <?= $_SESSION['name']; ?>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item disabled" href="">qwerty@gmail.com</a>
+                            <a class="dropdown-item disabled" href=""><?= $_SESSION['email']; ?></a>
                             <a class="dropdown-item" href="myaccount.php">My account</a>
                             <a class="dropdown-item" href="myAppointmentHistory.php">My Appointment History</a>
                             <div class="dropdown-divider"></div>
@@ -85,7 +80,6 @@ if (!isset($_SESSION['id'])) {
             <table class="table table-hover">
                 <thead class="thead-dark">
                     <tr>
-                        <th scope="col">Appointment ID</th>
                         <th scope="col">Patient Doctor</th>
                         <th scope="col">Appointment Fee</th>
                         <th scope="col">Appointment Reason</th>
@@ -94,22 +88,39 @@ if (!isset($_SESSION['id'])) {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Dr. Qwerty</td>
-                        <td>₱ 500.00</td>
-                        <td>Fever</td>
-                        <td>January 1, 2020 at 5:30 PM</td>
-                        <td><input type="submit" value="Accepted" class="btn btn-success disabled" name="appointmentStatus"></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Dr. Qwerty</td>
-                        <td>₱ 500.00</td>
-                        <td>Fever</td>
-                        <td>January 1, 2020 at 5:30 PM</td>
-                        <td><input type="submit" value="Cancelled" class="btn btn-danger disabled" name="appointmentStatus"></td>
-                    </tr>
+                    <?php
+                    $status1 = "done";
+                    $status2 = "cancelled";
+                    $sql = "SELECT * FROM appointment WHERE (aStatus = :status1 OR aStatus = :status2) AND pId = :id";
+
+                    $stmt = $con->prepare($sql);
+                    $stmt->bindParam(":status1", $status1, PDO::PARAM_STR);
+                    $stmt->bindParam(":status2", $status2, PDO::PARAM_STR);
+                    $stmt->bindParam(":id", $_SESSION['id'], PDO::PARAM_INT);
+                    $stmt->execute();
+
+                    $rowCount = $stmt->rowCount();
+
+                    while ($myAppointmentHistory = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                    ?>
+                        <tr>
+                            <td><?= $myAppointmentHistory['pDoctor']; ?></td>
+                            <td>₱ <?= number_format($myAppointmentHistory['dFee'], 2); ?></td>
+                            <td><?= $myAppointmentHistory['aReason']; ?></td>
+                            <td><?= date("M d, Y", strtotime($myAppointmentHistory['aDate'])); ?> at <?= date("h:i A", strtotime($myAppointmentHistory['aTime'])); ?></td>
+                            <td>
+                                <?php
+                                if ($myAppointmentHistory['aStatus'] === "done") { ?>
+                                    <input type="submit" value="Done" class="btn btn-primary disabled" name="appointmentStatus">
+                                <?php
+                                } else if ($myAppointmentHistory['aStatus'] === "cancelled") {
+                                ?>
+                                    <input type="submit" value="Cancelled" class="btn btn-danger disabled" name="appointmentStatus">
+                                <?php } ?>
+                            </td>
+                        </tr>
+
+                    <?php endwhile; ?>
                 </tbody>
             </table>
 

@@ -50,19 +50,14 @@ if (!isset($_SESSION['id'])) {
                         <a class="nav-link " href="myappointment.php">My Appointments</a>
                     </li>
                 </ul>
-                <!-- search bar -->
-                <!-- <form class="form-inline mt-2 mt-md-0">
-                    <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                </form> -->
                 <ul class="navbar-nav ml-auto">
-                    <img src="upload/user_profile_img/q.jpg" width="50" style="border:1px solid #fff; border-radius: 50%;" alt="">
+                    <img src="upload/user_profile_img/<?= $_SESSION['profile']; ?>" width="50" style="border:1px solid #fff; border-radius: 50%;" alt="">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Qwerty Asdf
+                            <?= $_SESSION['name']; ?>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item disabled" href="">qwerty@gmail.com</a>
+                            <a class="dropdown-item disabled" href=""><?= $_SESSION['email']; ?></a>
                             <a class="dropdown-item" href="myaccount.php">My account</a>
                             <a class="dropdown-item" href="myAppointmentHistory.php">My Appointment History</a>
                             <div class="dropdown-divider"></div>
@@ -81,30 +76,65 @@ if (!isset($_SESSION['id'])) {
             <div class="mt-4 mb-4">
                 <h1 class="Display-4" id="primaryColor">My Profile</h1>
             </div>
-
-            <form action="contactus.php" method="post">
+            <div class="text-center">
+                <?= (isset($_GET['errInfo'])) ? '<span class="text-danger">Nothing to update!</span>' : ''; ?>
+                <?= (isset($_GET['successInfo'])) ? '<span class="text-success">Update successfully!</span>' : ''; ?>
+            </div>
+            <form action="action.php" method="post">
                 <div class="row">
+                    <input type="hidden" name="id" value="<?= $_SESSION['id']; ?>">
                     <div class="col">
-                        <label for="exampleInputEmail1">Name</label>
-                        <input type="text" class="form-control" value="Qwerty">
+                        <label>Full Name</label>
+                        <?php
+                        if (isset($_GET['errName']) || isset($_GET['errName1'])) {
+                        ?>
+                            <input type="text" name="name" class="form-control is-invalid">
+                        <?php
+                        } else { ?>
+                            <input type="text" name="name" class="form-control" value="<?= $_SESSION['name'] ?>">
+                        <?php
+                        }
+                        ?>
+                        <?= (isset($_GET['errName']) && isset($_GET['errName']) == 'name_is_not_valid') ? '<small class="text-danger">Name is not valid!</small>' : ''; ?>
+                        <?= (isset($_GET['errName1']) && isset($_GET['errName1']) == 'name_is_already_taken') ? '<small class="text-danger">Name is already taken!</small>' : ''; ?>
                     </div>
                     <div class="col">
-                        <label for="exampleInputEmail1">Email</label>
-                        <input type="email" class="form-control" value="qwerty@gmail.com">
+                        <label>Email</label>
+                        <?php
+                        if (isset($_GET['errEmail']) && isset($_GET['errEmail']) == 'email_is_already_existed') {
+                        ?>
+                            <input type="email" name="email" class="form-control is-invalid">
+                        <?php
+                        } else { ?>
+                            <input type="email" name="email" class="form-control" value="<?= $_SESSION['email']; ?>">
+                        <?php
+                        }
+                        ?>
+                        <?= (isset($_GET['errEmail']) && isset($_GET['errEmail']) == 'email_is_already_existed') ? '<small class="text-danger">Email is already taken!</small>' : ''; ?>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
-                        <label for="exampleInputEmail1">Address</label>
-                        <input type="text" class="form-control" value="12345 St.">
+                        <label>Address</label>
+                        <input type="text" name="address" class="form-control" value="<?= $_SESSION['address']; ?>">
                     </div>
                     <div class="col">
-                        <label for="exampleInputEmail1">Mobile Number</label>
-                        <input type="tel" class="form-control" value="09550192231">
+                        <label>Mobile Number</label>
+                        <?php
+                        if (isset($_GET['errMobile']) && isset($_GET['errMobile']) == 'mobile_number_is_already_existed') {
+                        ?>
+                            <input type="tel" name="mobileNumber" class="form-control is-invalid">
+                        <?php
+                        } else { ?>
+                            <input type="tel" name="mobileNumber" class="form-control" value="<?= $_SESSION['mobile'] ?>">
+                        <?php
+                        }
+                        ?>
+                        <?= (isset($_GET['errMobile']) && isset($_GET['errMobile']) == 'mobile_number_is_already_existed') ? '<small class="text-danger">Mobile Number is already taken!</small>' : ''; ?>
                     </div>
                 </div>
                 <div class="text-center mt-3">
-                    <input type="submit" class="btn btn-info" value="Update Information">
+                    <input type="submit" name="updateInformation" class="btn btn-info" value="Update Information">
                 </div>
             </form>
 
@@ -112,20 +142,43 @@ if (!isset($_SESSION['id'])) {
                 <h1 class="Display-4" id="primaryColor">Password Update</h1>
             </div>
 
-            <form action="contactus.php" method="post">
+            <div class="text-center">
+                <?= (isset($_GET['succPass']) && isset($_GET['succPass']) == 'Successfully_updated_password') ? '<span class="text-success">Successfully update password!</span>' : ''; ?>
+            </div>
 
-                <label for="exampleInputEmail1">Current Password</label>
-                <input type="password" class="form-control">
+            <form action="action.php" method="post">
 
-                <label for="exampleInputEmail1">New Password</label>
-                <input type="password" class="form-control">
+                <label>Current Password</label>
+                <?php
+                if (isset($_GET['errCurrPass']) && isset($_GET['errCurrPass']) == 'Incorrect_current_password') {
+                ?>
+                    <input type="password" name="currentPassword" class="form-control is-invalid" required>
+                <?php
+                } else { ?>
+                    <input type="password" name="currentPassword" class="form-control" required>
+                <?php
+                }
+                ?>
+                <?= (isset($_GET['errCurrPass']) && isset($_GET['errCurrPass']) == 'Incorrect_current_password') ? '<small class="text-danger">Incorrect Current Password!</small>' : ''; ?><br>
+                <label>New Password</label>
+                <input type="password" name="newPassword" class="form-control" required>
 
 
-                <label for="exampleInputEmail1">Confirm New Password</label>
-                <input type="password" class="form-control">
+                <label>Confirm New Password</label>
+                <?php
+                if (isset($_GET['errCurrPass1']) && isset($_GET['errCurrPass1']) == 'Confirm_Password_do_not_match') {
+                ?>
+                    <input type="password" name="confirmNewPassword" class="form-control is-invalid" required>
+                <?php
+                } else { ?>
+                    <input type="password" name="confirmNewPassword" class="form-control" required>
+                <?php
+                }
+                ?>
+                <?= (isset($_GET['errCurrPass1']) && isset($_GET['errCurrPass1']) == 'Confirm_Password_do_not_match') ? '<small class="text-danger">Confirm password do not match!</small>' : ''; ?><br>
 
                 <div class="text-center mt-3">
-                    <input type="submit" class="btn btn-info" value="Update Password">
+                    <input type="submit" class="btn btn-info" name="updatePassword" value="Update Password">
                 </div>
             </form>
 
@@ -133,13 +186,28 @@ if (!isset($_SESSION['id'])) {
                 <h1 class="Display-4" id="primaryColor">Update Image</h1>
             </div>
 
-            <form action="contactus.php" method="post">
+            <div class="text-center">
+                <?= (isset($_GET['succUpdateImg']) && isset($_GET['succUpdateImg']) == 'Successfully_update_the_img') ? '<span class="text-success">Successfully update profile image!</span>' : ''; ?>
+            </div>
 
-                <label for="exampleInputEmail1">Profile Image</label>
-                <input type="file" class="form-control">
+            <form action="action.php" method="post" enctype="multipart/form-data">
+
+                <label>Profile Image</label>
+                <?php
+                if (isset($_GET['errInvalidImg']) || isset($_GET['errImgSize'])) {
+                ?>
+                    <input type="file" name="profileImg" class="form-control is-invalid" required>
+                <?php
+                } else { ?>
+                    <input type="file" name="profileImg" class="form-control" required>
+                <?php
+                }
+                ?>
+                <?= (isset($_GET['errInvalidImg']) && isset($_GET['errInvalidImg']) == 'Invalid_image_only(jpg,jpeg,png)') ? '<small class="text-danger">Invalid image file ONLY(JPEG, JPG, PNG)!</small>' : ''; ?>
+                <?= (isset($_GET['errImgSize']) && isset($_GET['errImgSize']) == 'Invalid_image_size_ONLY_less_than_5MB') ? '<small class="text-danger">Invalid image size ONLY less than 5MB!</small>' : ''; ?>
 
                 <div class="text-center mt-3">
-                    <input type="submit" class="btn btn-info" value="Update Image">
+                    <input type="submit" name="updateImg" class="btn btn-info" value="Update Image">
                 </div>
             </form>
 

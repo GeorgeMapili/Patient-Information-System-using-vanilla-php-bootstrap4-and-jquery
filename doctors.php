@@ -50,19 +50,14 @@ if (!isset($_SESSION['id'])) {
                         <a class="nav-link " href="myappointment.php">My Appointments</a>
                     </li>
                 </ul>
-                <!-- search bar -->
-                <!-- <form class="form-inline mt-2 mt-md-0">
-                    <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                </form> -->
                 <ul class="navbar-nav ml-auto">
-                    <img src="upload/user_profile_img/q.jpg" width="50" style="border:1px solid #fff; border-radius: 50%;" alt="">
+                    <img src="upload/user_profile_img/<?= $_SESSION['profile']; ?>" width="50" style="border:1px solid #fff; border-radius: 50%;" alt="">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Qwerty Asdf
+                            <?= $_SESSION['name']; ?>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item disabled" href="">qwerty@gmail.com</a>
+                            <a class="dropdown-item disabled" href=""><?= $_SESSION['email']; ?></a>
                             <a class="dropdown-item" href="myaccount.php">My account</a>
                             <a class="dropdown-item" href="myAppointmentHistory.php">My Appointment History</a>
                             <div class="dropdown-divider"></div>
@@ -83,17 +78,26 @@ if (!isset($_SESSION['id'])) {
             </div>
 
             <div class="row">
-                <div class="card col-lg-3 col-md-4 col-sm-6 my-3 mb-3" style="width: 18rem;">
-                    <img class="card-img-top" src="upload/doc_profile_img/doc1.jpg" alt="Card image cap">
-                    <div class="card-body ">
-                        <h5 class="card-title">Qwerty</h5>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <a href="#" class="btn " id="docBtnApt">Set an Appointment</a>
+                <?php
+                $sql = "SELECT * FROM doctor";
+                $stmt = $con->prepare($sql);
+                $stmt->execute();
+
+                while ($doctors = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                ?>
+                    <div class="card col-lg-3 col-md-4 col-sm-6 my-3 mb-3" style="width: 18rem;">
+                        <img class="card-img-top" src="upload/doc_profile_img/<?= $doctors['dProfileImg']; ?>" alt="Card image cap">
+                        <div class="card-body ">
+                            <h5 class="card-title"><?= $doctors['dName']; ?></h5>
+                            <p class="card-text lead"><?= $doctors['dSpecialization']; ?></p>
+                            <p class="card-text"><?= $doctors['dSpecializationInfo']; ?></p>
+                            <a href="appointment.php?docId=<?= $doctors['dId']; ?>" class="btn " id="docBtnApt">Set an Appointment</a>
+                        </div>
                     </div>
-                </div>
+                <?php endwhile; ?>
+            </div>
 
-
-                <div class="card col-lg-3 col-md-4 col-sm-6 my-3 mb-3" style="width: 18rem;">
+            <!-- <div class="card col-lg-3 col-md-4 col-sm-6 my-3 mb-3" style="width: 18rem;">
                     <img class="card-img-top" src="upload/doc_profile_img/doc2.jpg" alt="Card image cap">
                     <div class="card-body ">
                         <h5 class="card-title">Qwerty</h5>
@@ -155,8 +159,8 @@ if (!isset($_SESSION['id'])) {
                         <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                         <a href="#" class="btn " id="docBtnApt">Set an Appointment</a>
                     </div>
-                </div>
-            </div>
+                </div> -->
+
 
 
             <hr class="featurette-divider">
