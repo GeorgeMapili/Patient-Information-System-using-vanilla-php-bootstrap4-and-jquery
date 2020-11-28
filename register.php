@@ -164,8 +164,8 @@ if (isset($_POST['register'])) {
 
         <div class="form-group">
             <label>Gender</label>
-            <select name="gender" id="" class="form-control">
-                <option value="">Select a gender</option>
+            <select name="gender" id="" class="form-control" required>
+                <option selected="selected" disabled="disabled" value="">Select a gender</option>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
             </select>

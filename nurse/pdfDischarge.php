@@ -1,5 +1,13 @@
 <?php
 
+session_start();
+require_once '../connect.php';
+
+if (!isset($_SESSION['nId'])) {
+    header("location:index.php");
+    exit(0);
+}
+
 require('fpdf182/fpdf.php');
 
 $pdf = new FPDF('P', 'mm', 'A4');

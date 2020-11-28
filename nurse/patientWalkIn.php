@@ -34,10 +34,10 @@ if (!isset($_SESSION['nId'])) {
                     <li class="nav-item">
                         <a class="nav-link" href="dashboard.php">Home <span class="sr-only">(current)</span></a>
                     </li>
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="patient.php">Patient from appointments</a>
                     </li>
-                    <li class="nav-item ">
+                    <li class="nav-item active">
                         <a class="nav-link" href="patientWalkIn.php">Patient Walk in</a>
                     </li>
                     <li class="nav-item">
@@ -70,13 +70,11 @@ if (!isset($_SESSION['nId'])) {
     <main role="main">
         <div class="container">
 
-            <h3 class="display-4 mt-5 my-4" id="primaryColor">All Patient Appointment</h3>
+            <h3 class="display-4 mt-5 my-4" id="primaryColor">All Walk in Patients</h3>
 
             <?php
-            $valid = 1;
             $limit = 5;
-            $stmt = $con->prepare("SELECT * FROM patientappointment WHERE pValid = :valid");
-            $stmt->bindParam(":valid", $valid, PDO::PARAM_INT);
+            $stmt = $con->prepare("SELECT * FROM walkinpatient");
             $stmt->execute();
             $countPatientAppointment = $stmt->rowCount();
             $pages = ceil($countPatientAppointment / $limit);
@@ -106,11 +104,11 @@ if (!isset($_SESSION['nId'])) {
             <div class="row">
                 <div class="col">
                     <form class="form-inline">
-                        <input class="form-control mb-3" autocomplete="off" type="search" id="search" placeholder="Search Patient" aria-label="Search">
+                        <input class="form-control mb-3" type="search" placeholder="Search Patient" aria-label="Search">
                     </form>
                 </div>
             </div>
-            <table class="table table-hover" id="table-data">
+            <table class="table table-hover">
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col">Patient ID</th>
@@ -126,27 +124,29 @@ if (!isset($_SESSION['nId'])) {
                 </thead>
                 <tbody>
 
+
+
+
                     <?php
                     $prev = $page - 1;
                     $next = $page + 1;
                     $start = ($page - 1) * $limit;
-                    $sql = "SELECT * FROM patientappointment WHERE pValid = :valid LIMIT :start, :limit";
+                    $sql = "SELECT * FROM walkinpatient LIMIT :start, :limit";
                     $stmt = $con->prepare($sql);
-                    $stmt->bindParam(":valid", $valid, PDO::PARAM_INT);
                     $stmt->bindParam(":start", $start, PDO::PARAM_INT);
                     $stmt->bindParam(":limit", $limit, PDO::PARAM_INT);
                     $stmt->execute();
 
-                    while ($patientAppointment = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                    while ($walkInPatient = $stmt->fetch(PDO::FETCH_ASSOC)) :
                     ?>
                         <tr>
-                            <th scope="row"><?= $patientAppointment['pId']; ?></th>
-                            <td><?= $patientAppointment['pName']; ?></td>
-                            <td><?= $patientAppointment['pAddress']; ?></td>
-                            <td><?= $patientAppointment['pMobile'] ?></td>
-                            <td><?= $patientAppointment['pDisease']; ?></td>
-                            <td><?= $patientAppointment['pDoctor']; ?></td>
-                            <td><?= $patientAppointment['pPrescription']; ?></td>
+                            <th scope="row"><?= $walkInPatient['walkInId']; ?></th>
+                            <td><?= $walkInPatient['walkInName']; ?></td>
+                            <td><?= $walkInPatient['walkInAddress']; ?></td>
+                            <td><?= $walkInPatient['walkInMobile'] ?></td>
+                            <td><?= $walkInPatient['walkInDisease']; ?></td>
+                            <td><?= $walkInPatient['walkInDoctor']; ?></td>
+                            <td><?= $walkInPatient['walkInPrescription']; ?></td>
                             <td>
                                 <input type="submit" value="ADD MEDICAL INFORMATION" class="btn btn-info" name="appointmentStatus">
                             </td>
@@ -156,24 +156,37 @@ if (!isset($_SESSION['nId'])) {
                         </tr>
 
                     <?php endwhile; ?>
+
                 </tbody>
             </table>
             <div class="mt-3">
                 <nav aria-label="Page navigation example ">
                     <ul class="pagination justify-content-center">
                         <li class="page-item <?= ($prev <= 0) ? 'disabled' : ''; ?>">
-                            <a class="page-link" href="patient.php?page=<?= $prev; ?>" tabindex="-1">Previous</a>
+                            <a class="page-link" href="patientWalkIn.php?page=<?= $prev; ?>" tabindex="-1">Previous</a>
                         </li>
-                        <?php $pageAppointment = isset($_GET['page']) ? $_GET['page'] : 1; ?>
+                        <?php $pageWalkIn = isset($_GET['page']) ? $_GET['page'] : 1; ?>
                         <?php for ($i = 1; $i <= $pages; $i++) : ?>
-                            <li class="page-item <?= ($i == $pageAppointment) ? 'active' : ''; ?>"><a class="page-link" href="patient.php?page=<?= $i; ?>"><?= $i; ?></a></li>
+                            <li class="page-item <?= ($i == $pageWalkIn) ? 'active' : ''; ?>"><a class="page-link" href="patientWalkIn.php?page=<?= $i; ?>"><?= $i; ?></a></li>
                         <?php endfor; ?>
                         <li class="page-item <?= ($next > $pages) ? 'disabled' : ''; ?>">
-                            <a class="page-link" href="patient.php?page=<?= $next; ?>">Next</a>
+                            <a class="page-link" href="patientWalkIn.php?page=<?= $next; ?>">Next</a>
                         </li>
                     </ul>
                 </nav>
             </div>
+
+            <h3 class=" mt-5 my-4" id="primaryColor">Add Patients</h3>
+
+            <div>
+                <a href="addPatient.php" class="btn btn-success mb-3 margin-right-auto">Add New Patient</a>
+            </div>
+
+            <div>
+                <a href="returneePatient.php" class="btn btn-success mb-3 margin-right-auto">Patient Before</a>
+            </div>
+
+
 
             <hr class="featurette-divider">
 
@@ -188,29 +201,6 @@ if (!isset($_SESSION['nId'])) {
     <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
-
-    <!-- jQuery library -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-    <script>
-        $(document).ready(function() {
-            $('#search').keyup(function() {
-                var search = $(this).val();
-
-                $.ajax({
-                    url: 'action.php',
-                    method: 'post',
-                    data: {
-                        query: search
-                    },
-                    success: function(response) {
-                        $("#table-data").html(response);
-                    }
-                });
-            });
-        });
-    </script>
-
 </body>
 
 </html>

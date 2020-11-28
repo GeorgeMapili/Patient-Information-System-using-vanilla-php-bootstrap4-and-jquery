@@ -1,3 +1,12 @@
+<?php
+session_start();
+require_once '../connect.php';
+
+if (!isset($_SESSION['nId'])) {
+    header("location:index.php");
+    exit(0);
+}
+?>
 <!doctype html>
 <html lang="en">
 
@@ -26,7 +35,10 @@
                         <a class="nav-link" href="dashboard.php">Home <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="patient.php">Patient</a>
+                        <a class="nav-link" href="patient.php">Patient from appointments</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="patientWalkIn.php">Patient Walk in</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="room.php">Room</a>
@@ -38,13 +50,13 @@
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                 </form> -->
                 <ul class="navbar-nav ml-auto">
-                    <img src="../upload/doc_profile_img/doc1.jpg" width="50" style="border:1px solid #fff; border-radius: 50%;" alt="">
+                    <img src="../upload/nurse_profile_img/<?= $_SESSION['nProfileImg']; ?>" width="50" style="border:1px solid #fff; border-radius: 50%;" alt="">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Nurse Receptionist
+                            Nurse&nbsp;<?= $_SESSION['nName']; ?>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item disabled" href="">qwerty@gmail.com</a>
+                            <a class="dropdown-item disabled" href=""><?= $_SESSION['nEmail']; ?></a>
                             <a class="dropdown-item" href="nurseProfile.php">My account</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="logout.php">Logout</a>

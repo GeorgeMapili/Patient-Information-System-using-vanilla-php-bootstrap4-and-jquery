@@ -61,6 +61,8 @@ if (!isset($_SESSION['id'])) {
                             <a class="dropdown-item" href="myaccount.php">My account</a>
                             <a class="dropdown-item" href="myAppointmentHistory.php">My Appointment History</a>
                             <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="deleteAcc.php" onclick="return confirm('Are you sure?')">Delete Account</a>
+                            <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="logout.php">Logout</a>
                         </div>
                     </li>
