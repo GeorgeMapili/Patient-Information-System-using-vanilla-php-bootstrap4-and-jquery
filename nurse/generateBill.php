@@ -72,6 +72,14 @@ if (!isset($_SESSION['nId'])) {
 
             <h3 class="display-4 mt-5 my-4" id="primaryColor">Patient Bill</h3>
 
+            <?php
+
+            if (isset($_POST['generateBill'])) {
+                
+            }
+
+            ?>
+
             <div class="container">
                 <div class="row justify-content-center bg-light">
                     <div class="col-lg-6 px-4 pb-4" id="order">

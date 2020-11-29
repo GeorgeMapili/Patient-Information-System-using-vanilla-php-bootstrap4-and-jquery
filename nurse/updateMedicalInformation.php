@@ -70,62 +70,40 @@ if (!isset($_SESSION['nId'])) {
     <main role="main">
         <div class="container">
 
+            <h3 class="display-4 mt-5 my-4" id="primaryColor">Update Medical Information</h3>
+
+
             <?php
 
-            if (isset($_POST['addMed'])) {
+            if (isset($_GET['id'])) {
+                $id = trim(htmlspecialchars($_GET['id']));
 
-                $id = trim(htmlspecialchars($_POST['id']));
-                $height = trim(htmlspecialchars($_POST['height']));
-                $weight = trim(htmlspecialchars($_POST['weight']));
-                $bloodType = trim(htmlspecialchars($_POST['bloodType']));
-                $allergy = trim(htmlspecialchars($_POST['allergy']));
-                $medInfo = $_POST['followingMed'];
-
-                $sql = "SELECT * FROM walkinpatient WHERE walkInId = :id";
+                $sql = "SELECT * FROM medicalinformation WHERE pId = :id";
                 $stmt = $con->prepare($sql);
                 $stmt->bindParam(":id", $id, PDO::PARAM_INT);
                 $stmt->execute();
 
-                $walkInPatient = $stmt->fetch(PDO::FETCH_ASSOC);
+                $updateMedicalInfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-                $name = $walkInPatient['walkInName'];
-                $age = $walkInPatient['walkInAge'];
-
-                $infos = implode(",", $medInfo);
-
-                $sql = "INSERT INTO medicalinformation(pId,pName,pAge,pBloodType,pWeight,pHeight,pAllergy,pMedicalInfo)VALUES(:id,:name,:age,:bloodType,:weight,:height,:allergy,:medicalInfo)";
-                $stmt = $con->prepare($sql);
-                $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-                $stmt->bindParam(":name", $name, PDO::PARAM_STR);
-                $stmt->bindParam(":age", $age, PDO::PARAM_INT);
-                $stmt->bindParam(":bloodType", $bloodType, PDO::PARAM_STR);
-                $stmt->bindParam(":weight", $weight, PDO::PARAM_INT);
-                $stmt->bindParam(":height", $height, PDO::PARAM_INT);
-                $stmt->bindParam(":allergy", $allergy, PDO::PARAM_STR);
-                $stmt->bindParam(":medicalInfo", $infos, PDO::PARAM_STR);
-                $stmt->execute();
-
-                header("location:patientWalkIn.php?succAdd=Successfully_added_medical_information");
-                exit(0);
+                $arrayInfo = explode(",", $updateMedicalInfo['pMedicalInfo']);
+                $arrsLen = count($arrayInfo);
             }
+
             ?>
 
 
-            <h3 class="display-4 mt-5 my-4" id="primaryColor">Medical Information</h3>
-
-
-            <form action="addMedicalInformation.php" method="post">
-
-                <input type="hidden" name="id" value="<?= $_POST['id']; ?>">
+            <form action="action.php" method="post">
+                <?php $id = $_GET['id']; ?>
+                <input type="hidden" name="id" value="<?= $id; ?>">
 
                 <div class="row">
                     <div class="col m-1">
                         <label>Height</label>
-                        <input type="number" name="height" min="0" class="form-control" required>
+                        <input type="number" name="height" value="<?= $updateMedicalInfo['pHeight'] ?>" min="0" class="form-control" required>
                     </div>
                     <div class="col m-1">
                         <label>Weight</label>
-                        <input type="number" name="weight" min="0" class="form-control" required>
+                        <input type="number" name="weight" min="0" value="<?= $updateMedicalInfo['pWeight'] ?>" class="form-control" required>
                     </div>
                 </div>
                 <div class="row">
@@ -140,43 +118,37 @@ if (!isset($_SESSION['nId'])) {
 
                             while ($bloodType = $stmt->fetch(PDO::FETCH_ASSOC)) :
                             ?>
-                                <option value="<?= $bloodType['bloodType'] ?>"><?= $bloodType['bloodType'] ?></option>
+                                <option value="<?= $bloodType['bloodType'] ?>" <?= ($bloodType['bloodType'] == $updateMedicalInfo['pBloodType']) ? 'selected' : ''; ?>><?= $bloodType['bloodType'] ?></option>
                             <?php endwhile; ?>
                         </select>
                     </div>
                     <div class="col m-1">
                         <label>Allergy</label>
-                        <input type="text" name="allergy" class="form-control" required>
+                        <input type="text" name="allergy" class="form-control" value="<?= $updateMedicalInfo['pAllergy'] ?>" required>
                     </div>
                 </div>
 
                 <h6 class=" mt-5 my-4" id="primaryColor">Have you ever the following ?</h6>
+                <?php
 
-                <label for="">Diabetes</label>
-                <input type="checkbox" name="followingMed[]" value="diabetes"><br>
-                <label for="">Hypertension</label>
-                <input type="checkbox" name="followingMed[]" value="hypertension"><br>
-                <label for="">Cancer</label>
-                <input type="checkbox" name="followingMed[]" value="cancer"><br>
-                <label for="">Stroke</label>
-                <input type="checkbox" name="followingMed[]" value="stroke"><br>
-                <label for="">Heart Trouble</label>
-                <input type="checkbox" name="followingMed[]" value="heartTrouble"><br>
-                <label for="">Arthritis</label>
-                <input type="checkbox" name="followingMed[]" value="arthritis"><br>
-                <label for="">Convulsion</label>
-                <input type="checkbox" name="followingMed[]" value="convulsion"><br>
-                <label for="">Bleeding</label>
-                <input type="checkbox" name="followingMed[]" value="bleeding"><br>
-                <label for="">Acute Infections</label>
-                <input type="checkbox" name="followingMed[]" value="acuteInfections"><br>
-                <label for="">Venereal Disease</label>
-                <input type="checkbox" name="followingMed[]" value="venereal"><br>
-                <label for="">Hereditary Defects</label>
-                <input type="checkbox" name="followingMed[]" value="hereditary"><br>
+                $sql = "SELECT * FROM ffmedicaldisease";
+                $stmt = $con->prepare($sql);
+                $stmt->execute();
+                $inc = 0;
+                while ($md = $stmt->fetch(PDO::FETCH_ASSOC)) :
 
+                ?>
+                    <label for=""><?= ucwords($md['md_name']); ?></label>
+                    <input type="checkbox" name="followingMed[]" value="<?= $md['md_name'] ?>" <?php
+                                                                                                for ($i = 0; $i < $arrsLen; $i++) {
+                                                                                                    if ($md['md_name'] == $arrayInfo[$i]) {
+                                                                                                        echo 'checked';
+                                                                                                    }
+                                                                                                }
+                                                                                                ?>><br>
+                <?php endwhile; ?>
                 <div class="text-center">
-                    <input type="submit" value="Add Medical Information" name="addMed" class="btn btn-primary mt-3">
+                    <input type="submit" value="Update Medical Information" name="updateMedInfo" class="btn btn-primary mt-3">
                 </div>
             </form>
 

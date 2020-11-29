@@ -68,7 +68,7 @@ if (!isset($_SESSION['nId'])) {
     </header>
 
     <main role="main">
-        <div class="container">
+        <div class="container-fluid">
 
             <h3 class="display-4 mt-5 my-4" id="primaryColor">All Walk in Patients</h3>
 
@@ -100,15 +100,23 @@ if (!isset($_SESSION['nId'])) {
                 exit(0);
             }
             ?>
-
+            <div class="text-center">
+                <?= (isset($_GET['succAdd']) && $_GET['succAdd'] == "Successfully_added_medical_information") ? '<span class="text-success">Successfully added medical information!</span>' : ''; ?>
+            </div>
+            <div class="text-center">
+                <?= (isset($_GET['errUp']) && $_GET['errUp'] == "Nothing_to_update") ? '<span class="text-danger">Nothing to update!</span>' : ''; ?>
+            </div>
+            <div class="text-center">
+                <?= (isset($_GET['succUp']) && $_GET['succUp'] == "Updated_successfully") ? '<span class="text-success">Successfully updated!</span>' : ''; ?>
+            </div>
             <div class="row">
                 <div class="col">
                     <form class="form-inline">
-                        <input class="form-control mb-3" type="search" placeholder="Search Patient" aria-label="Search">
+                        <input class="form-control mb-3" id="search" autocomplete="off" type="search" placeholder="Search Patient" aria-label="Search">
                     </form>
                 </div>
             </div>
-            <table class="table table-hover">
+            <table class="table table-hover" id="table-data">
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col">Patient ID</th>
@@ -138,6 +146,12 @@ if (!isset($_SESSION['nId'])) {
                     $stmt->execute();
 
                     while ($walkInPatient = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                        $sql1 = "SELECT * FROM medicalinformation WHERE pId = :id";
+                        $stmt1 = $con->prepare($sql1);
+                        $stmt1->bindParam(":id", $walkInPatient['walkInId'], PDO::PARAM_INT);
+                        $stmt1->execute();
+
+                        $medInfoExst = $stmt1->fetch(PDO::FETCH_ASSOC);
                     ?>
                         <tr>
                             <th scope="row"><?= $walkInPatient['walkInId']; ?></th>
@@ -148,10 +162,33 @@ if (!isset($_SESSION['nId'])) {
                             <td><?= $walkInPatient['walkInDoctor']; ?></td>
                             <td><?= $walkInPatient['walkInPrescription']; ?></td>
                             <td>
-                                <input type="submit" value="ADD MEDICAL INFORMATION" class="btn btn-info" name="appointmentStatus">
+                                <?php
+                                $medInfoExst = $medInfoExst['pId'] ?? 0;
+                                ?>
+
+                                <?php
+                                if ($medInfoExst == $walkInPatient['walkInId']) {
+                                ?>
+                                    <form action="updateMedicalInformation.php" method="get">
+                                        <input type="hidden" name="id" value="<?= $walkInPatient['walkInId']; ?>">
+                                        <input type="submit" value="UPDATE MEDICAL INFORMATION" class="btn btn-secondary" name="medicalInformation">
+                                    </form>
+                                <?php
+                                } else {
+                                ?>
+                                    <form action="addMedicalInformation.php" method="post">
+                                        <input type="hidden" name="id" value="<?= $walkInPatient['walkInId']; ?>">
+                                        <input type="submit" value="ADD MEDICAL INFORMATION" class="btn btn-info" name="medicalInformation">
+                                    </form>
+                                <?php
+                                }
+                                ?>
                             </td>
                             <td>
-                                <input type="submit" value="GENERATE BILL" class="btn btn-primary" name="appointmentStatus">
+                                <form action="generateBill.php" method="post">
+                                    <input type="hidden" name="id" value="<?= $walkInPatient['walkInId']; ?>">
+                                    <input type="submit" value="GENERATE BILL" class="btn btn-primary" name="generateBill">
+                                </form>
                             </td>
                         </tr>
 
@@ -201,6 +238,28 @@ if (!isset($_SESSION['nId'])) {
     <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#search').keyup(function() {
+                var search = $(this).val();
+
+                $.ajax({
+                    url: 'action.php',
+                    method: 'post',
+                    data: {
+                        walkInQuery: search
+                    },
+                    success: function(response) {
+                        $('#table-data').html(response);
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>

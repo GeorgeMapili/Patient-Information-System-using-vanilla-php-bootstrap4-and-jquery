@@ -68,7 +68,7 @@ if (!isset($_SESSION['nId'])) {
     </header>
 
     <main role="main">
-        <div class="container">
+        <div class="container-fluid">
 
             <h3 class="display-4 mt-5 my-4" id="primaryColor">All Patient Appointment</h3>
 
