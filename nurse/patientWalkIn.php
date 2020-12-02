@@ -79,8 +79,12 @@ if (!isset($_SESSION['nId'])) {
             $countPatientAppointment = $stmt->rowCount();
             $pages = ceil($countPatientAppointment / $limit);
 
+            if (ceil($countPatientAppointment / $limit) == 0) {
+                $pages = 1;
+            }
 
-            $page = isset($_GET['page']) ? $_GET['page'] : 1;
+            // $page = isset($_GET['page']) ? $_GET['page'] : 1;
+            $page = $_GET['page'] ?? 1;
             ?>
 
             <?php
@@ -119,13 +123,13 @@ if (!isset($_SESSION['nId'])) {
             <table class="table table-hover" id="table-data">
                 <thead class="thead-dark">
                     <tr>
-                        <th scope="col">Patient ID</th>
                         <th scope="col">Patient Name</th>
                         <th scope="col">Patient Address</th>
                         <th scope="col">Patient Mobile</th>
                         <th scope="col">Patient Disease</th>
                         <th scope="col">Patient Doctor</th>
                         <th scope="col">Doctor Prescription</th>
+                        <th scope="col">Room #</th>
                         <th scope="col">Add</th>
                         <th scope="col">Generate</th>
                     </tr>
@@ -138,9 +142,11 @@ if (!isset($_SESSION['nId'])) {
                     <?php
                     $prev = $page - 1;
                     $next = $page + 1;
+                    $discharged = 0;
                     $start = ($page - 1) * $limit;
-                    $sql = "SELECT * FROM walkinpatient LIMIT :start, :limit";
+                    $sql = "SELECT * FROM walkinpatient WHERE walkInDischarged = :discharged LIMIT :start, :limit ";
                     $stmt = $con->prepare($sql);
+                    $stmt->bindParam(":discharged", $discharged, PDO::PARAM_INT);
                     $stmt->bindParam(":start", $start, PDO::PARAM_INT);
                     $stmt->bindParam(":limit", $limit, PDO::PARAM_INT);
                     $stmt->execute();
@@ -154,13 +160,13 @@ if (!isset($_SESSION['nId'])) {
                         $medInfoExst = $stmt1->fetch(PDO::FETCH_ASSOC);
                     ?>
                         <tr>
-                            <th scope="row"><?= $walkInPatient['walkInId']; ?></th>
                             <td><?= $walkInPatient['walkInName']; ?></td>
                             <td><?= $walkInPatient['walkInAddress']; ?></td>
                             <td><?= $walkInPatient['walkInMobile'] ?></td>
                             <td><?= $walkInPatient['walkInDisease']; ?></td>
                             <td><?= $walkInPatient['walkInDoctor']; ?></td>
                             <td><?= $walkInPatient['walkInPrescription']; ?></td>
+                            <td><?= $walkInPatient['walkInRoomNumber']; ?></td>
                             <td>
                                 <?php
                                 $medInfoExst = $medInfoExst['pId'] ?? 0;
@@ -216,11 +222,11 @@ if (!isset($_SESSION['nId'])) {
             <h3 class=" mt-5 my-4" id="primaryColor">Add Patients</h3>
 
             <div>
-                <a href="addPatient.php" class="btn btn-success mb-3 margin-right-auto">Add New Patient</a>
+                <a href="addPatient.php" class="btn btn-success mb-3 margin-right-auto">New Patient</a>
             </div>
 
             <div>
-                <a href="returneePatient.php" class="btn btn-success mb-3 margin-right-auto">Patient Before</a>
+                <a href="patientBefore.php" class="btn btn-success mb-3 margin-right-auto">Patient Before</a>
             </div>
 
 

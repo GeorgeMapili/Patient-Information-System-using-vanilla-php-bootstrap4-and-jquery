@@ -18,7 +18,7 @@ if (!isset($_SESSION['nId'])) {
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/main.css" />
-    <title>Nurse | Patient</title>
+    <title>Nurse | Medical Information</title>
 </head>
 
 <body>
@@ -40,7 +40,7 @@ if (!isset($_SESSION['nId'])) {
                     <li class="nav-item">
                         <a class="nav-link" href="patientWalkIn.php">Patient Walk in</a>
                     </li>
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="room.php">Room</a>
                     </li>
                 </ul>
@@ -68,95 +68,106 @@ if (!isset($_SESSION['nId'])) {
     </header>
 
     <main role="main">
-        <div class="container">
 
-            <h3 class="display-4 mt-5 my-4" id="primaryColor">All Room</h3>
-
-            <div class="row">
-                <div class="col">
-                    <form class="form-inline">
-                        <input class="form-control mb-3" id="searchRoom" type="number" autocomplete="off" placeholder="Search Room #" aria-label="Search">
-                    </form>
-                </div>
+        <div class="container-fluid">
+            <div class="mt-4 mb-4">
+                <h1 class="Display-4" id="primaryColor">My record</h1>
             </div>
+
             <table class="table table-hover" id="table-data">
                 <thead class="thead-dark">
                     <tr>
-                        <th scope="col">Room Number</th>
-                        <th scope="col">Room Fee</th>
-                        <th scope="col">Room Status</th>
+                        <th scope="col">Patient Name</th>
+                        <th scope="col">Patient Address</th>
+                        <th scope="col">Patient Email</th>
+                        <th scope="col">Patient Mobile</th>
+                        <th scope="col">Room #</th>
+                        <th scope="col">Patient Doctor</th>
+                        <th scope="col">Doctor Prescription</th>
+                        <th scope="col">Patient Disease</th>
+                        <th scope="col">Patient Status</th>
+                        <th scope="col">Total Amount</th>
+                        <th scope="col">Patient Amount Pay</th>
+                        <th scope="col">Patient Change</th>
+                        <th scope="col">Date</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php
-                    $sql = "SELECT * FROM rooms";
-                    $stmt = $con->prepare($sql);
-                    $stmt->execute();
 
-                    while ($rooms = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                    <?php
+                    if (isset($_GET['pName'])) {
+                        $pName = $_GET['pName'];
+
+                        $sql = "SELECT * FROM returnee_patient WHERE pName = :name";
+                        $stmt = $con->prepare($sql);
+                        $stmt->bindParam(":name", $pName, PDO::PARAM_STR);
+                        $stmt->execute();
+
+                        while ($returneePatient = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     ?>
-                        <tr>
-                            <th scope="row"><?= $rooms['room_number'] ?></th>
-                            <td>₱ <?= number_format($rooms['room_fee'], 2) ?></td>
-                            <td>
-                                <?php
-                                if ($rooms['room_status'] == "available") {
-                                ?>
-                                    <form action="addPatient.php" method="post">
-                                        <input type="hidden" name="roomNumber" value="<?= $rooms['room_number'] ?>">
-                                        <input type="submit" class="btn btn-success" value="Available" name="availableRoom">
-                                    </form>
-                                <?php
-                                } else {
-                                ?>
-                                    <form action="occupiedBy.php" method="post">
-                                        <input type="hidden" name="roomNumber" value="<?= $rooms['room_number'] ?>">
-                                        <input type="submit" class="btn btn-danger" value="Occupied" name="occupiedRoom">
-                                    </form>
-                                <?php
-                                }
-                                ?>
-                            </td>
-                        </tr>
-                    <?php endwhile; ?>
+                            <tr>
+                                <td><?= $returneePatient['pName'] ?></td>
+                                <td><?= $returneePatient['pAddress'] ?></td>
+                                <td><?= $returneePatient['pEmail'] ?></td>
+                                <td><?= $returneePatient['pMobile'] ?></td>
+                                <td><?= $returneePatient['pRoomNumber'] ?></td>
+                                <td><?= $returneePatient['pDoctor'] ?></td>
+                                <td><?= $returneePatient['pPrescription'] ?></td>
+                                <td><?= $returneePatient['pDisease'] ?></td>
+                                <td><?= $returneePatient['pStatus'] ?></td>
+                                <td><?= $returneePatient['pTotalAmount'] ?></td>
+                                <td><?= $returneePatient['pAmountPay'] ?></td>
+                                <td><?= $returneePatient['pChange'] ?></td>
+                                <td><?= date("M d, Y", strtotime($returneePatient['rpMadeOn'])) ?></td>
+                            </tr>
+                    <?php
+                        }
+                    } ?>
+
                 </tbody>
             </table>
 
+            <div>
+                <a href="addNewRecord.php?pName=<?= $pName ?>" class="btn btn-success mb-3 margin-right-auto">Add New Record</a>
+            </div>
 
-            <hr class="featurette-divider">
-
-            <!-- /END THE FEATURETTES -->
-
-            <!-- FOOTER -->
-            <footer class="text-center">
-                <p>&copy; 2017-2018 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
-            </footer>
         </div>
+
+
+        <hr class="featurette-divider">
+
+
+
+        <!-- FOOTER -->
+        <footer class="container text-center">
+            <p>&copy; 2017-2018 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+        </footer>
     </main>
 
 
     <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
-
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <script>
         $(document).ready(function() {
-            $("#searchRoom").keyup(function() {
-                var search = $(this).val();
+            $('#search').keyup(function() {
+                // Get input value on change
+                var patientBefore = $(this).val();
+                var resultDropdown = $(this).siblings("#data");
 
-                $.ajax({
-                    url: 'action1.php',
-                    method: 'post',
-                    data: {
-                        roomQuery: search
-                    },
-                    success: function(response) {
-                        $("#table-data").html(response);
-                    }
-                });
+                if (patientBefore.length) {
+                    $.get("action1.php", {
+                        patientBefore: patientBefore
+                    }).done(function(data) {
+                        // Display the returned data in browser
+                        resultDropdown.html(data);
+                    });
+                } else {
+                    resultDropdown.empty();
+                }
             });
         });
     </script>

@@ -68,69 +68,55 @@ if (!isset($_SESSION['nId'])) {
     </header>
 
     <main role="main">
+
         <div class="container">
-
-            <h3 class="display-4 mt-5 my-4" id="primaryColor">Patient Bill</h3>
-
-            <div class="container">
-                <div class="row justify-content-center bg-light">
-                    <div class="col-lg-6 px-4 pb-4" id="order">
-                        <form action="checkout.php" method="post" id="placeOrder">
-                            <input type="hidden" name="orderedfood" value="123">
-                            <input type="hidden" name="orderedtotalamount" value="123">
-                            <input type="hidden" name="userId" value="123">
-                            <h1 class=" text-center mt-3">Patient information</h1>
-
-                            <?php
-                            $sql = "SELECT * FROM discharged_patient WHERE pId = :id";
-                            $stmt = $con->prepare($sql);
-                            $stmt->bindParam(":id", $_SESSION['walkInId'], PDO::PARAM_INT);
-                            $stmt->execute();
-
-                            $dischargePatient = $stmt->fetch(PDO::FETCH_ASSOC);
-                            ?>
-                            <div class="text-center">
-                                <h1 class="display-4 mt-2 text-danger">Patient Discharged Successfully</h1>
-                                <h6 class="lead text-center">Patient Name: <?= $dischargePatient['pName'] ?></h6>
-                                <h6 class="lead text-center">Email: <?= $dischargePatient['pEmail'] ?></h6>
-                                <h6 class="lead text-center">Address: <?= $dischargePatient['pAddress'] ?></h6>
-                                <h6 class="lead text-center">Mobile Number: <?= $dischargePatient['pMobile'] ?></h6>
-                                <h6 class="lead text-center">Patient Status: <?= $dischargePatient['pStatus'] ?></h6>
-                                <h6 class="lead text-center">Room Number: <?= $dischargePatient['pRoomNumber'] ?></h6>
-                                <h6 class="lead text-center">Doctor Name: <?= $dischargePatient['pDoctor'] ?></h6>
-                                <h6 class="lead text-center">Doctor Prescribe Medicine: <?= $dischargePatient['pPrescription'] ?></h6>
-                                <h6 class="lead text-center">Amount Input: <?= $dischargePatient['pAmountPay'] ?></h6>
-                                <h6 class="lead text-center">Total Amount: <?= $dischargePatient['pTotalAmount'] ?></h6>
-                                <h6 class="lead text-center">Change: <?= $dischargePatient['pChange'] ?></h6>
-                            </div>
-
-                            <div class="col">
-                                <div class="form-group mt-3">
-                                    <!-- <input type="submit" name="placeorder" class="btn btn-primary" value="Show Bill"> -->
-                                    <a href='pdfDischarge.php' class="btn btn-primary" target="_blank">Print Billings</a>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+            <div class="mt-4 mb-4">
+                <h1 class="Display-4" id="primaryColor">Patient Before</h1>
+            </div>
+            <input class="form-control mr-sm-2" type="search" name="search" id="search" placeholder="Search Patient Name" autocomplete="off" aria-label="Search">
+            <div class="list-group" id="data">
             </div>
 
-
-            <hr class="featurette-divider">
-
-            <!-- /END THE FEATURETTES -->
-
-            <!-- FOOTER -->
-            <footer class="text-center">
-                <p>&copy; 2017-2018 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
-            </footer>
         </div>
+
+
+        <hr class="featurette-divider">
+
+
+
+        <!-- FOOTER -->
+        <footer class="container text-center">
+            <p>&copy; 2017-2018 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+        </footer>
     </main>
 
 
     <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#search').keyup(function() {
+                // Get input value on change
+                var patientBefore = $(this).val();
+                var resultDropdown = $(this).siblings("#data");
+
+                if (patientBefore.length) {
+                    $.get("action1.php", {
+                        patientBefore: patientBefore
+                    }).done(function(data) {
+                        // Display the returned data in browser
+                        resultDropdown.html(data);
+                    });
+                } else {
+                    resultDropdown.empty();
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

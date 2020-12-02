@@ -70,11 +70,11 @@ if (!isset($_SESSION['nId'])) {
     <main role="main">
         <div class="container">
 
-            <h3 class="display-4 mt-5 my-4" id="primaryColor">Add Patient</h3>
+            <h3 class="display-4 mt-5 my-4" id="primaryColor">Add Record</h3>
 
             <?php
 
-            if (isset($_POST['addPatient'])) {
+            if (isset($_POST['addRecord'])) {
 
                 $name = trim(htmlspecialchars($_POST['name']));
                 $address = trim(htmlspecialchars($_POST['address']));
@@ -196,13 +196,27 @@ if (!isset($_SESSION['nId'])) {
             <?= (isset($_GET['addSucc']) && $_GET['addSucc'] == "Successfully_added_new_walkin_patient") ? '<div class="text-center"><h3 class="text-success">Successfully added new walk in patient!</h3></div>' : '';  ?>
             <?= (isset($_GET['errField']) && $_GET['errField'] == "please_input_all_fields") ? '<div class="text-center"><h3 class="text-danger">Please input all fields!</h3></div>' : '';  ?>
 
-            <form action="addPatient.php" method="post">
+            <?php
+
+            ?>
+            <form action="addNewRecord.php" method="post">
                 <div class="row">
+                    <?php
+
+                    if (isset($_GET['pName'])) {
+                        $pName = $_GET['pName'];
+
+                        $sql = "SELECT * FROM returnee_patient WHERE pName = :name";
+                        $stmt = $con->prepare($sql);
+                        $stmt->bindParam(":name", $pName, PDO::PARAM_STR);
+                        $stmt->execute();
+
+                        $addRecord = $stmt->fetch(PDO::FETCH_ASSOC);
+                    }
+                    ?>
                     <div class="col m-1">
                         <label>Full Name</label>
-                        <?= ((isset($_GET['errName']) && $_GET['errName'] == "name_is_not_valid") || (isset($_GET['errName1']) && $_GET['errName1'] == "name_is_already_taken")) ? '<input type="text" name="name" class="form-control is-invalid" required>' : '<input type="text" name="name" class="form-control" required>'; ?>
-                        <?= (isset($_GET['errName']) && $_GET['errName'] == "name_is_not_valid") ? '<span class="text-danger">Name is not valid!</span>' : ''; ?>
-                        <?= (isset($_GET['errName1']) && $_GET['errName1'] == "name_is_already_taken") ? '<span class="text-danger">Name is already taken!</span>' : ''; ?>
+                        <input type="text" name="name" class="form-control" value="<?= $addRecord['pName'] ?>" readonly>
                     </div>
                     <div class="col m-1">
                         <label>Address</label>
@@ -313,7 +327,7 @@ if (!isset($_SESSION['nId'])) {
                     </div>
                 </div>
                 <div class="text-center">
-                    <input type="submit" name="addPatient" value="Add Patient" class="mt-5 btn btn-primary">
+                    <input type="submit" name="addRecord" value="Add Record" class="mt-5 btn btn-primary">
                 </div>
             </form>
 

@@ -8,6 +8,13 @@ if (!isset($_SESSION['nId'])) {
     exit(0);
 }
 
+$sql = "SELECT * FROM discharged_patient WHERE pId = :id";
+$stmt = $con->prepare($sql);
+$stmt->bindParam(":id", $_SESSION['walkInId'], PDO::PARAM_INT);
+$stmt->execute();
+
+$dischargePatient = $stmt->fetch(PDO::FETCH_ASSOC);
+
 require('fpdf182/fpdf.php');
 
 $pdf = new FPDF('P', 'mm', 'A4');
@@ -27,15 +34,13 @@ $pdf->Cell(59, 5, '', 0, 1);
 
 $pdf->Cell(130, 5, '[Zip Code]', 0, 0);
 $pdf->Cell(25, 5, 'Date', 0, 0);
-$pdf->Cell(34, 5, ': 08/24/2020', 0, 1);
+$pdf->Cell(34, 5, date("M d, Y", strtotime($dischargePatient['pMadeOn'])), 0, 1);
 
 $pdf->Cell(130, 5, '[Contact Number]', 0, 0);
-$pdf->Cell(25, 5, 'Invoice #', 0, 0);
-$pdf->Cell(34, 5, ': [12345]', 0, 1);
-
-$pdf->Cell(130, 5, '[Fax #]', 0, 0);
 $pdf->Cell(25, 5, 'Patient ID', 0, 0);
-$pdf->Cell(34, 5, ': [123]', 0, 1);
+$pdf->Cell(34, 5, $dischargePatient['pId'], 0, 1);
+
+$pdf->Cell(130, 5, '[Fax #]', 0, 1);
 
 // empty cell as a vertical spacer
 $pdf->Cell('189', 10, '', 0, 1);
@@ -48,16 +53,16 @@ $pdf->SetFont('Arial', '', 12);
 
 // add cell at beginning of each line  for indentation
 $pdf->Cell(10, 5, '', 0, 0);
-$pdf->Cell(90, 5, '[Name]', 0, 1);
+$pdf->Cell(90, 5, 'Name: ' . $dischargePatient['pName'], 0, 1);
 
 $pdf->Cell(10, 5, '', 0, 0);
-$pdf->Cell(90, 5, '[Company Name]', 0, 1);
+$pdf->Cell(90, 5, 'Disease: ' . $dischargePatient['pDisease'], 0, 1);
 
 $pdf->Cell(10, 5, '', 0, 0);
-$pdf->Cell(90, 5, '[Address]', 0, 1);
+$pdf->Cell(90, 5, 'Prescription: ' . $dischargePatient['pPrescription'], 0, 1);
 
 $pdf->Cell(10, 5, '', 0, 0);
-$pdf->Cell(90, 5, '[Phone]', 0, 1);
+$pdf->Cell(90, 5, 'Doctor: ' . $dischargePatient['pDoctor'], 0, 1);
 
 // empty cell as a vertical spacer
 $pdf->Cell('189', 10, '', 0, 1);
@@ -72,33 +77,47 @@ $pdf->Cell(34, 5, 'Amount', 1, 1);
 $pdf->SetFont('Arial', '', 12);
 // Numbers are right-aligned so we give 'R' after new line 
 
-$pdf->Cell(130, 5, 'Ultra Cool Fridge', 1, 0);
-$pdf->Cell(25, 5, '-', 1, 0);
-$pdf->Cell(34, 5, '3,204', 1, 1, 'R');
+$sql = "SELECT * FROM doctor WHERE dName = :name";
+$stmt = $con->prepare($sql);
+$stmt->bindParam(":name", $dischargePatient['pDoctor'], PDO::PARAM_STR);
+$stmt->execute();
 
-$pdf->Cell(130, 5, 'Something Else', 1, 0);
-$pdf->Cell(25, 5, '-', 1, 0);
-$pdf->Cell(34, 5, '1,204', 1, 1, 'R');
+$doctor = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$pdf->Cell(130, 5, 'Something Else1', 1, 0);
-$pdf->Cell(25, 5, '-', 1, 0);
-$pdf->Cell(34, 5, '204', 1, 1, 'R');
+$pdf->Cell(130, 5, 'Doctor Fee: ', 1, 0);
+$pdf->Cell(25, 5, $doctor['dFee'], 1, 0);
+$pdf->Cell(34, 5, $doctor['dFee'], 1, 1, 'R');
+
+$sql = "SELECT * FROM rooms WHERE room_number = :number";
+$stmt = $con->prepare($sql);
+$stmt->bindParam(":number", $_SESSION['walkInRoomNumber'], PDO::PARAM_INT);
+$stmt->execute();
+
+$room = $stmt->fetch(PDO::FETCH_ASSOC);
+
+$pdf->Cell(130, 5, 'Room Fee: ', 1, 0);
+$pdf->Cell(25, 5, $room['room_fee'], 1, 0);
+$pdf->Cell(34, 5, $room['room_fee'], 1, 1, 'R');
+
+$pdf->Cell(130, 5, 'Medicine Fee: ', 1, 0);
+$pdf->Cell(25, 5, $_SESSION['medicineFee'], 1, 0);
+$pdf->Cell(34, 5, $_SESSION['medicineFee'], 1, 1, 'R');
 
 // Summary
 $pdf->Cell(130, 5, '', 1, 0);
-$pdf->Cell(25, 5, 'Subtotal', 1, 0);
-$pdf->Cell(4, 5, '$', 1, 0);
-$pdf->Cell(30, 5, '4,612', 1, 1, 'R');
+$pdf->Cell(34, 5, 'Total Amount:', 1, 0);
+// $pdf->Cell(4, 5, '', 1, 0);
+$pdf->Cell(25, 5, $_SESSION['walkInTotalPay'], 1, 1, 'R');
 
 $pdf->Cell(130, 5, '', 1, 0);
-$pdf->Cell(25, 5, 'Taxable', 1, 0);
-$pdf->Cell(4, 5, '$', 1, 0);
-$pdf->Cell(30, 5, '0', 1, 1, 'R');
+$pdf->Cell(34, 5, 'Amount Pay:', 1, 0);
+// $pdf->Cell(4, 5, '', 1, 0);
+$pdf->Cell(25, 5, $dischargePatient['pAmountPay'], 1, 1, 'R');
 
 $pdf->Cell(130, 5, '', 1, 0);
-$pdf->Cell(25, 5, 'Total Due', 1, 0);
-$pdf->Cell(4, 5, '$', 1, 0);
-$pdf->Cell(30, 5, '4,612', 1, 1, 'R');
+$pdf->Cell(34, 5, 'Change:', 1, 0);
+// $pdf->Cell(4, 5, '', 1, 0);
+$pdf->Cell(25, 5, $dischargePatient['pChange'], 1, 1, 'R');
 
 
 
