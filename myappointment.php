@@ -116,7 +116,7 @@ if (!isset($_SESSION['id'])) {
                             <td><?= $appointment['pDoctor']; ?></td>
                             <td>₱ <?= number_format($appointment['dFee'], 2); ?></td>
                             <td><?= $appointment['aReason']; ?></td>
-                            <td><?= date("M d, Y", strtotime($appointment['aDate'])); ?> at <?= date("h:i A", strtotime($appointment['aTime'])); ?></td>
+                            <td><?= date("M d, Y", strtotime($appointment['aDate'])); ?> at <?= $appointment['aTime']; ?></td>
                             <td>
                                 <form action="myappointment.php" method="post">
                                     <input type="hidden" name="id" value="<?= $appointment['aId']; ?>">

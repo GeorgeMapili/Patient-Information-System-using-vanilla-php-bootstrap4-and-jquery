@@ -1,3 +1,8 @@
+<?php
+session_start();
+require_once '../connect.php';
+
+?>
 <!doctype html>
 <html lang="en">
 
@@ -14,15 +19,43 @@
 
 <body>
     <h2 class="display-4 mb-3" style="color: rgb(15, 208, 214);">Doctor Login</h2>
-    <form action="index.php" method="post">
 
+    <?php
+    if (isset($_POST['login'])) {
+        $email = trim(htmlspecialchars($_POST['email']));
+        $passwords = trim(htmlspecialchars($_POST['password']));
+
+        $sql = "SELECT * FROM doctor WHERE dEmail = :email";
+        $stmt = $con->prepare($sql);
+        $stmt->bindParam(":email", $email, PDO::PARAM_STR);
+        $stmt->execute();
+
+        while ($password = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            if ($passwords === $password['dPassword']) {
+                $_SESSION['dId'] = $password['dId'];
+                $_SESSION['dName'] = $password['dName'];
+                $_SESSION['dEmail'] = $password['dEmail'];
+                $_SESSION['dAddress'] = $password['dAddress'];
+                $_SESSION['dMobile'] = $password['dMobile'];
+                $_SESSION['dSpecialization'] = $password['dSpecialization'];
+                $_SESSION['dSpecializationInfo'] = $password['dSpecializationInfo'];
+                $_SESSION['dProfileImg'] = $password['dProfileImg'];
+                $_SESSION['dFee'] = $password['dFee'];
+
+                header("location:dashboard.php");
+                exit(0);
+            }
+        }
+    }
+    ?>
+    <form action="index.php" method="post">
         <div class="form-group">
-            <label for="exampleInputEmail1">Email address</label>
-            <input type="email" name="email" class="form-control is-invalid" required>
+            <label>Email address</label>
+            <input type="email" name="email" class="form-control" required>
         </div>
         <div class="form-group">
-            <label for="exampleInputPassword1">Password</label>
-            <input type="password" name="password" class="form-control is-valid" required>
+            <label>Password</label>
+            <input type="password" name="password" class="form-control" required>
         </div>
 
         <input type="submit" class="btn-block btn-info mt-4" value="Login" name="login">

@@ -14,18 +14,17 @@ $output = '';
 if (isset($_POST['query'])) {
     $start = 0;
     $limit = 5;
+    $status = "done";
     $search = trim(htmlspecialchars($_POST['query']));
     $name = "%" . $search . "%";
-    $stmt = $con->prepare("SELECT * FROM patientappointment WHERE pName LIKE :name LIMIT :start,:limit");
+    $stmt = $con->prepare("SELECT * FROM appointment WHERE pName LIKE :name AND aStatus = :status LIMIT :start,:limit");
     $stmt->bindParam(":name", $name, PDO::PARAM_STR);
+    $stmt->bindParam(":status", $status, PDO::PARAM_STR);
     $stmt->bindParam(":start", $start, PDO::PARAM_INT);
     $stmt->bindParam(":limit", $limit, PDO::PARAM_INT);
 
     $stmt->execute();
     $userRow = $stmt->rowCount();
-
-    // var_dump($userRow);
-    // exit(0);
 
     if ($userRow > 0) {
         $output = '
@@ -38,7 +37,6 @@ if (isset($_POST['query'])) {
             <th scope="col">Patient Disease</th>
             <th scope="col">Patient Doctor</th>
             <th scope="col">Doctor Prescription</th>
-            <th scope="col">Add</th>
             <th scope="col">Generate</th>
         </tr>
     </thead>
@@ -52,14 +50,17 @@ if (isset($_POST['query'])) {
             <td>' . $patientAppointment['pName'] . '</td>
             <td>' . $patientAppointment['pAddress'] . '</td>
             <td>' . $patientAppointment['pMobile'] . '</td>
-            <td>' . $patientAppointment['pDisease'] . '</td>
+            <td>' . $patientAppointment['aReason'] . '</td>
             <td>' . $patientAppointment['pDoctor'] . '</td>
-            <td>' . $patientAppointment['pPrescription'] . '</td>
+            <td>' . $patientAppointment['pPrescription'] . '</td>';
+
+
+            $output .= '
             <td>
-                <input type="submit" value="ADD MEDICAL INFORMATION" class="btn btn-info" name="appointmentStatus">
-            </td>
-            <td>
-                <input type="submit" value="GENERATE BILL" class="btn btn-primary" name="appointmentStatus">
+            <form action="generateBill.php" method="post">
+                <input type="hidden" name="id" value=' . $patientAppointment['pId'] . '>
+                <input type="submit" value="GENERATE BILL" class="btn btn-primary" name="generateBill">
+            </form>
             </td>
         </tr>
         ';
@@ -216,5 +217,24 @@ if (isset($_POST['medPrice'])) {
     $stmt->bindParam(":totalpay", $totalprice, PDO::PARAM_INT);
     $stmt->bindParam(":medFee", $medPrice, PDO::PARAM_INT);
     $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+    $stmt->execute();
+}
+
+if (isset($_POST['medPricePa'])) {
+    $medPricePa = $_POST['medPricePa'];
+    $doctorFeePa = $_POST['doctorFeePa'];
+    $aid = $_POST['aid'];
+    $pid = $_POST['pid'];
+
+    $totalprice = 0;
+
+    $totalprice = (int)$medPricePa + (int)$doctorFeePa;
+
+    $sql = "UPDATE appointment SET pTotalPay = :totalpay, pMedicineFee = :medFee WHERE aId =:aid AND pId = :pid";
+    $stmt = $con->prepare($sql);
+    $stmt->bindParam(":totalpay", $totalprice, PDO::PARAM_INT);
+    $stmt->bindParam(":medFee", $medPricePa, PDO::PARAM_INT);
+    $stmt->bindParam(":aid", $aid, PDO::PARAM_INT);
+    $stmt->bindParam(":pid", $pid, PDO::PARAM_INT);
     $stmt->execute();
 }

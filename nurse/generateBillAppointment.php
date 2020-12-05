@@ -77,29 +77,30 @@ if (!isset($_SESSION['nId'])) {
 
             <?php
 
-            if (isset($_POST['generateBill'])) {
+            if (isset($_POST['generateBillAppointment'])) {
                 $id = $_POST['id'];
+                $aid = $_POST['aid'];
 
-                $sql = "SELECT * FROM walkinpatient WHERE walkInId = :id";
+                $sql = "SELECT * FROM appointment WHERE pId = :id AND aId = :aid";
                 $stmt = $con->prepare($sql);
                 $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+                $stmt->bindParam(":aid", $aid, PDO::PARAM_INT);
                 $stmt->execute();
 
-                $patientBill = $stmt->fetch(PDO::FETCH_ASSOC);
+                $patientAppointmentBill = $stmt->fetch(PDO::FETCH_ASSOC);
                 // SESSION -------------------------------------------------------------
-                $_SESSION['walkInId'] = $patientBill['walkInId'];
-                $_SESSION['walkInName'] = $patientBill['walkInName'];
-                $_SESSION['walkInEmail'] = $patientBill['walkInEmail'];
-                $_SESSION['walkInAddress'] = $patientBill['walkInAddress'];
-                $_SESSION['walkInMobile'] = $patientBill['walkInMobile'];
-                $_SESSION['walkInRoomNumber'] = $patientBill['walkInRoomNumber'];
-                $_SESSION['walkInDoctor'] = $patientBill['walkInDoctor'];
-                $_SESSION['walkInPrescription'] = $patientBill['walkInPrescription'];
-                $_SESSION['medicineFee'] = $patientBill['medicineFee'];
-                $_SESSION['walkInTotalPay'] = $patientBill['walkInTotalPay'];
-                $_SESSION['room_fee'] = $patientBill['roomFee'];
-                $_SESSION['dFee'] = $patientBill['doctorFee'];
-                $_SESSION['walkInDisease'] = $patientBill['walkInDisease'];
+                $_SESSION['Pa_aId'] = $patientAppointmentBill['aId'];
+                $_SESSION['Pa_pId'] = $patientAppointmentBill['pId'];
+                $_SESSION['Pa_name'] = $patientAppointmentBill['pName'];
+                $_SESSION['Pa_email'] = $patientAppointmentBill['pEmail'];
+                $_SESSION['Pa_address'] = $patientAppointmentBill['pAddress'];
+                $_SESSION['Pa_mobile'] = $patientAppointmentBill['pMobile'];
+                $_SESSION['Pa_doctor'] = $patientAppointmentBill['pDoctor'];
+                $_SESSION['Pa_prescription'] = $patientAppointmentBill['pPrescription'];
+                $_SESSION['Pa_mFee'] = $patientAppointmentBill['pMedicineFee'];
+                $_SESSION['Pa_totalPay'] = $patientAppointmentBill['pTotalPay'];
+                $_SESSION['Pa_dFee'] = $patientAppointmentBill['dFee'];
+                $_SESSION['Pa_Disease'] = $patientAppointmentBill['aReason'];
             }
 
             ?>
@@ -110,16 +111,15 @@ if (!isset($_SESSION['nId'])) {
 
                         <?php
 
-                        if (isset($_POST['discharge'])) {
+                        if (isset($_POST['dischargeAppointment'])) {
                             // Data in field
-                            $id = $_POST['id'];
+                            $aid = $_POST['aId'];
+                            $pid = $_POST['pId'];
                             $name = $_POST['name'];
                             $email = $_POST['email'];
                             $address = $_POST['address'];
                             $mobilenumber = $_POST['mobilenumber'];
                             $patientStatus = $_POST['patientStatus'];
-                            $roomNumber = $_POST['roomNumber'];
-                            $roomFee = $_POST['roomFee'];
                             $doctorName = $_POST['doctorName'];
                             $doctorFee = $_POST['doctorFee'];
                             $prescribeMed = $_POST['prescribeMed'];
@@ -131,130 +131,77 @@ if (!isset($_SESSION['nId'])) {
                             $changeBill = 0;
 
                             // SESSION ------------------------------------------------------
-                            $_SESSION['amountInput'] = $amountInput;
+                            // $_SESSION['amountInput'] = $amountInput;
 
                             if ($amountInput >= $totalAmount) {
-                                $_SESSION['change'] = $amountInput -  $totalAmount;
+                                $changeBill = $amountInput -  $totalAmount;
 
+                                $status = "discharged";
                                 $discharge = 1;
-                                // CHANGE STATUS
-                                $sql = "UPDATE walkinpatient SET walkInDischarged = :discharged WHERE walkInId = :id";
-                                $stmt = $con->prepare($sql);
-                                $stmt->bindParam(":discharged", $discharge, PDO::PARAM_INT);
-                                $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-                                $stmt->execute();
-
-                                // INSERT INTO DISCHARGED PATIENT TABLE
-                                $sql = "INSERT INTO discharged_patient(pId,pName,pEmail,pAddress, pMobile, pRoomNumber, pDoctor, pPrescription, pDisease, pTotalAmount,pStatus,pAmountPay,pChange)VALUES(:id,:name,:email,:address,:mobile,:roomNumber,:doctor,:prescription,:disease,:totalAmount,:status,:amountPay,:change)";
-                                $stmt = $con->prepare($sql);
-                                $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-                                $stmt->bindParam(":name", $name, PDO::PARAM_STR);
-                                $stmt->bindParam(":email", $email, PDO::PARAM_STR);
-                                $stmt->bindParam(":address", $address, PDO::PARAM_STR);
-                                $stmt->bindParam(":mobile", $mobilenumber, PDO::PARAM_STR);
-                                $stmt->bindParam(":roomNumber", $roomNumber, PDO::PARAM_INT);
-                                $stmt->bindParam(":doctor", $doctorName, PDO::PARAM_STR);
-                                $stmt->bindParam(":prescription", $prescribeMed, PDO::PARAM_STR);
-                                $stmt->bindParam(":disease", $_SESSION['walkInDisease'], PDO::PARAM_STR);
-                                $stmt->bindParam(":totalAmount", $totalAmount, PDO::PARAM_STR);
-                                $stmt->bindParam(":status", $patientStatus, PDO::PARAM_STR);
-                                $stmt->bindParam(":amountPay", $_SESSION['amountInput'], PDO::PARAM_INT);
-                                $stmt->bindParam(":change", $_SESSION['change'], PDO::PARAM_INT);
-                                $stmt->execute();
-
-                                // DELETE IT FROM PATIENTWALKIN TABLE || JUST COMMENT IF SOMETHING MAKE WRONG
-                                $sql = "DELETE FROM walkinpatient WHERE walkInId = :id";
-                                $stmt = $con->prepare($sql);
-                                $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-                                $stmt->execute();
-
-                                // INSERT INTO RETURNEE PATIENT TABLE FOR DOCTOR MEDICAL HISTORY
-                                $sql = "INSERT INTO returnee_patient(pId,pName,pEmail,pAddress, pMobile, pRoomNumber, pDoctor, pPrescription, pDisease, pTotalAmount,pStatus,pAmountPay,pChange)VALUES(:id,:name,:email,:address,:mobile,:roomNumber,:doctor,:prescription,:disease,:totalAmount,:status,:amountPay,:change)";
-                                $stmt = $con->prepare($sql);
-                                $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-                                $stmt->bindParam(":name", $name, PDO::PARAM_STR);
-                                $stmt->bindParam(":email", $email, PDO::PARAM_STR);
-                                $stmt->bindParam(":address", $address, PDO::PARAM_STR);
-                                $stmt->bindParam(":mobile", $mobilenumber, PDO::PARAM_STR);
-                                $stmt->bindParam(":roomNumber", $roomNumber, PDO::PARAM_INT);
-                                $stmt->bindParam(":doctor", $doctorName, PDO::PARAM_STR);
-                                $stmt->bindParam(":prescription", $prescribeMed, PDO::PARAM_STR);
-                                $stmt->bindParam(":disease", $_SESSION['walkInDisease'], PDO::PARAM_STR);
-                                $stmt->bindParam(":totalAmount", $totalAmount, PDO::PARAM_STR);
-                                $stmt->bindParam(":status", $patientStatus, PDO::PARAM_STR);
-                                $stmt->bindParam(":amountPay", $_SESSION['amountInput'], PDO::PARAM_INT);
-                                $stmt->bindParam(":change", $_SESSION['change'], PDO::PARAM_INT);
-                                $stmt->execute();
-
-                                // Update the table from occupied to available
-                                $status = "available";
-                                $sql = "UPDATE rooms SET room_status = :status WHERE room_number = :number";
+                                // UPDATE THE STATUS OF THE PATIENT FROM DONE TO DISCHARGE
+                                $sql = "UPDATE appointment SET aStatus = :status, pDischarge = :discharge, patientStatus =:statusPatient, pAmountPay = :amountPay, pChange = :change  WHERE aId = :aid AND pId = :pid";
                                 $stmt = $con->prepare($sql);
                                 $stmt->bindParam(":status", $status, PDO::PARAM_STR);
-                                $stmt->bindParam(":number", $roomNumber, PDO::PARAM_INT);
+                                $stmt->bindParam(":discharge", $discharge, PDO::PARAM_INT);
+                                $stmt->bindParam(":statusPatient", $patientStatus, PDO::PARAM_STR);
+                                $stmt->bindParam(":amountPay", $amountInput, PDO::PARAM_INT);
+                                $stmt->bindParam(":change", $changeBill, PDO::PARAM_INT);
+                                $stmt->bindParam(":aid", $aid, PDO::PARAM_INT);
+                                $stmt->bindParam(":pid", $pid, PDO::PARAM_INT);
                                 $stmt->execute();
 
-                                header("location:discharge.php");
+                                header("location:dischargePa.php");
                                 exit(0);
                             } else {
-                                header("location:generateBill.php?errAmount=too_low_amount");
+                                header("location:generateBillAppointment.php?errAmount=too_low_amount");
                                 exit(0);
                             }
                         }
                         ?>
-                        <form action="generateBill.php" method="post" id="placeOrder">
-                            <!-- <input type="hidden" name="orderedfood" value="123">
-                            <input type="hidden" name="orderedtotalamount" value="123">
-                            <input type="hidden" name="userId" value="123"> -->
+                        <form action="generateBillAppointment.php" method="post" id="placeOrder">
                             <h1 class=" text-center mt-3">Patient information</h1>
 
-                            <input type="hidden" name="id" class="id" value="<?= $_SESSION['walkInId'] ?>">
+                            <input type="hidden" name="aId" class="aid" value="<?= $_SESSION['Pa_aId'] ?>">
+                            <input type="hidden" name="pId" class="pid" value="<?= $_SESSION['Pa_pId'] ?>">
 
                             <div class="form-group">
                                 <label for="">Name</label>
-                                <input type="text" name="name" value="<?= $_SESSION['walkInName'] ?>" class="form-control" readonly>
+                                <input type="text" name="name" value="<?= $_SESSION['Pa_name'] ?>" class="form-control" readonly>
                             </div>
                             <div class="form-group">
                                 <label for="">Email</label>
-                                <input type="email" name="email" value="<?= $_SESSION['walkInEmail'] ?>" class="form-control" readonly>
+                                <input type="email" name="email" value="<?= $_SESSION['Pa_email'] ?>" class="form-control" readonly>
                             </div>
                             <div class="form-group">
                                 <label for="">Address</label>
-                                <input type="text" name="address" value="<?= $_SESSION['walkInAddress'] ?>" class="form-control" readonly>
+                                <input type="text" name="address" value="<?= $_SESSION['Pa_address'] ?>" class="form-control" readonly>
                             </div>
                             <div class="form-group">
                                 <label for="">Phone Number</label>
-                                <input type="tel" name="mobilenumber" class="form-control" value="<?= $_SESSION['walkInMobile'] ?>" readonly>
+                                <input type="tel" name="mobilenumber" class="form-control" value="<?= $_SESSION['Pa_mobile'] ?>" readonly>
                             </div>
-
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="">Room Number</label>
-                                    <input type="text" name="roomNumber" value="<?= $_SESSION['walkInRoomNumber'] ?>" class="form-control" readonly>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="">Room Fee</label>
-                                    <input type="text" name="roomFee" class="form-control roomFee" value="<?= $_SESSION['room_fee'] ?>" readonly>
-                                </div>
+                            <div class="form-group">
+                                <label for="">Patient Disease</label>
+                                <input type="text" name="patientDisease" value="<?= $_SESSION['Pa_Disease'] ?>" class="form-control" readonly>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="">Doctor Name</label>
-                                    <input type="text" name="doctorName" value="<?= $_SESSION['walkInDoctor'] ?>" class="form-control" readonly>
+                                    <input type="text" name="doctorName" value="<?= $_SESSION['Pa_doctor'] ?>" class="form-control" readonly>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="">Doctor Fee</label>
-                                    <input type="text" name="doctorFee" class="form-control doctorFee" value="<?= $_SESSION['dFee'] ?>" readonly>
+                                    <input type="text" name="doctorFee" class="form-control doctorFee" value="<?= $_SESSION['Pa_dFee'] ?>" readonly>
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="">Doctor Prescribe Medicine</label>
-                                    <textarea name="prescribeMed" class="form-control" cols="30" rows="10" readonly><?= $_SESSION['walkInPrescription'] ?></textarea>
+                                    <textarea name="prescribeMed" class="form-control" cols="30" rows="10" readonly><?= $_SESSION['Pa_prescription'] ?></textarea>
                                 </div>
                                 <div class="form-group col-md-6" id="price">
                                     <label for="">Medicine Fee</label>
-                                    <input type="number" name="medicineFee" autocomplete="off" class="form-control medPrice" value="<?= $_SESSION['medicineFee'] ?>">
+                                    <input type="number" name="medicineFee" autocomplete="off" class="form-control medPrice" min="0" value="<?= $_SESSION['Pa_mFee'] ?>">
                                 </div>
                             </div>
 
@@ -267,7 +214,7 @@ if (!isset($_SESSION['nId'])) {
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="">Total Amount</label>
-                                    <input type="text" name="totalAmount" class="form-control" value="<?= $_SESSION['walkInTotalPay'] ?>" readonly>
+                                    <input type="text" name="totalAmount" class="form-control" value="<?= $_SESSION['Pa_totalPay'] ?>" readonly>
                                 </div>
                             </div>
 
@@ -284,7 +231,7 @@ if (!isset($_SESSION['nId'])) {
 
                             <div class="col">
                                 <div class="form-group">
-                                    <input type="submit" name="discharge" class="btn btn-primary" value="Discharge">
+                                    <input type="submit" name="dischargeAppointment" class="btn btn-primary" value="Discharge">
                                 </div>
                             </div>
                         </form>
@@ -318,10 +265,10 @@ if (!isset($_SESSION['nId'])) {
             $(".medPrice").on('change', function() {
                 var $el = $(this).closest("form");
 
-                var medPrice = $el.find('.medPrice').val();
-                var doctorFee = $el.find('.doctorFee').val();
-                var roomFee = $el.find('.roomFee').val();
-                var id = $el.find('.id').val();
+                var medPricePa = $el.find('.medPrice').val();
+                var doctorFeePa = $el.find('.doctorFee').val();
+                var aid = $el.find('.aid').val();
+                var pid = $el.find('.pid').val();
 
                 location.reload(true);
 
@@ -330,10 +277,10 @@ if (!isset($_SESSION['nId'])) {
                     method: 'post',
                     cache: false,
                     data: {
-                        medPrice: medPrice,
-                        doctorFee: doctorFee,
-                        roomFee: roomFee,
-                        id: id
+                        medPricePa: medPricePa,
+                        doctorFeePa: doctorFeePa,
+                        aid: aid,
+                        pid: pid
                     },
                     success: function(response) {
                         console.log(response);

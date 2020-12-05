@@ -26,6 +26,22 @@ unset($_SESSION['dFee']);
 unset($_SESSION['amountInput']);
 unset($_SESSION['change']);
 unset($_SESSION['walkInDisease']);
+unset($_SESSION['amountInput']);
+unset($_SESSION['change']);
+
+// Patient information SESSION
+unset($_SESSION['Pa_aId']);
+unset($_SESSION['Pa_pId']);
+unset($_SESSION['Pa_name']);
+unset($_SESSION['Pa_email']);
+unset($_SESSION['Pa_address']);
+unset($_SESSION['Pa_mobile']);
+unset($_SESSION['Pa_doctor']);
+unset($_SESSION['Pa_prescription']);
+unset($_SESSION['Pa_mFee']);
+unset($_SESSION['Pa_totalPay']);
+unset($_SESSION['Pa_dFee']);
+unset($_SESSION['Pa_Disease']);
 
 header("location:index.php");
 exit(0);

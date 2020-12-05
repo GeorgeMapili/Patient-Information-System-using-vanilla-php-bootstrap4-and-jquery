@@ -1,3 +1,8 @@
+<?php
+session_start();
+require_once '../connect.php';
+
+?>
 <!doctype html>
 <html lang="en">
 
@@ -47,13 +52,13 @@
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                 </form> -->
                 <ul class="navbar-nav ml-auto">
-                    <img src="../upload/doc_profile_img/doc1.jpg" width="50" style="border:1px solid #fff; border-radius: 50%;" alt="">
+                    <img src="../upload/doc_profile_img/<?= $_SESSION['dProfileImg'] ?>" width="50" style="border:1px solid #fff; border-radius: 50%;" alt="">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Dr. Qwerty Asdf
+                            <?= $_SESSION['dName'] ?>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item disabled" href="">qwerty@gmail.com</a>
+                            <a class="dropdown-item disabled" href=""><?= $_SESSION['dEmail'] ?></a>
                             <a class="dropdown-item" href="doctorProfile.php">My account</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="logout.php">Logout</a>
@@ -75,7 +80,6 @@
             <table class="table table-hover">
                 <thead class="thead-dark">
                     <tr>
-                        <th scope="col">Appointment ID</th>
                         <th scope="col">Patient Name</th>
                         <th scope="col">Patient Address</th>
                         <th scope="col">Patient Mobile</th>
@@ -86,48 +90,32 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Qwerty</td>
-                        <td>12345 St.</td>
-                        <td>09510195578</td>
-                        <td>Fever</td>
-                        <td>January 1, 2020 at 5:30 PM</td>
-                        <td>
-                            <input type="submit" value="Update Disease" class="btn btn-info" name="appointmentStatus">
-                        </td>
-                        <td>
-                            <input type="submit" value="Done" class="btn btn-success" name="appointmentStatus">
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Qwerty</td>
-                        <td>12345 St.</td>
-                        <td>09510195578</td>
-                        <td>Fever</td>
-                        <td>January 1, 2020 at 5:30 PM</td>
-                        <td>
-                            <input type="submit" value="Update Disease" class="btn btn-info" name="appointmentStatus">
-                        </td>
-                        <td>
-                            <input type="submit" value="Done" class="btn btn-success" name="appointmentStatus">
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Qwerty</td>
-                        <td>12345 St.</td>
-                        <td>09510195578</td>
-                        <td>Fever</td>
-                        <td>January 1, 2020 at 5:30 PM</td>
-                        <td>
-                            <input type="submit" value="Update Disease" class="btn btn-info" name="appointmentStatus">
-                        </td>
-                        <td>
-                            <input type="submit" value="Done" class="btn btn-success" name="appointmentStatus">
-                        </td>
-                    </tr>
+                    <?php
+                    $status1 = "accepted";
+                    $status2 = "done";
+                    $sql = "SELECT * FROM appointment WHERE pDoctor = :doctor AND aStatus IN(:status1,:status2)";
+                    $stmt = $con->prepare($sql);
+                    $stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);
+                    $stmt->bindParam(":status1", $status1, PDO::PARAM_STR);
+                    $stmt->bindParam(":status2", $status2, PDO::PARAM_STR);
+                    $stmt->execute();
+
+                    while ($upcomingAppointment = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                    ?>
+                        <tr>
+                            <td><?= $upcomingAppointment['pName'] ?></td>
+                            <td><?= $upcomingAppointment['pAddress'] ?></td>
+                            <td><?= $upcomingAppointment['pMobile'] ?></td>
+                            <td><?= $upcomingAppointment['aReason'] ?></td>
+                            <td><?= date("M d, Y", strtotime($upcomingAppointment['aDate'])); ?> at <?= $upcomingAppointment['aTime']; ?></td>
+                            <td>
+                                <input type="submit" value="Update Disease" class="btn btn-info" name="appointmentStatus">
+                            </td>
+                            <td>
+                                <input type="submit" value="Done" class="btn btn-success" name="appointmentStatus">
+                            </td>
+                        </tr>
+                    <?php endwhile; ?>
                 </tbody>
             </table>
 

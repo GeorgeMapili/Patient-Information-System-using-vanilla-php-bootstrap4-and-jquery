@@ -2,6 +2,10 @@
 session_start();
 require_once '../connect.php';
 
+if (!isset($_SESSION['nId'])) {
+    header("location:index.php");
+    exit(0);
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -14,7 +18,7 @@ require_once '../connect.php';
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/main.css" />
-    <title>Doctor | Pending Appointment</title>
+    <title>Nurse | Patient</title>
 </head>
 
 <body>
@@ -31,19 +35,16 @@ require_once '../connect.php';
                         <a class="nav-link" href="dashboard.php">Home <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" href="appointmentPending.php">Appointment Pending</a>
+                        <a class="nav-link" href="appointmentPending.php">Pending Appointments</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="patient.php">Patient</a>
+                        <a class="nav-link" href="patient.php">Patient from appointments</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " href="incomingAppointment.php">Upcoming Appointment</a>
+                        <a class="nav-link" href="patientWalkIn.php">Patient Walk in</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " href="cancelledAppointment.php">Cancelled Appointment</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link " href="doneAppointment.php">Done Appointment</a>
+                        <a class="nav-link" href="room.php">Room</a>
                     </li>
                 </ul>
                 <!-- search bar -->
@@ -52,14 +53,14 @@ require_once '../connect.php';
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                 </form> -->
                 <ul class="navbar-nav ml-auto">
-                    <img src="../upload/doc_profile_img/<?= $_SESSION['dProfileImg'] ?>" width="50" style="border:1px solid #fff; border-radius: 50%;" alt="">
+                    <img src="../upload/nurse_profile_img/<?= $_SESSION['nProfileImg']; ?>" width="50" style="border:1px solid #fff; border-radius: 50%;" alt="">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <?= $_SESSION['dName'] ?>
+                            Nurse&nbsp;<?= $_SESSION['nName']; ?>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item disabled" href=""><?= $_SESSION['dEmail'] ?></a>
-                            <a class="dropdown-item" href="doctorProfile.php">My account</a>
+                            <a class="dropdown-item disabled" href=""><?= $_SESSION['nEmail']; ?></a>
+                            <a class="dropdown-item" href="nurseProfile.php">My account</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="logout.php">Logout</a>
                         </div>
@@ -71,53 +72,44 @@ require_once '../connect.php';
 
     <main role="main">
 
-        <?php
-        // QUERY FOR ACCEPT STATUS
-        if (isset($_POST['acceptStatus'])) {
-            $aid = $_POST['aid'];
-            $pid = $_POST['id'];
-            // UPDATE appointment
-            $status = "accepted";
-            $sql = "UPDATE appointment SET aStatus = :status WHERE pId = :id AND pDoctor = :doctor AND aId= :aid";
-            $stmt = $con->prepare($sql);
-            $stmt->bindParam(":status", $status, PDO::PARAM_STR);
-            $stmt->bindParam(":id", $pid, PDO::PARAM_INT);
-            $stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);
-            $stmt->bindParam(":aid", $aid, PDO::PARAM_INT);
-            $stmt->execute();
-            // UPDATE patient appointment
-            $value = "1";
-            $sql = "UPDATE patientappointment SET pDoctor = :doctor, pValid = :value WHERE pId = :id";
-            $stmt = $con->prepare($sql);
-            $stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);
-            $stmt->bindParam(":value", $value, PDO::PARAM_INT);
-            $stmt->bindParam(":id", $pid, PDO::PARAM_INT);
-            $stmt->execute();
-
-            header("location:appointmentPending.php");
-            exit(0);
-        }
-
-        if (isset($_POST['cancelStatus'])) {
-            $pid = $_POST['id'];
-
-            // UPDATE appointment;
-            $status = "cancelled";
-            $sql = "UPDATE appointment SET aStatus = :status WHERE pId = :id";
-            $stmt = $con->prepare($sql);
-            $stmt->bindParam(":status", $status, PDO::PARAM_STR);
-            $stmt->bindParam(":id", $pid, PDO::PARAM_INT);
-            $stmt->execute();
-
-            header("location:appointmentPending.php");
-            exit(0);
-        }
-        ?>
-
         <div class="container-fluid">
 
+            <?php
+            if (isset($_POST['acceptStatus'])) {
+                $aId = $_POST['aId'];
+                $pId = $_POST['pId'];
+                $status = "accepted";
+
+                $sql = "UPDATE appointment SET aStatus = :status WHERE aId = :aid AND pId = :pid";
+                $stmt = $con->prepare($sql);
+                $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+                $stmt->bindParam(":aid", $aId, PDO::PARAM_INT);
+                $stmt->bindParam(":pid", $pId, PDO::PARAM_INT);
+                $stmt->execute();
+
+                header("location:appointmentPending.php");
+                exit(0);
+            }
+
+            if (isset($_POST['cancelStatus'])) {
+                $aId = $_POST['aId'];
+                $pId = $_POST['pId'];
+                $status = "cancelled";
+
+                $sql = "UPDATE appointment SET aStatus = :status WHERE aId = :aid AND pId = :pid";
+                $stmt = $con->prepare($sql);
+                $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+                $stmt->bindParam(":aid", $aId, PDO::PARAM_INT);
+                $stmt->bindParam(":pid", $pId, PDO::PARAM_INT);
+                $stmt->execute();
+
+                header("location:appointmentPending.php");
+                exit(0);
+            }
+            ?>
+
             <div class="mt-4 mb-4">
-                <h1 class="Display-4 my-4" id="primaryColor">My Pending Appointment</h1>
+                <h1 class="Display-4 my-4" id="primaryColor">Pending Appointments</h1>
             </div>
 
             <table class="table table-hover">
@@ -126,31 +118,32 @@ require_once '../connect.php';
                         <th scope="col">Patient Name</th>
                         <th scope="col">Patient Address</th>
                         <th scope="col">Patient Mobile</th>
+                        <th scope="col">Doctor</th>
                         <th scope="col">Appointment Reason</th>
-                        <th scope="col">Date</th>
+                        <th scope="col">Date of Appointment</th>
                         <th scope="col">Status</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
-                    // QUERY FOR PENDING APPOINTMENT
                     $status = "pending";
-                    $sql = "SELECT * FROM appointment WHERE pDoctor = :name AND aStatus = :status";
+                    $sql = "SELECT * FROM appointment WHERE aStatus = :status";
                     $stmt = $con->prepare($sql);
-                    $stmt->bindParam(":name", $_SESSION['dName'], PDO::PARAM_STR);
                     $stmt->bindParam(":status", $status, PDO::PARAM_STR);
                     $stmt->execute();
 
-                    while ($pendingAppointment = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                    while ($appointmentPending = $stmt->fetch(PDO::FETCH_ASSOC)) :
                     ?>
                         <tr>
-                            <td><?= $pendingAppointment['pName'] ?></td>
-                            <td><?= $pendingAppointment['pAddress'] ?></td>
-                            <td><?= $pendingAppointment['pMobile'] ?></td>
-                            <td><?= $pendingAppointment['aReason'] ?></td>
-                            <td><?= date("M d, Y", strtotime($pendingAppointment['aDate'])); ?>
+                            <td><?= $appointmentPending['pName'] ?></td>
+                            <td><?= $appointmentPending['pAddress'] ?></td>
+                            <td><?= $appointmentPending['pMobile'] ?></td>
+                            <td><?= $appointmentPending['pDoctor'] ?></td>
+                            <td><?= $appointmentPending['aReason'] ?></td>
+                            <td>
+                                <?= date("M d, Y", strtotime($appointmentPending['aDate'])); ?>
                                 at
-                                <?= date("h:i A", strtotime($pendingAppointment['aTime'])); ?>
+                                <?= $appointmentPending['aTime']; ?>
                             </td>
                             <td>
                                 <div class="row">
@@ -158,16 +151,16 @@ require_once '../connect.php';
 
                                     <div class="col">
                                         <form action="appointmentPending.php" method="post">
-                                            <input type="hidden" name="aid" value="<?= $pendingAppointment['aId'] ?>">
-                                            <input type="hidden" name="id" value="<?= $pendingAppointment['pId'] ?>">
+                                            <input type="hidden" name="aId" value="<?= $appointmentPending['aId'] ?>">
+                                            <input type="hidden" name="pId" value="<?= $appointmentPending['pId'] ?>">
                                             <input type="submit" value="Accept" class="btn btn-primary" name="acceptStatus">
                                         </form>
                                     </div>
                                     <div class="col">
                                         <form action="appointmentPending.php" method="post">
-                                            <input type="hidden" name="aid" value="<?= $pendingAppointment['aId'] ?>">
-                                            <input type="hidden" name="id" value="<?= $pendingAppointment['pId'] ?>">
-                                            <input type="submit" value="Cancel" class="btn btn-danger" name="cancelStatus">
+                                            <input type="hidden" name="aId" value="<?= $appointmentPending['aId'] ?>">
+                                            <input type="hidden" name="pId" value="<?= $appointmentPending['pId'] ?>">
+                                            <input type="submit" value="Cancel" class="btn btn-danger" name="cancelStatus" onclick="return confirm('Are you sure?')">
                                         </form>
                                     </div>
                                 </div>
@@ -176,18 +169,6 @@ require_once '../connect.php';
                     <?php endwhile; ?>
                 </tbody>
             </table>
-
-        </div>
-
-
-        <hr class="featurette-divider">
-
-
-
-        <!-- FOOTER -->
-        <footer class="container text-center">
-            <p>&copy; 2017-2018 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
-        </footer>
     </main>
 
 

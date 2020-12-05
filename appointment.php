@@ -83,8 +83,47 @@ if (!isset($_SESSION['id'])) {
             $pMobile = $_POST['mobileNumber'];
             $pDoctor = $_POST['selectDoctor'];
             $aDate = $_POST['dateOfAppointment'];
-            $aTime = $_POST['timeOfAppointment'];
+            $aTime = $_POST['selectTime'];
             $aReason = trim(htmlspecialchars($_POST['reasonAppointment']));
+
+            // Check if the Date is already pass by
+            if (strtotime($aDate) < strtotime('now')) {
+                header("location:appointment.php?errDate=date_already_pass_by");
+                exit(0);
+            }
+
+            // Check if already have an appointment with different doctor but the same time ||You have already an appointment in that time with different doctor
+            $sql = "SELECT * FROM appointment WHERE pName = :name AND aDate=:date AND aTime = :time AND pDoctor <> :doctor";
+            $stmt = $con->prepare($sql);
+            $stmt->bindParam(":name", $_SESSION['name'], PDO::PARAM_STR);
+            $stmt->bindParam(":date", $aDate, PDO::PARAM_STR);
+            $stmt->bindParam(":time", $aTime, PDO::PARAM_STR);
+            $stmt->bindParam(":doctor", $pDoctor, PDO::PARAM_STR);
+            $stmt->execute();
+
+            $sameTimeWithDiffentDoctor = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($sameTimeWithDiffentDoctor > 0) {
+                header("location:appointment.php?errDup=you_have_already_an_appointment_in_that_time_with_different_doctor");
+                exit(0);
+            }
+
+
+
+            // Check if it is already requested an appointment with the same date and time
+            $sql = "SELECT * FROM appointment WHERE pDoctor = :doctor AND aDate =:date AND aTime = :time";
+            $stmt = $con->prepare($sql);
+            $stmt->bindParam(":doctor", $pDoctor, PDO::PARAM_STR);
+            $stmt->bindParam(":date", $aDate, PDO::PARAM_STR);
+            $stmt->bindParam(":time", $aTime, PDO::PARAM_STR);
+            $stmt->execute();
+
+            $duplicateRow = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($duplicateRow > 0) {
+                header("location:appointment.php?errTime=all_ready_taken_time");
+                exit(0);
+            }
 
             // Get the Doctor Fee
             $sql = "SELECT * FROM doctor WHERE dName = :name";
@@ -94,7 +133,7 @@ if (!isset($_SESSION['id'])) {
             $doctor = $stmt->fetch(PDO::FETCH_ASSOC);
             $dFee = $doctor['dFee'];
 
-            $sql = "INSERT INTO appointment (pId,pName,pEmail,pAddress,pMobile,pDoctor,dFee,aReason,aDate,aTime)VALUES(:id,:name,:email,:address,:mobile,:doctor,:fee,:reason,:date,:time)";
+            $sql = "INSERT INTO appointment (pId,pName,pEmail,pAddress,pMobile,pDoctor,dFee,aReason,aDate,aTime,pTotalPay)VALUES(:id,:name,:email,:address,:mobile,:doctor,:fee,:reason,:date,:time,:totalPay)";
             $stmt = $con->prepare($sql);
             $stmt->bindParam(":id", $pId, PDO::PARAM_INT);
             $stmt->bindParam(":name", $pName, PDO::PARAM_STR);
@@ -106,6 +145,7 @@ if (!isset($_SESSION['id'])) {
             $stmt->bindParam(":reason", $aReason, PDO::PARAM_STR);
             $stmt->bindParam(":date", $aDate, PDO::PARAM_STR);
             $stmt->bindParam(":time", $aTime, PDO::PARAM_STR);
+            $stmt->bindParam(":totalPay", $dFee, PDO::PARAM_STR);
 
             if ($stmt->execute()) {
                 header("location:appointment.php?AppointmentSuccess=Successully_request_an_appointment");
@@ -128,6 +168,7 @@ if (!isset($_SESSION['id'])) {
                 <h1 class="Display-4" id="primaryColor">Set an Appointment</h1>
             </div>
 
+            <?= (isset($_GET['errDup']) && $_GET['errDup'] == "you_have_already_an_appointment_in_that_time_with_different_doctor") ? '<span class="text-danger text-center">Already have an appointment in that time with different doctor!</span>' : ''; ?>
             <form action="appointment.php" method="post">
                 <div class="row">
                     <input type="hidden" name="id" value="<?= $_SESSION['id']; ?>">
@@ -201,10 +242,22 @@ if (!isset($_SESSION['id'])) {
                 <div>
                     <small>Read specialization info below</small>
                 </div>
+                <label for="">Date & Time</label>
+                <?= (isset($_GET['errDate']) && $_GET['errDate'] == "date_already_pass_by") ? '<input type="date" class="form-control is-invalid" name="dateOfAppointment" required>' : '<input type="date" class="form-control" name="dateOfAppointment" required>'; ?>
+                <?= (isset($_GET['errDate']) && $_GET['errDate'] == "date_already_pass_by") ? '<span class="text-danger">Date has already passed!</span>' : ''; ?>
 
-                <label for="">Date</label>
-                <input type="date" class="form-control" name="dateOfAppointment" required>
-                <input type="time" class="form-control" name="timeOfAppointment" required>
+                <?= (isset($_GET['errTime']) && $_GET['errTime'] == "all_ready_taken_time") ? '<select class="form-control is-invalid" name="selectTime" required>' : '<select class="form-control" name="selectTime" required>'; ?>
+                <option value="">select a time</option>
+                <option value="8:00-9:00 A.M.">8:00-9:00 A.M.</option>
+                <option value="9:00-10:00 A.M.">9:00-10:00 A.M.</option>
+                <option value="10:00-11:00 A.M.">10:00-11:00 A.M.</option>
+                <option value="11:00-12:00 A.M.">11:00-12:00 A.M.</option>
+                <option value="1:00-2:00 P.M.">1:00-2:00 P.M.</option>
+                <option value="2:00-3:00 P.M.">2:00-3:00 P.M.</option>
+                <option value="3:00-4:00 P.M.">3:00-4:00 P.M.</option>
+                <option value="4:00-5:00 P.M.">4:00-5:00 P.M.</option>
+                </select>
+                <?= (isset($_GET['errTime']) && $_GET['errTime'] == "all_ready_taken_time") ? '<span class="text-danger">Someone already have an appointment that time!</span> <br>' : ''; ?>
 
                 <label for="">Reason for Appointment or Diagnosis</label>
                 <textarea name="reasonAppointment" class="form-control resize-0" cols="30" rows="10" required></textarea>

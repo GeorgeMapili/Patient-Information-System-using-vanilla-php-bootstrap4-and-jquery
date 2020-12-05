@@ -1,3 +1,8 @@
+<?php
+session_start();
+require_once '../connect.php';
+
+?>
 <!doctype html>
 <html lang="en">
 
@@ -47,13 +52,13 @@
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                 </form> -->
                 <ul class="navbar-nav ml-auto">
-                    <img src="../upload/doc_profile_img/doc1.jpg" width="50" style="border:1px solid #fff; border-radius: 50%;" alt="">
+                    <img src="../upload/doc_profile_img/<?= $_SESSION['dProfileImg'] ?>" width="50" style="border:1px solid #fff; border-radius: 50%;" alt="">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Dr. Qwerty Asdf
+                            <?= $_SESSION['dName'] ?>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item disabled" href="">qwerty@gmail.com</a>
+                            <a class="dropdown-item disabled" href=""><?= $_SESSION['dEmail'] ?></a>
                             <a class="dropdown-item" href="doctorProfile.php">My account</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="logout.php">Logout</a>

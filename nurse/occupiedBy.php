@@ -40,6 +40,9 @@ if (isset($_POST['occupiedRoom'])) {
                             <a class="nav-link" href="dashboard.php">Home <span class="sr-only">(current)</span></a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="appointmentPending.php">Pending Appointments</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="patient.php">Patient from appointments</a>
                         </li>
                         <li class="nav-item">

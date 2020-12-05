@@ -35,6 +35,9 @@ if (!isset($_SESSION['nId'])) {
                         <a class="nav-link" href="dashboard.php">Home <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="appointmentPending.php">Pending Appointments</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="patient.php">Patient from appointments</a>
                     </li>
                     <li class="nav-item">
@@ -75,10 +78,28 @@ if (!isset($_SESSION['nId'])) {
             <div class="row mt-3">
 
                 <?php
-                $valid = 1;
-                $sql = "SELECT * FROM patientappointment WHERE pValid = :valid";
+                $status = "pending";
+                $sql = "SELECT * FROM appointment WHERE aStatus = :status";
                 $stmt = $con->prepare($sql);
-                $stmt->bindParam(":valid", $valid, PDO::PARAM_INT);
+                $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+                $stmt->execute();
+
+                $pendingAppointment = $stmt->rowCount();
+                ?>
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <div class="card text-white bg-dark mb-3">
+                        <div class="card-header h2">All Pending Appointments</div>
+                        <div class="card-body">
+                            <h5 class="card-title"><?= $pendingAppointment ?></h5>
+                        </div>
+                    </div>
+                </div>
+
+                <?php
+                $status = "done";
+                $sql = "SELECT DISTINCT(pName) FROM appointment WHERE aStatus =:status";
+                $stmt = $con->prepare($sql);
+                $stmt->bindParam(":status", $status, PDO::PARAM_STR);
                 $stmt->execute();
 
                 $patientAppointmentCount = $stmt->rowCount();
@@ -137,6 +158,26 @@ if (!isset($_SESSION['nId'])) {
                         <div class="card-header h2">Discharged Patient</div>
                         <div class="card-body">
                             <h5 class="card-title"><?= $dischargedPatient ?></h5>
+                        </div>
+                    </div>
+                </div>
+
+                <?php
+                $discharge = 1;
+                $dischargeStatus = "discharged";
+                $sql = "SELECT * FROM appointment WHERE pDischarge = :discharge AND aStatus = :status";
+                $stmt = $con->prepare($sql);
+                $stmt->bindParam(":discharge", $discharge, PDO::PARAM_INT);
+                $stmt->bindParam(":status", $dischargeStatus, PDO::PARAM_STR);
+                $stmt->execute();
+
+                $doneAppointment = $stmt->rowCount();
+                ?>
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <div class="card text-white bg-dark mb-3">
+                        <div class="card-header h2">Done Appointments</div>
+                        <div class="card-body">
+                            <h5 class="card-title"><?= $doneAppointment; ?></h5>
                         </div>
                     </div>
                 </div>
