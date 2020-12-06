@@ -31,9 +31,6 @@ require_once '../connect.php';
                         <a class="nav-link" href="dashboard.php">Home <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="appointmentPending.php">Appointment Pending</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="patient.php">Patient</a>
                     </li>
                     <li class="nav-item">

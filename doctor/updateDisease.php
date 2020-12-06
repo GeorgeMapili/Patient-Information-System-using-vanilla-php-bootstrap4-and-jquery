@@ -14,7 +14,7 @@ require_once '../connect.php';
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/main.css" />
-    <title>Doctor | Patient Medical History</title>
+    <title>Doctor | Incoming Appointment</title>
 </head>
 
 <body>
@@ -30,10 +30,10 @@ require_once '../connect.php';
                     <li class="nav-item">
                         <a class="nav-link" href="dashboard.php">Home <span class="sr-only">(current)</span></a>
                     </li>
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="patient.php">Patient</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item active">
                         <a class="nav-link " href="incomingAppointment.php">Upcoming Appointment</a>
                     </li>
                     <li class="nav-item">
@@ -68,58 +68,52 @@ require_once '../connect.php';
 
     <main role="main">
 
+        <?php
+        if (isset($_POST['updateDisease'])) {
+            $aId = $_POST['aId'];
+            $pId = $_POST['pId'];
+
+            $sql = "SELECT * FROM appointment WHERE aId = :aid AND pId = :pid";
+            $stmt = $con->prepare($sql);
+            $stmt->bindParam(":aid", $aId, PDO::PARAM_INT);
+            $stmt->bindParam(":pid", $pId, PDO::PARAM_INT);
+            $stmt->execute();
+
+            $updateDisease = $stmt->fetch(PDO::FETCH_ASSOC);
+        }
+        ?>
+
+        <?php
+        if (isset($_POST['update'])) {
+            $aId = $_POST['aId'];
+            $pId = $_POST['pId'];
+            $updateDisease = trim(htmlspecialchars($_POST['disease']));
+
+            $sql = "UPDATE appointment SET aReason = :reason WHERE aId = :aid AND pId = :pid";
+            $stmt = $con->prepare($sql);
+            $stmt->bindParam(":reason", $updateDisease, PDO::PARAM_STR);
+            $stmt->bindParam(":aid", $aId, PDO::PARAM_INT);
+            $stmt->bindParam(":pid", $pId, PDO::PARAM_INT);
+            $stmt->execute();
+
+            header("location:incomingAppointment.php?succUpdate=disease_updated_successfully");
+            exit(0);
+        }
+        ?>
         <div class="container-fluid">
 
             <div class="mt-4 mb-4">
-                <h1 class="Display-4 my-4" id="primaryColor">Qwerty Medical History</h1>
+                <h1 class="Display-4 my-4" id="primaryColor">Update Disease</h1>
             </div>
 
-            <table class="table table-hover">
-                <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">Patient ID</th>
-                        <th scope="col">Patient Name</th>
-                        <th scope="col">Patient Address</th>
-                        <th scope="col">Patient Mobile</th>
-                        <th scope="col">Patient Doctor</th>
-                        <th scope="col">Patient Disease</th>
-                        <th scope="col">Prescription</th>
-                        <th scope="col">Dated On</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Qwerty</td>
-                        <td>12345 St.</td>
-                        <td>09510195578</td>
-                        <td>Dr. Qwerty</td>
-                        <td>Fever</td>
-                        <td>Paracetamol</td>
-                        <td>December 31, 2019</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Qwerty</td>
-                        <td>12345 St.</td>
-                        <td>09510195578</td>
-                        <td>Dr. Qwerty</td>
-                        <td>Fever</td>
-                        <td>Paracetamol</td>
-                        <td>December 31, 2019</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Qwerty</td>
-                        <td>12345 St.</td>
-                        <td>09510195578</td>
-                        <td>Dr. Qwerty</td>
-                        <td>Fever</td>
-                        <td>Paracetamol</td>
-                        <td>December 31, 2019</td>
-                    </tr>
-                </tbody>
-            </table>
+            <form action="updateDisease.php" method="post">
+                <input type="hidden" name="aId" value="<?= $updateDisease['aId'] ?>">
+                <input type="hidden" name="pId" value="<?= $updateDisease['pId'] ?>">
+                <input type="text" name="disease" class="form-control" autocomplete="off">
+                <div class="text-center mt-3">
+                    <input type="submit" value="Update Disease" name="update" class="btn btn-secondary">
+                </div>
+            </form>
 
         </div>
 

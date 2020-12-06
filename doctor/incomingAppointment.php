@@ -31,9 +31,6 @@ require_once '../connect.php';
                         <a class="nav-link" href="dashboard.php">Home <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="appointmentPending.php">Appointment Pending</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="patient.php">Patient</a>
                     </li>
                     <li class="nav-item active">
@@ -73,11 +70,47 @@ require_once '../connect.php';
 
         <div class="container-fluid">
 
+            <?php
+            if (isset($_POST['doneAppointment'])) {
+                $aId = $_POST['aId'];
+                $pId = $_POST['pId'];
+
+                // var_dump('Hello World');
+                // exit(0);
+
+                $status = "done";
+
+                $sql = "UPDATE appointment SET aStatus = :status WHERE aId = :aid AND pId = :pid";
+                $stmt = $con->prepare($sql);
+                $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+                $stmt->bindParam(":aid", $aId, PDO::PARAM_INT);
+                $stmt->bindParam(":pid", $pId, PDO::PARAM_INT);
+                $stmt->execute();
+                header("location:incomingAppointment.php");
+                exit(0);
+            }
+            ?>
+
             <div class="mt-4 mb-4">
                 <h1 class="Display-4 my-4" id="primaryColor">My Incoming Appointment</h1>
             </div>
 
-            <table class="table table-hover">
+            <div class="text-center">
+                <?= (isset($_GET['succUpdate']) && $_GET['succUpdate'] == "disease_updated_successfully") ? '<span class="text-success">Updated Disease Successfully</span>' : ''; ?>
+            </div>
+            <!-- Sort -->
+            <div class="form-group">
+                <h5>Sort By:</h5>
+                <select name="sortBy" class="sortBy">
+                    <option value="default">default</option>
+                    <option value="today">Today</option>
+                    <option value="tomorrow">Tomorrow</option>
+                    <option value="this_week">This week</option>
+                    <option value="next_week">Next week</option>
+                    <option value="this_month">This month</option>
+                </select>
+            </div>
+            <table class="table table-hover" id="table-data">
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col">Patient Name</th>
@@ -92,12 +125,10 @@ require_once '../connect.php';
                 <tbody>
                     <?php
                     $status1 = "accepted";
-                    $status2 = "done";
-                    $sql = "SELECT * FROM appointment WHERE pDoctor = :doctor AND aStatus IN(:status1,:status2)";
+                    $sql = "SELECT * FROM appointment WHERE pDoctor = :doctor AND aStatus = :status1";
                     $stmt = $con->prepare($sql);
                     $stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);
                     $stmt->bindParam(":status1", $status1, PDO::PARAM_STR);
-                    $stmt->bindParam(":status2", $status2, PDO::PARAM_STR);
                     $stmt->execute();
 
                     while ($upcomingAppointment = $stmt->fetch(PDO::FETCH_ASSOC)) :
@@ -109,10 +140,18 @@ require_once '../connect.php';
                             <td><?= $upcomingAppointment['aReason'] ?></td>
                             <td><?= date("M d, Y", strtotime($upcomingAppointment['aDate'])); ?> at <?= $upcomingAppointment['aTime']; ?></td>
                             <td>
-                                <input type="submit" value="Update Disease" class="btn btn-info" name="appointmentStatus">
+                                <form action="updateDisease.php" method="post">
+                                    <input type="hidden" name="aId" value="<?= $upcomingAppointment['aId'] ?>">
+                                    <input type="hidden" name="pId" value="<?= $upcomingAppointment['pId'] ?>">
+                                    <input type="submit" value="Update Disease" class="btn btn-info" name="updateDisease">
+                                </form>
                             </td>
                             <td>
-                                <input type="submit" value="Done" class="btn btn-success" name="appointmentStatus">
+                                <form action="incomingAppointment.php" method="post">
+                                    <input type="hidden" name="aId" value="<?= $upcomingAppointment['aId'] ?>">
+                                    <input type="hidden" name="pId" value="<?= $upcomingAppointment['pId'] ?>">
+                                    <input type="submit" value="Done" class="btn btn-success" name="doneAppointment">
+                                </form>
                             </td>
                         </tr>
                     <?php endwhile; ?>
@@ -136,6 +175,31 @@ require_once '../connect.php';
     <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('.sortBy').change(function() {
+                // Get the sorted Value
+                var sortBy = $('.sortBy').val();
+                // console.log(sortBy);
+
+                $.ajax({
+                    url: 'action.php',
+                    method: 'post',
+                    data: {
+                        sortBy: sortBy
+                    },
+                    success: function(response) {
+                        $('#table-data').html(response);
+                    }
+                });
+            });
+        });
+    </script>
+
 </body>
 
 </html>
