@@ -18,7 +18,7 @@ if (!isset($_SESSION['dId'])) {
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/main.css" />
-    <title>Doctor | Profile</title>
+    <title>Doctor | Add Prescription</title>
 </head>
 
 <body>
@@ -34,7 +34,7 @@ if (!isset($_SESSION['dId'])) {
                     <li class="nav-item">
                         <a class="nav-link" href="dashboard.php">Home <span class="sr-only">(current)</span></a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item active">
                         <a class="nav-link" href="walkInPatient.php">Walk in Patient</a>
                     </li>
                     <li class="nav-item">
@@ -46,7 +46,7 @@ if (!isset($_SESSION['dId'])) {
                     <li class="nav-item">
                         <a class="nav-link " href="cancelledAppointment.php">Cancelled Appointment</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item ">
                         <a class="nav-link " href="doneAppointment.php">Done Appointment</a>
                     </li>
                 </ul>
@@ -75,49 +75,84 @@ if (!isset($_SESSION['dId'])) {
 
     <main role="main">
 
+        <?php
+        if (isset($_POST['submitAddPrescriptionWalkIn'])) {
+            $id = $_POST['id'];
+            $prescription = trim(htmlspecialchars($_POST['patientPrescription']));
+
+            $sql = "UPDATE walkinpatient SET walkInPrescription = :prescription WHERE walkInId= :id";
+            $stmt = $con->prepare($sql);
+            $stmt->bindParam(":prescription", $prescription, PDO::PARAM_STR);
+            $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+            $stmt->execute();
+
+            header("location:walkInPatient.php?succAddPrescription=Successfully_added_prescription");
+            exit(0);
+        }
+        ?>
+
         <div class="container">
 
             <div class="mt-4 mb-4">
-                <h1 class="Display-4" id="primaryColor">My Profile</h1>
+                <h1 class="Display-4" id="primaryColor">Walk in Patient Prescription</h1>
             </div>
 
-            <form action="contactus.php" method="post">
+
+
+            <form action="addPrescriptionWalkIn.php" method="post">
                 <div class="row">
+
+                    <?php
+                    if (isset($_POST['addPrescriptionWalkIn'])) {
+                        $id = $_POST['id'];
+
+                        $sql = "SELECT * FROM walkinpatient WHERE walkInId = :id";
+                        $stmt = $con->prepare($sql);
+                        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+                        $stmt->execute();
+
+                        $addPrescription = $stmt->fetch(PDO::FETCH_ASSOC);
+                    }
+                    ?>
                     <div class="col">
-                        <label for="exampleInputEmail1">Name</label>
-                        <input type="text" class="form-control" value="Qwerty">
+                        <input type="hidden" name="id" value="<?= $id ?>">
+                        <label>Patient Name</label>
+                        <input type="text" name="patientName" class="form-control" value="<?= $addPrescription['walkInName'] ?>" readonly>
                     </div>
                     <div class="col">
-                        <label for="exampleInputEmail1">Email</label>
-                        <input type="email" class="form-control" value="qwerty@gmail.com">
+                        <label>Patient Disease</label>
+                        <input type="text" name="patientDisease" class="form-control" value="<?= $addPrescription['walkInDisease'] ?>" readonly>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
-                        <label for="exampleInputEmail1">Address</label>
-                        <input type="text" class="form-control" value="12345 St.">
+                        <label>Address</label>
+                        <input type="text" name="patientAddress" class="form-control" value="<?= $addPrescription['walkInAddress'] ?>" readonly>
                     </div>
                     <div class="col">
-                        <label for="exampleInputEmail1">Mobile Number</label>
-                        <input type="tel" class="form-control" value="09550192231">
+                        <label>Mobile Number</label>
+                        <input type="tel" name="patientMobile" class="form-control" value="<?= $addPrescription['walkInMobile'] ?>" readonly>
                     </div>
                 </div>
+
+                <label for="">Prescription or Medicines</label>
+                <textarea name="patientPrescription" class="form-control resize-0" cols="30" rows="10"></textarea>
                 <div class="text-center mt-3">
-                    <input type="submit" class="btn btn-info" value="Update Information">
+                    <input type="submit" class="btn" id="docBtnApt" value="Submit" name="submitAddPrescriptionWalkIn">
                 </div>
             </form>
-
-            <hr class="featurette-divider">
         </div>
+
+
+        <hr class="featurette-divider">
+
+
+
+        <!-- FOOTER -->
+        <footer class="container text-center">
+            <p>&copy; 2017-2018 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+        </footer>
     </main>
-
-
-
-    <!-- FOOTER -->
-    <footer class="container text-center">
-        <p>&copy; 2017-2018 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
-    </footer>
-
 
 
     <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->

@@ -18,7 +18,7 @@ if (!isset($_SESSION['dId'])) {
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/main.css" />
-    <title>Doctor | Profile</title>
+    <title>Doctor | Add Prescription</title>
 </head>
 
 <body>
@@ -34,7 +34,7 @@ if (!isset($_SESSION['dId'])) {
                     <li class="nav-item">
                         <a class="nav-link" href="dashboard.php">Home <span class="sr-only">(current)</span></a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item active">
                         <a class="nav-link" href="walkInPatient.php">Walk in Patient</a>
                     </li>
                     <li class="nav-item">
@@ -46,7 +46,7 @@ if (!isset($_SESSION['dId'])) {
                     <li class="nav-item">
                         <a class="nav-link " href="cancelledAppointment.php">Cancelled Appointment</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item ">
                         <a class="nav-link " href="doneAppointment.php">Done Appointment</a>
                     </li>
                 </ul>
@@ -75,49 +75,90 @@ if (!isset($_SESSION['dId'])) {
 
     <main role="main">
 
+        <?php
+
+        if (isset($_POST['UpdateWalkInPrescription'])) {
+            $id = $_POST['id'];
+            $updatePrescription = trim(htmlspecialchars($_POST['prescription']));
+
+            if ($_SESSION['updateWalkInPrescription'] == $updatePrescription) {
+                header("location:walkInPatient.php?errUp=Nothing_to_update");
+                exit(0);
+            }
+
+            $sql = "UPDATE walkinpatient SET walkInPrescription = :prescription WHERE walkInId = :id";
+            $stmt = $con->prepare($sql);
+            $stmt->bindParam(":prescription", $updatePrescription, PDO::PARAM_STR);
+            $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+            $stmt->execute();
+
+            header("location:walkInPatient.php?succUp=Successfully_updated_prescription");
+            exit(0);
+        }
+        ?>
+
         <div class="container">
 
             <div class="mt-4 mb-4">
-                <h1 class="Display-4" id="primaryColor">My Profile</h1>
+                <h1 class="Display-4" id="primaryColor">Update Prescription</h1>
             </div>
 
-            <form action="contactus.php" method="post">
+            <form action="updatePrescriptionWalkIn.php" method="post">
+
+                <?php
+                if (isset($_POST['updatePrescriptionWalkIn'])) {
+                    $id = $_POST['id'];
+
+                    $sql = "SELECT * FROM walkinpatient WHERE walkInId = :id";
+                    $stmt = $con->prepare($sql);
+                    $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+                    $stmt->execute();
+
+                    $updateWalkIn = $stmt->fetch(PDO::FETCH_ASSOC);
+                    $_SESSION['updateWalkInPrescription'] = $updateWalkIn['walkInPrescription'];
+                }
+                ?>
+
                 <div class="row">
                     <div class="col">
-                        <label for="exampleInputEmail1">Name</label>
-                        <input type="text" class="form-control" value="Qwerty">
+                        <input type="hidden" name="id" value="<?= $updateWalkIn['walkInId'] ?>">
+                        <label for="exampleInputEmail1">Patient Name</label>
+                        <input type="text" class="form-control" value="<?= $updateWalkIn['walkInName'] ?>" readonly>
                     </div>
                     <div class="col">
-                        <label for="exampleInputEmail1">Email</label>
-                        <input type="email" class="form-control" value="qwerty@gmail.com">
+                        <label for="exampleInputEmail1">Patient Disease</label>
+                        <input type="text" class="form-control" value="<?= $updateWalkIn['walkInDisease'] ?>" readonly>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
                         <label for="exampleInputEmail1">Address</label>
-                        <input type="text" class="form-control" value="12345 St.">
+                        <input type="text" class="form-control" value="<?= $updateWalkIn['walkInAddress'] ?>" readonly>
                     </div>
                     <div class="col">
                         <label for="exampleInputEmail1">Mobile Number</label>
-                        <input type="tel" class="form-control" value="09550192231">
+                        <input type="tel" class="form-control" value="<?= $updateWalkIn['walkInMobile'] ?>" readonly>
                     </div>
                 </div>
+
+                <label for="">Prescription or Medicines</label>
+                <textarea name="prescription" class="form-control resize-0" cols="30" rows="10"><?= $updateWalkIn['walkInPrescription'] ?></textarea>
                 <div class="text-center mt-3">
-                    <input type="submit" class="btn btn-info" value="Update Information">
+                    <input type="submit" class="btn" id="docBtnApt" value="Update" name="UpdateWalkInPrescription">
                 </div>
             </form>
-
-            <hr class="featurette-divider">
         </div>
+
+
+        <hr class="featurette-divider">
+
+
+
+        <!-- FOOTER -->
+        <footer class="container text-center">
+            <p>&copy; 2017-2018 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+        </footer>
     </main>
-
-
-
-    <!-- FOOTER -->
-    <footer class="container text-center">
-        <p>&copy; 2017-2018 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
-    </footer>
-
 
 
     <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->

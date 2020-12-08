@@ -34,10 +34,10 @@ if (!isset($_SESSION['dId'])) {
                     <li class="nav-item">
                         <a class="nav-link" href="dashboard.php">Home <span class="sr-only">(current)</span></a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item active">
                         <a class="nav-link" href="walkInPatient.php">Walk in Patient</a>
                     </li>
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="patient.php">Patient Appointment</a>
                     </li>
                     <li class="nav-item">
@@ -78,15 +78,17 @@ if (!isset($_SESSION['dId'])) {
         <div class="container-fluid">
 
             <div class="mt-4 mb-4">
-                <h1 class="Display-4 my-4" id="primaryColor">My Patient from Appointment</h1>
+                <h1 class="Display-4 my-4" id="primaryColor">My Walkin Patient</h1>
             </div>
 
             <div class="text-center">
-                <?= (isset($_GET['succAddPrescription']) && $_GET['succAddPrescription'] == "Successfully_added_prescription") ? '<span class="text-success">Successfully added presciption!</span>' : ''; ?>
-                <?= (isset($_GET['succUpdatePrescription']) && $_GET['succUpdatePrescription'] == "Successfully_updated_prescription") ? '<span class="text-success">Successfully updated presciption!</span>' : ''; ?>
-                <?= (isset($_GET['errUpdate']) && $_GET['errUpdate'] == "Nothing_to_update") ? '<span class="text-danger">Nothing to update!</span>' : ''; ?>
-                <?= (isset($_GET['succUpdate']) && $_GET['succUpdate'] == "disease_updated_successfully") ? '<span class="text-success">Updated Disease Successfully!</span>' : ''; ?>
-                <?= (isset($_GET['errUpdateDisease']) && $_GET['errUpdateDisease'] == "nothing_to_update") ? '<span class="text-danger">Nothing to update!</span>' : ''; ?>
+                <?= (isset($_GET['succAddPrescription']) && $_GET['succAddPrescription'] == "Successfully_added_prescription") ? '<span class="text-success">Successfully added prescription!</span>' : ''; ?>
+                <?= (isset($_GET['succUp']) && $_GET['succUp'] == "Successfully_updated_prescription") ? '<span class="text-success">Successfully updated prescription!</span>' : ''; ?>
+                <?= (isset($_GET['errUp']) && $_GET['errUp'] == "Nothing_to_update") ? '<span class="text-danger">Nothing to update!</span>' : ''; ?>
+                <?= (isset($_GET['succDiseaseUp']) && $_GET['succDiseaseUp'] == "Successfully_updated_disease") ? '<span class="text-success">Successfully updated disease!</span>' : ''; ?>
+                <?= (isset($_GET['errDiseaseUp']) && $_GET['errDiseaseUp'] == "Nothing_to_update") ? '<span class="text-danger">Nothing to update!</span>' : ''; ?>
+                <?= (isset($_GET['errWatch']) && $_GET['errWatch'] == "No_medical_information_avalable") ? '<span class="text-danger">No medical information available!</span>' : ''; ?>
+                <?= (isset($_GET['errWalkInMedHistory']) && $_GET['errWalkInMedHistory'] == "No_medical_history") ? '<span class="text-danger">No medical history!</span>' : ''; ?>
             </div>
 
             <div class="row">
@@ -105,45 +107,41 @@ if (!isset($_SESSION['dId'])) {
                         <th scope="col">Patient Mobile</th>
                         <th scope="col">Patient Disease</th>
                         <th scope="col">Prescription</th>
-                        <th scope="col">Updated Disease</th>
+                        <th scope="col">Update</th>
+                        <th scope="col">Information</th>
                         <th scope="col">History</th>
                     </tr>
                 </thead>
                 <tbody>
-
-
                     <?php
-                    $doctor = $_SESSION['dName'];
-                    $status = "accepted";
-                    $sql = "SELECT * FROM appointment WHERE pDoctor = :doctor AND aStatus = :status";
+                    $discharge = 0;
+                    $sql = "SELECT * FROM walkinpatient WHERE walkInDoctor = :doctor AND walkInDischarged = :discharge";
                     $stmt = $con->prepare($sql);
-                    $stmt->bindParam(":doctor", $doctor, PDO::PARAM_STR);
-                    $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+                    $stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);
+                    $stmt->bindParam(":discharge", $discharge, PDO::PARAM_INT);
                     $stmt->execute();
 
-                    while ($patientAppointment = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                    while ($walkInPatient = $stmt->fetch(PDO::FETCH_ASSOC)) :
                     ?>
                         <tr>
-                            <td><?= $patientAppointment['pName']; ?></td>
-                            <td><?= $patientAppointment['pAddress']; ?></td>
-                            <td><?= $patientAppointment['pMobile'] ?></td>
-                            <td><?= $patientAppointment['aReason']; ?></td>
+                            <td><?= $walkInPatient['walkInName'] ?></td>
+                            <td><?= $walkInPatient['walkInAddress'] ?></td>
+                            <td><?= $walkInPatient['walkInMobile'] ?></td>
+                            <td><?= $walkInPatient['walkInDisease'] ?></td>
                             <td>
                                 <?php
-                                if (empty($patientAppointment['pPrescription'])) {
+                                if (empty($walkInPatient['walkInPrescription'])) {
                                 ?>
-                                    <form action="addPrescription.php" method="post">
-                                        <input type="hidden" name="aid" value="<?= $patientAppointment['aId']; ?>">
-                                        <input type="hidden" name="pid" value="<?= $patientAppointment['pId']; ?>">
-                                        <input type="submit" value="Add Prescription" class="btn btn-info" name="addPrescriptionBtn">
+                                    <form action="addPrescriptionWalkIn.php" method="post">
+                                        <input type="hidden" name="id" value="<?= $walkInPatient['walkInId'] ?>">
+                                        <input type="submit" value="Add Prescription" class="btn btn-primary" name="addPrescriptionWalkIn">
                                     </form>
                                 <?php
                                 } else {
                                 ?>
-                                    <form action="editPrescription.php" method="post">
-                                        <input type="hidden" name="aid" value="<?= $patientAppointment['aId']; ?>">
-                                        <input type="hidden" name="pid" value="<?= $patientAppointment['pId']; ?>">
-                                        <input type="submit" value="Update Prescription" class="btn btn-secondary" name="updatePrescriptionBtn">
+                                    <form action="updatePrescriptionWalkIn.php" method="post">
+                                        <input type="hidden" name="id" value="<?= $walkInPatient['walkInId'] ?>">
+                                        <input type="submit" value="Update Prescription" class="btn btn-secondary" name="updatePrescriptionWalkIn">
                                     </form>
                                 <?php
                                 }
@@ -151,35 +149,36 @@ if (!isset($_SESSION['dId'])) {
 
                             </td>
                             <td>
-                                <form action="updateDisease.php" method="post">
-                                    <input type="hidden" name="aId" value="<?= $patientAppointment['aId'] ?>">
-                                    <input type="hidden" name="pId" value="<?= $patientAppointment['pId'] ?>">
-                                    <input type="submit" value="Update Disease" class="btn btn-info" name="updateDisease">
+                                <form action="updateDiseaseWalkIn.php" method="post">
+                                    <input type="hidden" name="id" value="<?= $walkInPatient['walkInId'] ?>">
+                                    <input type="submit" value="Update Disease" class="btn btn-primary" name="updateDiseaseWalkIn">
                                 </form>
                             </td>
                             <td>
-                                <form action="patientMedicalHistory.php" method="post">
-                                    <input type="hidden" name="aId" value="<?= $patientAppointment['aId']; ?>">
-                                    <input type="hidden" name="pId" value="<?= $patientAppointment['pId']; ?>">
-                                    <input type="submit" value="Watch appointment history" class="btn btn-primary" name="watchHistory">
+                                <form action="watchMedicalInfo.php" method="post">
+                                    <input type="hidden" name="id" value="<?= $walkInPatient['walkInId'] ?>">
+                                    <input type="submit" value="Watch Medical Information" class="btn btn-primary" name="watchMedInfo">
+                                </form>
+                            </td>
+                            <td>
+                                <form action="watchMedicalHistory.php" method="post">
+                                    <input type="hidden" name="name" value="<?= $walkInPatient['walkInName'] ?>">
+                                    <input type="submit" value="Watch Medical History" class="btn btn-info" name="watchMedHistory">
                                 </form>
                             </td>
                         </tr>
-
                     <?php endwhile; ?>
-
                 </tbody>
             </table>
 
-
-
-            <hr class="featurette-divider">
-
-            <!-- FOOTER -->
-            <footer class="text-center">
-                <p>&copy; 2017-2018 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
-            </footer>
         </div>
+
+
+
+        <!-- FOOTER -->
+        <footer class="container text-center">
+            <p>&copy; 2017-2018 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+        </footer>
     </main>
 
 
@@ -200,7 +199,7 @@ if (!isset($_SESSION['dId'])) {
                     url: 'action.php',
                     method: 'post',
                     data: {
-                        patientQuery: search,
+                        walkInQuery: search,
                         doctorName: doctorName
                     },
                     success: function(response) {
@@ -210,6 +209,7 @@ if (!isset($_SESSION['dId'])) {
             });
         });
     </script>
+
 </body>
 
 </html>

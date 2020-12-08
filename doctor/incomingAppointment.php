@@ -31,7 +31,10 @@ require_once '../connect.php';
                         <a class="nav-link" href="dashboard.php">Home <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="patient.php">Patient</a>
+                        <a class="nav-link" href="walkInPatient.php">Walk in Patient</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="patient.php">Patient Appointment</a>
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link " href="incomingAppointment.php">Upcoming Appointment</a>
@@ -75,9 +78,6 @@ require_once '../connect.php';
                 $aId = $_POST['aId'];
                 $pId = $_POST['pId'];
 
-                // var_dump('Hello World');
-                // exit(0);
-
                 $status = "done";
 
                 $sql = "UPDATE appointment SET aStatus = :status WHERE aId = :aid AND pId = :pid";
@@ -86,7 +86,22 @@ require_once '../connect.php';
                 $stmt->bindParam(":aid", $aId, PDO::PARAM_INT);
                 $stmt->bindParam(":pid", $pId, PDO::PARAM_INT);
                 $stmt->execute();
-                header("location:incomingAppointment.php");
+                header("location:incomingAppointment.php?succDone=Successfully_done_appointment");
+                exit(0);
+            }
+
+            if (isset($_POST['cancelAppointment'])) {
+                $aId = $_POST['aId'];
+                $pId = $_POST['pId'];
+                $status = "cancelled";
+
+                $sql = "UPDATE appointment SET aStatus = :status WHERE aId = :aid AND pId = :pid";
+                $stmt = $con->prepare($sql);
+                $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+                $stmt->bindParam(":aid", $aId, PDO::PARAM_INT);
+                $stmt->bindParam(":pid", $pId, PDO::PARAM_INT);
+                $stmt->execute();
+                header("location:incomingAppointment.php?succCanc=Successfully_cancelled_appointment");
                 exit(0);
             }
             ?>
@@ -95,8 +110,12 @@ require_once '../connect.php';
                 <h1 class="Display-4 my-4" id="primaryColor">My Incoming Appointment</h1>
             </div>
 
+
             <div class="text-center">
-                <?= (isset($_GET['succUpdate']) && $_GET['succUpdate'] == "disease_updated_successfully") ? '<span class="text-success">Updated Disease Successfully</span>' : ''; ?>
+                <?= (isset($_GET['succCanc']) && $_GET['succCanc'] == "Successfully_cancelled_appointment") ? '<span class="text-success">Successfully Cancelled Appointment!</span>' : ''; ?>
+            </div>
+            <div class="text-center">
+                <?= (isset($_GET['succDone']) && $_GET['succDone'] == "Successfully_done_appointment") ? '<span class="text-success">Successfully Done Appointment!</span>' : ''; ?>
             </div>
             <!-- Sort -->
             <div class="form-group">
@@ -118,7 +137,6 @@ require_once '../connect.php';
                         <th scope="col">Patient Mobile</th>
                         <th scope="col">Appointment Reason</th>
                         <th scope="col">Date</th>
-                        <th scope="col">Updated Disease</th>
                         <th scope="col">Status</th>
                     </tr>
                 </thead>
@@ -140,18 +158,22 @@ require_once '../connect.php';
                             <td><?= $upcomingAppointment['aReason'] ?></td>
                             <td><?= date("M d, Y", strtotime($upcomingAppointment['aDate'])); ?> at <?= $upcomingAppointment['aTime']; ?></td>
                             <td>
-                                <form action="updateDisease.php" method="post">
-                                    <input type="hidden" name="aId" value="<?= $upcomingAppointment['aId'] ?>">
-                                    <input type="hidden" name="pId" value="<?= $upcomingAppointment['pId'] ?>">
-                                    <input type="submit" value="Update Disease" class="btn btn-info" name="updateDisease">
-                                </form>
-                            </td>
-                            <td>
-                                <form action="incomingAppointment.php" method="post">
-                                    <input type="hidden" name="aId" value="<?= $upcomingAppointment['aId'] ?>">
-                                    <input type="hidden" name="pId" value="<?= $upcomingAppointment['pId'] ?>">
-                                    <input type="submit" value="Done" class="btn btn-success" name="doneAppointment">
-                                </form>
+                                <div class="row">
+                                    <div class="col">
+                                        <form action="incomingAppointment.php" method="post">
+                                            <input type="hidden" name="aId" value="<?= $upcomingAppointment['aId'] ?>">
+                                            <input type="hidden" name="pId" value="<?= $upcomingAppointment['pId'] ?>">
+                                            <input type="submit" value="Done" class="btn btn-success" name="doneAppointment">
+                                        </form>
+                                    </div>
+                                    <div class="col">
+                                        <form action="incomingAppointment.php" method="post">
+                                            <input type="hidden" name="aId" value="<?= $upcomingAppointment['aId'] ?>">
+                                            <input type="hidden" name="pId" value="<?= $upcomingAppointment['pId'] ?>">
+                                            <input type="submit" value="Cancel" class="btn btn-danger" name="cancelAppointment">
+                                        </form>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                     <?php endwhile; ?>

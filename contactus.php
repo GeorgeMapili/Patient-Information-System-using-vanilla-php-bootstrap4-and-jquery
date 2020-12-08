@@ -49,6 +49,12 @@ if (!isset($_SESSION['id'])) {
                     <li class="nav-item">
                         <a class="nav-link " href="myappointment.php">My Appointments</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="acceptedAppointment.php">Accepted Appointments</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="finishedAppointment.php">Finished Appointments</a>
+                    </li>
                 </ul>
                 <ul class="navbar-nav ml-auto">
                     <img src="upload/user_profile_img/<?= $_SESSION['profile']; ?>" width="50" style="border:1px solid #fff; border-radius: 50%;" alt="">

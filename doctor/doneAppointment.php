@@ -2,6 +2,10 @@
 session_start();
 require_once '../connect.php';
 
+if (!isset($_SESSION['dId'])) {
+    header("location:index.php");
+    exit(0);
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -31,7 +35,10 @@ require_once '../connect.php';
                         <a class="nav-link" href="dashboard.php">Home <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="patient.php">Patient</a>
+                        <a class="nav-link" href="walkInPatient.php">Walk in Patient</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="patient.php">Patient Appointment</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link " href="incomingAppointment.php">Upcoming Appointment</a>
@@ -71,13 +78,12 @@ require_once '../connect.php';
         <div class="container-fluid">
 
             <div class="mt-4 mb-4">
-                <h1 class="Display-4 my-4" id="primaryColor">My Done Appointment</h1>
+                <h1 class="Display-4 my-4" id="primaryColor">Finished Appointment</h1>
             </div>
 
             <table class="table table-hover">
                 <thead class="thead-dark">
                     <tr>
-                        <th scope="col">Appointment ID</th>
                         <th scope="col">Patient Name</th>
                         <th scope="col">Patient Address</th>
                         <th scope="col">Patient Mobile</th>
@@ -87,39 +93,27 @@ require_once '../connect.php';
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Qwerty</td>
-                        <td>12345 St.</td>
-                        <td>09510195578</td>
-                        <td>Fever</td>
-                        <td>January 1, 2020 at 5:30 PM</td>
-                        <td>
-                            <input type="submit" value="Done" class="btn btn-primary disabled" name="appointmentStatus">
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Qwerty</td>
-                        <td>12345 St.</td>
-                        <td>09510195578</td>
-                        <td>Fever</td>
-                        <td>January 1, 2020 at 5:30 PM</td>
-                        <td>
-                            <input type="submit" value="Done" class="btn btn-primary disabled" name="appointmentStatus">
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Qwerty</td>
-                        <td>12345 St.</td>
-                        <td>09510195578</td>
-                        <td>Fever</td>
-                        <td>January 1, 2020 at 5:30 PM</td>
-                        <td>
-                            <input type="submit" value="Done" class="btn btn-primary disabled" name="appointmentStatus">
-                        </td>
-                    </tr>
+                    <?php
+                    $status = "discharged";
+                    $sql = "SELECT * FROM appointment WHERE aStatus = :status AND pDoctor = :doctor";
+                    $stmt = $con->prepare($sql);
+                    $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+                    $stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);
+                    $stmt->execute();
+
+                    while ($dischargeAppointment = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                    ?>
+                        <tr>
+                            <td><?= $dischargeAppointment['pName'] ?></td>
+                            <td><?= $dischargeAppointment['pAddress'] ?></td>
+                            <td><?= $dischargeAppointment['pMobile'] ?></td>
+                            <td><?= $dischargeAppointment['aReason'] ?></td>
+                            <td><?= date("M d, Y", strtotime($dischargeAppointment['dischargedOn'])) ?></td>
+                            <td>
+                                <p class="btn btn-primary disabled">Discharged</p>
+                            </td>
+                        </tr>
+                    <?php endwhile; ?>
                 </tbody>
             </table>
 

@@ -135,17 +135,19 @@ if (!isset($_SESSION['nId'])) {
 
                             if ($amountInput >= $totalAmount) {
                                 $changeBill = $amountInput -  $totalAmount;
+                                $date = date("M d, Y");
 
                                 $status = "discharged";
                                 $discharge = 1;
                                 // UPDATE THE STATUS OF THE PATIENT FROM DONE TO DISCHARGE
-                                $sql = "UPDATE appointment SET aStatus = :status, pDischarge = :discharge, patientStatus =:statusPatient, pAmountPay = :amountPay, pChange = :change  WHERE aId = :aid AND pId = :pid";
+                                $sql = "UPDATE appointment SET aStatus = :status, pDischarge = :discharge, patientStatus =:statusPatient, pAmountPay = :amountPay, pChange = :change, dischargedOn = :dischargedOn  WHERE aId = :aid AND pId = :pid";
                                 $stmt = $con->prepare($sql);
                                 $stmt->bindParam(":status", $status, PDO::PARAM_STR);
                                 $stmt->bindParam(":discharge", $discharge, PDO::PARAM_INT);
                                 $stmt->bindParam(":statusPatient", $patientStatus, PDO::PARAM_STR);
                                 $stmt->bindParam(":amountPay", $amountInput, PDO::PARAM_INT);
                                 $stmt->bindParam(":change", $changeBill, PDO::PARAM_INT);
+                                $stmt->bindParam(":dischargedOn", $date, PDO::PARAM_STR);
                                 $stmt->bindParam(":aid", $aid, PDO::PARAM_INT);
                                 $stmt->bindParam(":pid", $pid, PDO::PARAM_INT);
                                 $stmt->execute();

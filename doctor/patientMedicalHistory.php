@@ -2,6 +2,10 @@
 session_start();
 require_once '../connect.php';
 
+if (!isset($_SESSION['dId'])) {
+    header("location:index.php");
+    exit(0);
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -30,8 +34,11 @@ require_once '../connect.php';
                     <li class="nav-item">
                         <a class="nav-link" href="dashboard.php">Home <span class="sr-only">(current)</span></a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="walkInPatient.php">Walk in Patient</a>
+                    </li>
                     <li class="nav-item active">
-                        <a class="nav-link" href="patient.php">Patient</a>
+                        <a class="nav-link" href="patient.php">Patient Appointment</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link " href="incomingAppointment.php">Upcoming Appointment</a>
@@ -70,14 +77,15 @@ require_once '../connect.php';
 
         <div class="container-fluid">
 
+
+
             <div class="mt-4 mb-4">
-                <h1 class="Display-4 my-4" id="primaryColor">Qwerty Medical History</h1>
+                <h1 class="Display-4 my-4" id="primaryColor">Medical History</h1>
             </div>
 
             <table class="table table-hover">
                 <thead class="thead-dark">
                     <tr>
-                        <th scope="col">Patient ID</th>
                         <th scope="col">Patient Name</th>
                         <th scope="col">Patient Address</th>
                         <th scope="col">Patient Mobile</th>
@@ -88,36 +96,31 @@ require_once '../connect.php';
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Qwerty</td>
-                        <td>12345 St.</td>
-                        <td>09510195578</td>
-                        <td>Dr. Qwerty</td>
-                        <td>Fever</td>
-                        <td>Paracetamol</td>
-                        <td>December 31, 2019</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Qwerty</td>
-                        <td>12345 St.</td>
-                        <td>09510195578</td>
-                        <td>Dr. Qwerty</td>
-                        <td>Fever</td>
-                        <td>Paracetamol</td>
-                        <td>December 31, 2019</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Qwerty</td>
-                        <td>12345 St.</td>
-                        <td>09510195578</td>
-                        <td>Dr. Qwerty</td>
-                        <td>Fever</td>
-                        <td>Paracetamol</td>
-                        <td>December 31, 2019</td>
-                    </tr>
+                    <?php
+                    if (isset($_POST['watchHistory'])) {
+                        $pId = $_POST['pId'];
+                        $status = "discharged";
+
+                        $sql = "SELECT * FROM appointment WHERE aStatus = :status AND pId = :pid";
+                        $stmt = $con->prepare($sql);
+                        $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+                        $stmt->bindParam(":pid", $pId, PDO::PARAM_INT);
+                        $stmt->execute();
+
+                        while ($history = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                    ?>
+                            <tr>
+                                <td><?= $history['pName'] ?></td>
+                                <td><?= $history['pAddress'] ?></td>
+                                <td><?= $history['pMobile'] ?></td>
+                                <td><?= $history['pDoctor'] ?></td>
+                                <td><?= $history['aReason'] ?></td>
+                                <td><?= $history['pPrescription'] ?></td>
+                                <td><?= $history['dischargedOn'] ?></td>
+                            </tr>
+                    <?php
+                        endwhile;
+                    } ?>
                 </tbody>
             </table>
 

@@ -2,6 +2,10 @@
 session_start();
 require_once '../connect.php';
 
+if (isset($_SESSION['dId'])) {
+    header("location:dashboard.php");
+    exit(0);
+}
 ?>
 <!doctype html>
 <html lang="en">

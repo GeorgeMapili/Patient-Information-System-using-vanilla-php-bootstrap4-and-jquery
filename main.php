@@ -2,6 +2,7 @@
 session_start();
 require_once 'connect.php';
 
+
 if (!isset($_SESSION['id'])) {
     header("location:index.php");
     exit(0);
@@ -53,6 +54,13 @@ $stmt->execute();
                     </li>
                     <li class="nav-item">
                         <a class="nav-link " href="myappointment.php">My Appointments</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="acceptedAppointment.php">Accepted Appointments</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="finishedAppointment.php">Finished Appointments</a>
+                        <?= date("M d, Y") ?>
                     </li>
                 </ul>
                 <ul class="navbar-nav ml-auto">

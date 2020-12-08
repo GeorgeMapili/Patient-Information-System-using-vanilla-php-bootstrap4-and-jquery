@@ -88,7 +88,7 @@ if (!isset($_SESSION['nId'])) {
                 ?>
                 <div class="col-sm-6 col-md-4 col-lg-3">
                     <div class="card text-white bg-dark mb-3">
-                        <div class="card-header h2">All Pending Appointments</div>
+                        <div class="card-header h2"> Pending Appointments</div>
                         <div class="card-body">
                             <h5 class="card-title"><?= $pendingAppointment ?></h5>
                         </div>
@@ -106,7 +106,7 @@ if (!isset($_SESSION['nId'])) {
                 ?>
                 <div class="col-sm-6 col-md-4 col-lg-3">
                     <div class="card text-white bg-dark mb-3">
-                        <div class="card-header h2">All Patient Appointments</div>
+                        <div class="card-header h2"> Patient Appointments</div>
                         <div class="card-body">
                             <h5 class="card-title"><?= $patientAppointmentCount; ?></h5>
                         </div>
@@ -122,7 +122,7 @@ if (!isset($_SESSION['nId'])) {
                 ?>
                 <div class="col-sm-6 col-md-4 col-lg-3">
                     <div class="card text-white bg-dark mb-3">
-                        <div class="card-header h2">All Walk in Patients</div>
+                        <div class="card-header h2"> Walk in Patients</div>
                         <div class="card-body">
                             <h5 class="card-title"><?= $walkInPatientCount ?></h5>
                         </div>
@@ -138,7 +138,7 @@ if (!isset($_SESSION['nId'])) {
                 ?>
                 <div class="col-sm-6 col-md-4 col-lg-3">
                     <div class="card text-white bg-dark mb-3">
-                        <div class="card-header h2">All Total Rooms</div>
+                        <div class="card-header h2"> Total Rooms</div>
                         <div class="card-body">
                             <h5 class="card-title"><?= $roomCount ?></h5>
                         </div>
@@ -175,7 +175,7 @@ if (!isset($_SESSION['nId'])) {
                 ?>
                 <div class="col-sm-6 col-md-4 col-lg-3">
                     <div class="card text-white bg-dark mb-3">
-                        <div class="card-header h2">Done Appointments</div>
+                        <div class="card-header h2">Finished Appointments</div>
                         <div class="card-body">
                             <h5 class="card-title"><?= $doneAppointment; ?></h5>
                         </div>

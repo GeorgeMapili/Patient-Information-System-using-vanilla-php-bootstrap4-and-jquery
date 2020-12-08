@@ -74,7 +74,7 @@ if (!isset($_SESSION['nId'])) {
 
         <div class="container-fluid">
             <div class="mt-4 mb-4">
-                <h1 class="Display-4" id="primaryColor">My record</h1>
+                <h1 class="Display-4" id="primaryColor">Patient record</h1>
             </div>
 
             <table class="table table-hover" id="table-data">

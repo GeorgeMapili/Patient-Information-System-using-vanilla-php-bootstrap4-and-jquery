@@ -18,7 +18,7 @@ if (!isset($_SESSION['dId'])) {
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/main.css" />
-    <title>Doctor | Profile</title>
+    <title>Doctor | Patient</title>
 </head>
 
 <body>
@@ -34,7 +34,7 @@ if (!isset($_SESSION['dId'])) {
                     <li class="nav-item">
                         <a class="nav-link" href="dashboard.php">Home <span class="sr-only">(current)</span></a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item active">
                         <a class="nav-link" href="walkInPatient.php">Walk in Patient</a>
                     </li>
                     <li class="nav-item">
@@ -75,49 +75,79 @@ if (!isset($_SESSION['dId'])) {
 
     <main role="main">
 
-        <div class="container">
+        <div class="container-fluid">
 
             <div class="mt-4 mb-4">
-                <h1 class="Display-4" id="primaryColor">My Profile</h1>
+                <h1 class="Display-4 my-4" id="primaryColor">Watch Medical History</h1>
             </div>
 
-            <form action="contactus.php" method="post">
-                <div class="row">
-                    <div class="col">
-                        <label for="exampleInputEmail1">Name</label>
-                        <input type="text" class="form-control" value="Qwerty">
-                    </div>
-                    <div class="col">
-                        <label for="exampleInputEmail1">Email</label>
-                        <input type="email" class="form-control" value="qwerty@gmail.com">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <label for="exampleInputEmail1">Address</label>
-                        <input type="text" class="form-control" value="12345 St.">
-                    </div>
-                    <div class="col">
-                        <label for="exampleInputEmail1">Mobile Number</label>
-                        <input type="tel" class="form-control" value="09550192231">
-                    </div>
-                </div>
-                <div class="text-center mt-3">
-                    <input type="submit" class="btn btn-info" value="Update Information">
-                </div>
-            </form>
+            <table class="table table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Patient Name</th>
+                        <th scope="col">Patient Address</th>
+                        <th scope="col">Patient Email</th>
+                        <th scope="col">Patient Mobile</th>
+                        <th scope="col">Room #</th>
+                        <th scope="col">Patient Doctor</th>
+                        <th scope="col">Doctor Prescription</th>
+                        <th scope="col">Patient Disease</th>
+                        <th scope="col">Patient Status</th>
+                        <th scope="col">Total Amount</th>
+                        <th scope="col">Patient Amount Pay</th>
+                        <th scope="col">Patient Change</th>
+                        <th scope="col">Date</th>
+                    </tr>
+                </thead>
+                <tbody>
 
-            <hr class="featurette-divider">
+                    <?php
+                    if (isset($_POST['watchMedHistory'])) {
+                        $name = $_POST['name'];
+
+                        $sql = "SELECT * FROM discharged_patient WHERE pName = :name";
+                        $stmt = $con->prepare($sql);
+                        $stmt->bindParam(":name", $name, PDO::PARAM_STR);
+                        $stmt->execute();
+
+                        while ($history = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                    ?>
+
+                            <tr>
+                                <td><?= $history['pName'] ?></td>
+                                <td><?= $history['pAddress'] ?></td>
+                                <td><?= $history['pEmail'] ?></td>
+                                <td><?= $history['pMobile'] ?></td>
+                                <td><?= $history['pRoomNumber'] ?></td>
+                                <td><?= $history['pDoctor'] ?></td>
+                                <td><?= $history['pPrescription'] ?></td>
+                                <td><?= $history['pDisease'] ?></td>
+                                <td><?= $history['pStatus'] ?></td>
+                                <td><?= $history['pTotalAmount'] ?></td>
+                                <td><?= $history['pAmountPay'] ?></td>
+                                <td><?= $history['pChange'] ?></td>
+                                <td><?= date("M d, Y", strtotime($history['pMadeOn'])) ?></td>
+                            </tr>
+
+                    <?php
+                        endwhile;
+                    }
+                    ?>
+                </tbody>
+            </table>
+
         </div>
+
+
+        <hr class="featurette-divider">
+
+
+
+        <!-- FOOTER -->
+        <footer class="container text-center">
+            <p>&copy; 2017-2018 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+        </footer>
     </main>
-
-
-
-    <!-- FOOTER -->
-    <footer class="container text-center">
-        <p>&copy; 2017-2018 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
-    </footer>
-
 
 
     <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->

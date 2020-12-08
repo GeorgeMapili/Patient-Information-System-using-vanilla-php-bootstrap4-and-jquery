@@ -18,7 +18,7 @@ if (!isset($_SESSION['dId'])) {
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/main.css" />
-    <title>Doctor | Profile</title>
+    <title>Doctor | Patient</title>
 </head>
 
 <body>
@@ -34,7 +34,7 @@ if (!isset($_SESSION['dId'])) {
                     <li class="nav-item">
                         <a class="nav-link" href="dashboard.php">Home <span class="sr-only">(current)</span></a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item active">
                         <a class="nav-link" href="walkInPatient.php">Walk in Patient</a>
                     </li>
                     <li class="nav-item">
@@ -75,54 +75,97 @@ if (!isset($_SESSION['dId'])) {
 
     <main role="main">
 
-        <div class="container">
+        <?php
+        if (isset($_POST['updateDiseaseBtn'])) {
+            $id = $_POST['id'];
+            $disease =  trim(htmlspecialchars($_POST['updateDisease']));
+
+            if ($_SESSION['updateDiseaseWalkIn'] == $disease) {
+                header("location:walkInPatient.php?errDiseaseUp=Nothing_to_update");
+                exit(0);
+            }
+
+            $sql = "UPDATE walkinpatient SET walkInDisease = :disease WHERE walkInId = :id";
+            $stmt = $con->prepare($sql);
+            $stmt->bindParam(":disease", $disease, PDO::PARAM_STR);
+            $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+            $stmt->execute();
+
+            header("location:walkInPatient.php?succDiseaseUp=Successfully_updated_disease");
+            exit(0);
+        }
+        ?>
+
+        <div class="container-fluid">
 
             <div class="mt-4 mb-4">
-                <h1 class="Display-4" id="primaryColor">My Profile</h1>
+                <h1 class="Display-4 my-4" id="primaryColor">Update Disease</h1>
             </div>
 
-            <form action="contactus.php" method="post">
-                <div class="row">
-                    <div class="col">
-                        <label for="exampleInputEmail1">Name</label>
-                        <input type="text" class="form-control" value="Qwerty">
-                    </div>
-                    <div class="col">
-                        <label for="exampleInputEmail1">Email</label>
-                        <input type="email" class="form-control" value="qwerty@gmail.com">
-                    </div>
+            <?php
+            if (isset($_POST['updateDiseaseWalkIn'])) {
+                $id = $_POST['id'];
+
+                $sql = "SELECT * FROM walkinpatient WHERE walkInId = :id";
+                $stmt = $con->prepare($sql);
+                $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+                $stmt->execute();
+
+                $updateDisease = $stmt->fetch(PDO::FETCH_ASSOC);
+                $_SESSION['updateDiseaseWalkIn'] = $updateDisease['walkInDisease'];
+            }
+            ?>
+
+            <form action="updateDiseaseWalkIn.php" method="post">
+
+                <div class="container">
+                    <input type="hidden" name="id" value="<?= $updateDisease['walkInId'] ?>">
+                    <input type="text" name="updateDisease" class="form-control" value="<?= $updateDisease['walkInDisease'] ?>">
                 </div>
-                <div class="row">
-                    <div class="col">
-                        <label for="exampleInputEmail1">Address</label>
-                        <input type="text" class="form-control" value="12345 St.">
-                    </div>
-                    <div class="col">
-                        <label for="exampleInputEmail1">Mobile Number</label>
-                        <input type="tel" class="form-control" value="09550192231">
-                    </div>
-                </div>
-                <div class="text-center mt-3">
-                    <input type="submit" class="btn btn-info" value="Update Information">
+
+                <div class="text-center my-5">
+                    <input type="submit" value="Update" class="btn btn-primary" name="updateDiseaseBtn">
                 </div>
             </form>
-
-            <hr class="featurette-divider">
         </div>
+
+
+
+        <!-- FOOTER -->
+        <footer class="container text-center">
+            <p>&copy; 2017-2018 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+        </footer>
     </main>
-
-
-
-    <!-- FOOTER -->
-    <footer class="container text-center">
-        <p>&copy; 2017-2018 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
-    </footer>
-
 
 
     <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#search').keyup(function() {
+                var search = $(this).val();
+                var doctorName = $('.doctorName').val();
+
+                $.ajax({
+                    url: 'action.php',
+                    method: 'post',
+                    data: {
+                        walkInQuery: search,
+                        doctorName: doctorName
+                    },
+                    success: function(response) {
+                        $('#table-data').html(response);
+                    }
+                });
+            });
+        });
+    </script>
+
 </body>
 
 </html>

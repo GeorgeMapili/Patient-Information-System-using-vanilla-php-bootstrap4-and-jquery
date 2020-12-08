@@ -2,6 +2,10 @@
 session_start();
 require_once '../connect.php';
 
+if (!isset($_SESSION['dId'])) {
+    header("location:index.php");
+    exit(0);
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -30,8 +34,11 @@ require_once '../connect.php';
                     <li class="nav-item">
                         <a class="nav-link" href="dashboard.php">Home <span class="sr-only">(current)</span></a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="walkInPatient.php">Walk in Patient</a>
+                    </li>
                     <li class="nav-item active">
-                        <a class="nav-link" href="patient.php">Patient</a>
+                        <a class="nav-link" href="patient.php">Patient Appointment</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link " href="incomingAppointment.php">Upcoming Appointment</a>
@@ -68,38 +75,75 @@ require_once '../connect.php';
 
     <main role="main">
 
+        <?php
+        if (isset($_POST['submitAddPrescription'])) {
+            $aId = $_POST['aId'];
+            $pId = $_POST['pId'];
+            $prescription = trim(htmlspecialchars($_POST['prescription']));
+
+            $sql = "UPDATE appointment SET pPrescription = :prescription WHERE aId = :aid AND pId = :pid";
+            $stmt = $con->prepare($sql);
+            $stmt->bindParam(":prescription", $prescription, PDO::PARAM_STR);
+            $stmt->bindParam(":aid", $aId, PDO::PARAM_INT);
+            $stmt->bindParam(":pid", $pId, PDO::PARAM_INT);
+            $stmt->execute();
+
+            header("location:patient.php?succAddPrescription=Successfully_added_prescription");
+            exit(0);
+        }
+        ?>
+
         <div class="container">
 
             <div class="mt-4 mb-4">
                 <h1 class="Display-4" id="primaryColor">Add Prescription</h1>
             </div>
 
-            <form action="contactus.php" method="post">
+
+
+            <form action="addPrescription.php" method="post">
                 <div class="row">
+
+                    <?php
+                    if (isset($_POST['addPrescriptionBtn'])) {
+                        $aId = $_POST['aid'];
+                        $pId = $_POST['pid'];
+
+                        $sql = "SELECT * FROM appointment WHERE aId = :aid AND pId = :pid";
+                        $stmt = $con->prepare($sql);
+                        $stmt->bindParam(":aid", $aId, PDO::PARAM_INT);
+                        $stmt->bindParam(":pid", $pId, PDO::PARAM_INT);
+                        $stmt->execute();
+
+                        $addPrescription = $stmt->fetch(PDO::FETCH_ASSOC);
+                    }
+                    ?>
                     <div class="col">
+                        <input type="hidden" name="aId" value="<?= $aId ?>">
+                        <input type="hidden" name="pId" value="<?= $pId ?>">
                         <label for="exampleInputEmail1">Patient Name</label>
-                        <input type="text" class="form-control" value="Qwerty" readonly>
+                        <input type="text" class="form-control" value="<?= $addPrescription['pName'] ?>" readonly>
                     </div>
                     <div class="col">
                         <label for="exampleInputEmail1">Patient Disease</label>
-                        <input type="text" class="form-control" value="Fever" readonly>
+                        <input type="text" class="form-control" value="<?= $addPrescription['aReason'] ?>" readonly>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
                         <label for="exampleInputEmail1">Address</label>
-                        <input type="text" class="form-control" value="12345 St." readonly>
+                        <input type="text" class="form-control" value="<?= $addPrescription['pAddress'] ?>" readonly>
                     </div>
                     <div class="col">
                         <label for="exampleInputEmail1">Mobile Number</label>
-                        <input type="tel" class="form-control" value="09550192231" readonly>
+                        <input type="tel" class="form-control" value="<?= $addPrescription['pMobile'] ?>" readonly>
                     </div>
                 </div>
 
                 <label for="">Prescription or Medicines</label>
-                <textarea name="reasonAppointment" class="form-control resize-0" cols="30" rows="10"></textarea>
+                <textarea name="prescription" class="form-control resize-0" cols="30" rows="10"></textarea>
                 <div class="text-center mt-3">
-                    <input type="submit" class="btn" id="docBtnApt" value="Submit" name="submitAppointment">
+                    <input type="submit" class="btn" id="docBtnApt" value="Submit" name="submitAddPrescription">
                 </div>
             </form>
         </div>

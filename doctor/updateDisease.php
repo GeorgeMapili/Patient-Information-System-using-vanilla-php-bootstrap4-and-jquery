@@ -2,6 +2,10 @@
 session_start();
 require_once '../connect.php';
 
+if (!isset($_SESSION['dId'])) {
+    header("location:index.php");
+    exit(0);
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -31,9 +35,12 @@ require_once '../connect.php';
                         <a class="nav-link" href="dashboard.php">Home <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="patient.php">Patient</a>
+                        <a class="nav-link" href="walkInPatient.php">Walk in Patient</a>
                     </li>
                     <li class="nav-item active">
+                        <a class="nav-link" href="patient.php">Patient Appointment</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link " href="incomingAppointment.php">Upcoming Appointment</a>
                     </li>
                     <li class="nav-item">
@@ -80,6 +87,7 @@ require_once '../connect.php';
             $stmt->execute();
 
             $updateDisease = $stmt->fetch(PDO::FETCH_ASSOC);
+            $_SESSION['updateAppointmentDisease'] = $updateDisease['aReason'];
         }
         ?>
 
@@ -89,6 +97,11 @@ require_once '../connect.php';
             $pId = $_POST['pId'];
             $updateDisease = trim(htmlspecialchars($_POST['disease']));
 
+            if ($updateDisease == $_SESSION['updateAppointmentDisease']) {
+                header("location:patient.php?errUpdateDisease=nothing_to_update");
+                exit(0);
+            }
+
             $sql = "UPDATE appointment SET aReason = :reason WHERE aId = :aid AND pId = :pid";
             $stmt = $con->prepare($sql);
             $stmt->bindParam(":reason", $updateDisease, PDO::PARAM_STR);
@@ -96,7 +109,7 @@ require_once '../connect.php';
             $stmt->bindParam(":pid", $pId, PDO::PARAM_INT);
             $stmt->execute();
 
-            header("location:incomingAppointment.php?succUpdate=disease_updated_successfully");
+            header("location:patient.php?succUpdate=disease_updated_successfully");
             exit(0);
         }
         ?>
@@ -109,7 +122,7 @@ require_once '../connect.php';
             <form action="updateDisease.php" method="post">
                 <input type="hidden" name="aId" value="<?= $updateDisease['aId'] ?>">
                 <input type="hidden" name="pId" value="<?= $updateDisease['pId'] ?>">
-                <input type="text" name="disease" class="form-control" autocomplete="off">
+                <input type="text" name="disease" value="<?= $updateDisease['aReason'] ?>" class="form-control" autocomplete="off">
                 <div class="text-center mt-3">
                     <input type="submit" value="Update Disease" name="update" class="btn btn-secondary">
                 </div>
