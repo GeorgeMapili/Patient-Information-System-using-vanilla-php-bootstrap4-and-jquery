@@ -97,7 +97,7 @@ if (!isset($_SESSION['id'])) {
                 </thead>
                 <tbody>
                     <?php
-                    $status1 = "done";
+                    $status1 = "discharged";
                     $status2 = "cancelled";
                     $sql = "SELECT * FROM appointment WHERE (aStatus = :status1 OR aStatus = :status2) AND pId = :id";
 
@@ -118,8 +118,8 @@ if (!isset($_SESSION['id'])) {
                             <td><?= date("M d, Y", strtotime($myAppointmentHistory['aDate'])); ?> at <?= date("h:i A", strtotime($myAppointmentHistory['aTime'])); ?></td>
                             <td>
                                 <?php
-                                if ($myAppointmentHistory['aStatus'] === "done") { ?>
-                                    <input type="submit" value="Done" class="btn btn-primary disabled" name="appointmentStatus">
+                                if ($myAppointmentHistory['aStatus'] === "discharged") { ?>
+                                    <input type="submit" value="Discharged" class="btn btn-primary disabled" name="appointmentStatus">
                                 <?php
                                 } else if ($myAppointmentHistory['aStatus'] === "cancelled") {
                                 ?>

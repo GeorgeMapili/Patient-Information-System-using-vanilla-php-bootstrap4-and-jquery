@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 require_once '../connect.php';
 
@@ -48,13 +49,13 @@ if (!isset($_SESSION['adId'])) {
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link " href="patientUser.php">
+                            <a class="nav-link " href="patientUser.php" id="primaryColor">
                                 <span data-feather="file"></span>
                                 View All Patient Users
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link " href="patient.php" id="primaryColor">
+                            <a class="nav-link " href="patient.php">
                                 <span data-feather="file"></span>
                                 View All Appointments
                             </a>
@@ -104,9 +105,13 @@ if (!isset($_SESSION['adId'])) {
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h1 class="h2">All Patients</h1>
                 </div>
-
+                <div class="text-center">
+                    <?= (isset($_GET['errInfo']) && $_GET['errInfo'] == "Nothing_to_update") ? '<span class="text-danger">Nothing to update!</span>' : ''; ?>
+                    <?= (isset($_GET['succUpdate']) && $_GET['succUpdate'] == "Successfully_updated_information") ? '<span class="text-success">Successfully updated!</span>' : ''; ?>
+                    <?= (isset($_GET['succDelete']) && $_GET['succDelete'] == "Successfully_deleted_user") ? '<span class="text-success">Successfully deleted user!</span>' : ''; ?>
+                </div>
                 <div class="mt-4 mb-4">
-                    <h1 class="Display-4 my-4" id="primaryColor">Appointments</h1>
+                    <h1 class="Display-4 my-4" id="primaryColor">Users</h1>
                 </div>
                 <div class="d-flex justify-content-between">
                     <form class="form-inline">
@@ -120,46 +125,70 @@ if (!isset($_SESSION['adId'])) {
                 <table class="table table-hover" id="table-data">
                     <thead class="thead-dark">
                         <tr>
-                            <th scope="col">Appointment ID</th>
+                            <th scope="col">Patient ID</th>
+                            <th scope="col">Patient Profile</th>
                             <th scope="col">Patient Name</th>
+                            <th scope="col">Patient Email</th>
                             <th scope="col">Patient Address</th>
                             <th scope="col">Patient Mobile</th>
-                            <th scope="col">Patient Disease</th>
-                            <th scope="col">Doctor Name</th>
+                            <th scope="col">Patient Age</th>
+                            <th scope="col">Patient Gender</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
-                        $status1 = "accepted";
-                        $status2 = "done";
-                        $sql = "SELECT * FROM appointment WHERE aStatus IN(:status1,:status2)";
+
+                        if (isset($_POST['deletePatient'])) {
+                            $id = $_POST['pId'];
+                            $pProfile = $_POST['pProfile'];
+
+                            $sql = "DELETE FROM patientappointment WHERE pId = :id";
+                            $stmt = $con->prepare($sql);
+                            $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+                            $stmt->execute();
+
+                            $image = "../upload/user_profile_img/$pProfile";
+                            unlink($image);
+
+                            header("location:patientUser.php?succDelete=Successfully_deleted_user");
+                            ob_end_flush();
+                            exit(0);
+                        }
+
+                        ?>
+
+                        <?php
+
+                        $sql = "SELECT * FROM patientappointment";
                         $stmt = $con->prepare($sql);
-                        $stmt->bindParam(":status1", $status1, PDO::PARAM_STR);
-                        $stmt->bindParam(":status2", $status2, PDO::PARAM_STR);
                         $stmt->execute();
 
                         while ($patientAppointment = $stmt->fetch(PDO::FETCH_ASSOC)) :
                         ?>
+
                             <tr>
-                                <th scope="row"><?= $patientAppointment['aId'] ?></th>
+                                <th scope="row"><?= $patientAppointment['pId'] ?></th>
+                                <td><img src="../upload/user_profile_img/<?= $patientAppointment['pProfile'] ?>" width="50" style="border:1px solid #333; border-radius: 50%;" alt=""></td>
                                 <td><?= $patientAppointment['pName'] ?></td>
+                                <td><?= $patientAppointment['pEmail'] ?></td>
                                 <td><?= $patientAppointment['pAddress'] ?></td>
                                 <td><?= $patientAppointment['pMobile'] ?></td>
-                                <td><?= $patientAppointment['aReason'] ?></td>
-                                <td><?= $patientAppointment['pDoctor'] ?></td>
+                                <td><?= $patientAppointment['pAge'] ?></td>
+                                <td><?= ucwords($patientAppointment['pGender']) ?></td>
                                 <td>
                                     <div class="row">
                                         <div class="col">
-                                            <form action="updatePatientAppointment.php" method="post">
-                                                <input type="hidden" name="aId" value="<?= $patientAppointment['aId'] ?>">
+                                            <form action="updatePatient.php" method="post">
                                                 <input type="hidden" name="pId" value="<?= $patientAppointment['pId'] ?>">
-                                                <input type="submit" value="Update" class="btn btn-secondary" name="appointmentStatus">
+                                                <input type="submit" value="Update" class="btn btn-secondary" name="updatePatient">
                                             </form>
                                         </div>
                                         <div class="col">
-                                            <form action="" method="post">
-                                                <input type="submit" value="Delete" class="btn btn-danger" name="appointmentStatus">
+                                            <form action="patientUser.php" method="post">
+                                                <input type="hidden" name="pId" value="<?= $patientAppointment['pId'] ?>">
+                                                <input type="hidden" name="pProfile" value="<?= $patientAppointment['pProfile'] ?>">
+                                                <input type="submit" value="Delete" class="btn btn-danger" name="deletePatient">
                                             </form>
                                         </div>
                                     </div>

@@ -60,7 +60,6 @@ $stmt->execute();
                     </li>
                     <li class="nav-item">
                         <a class="nav-link " href="finishedAppointment.php">Finished Appointments</a>
-                        <?= date("M d, Y") ?>
                     </li>
                 </ul>
                 <ul class="navbar-nav ml-auto">

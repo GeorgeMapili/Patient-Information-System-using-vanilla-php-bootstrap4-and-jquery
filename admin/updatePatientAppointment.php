@@ -54,7 +54,7 @@ if (!isset($_SESSION['adId'])) {
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link " href="patient.php">
+                            <a class="nav-link " href="patient.php" id="primaryColor">
                                 <span data-feather="file"></span>
                                 View All Appointments
                             </a>
@@ -72,7 +72,7 @@ if (!isset($_SESSION['adId'])) {
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="nurse.php" id="primaryColor">
+                            <a class="nav-link" href="nurse.php">
                                 <span data-feather="users"></span>
                                 View All Nurse Receptionist
                             </a>
@@ -102,54 +102,45 @@ if (!isset($_SESSION['adId'])) {
 
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">Add Nurse Receptionist</h1>
-                </div>
-                <div class="container">
-
-                    <form action="contactus.php" method="post">
-                        <div class="row">
-                            <div class="col">
-                                <label for="exampleInputEmail1">Nurse Name</label>
-                                <input type="text" class="form-control">
-                            </div>
-                            <div class="col">
-                                <label for="exampleInputEmail1">Nurse Email</label>
-                                <input type="text" class="form-control">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <label for="exampleInputEmail1">Nurse Address</label>
-                                <input type="text" class="form-control">
-                            </div>
-                            <div class="col">
-                                <label for="exampleInputEmail1">Nurse Mobile Number</label>
-                                <input type="tel" class="form-control">
-                            </div>
-                        </div>
-
-                        <label for="exampleInputEmail1">Nurse Profile Img</label>
-                        <input type="file" name="doctorProfileImg" class="form-control" id="">
-
-                        <div class="text-center mt-3">
-                            <input type="submit" class="btn btn-primary" value="Add Nurse" name="submitAppointment">
-                        </div>
-                    </form>
+                    <h1 class="h2">All Patients</h1>
                 </div>
 
+                <div class="mt-4 mb-4">
+                    <h1 class="Display-4 my-4" id="primaryColor">Update Patient</h1>
+                </div>
+
+                <form action="" method="post">
+                    <div class="row">
+                        <div class="col" class="form-group">
+                            <label>Name</label>
+                            <input type="text" name="name" class="form-control">
+                        </div>
+                        <div class="col" class="form-group">
+                            <label>Name</label>
+                            <input type="text" name="name" class="form-control">
+                        </div>
+                    </div>
+
+                </form>
+
+
+
+
+            </main>
         </div>
-
-
-        </main>
-    </div>
     </div>
 
 
 
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </body>
 
 </html>

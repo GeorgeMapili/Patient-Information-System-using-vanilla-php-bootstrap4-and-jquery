@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 require_once 'connect.php';
 
@@ -64,7 +65,7 @@ if (!isset($_SESSION['id'])) {
                             <?= $_SESSION['name']; ?>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item disabled" href=""><?= $_SESSION['email']; ?></a>
+                            <a class="dropdown-item disabled" href=""><?= $_SESSION['email'] ?></a>
                             <a class="dropdown-item" href="myaccount.php">My account</a>
                             <a class="dropdown-item" href="myAppointmentHistory.php">My Appointment History</a>
                             <div class="dropdown-divider"></div>
@@ -125,6 +126,7 @@ if (!isset($_SESSION['id'])) {
                         exit(0);
                     } else {
                         header("location:deleteAcc.php?errPass=Incorrect_password");
+                        ob_end_flush();
                         exit(0);
                     }
                 }

@@ -1,3 +1,13 @@
+<?php
+session_start();
+require_once '../connect.php';
+
+if (!isset($_SESSION['adId'])) {
+    header("location:index.php");
+    exit(0);
+}
+
+?>
 <!doctype html>
 <html lang="en">
 
@@ -21,7 +31,7 @@
         </button>
         <ul class="navbar-nav px-3">
             <li class="nav-item text-nowrap">
-                <a class="nav-link" href="#">Logout</a>
+                <a class="nav-link" href="logout.php">Logout</a>
             </li>
         </ul>
     </nav>
@@ -38,9 +48,15 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link " href="patientUser.php">
+                                <span data-feather="file"></span>
+                                View All Patient Users
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link " href="patient.php" id="primaryColor">
                                 <span data-feather="file"></span>
-                                View All Patients
+                                View All Appointments
                             </a>
                         </li>
                         <li class="nav-item">

@@ -1,3 +1,13 @@
+<?php
+session_start();
+require_once '../connect.php';
+
+if (isset($_SESSION['adId'])) {
+    header("location:dashboard.php");
+    exit(0);
+}
+
+?>
 <!doctype html>
 <html lang="en">
 
@@ -14,15 +24,45 @@
 
 <body>
     <h2 class="display-4 mb-3" style="color: rgb(15, 208, 214);">Admin Login</h2>
-    <form action="index.php" method="post">
 
+    <div class="text-center my-4">
+        <?= (isset($_GET['errInfo']) && $_GET['errInfo'] = "Incorrect_credentials") ? '<span class="text-danger">Incorrect Credentials</span>' : ''; ?>
+    </div>
+
+    <?php
+    if (isset($_POST['login'])) {
+        $email = trim(htmlspecialchars($_POST['email']));
+        $password = trim(htmlspecialchars($_POST['password']));
+
+        $sql = "SELECT * FROM admin WHERE ad_email = :email";
+        $stmt = $con->prepare($sql);
+        $stmt->bindParam(":email", $email, PDO::PARAM_STR);
+        $stmt->execute();
+
+        $adminAccount = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (password_verify($password, $adminAccount['ad_pass'])) {
+            $_SESSION['adId'] = $adminAccount['ad_id'];
+            $_SESSION['adName'] = $adminAccount['ad_name'];
+            $_SESSION['adEmail'] = $adminAccount['ad_email'];
+
+            header("location:dashboard.php");
+            exit(0);
+        } else {
+            header("location:index.php?errInfo=Incorrect_credentials");
+            exit(0);
+        }
+    }
+    ?>
+
+    <form action="index.php" method="post">
         <div class="form-group">
-            <label for="exampleInputEmail1">Email address</label>
-            <input type="email" name="email" class="form-control is-invalid" required>
+            <label>Email address</label>
+            <input type="email" name="email" class="form-control" required>
         </div>
         <div class="form-group">
-            <label for="exampleInputPassword1">Password</label>
-            <input type="password" name="password" class="form-control is-valid" required>
+            <label>Password</label>
+            <input type="password" name="password" class="form-control" required>
         </div>
 
         <input type="submit" class="btn-block btn-info mt-4" value="Login" name="login">
