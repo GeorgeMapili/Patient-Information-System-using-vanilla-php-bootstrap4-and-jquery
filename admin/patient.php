@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 require_once '../connect.php';
 
@@ -100,9 +101,32 @@ if (!isset($_SESSION['adId'])) {
                 </div>
             </nav>
 
+            <?php
+
+            if (isset($_POST['deleteAppointment'])) {
+
+                $aId = $_POST['aId'];
+                $pId = $_POST['pId'];
+
+                $sql = "DELETE FROM appointment WHERE aId = :aid AND pId = :pid";
+                $stmt = $con->prepare($sql);
+                $stmt->bindParam(":aid", $aId, PDO::PARAM_INT);
+                $stmt->bindParam(":pid", $pId, PDO::PARAM_INT);
+                $stmt->execute();
+
+                header("location:patient.php?succDeleteAppointment=Successfully_deleted_a_appointment");
+                ob_end_flush();
+                exit(0);
+            }
+            ?>
+
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h1 class="h2">All Patients</h1>
+                </div>
+
+                <div class="text-center">
+                    <?= (isset($_GET['succDeleteAppointment']) && $_GET['succDeleteAppointment'] == "Successfully_deleted_a_appointment") ? '<span class="text-success">Successfully deleted a appointment!</span>' : '' ?>
                 </div>
 
                 <div class="mt-4 mb-4">
@@ -112,10 +136,6 @@ if (!isset($_SESSION['adId'])) {
                     <form class="form-inline">
                         <input class="form-control mb-3" id="search" autocomplete="off" type="search" placeholder="Search Patient Name" aria-label="Search">
                     </form>
-
-                    <div>
-                        <a href="addPatientAppointment.php" class="btn btn-success mb-3 ">Add Patient from Appointment</a>
-                    </div>
                 </div>
                 <table class="table table-hover" id="table-data">
                     <thead class="thead-dark">
@@ -149,19 +169,12 @@ if (!isset($_SESSION['adId'])) {
                                 <td><?= $patientAppointment['aReason'] ?></td>
                                 <td><?= $patientAppointment['pDoctor'] ?></td>
                                 <td>
-                                    <div class="row">
-                                        <div class="col">
-                                            <form action="updatePatientAppointment.php" method="post">
-                                                <input type="hidden" name="aId" value="<?= $patientAppointment['aId'] ?>">
-                                                <input type="hidden" name="pId" value="<?= $patientAppointment['pId'] ?>">
-                                                <input type="submit" value="Update" class="btn btn-secondary" name="appointmentStatus">
-                                            </form>
-                                        </div>
-                                        <div class="col">
-                                            <form action="" method="post">
-                                                <input type="submit" value="Delete" class="btn btn-danger" name="appointmentStatus">
-                                            </form>
-                                        </div>
+                                    <div class="col">
+                                        <form action="patient.php" method="post">
+                                            <input type="hidden" name="aId" value="<?= $patientAppointment['aId'] ?>">
+                                            <input type="hidden" name="pId" value="<?= $patientAppointment['pId'] ?>">
+                                            <input type="submit" value="Delete" class="btn btn-danger" name="deleteAppointment" onclick="return confirm('Are you sure to delete ?')">
+                                        </form>
                                     </div>
                                 </td>
                             </tr>

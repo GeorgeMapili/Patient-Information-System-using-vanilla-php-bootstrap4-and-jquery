@@ -35,7 +35,8 @@ if (isset($_SESSION['dId'])) {
         $stmt->execute();
 
         while ($password = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            if ($passwords === $password['dPassword']) {
+
+            if (password_verify($passwords, $password['dPassword'])) {
                 $_SESSION['dId'] = $password['dId'];
                 $_SESSION['dName'] = $password['dName'];
                 $_SESSION['dEmail'] = $password['dEmail'];
@@ -48,18 +49,28 @@ if (isset($_SESSION['dId'])) {
 
                 header("location:dashboard.php");
                 exit(0);
+            } else {
+                header("location:index.php?errPass=Incorrect_password");
+                exit(0);
             }
+        }
+
+        if ($stmt->rowCount() < 1) {
+            header("location:index.php?errEmail=Incorrect_email");
+            exit(0);
         }
     }
     ?>
     <form action="index.php" method="post">
         <div class="form-group">
             <label>Email address</label>
-            <input type="email" name="email" class="form-control" required>
+            <?= (isset($_GET['errEmail']) && $_GET['errEmail'] == "Incorrect_email") ? '<input type="email" name="email" class="form-control is-invalid" required>' : '<input type="email" name="email" class="form-control" required>' ?>
+            <?= (isset($_GET['errEmail']) && $_GET['errEmail'] == "Incorrect_email") ? '<small class="text-danger">Incorrect email!</small>' : ''; ?>
         </div>
         <div class="form-group">
             <label>Password</label>
-            <input type="password" name="password" class="form-control" required>
+            <?= (isset($_GET['errPass']) && $_GET['errPass'] == "Incorrect_password") ? '<input type="password" name="password" class="form-control is-invalid" required>' : '<input type="password" name="password" class="form-control" required>'; ?>
+            <?= (isset($_GET['errPass']) && $_GET['errPass'] == "Incorrect_password") ? '<small class="text-danger">Incorrect password!</small>' : ''; ?>
         </div>
 
         <input type="submit" class="btn-block btn-info mt-4" value="Login" name="login">

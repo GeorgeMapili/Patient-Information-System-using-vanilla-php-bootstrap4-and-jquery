@@ -111,6 +111,12 @@ if (!isset($_SESSION['id'])) {
                         $path = __DIR__ . "/upload/user_profile_img/" . $_SESSION['profile'];
                         unlink($path);
 
+                        // Delete all existed in appointment
+                        $sql = "DELETE FROM appointment WHERE pId = :id";
+                        $stmt = $con->prepare($sql);
+                        $stmt->bindParam(":id", $_SESSION['id'], PDO::PARAM_INT);
+                        $stmt->execute();
+
                         unset($_SESSION['id']);
                         unset($_SESSION['name']);
                         unset($_SESSION['email']);

@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 require_once '../connect.php';
 
@@ -102,14 +103,72 @@ if (!isset($_SESSION['adId'])) {
 
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">All Doctors</h1>
+                    <h1 class="h2" id="primaryColor">All Doctors</h1>
                 </div>
-                <div>
+
+                <div class="text-center">
+                    <?= (isset($_GET['errUpdate']) && $_GET['errUpdate'] == "Nothing_to_update") ? '<span class="text-danger">Nothing to update!</span>' : ''; ?>
+                    <?= (isset($_GET['succUpdateImg']) && $_GET['succUpdateImg'] == "Successfully_update_the_img") ? '<span class="text-success">Successfully updated image!</span>' : ''; ?>
+                    <?= (isset($_GET['updateSuccInfo']) && $_GET['updateSuccInfo'] == "Successfully_updated_information") ? '<span class="text-success">Successfully updated information!</span>' : ''; ?>
+                    <?= (isset($_GET['succUpdatePass']) && $_GET['succUpdatePass'] == "Successfully_updated_password") ? '<span class="text-success">Successfully updated password!</span>' : ''; ?>
+                    <?= (isset($_GET['succDelete']) && $_GET['succDelete'] == "Successfully_deleted_a_doctor") ? '<span class="text-success">Successfully deleted a doctor account!</span>' : ''; ?>
+                </div>
+
+                <div class="d-flex justify-content-between">
                     <form class="form-inline">
-                        <input class="form-control mb-3" type="search" placeholder="Search Doctor" aria-label="Search">
+                        <input class="form-control mb-3" type="search" id="search" placeholder="Search Doctor" aria-label="Search">
                     </form>
+                    <div class="mb-3">
+                        <a href="addDoctor.php" class="btn btn-success mt-3 ">Add Doctor</a>
+                    </div>
                 </div>
-                <table class="table table-hover ">
+
+                <?php
+
+                if (isset($_POST['deleteDoctorBtn'])) {
+                    $dId = $_POST['dId'];
+
+                    // select the doctor image
+                    $sql = "SELECT * FROM doctor WHERE dId = :id";
+                    $stmt = $con->prepare($sql);
+                    $stmt->bindParam(":id", $dId, PDO::PARAM_INT);
+                    $stmt->execute();
+
+                    $doctor = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                    $doctorImage = $doctor['dProfileImg'];
+
+                    $sql = "DELETE FROM doctor WHERE dId = :id";
+                    $stmt = $con->prepare($sql);
+                    $stmt->bindParam(":id", $dId, PDO::PARAM_INT);
+                    $stmt->execute();
+
+                    // Delete all the appointments WHERE status = pending/accepted/done if doctor acc deleted
+                    $status1 = "pending";
+                    $status2 = "accepted";
+                    $status3 = "done";
+                    $sql = "DELETE FROM appointment WHERE pDoctor = :doctor AND aStatus IN(:status1,:status2,:status3)";
+                    $stmt = $con->prepare($sql);
+                    $stmt->bindParam(":doctor", $doctor['dName'], PDO::PARAM_STR);
+                    $stmt->bindParam(":status1", $status1, PDO::PARAM_STR);
+                    $stmt->bindParam(":status2", $status2, PDO::PARAM_STR);
+                    $stmt->bindParam(":status3", $status3, PDO::PARAM_STR);
+                    $stmt->execute();
+
+
+                    $path = __DIR__ . "/../upload/doc_profile_img/" . $doctorImage;
+                    unlink($path);
+                    // var_dump(unlink($path));
+                    // die();
+
+                    header("location:doctor.php?succDelete=Successfully_deleted_a_doctor");
+                    ob_end_flush();
+                    exit(0);
+                }
+
+                ?>
+
+                <table class="table table-hover " id="table-data">
                     <thead class="thead-dark">
                         <tr>
                             <th scope="col">Doctor ID</th>
@@ -124,89 +183,43 @@ if (!isset($_SESSION['adId'])) {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td><img src="../upload/doc_profile_img/doc1.jpg" width="50" style="border:1px solid #333; border-radius: 50%;" alt=""></td>
-                            <td>Dr. Qwerty</td>
-                            <td>qwerty@gmail.com</td>
-                            <td>12345 St.</td>
-                            <td>09510195578</td>
-                            <td>Cardiologist</td>
-                            <td>5,000.00</td>
-                            <td>
-                                <input type="submit" value="Update" class="btn btn-secondary" name="appointmentStatus" onclick="return confirm('Are you sure to update?');">
-                                |
-                                <input type="submit" value="Delete" class="btn btn-danger" name="appointmentStatus" onclick="return confirm('Are you sure to delete?');">
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td><img src="../upload/doc_profile_img/doc2.jpg" width="50" style="border:1px solid #333; border-radius: 50%;" alt=""></td>
-                            <td>Dr. Qwerty</td>
-                            <td>qwerty@gmail.com</td>
-                            <td>12345 St.</td>
-                            <td>09510195578</td>
-                            <td>Cardiologist</td>
-                            <td>5,000.00</td>
-                            <td>
-                                <input type="submit" value="Update" class="btn btn-secondary" name="appointmentStatus" onclick="return confirm('Are you sure to update?');">
-                                |
-                                <input type="submit" value="Delete" class="btn btn-danger" name="appointmentStatus" onclick="return confirm('Are you sure to delete?');">
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td><img src="../upload/doc_profile_img/doc3.jpg" width="50" style="border:1px solid #333; border-radius: 50%;" alt=""></td>
-                            <td>Dr. Qwerty</td>
-                            <td>qwerty@gmail.com</td>
-                            <td>12345 St.</td>
-                            <td>09510195578</td>
-                            <td>Cardiologist</td>
-                            <td>5,000.00</td>
-                            <td>
-                                <input type="submit" value="Update" class="btn btn-secondary" name="appointmentStatus" onclick="return confirm('Are you sure to update?');">
-                                |
-                                <input type="submit" value="Delete" class="btn btn-danger" name="appointmentStatus" onclick="return confirm('Are you sure to delete?');">
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td><img src="../upload/doc_profile_img/doc4.jpeg" width="50" style="border:1px solid #333; border-radius: 50%;" alt=""></td>
-                            <td>Dr. Qwerty</td>
-                            <td>qwerty@gmail.com</td>
-                            <td>12345 St.</td>
-                            <td>09510195578</td>
-                            <td>Cardiologist</td>
-                            <td>5,000.00</td>
-                            <td>
-                                <input type="submit" value="Update" class="btn btn-secondary" name="appointmentStatus" onclick="return confirm('Are you sure to update?');">
-                                |
-                                <input type="submit" value="Delete" class="btn btn-danger" name="appointmentStatus" onclick="return confirm('Are you sure to delete?');">
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td><img src="../upload/doc_profile_img/doc5.jpeg" width="50" style="border:1px solid #333; border-radius: 50%;" alt=""></td>
-                            <td>Dr. Qwerty</td>
-                            <td>qwerty@gmail.com</td>
-                            <td>12345 St.</td>
-                            <td>09510195578</td>
-                            <td>Cardiologist</td>
-                            <td>5,000.00</td>
-                            <td>
-                                <input type="submit" value="Update" class="btn btn-secondary" name="appointmentStatus" onclick="return confirm('Are you sure to update?');">
-                                |
-                                <input type="submit" value="Delete" class="btn btn-danger" name="appointmentStatus" onclick="return confirm('Are you sure to delete?');">
-                            </td>
-                        </tr>
+                        <?php
 
+                        $sql = "SELECT * FROM doctor";
+                        $stmt = $con->prepare($sql);
+                        $stmt->execute();
+
+                        while ($doctor = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                        ?>
+                            <tr>
+                                <th scope="row"><?= $doctor['dId'] ?></th>
+                                <td><img src="../upload/doc_profile_img/<?= $doctor['dProfileImg'] ?>" width="50" height="50" style="border:1px solid #333; border-radius: 100%;" alt=""></td>
+                                <td><?= $doctor['dName'] ?></td>
+                                <td><?= $doctor['dEmail'] ?></td>
+                                <td><?= $doctor['dAddress'] ?></td>
+                                <td><?= $doctor['dMobile'] ?></td>
+                                <td><?= $doctor['dSpecialization'] ?></td>
+                                <td>₱<?= number_format($doctor['dFee'], 2) ?></td>
+                                <td>
+                                    <div class="row">
+                                        <div class="col">
+                                            <form action="updateDoctor.php" method="post">
+                                                <input type="hidden" name="dId" value="<?= $doctor['dId'] ?>">
+                                                <input type="submit" value="Update" class="btn btn-secondary" name="updateDoctorBtn">
+                                            </form>
+                                        </div>
+                                        <div class="col">
+                                            <form action="doctor.php" method="post">
+                                                <input type="hidden" name="dId" value="<?= $doctor['dId'] ?>">
+                                                <input type="submit" value="Delete" class="btn btn-danger" name="deleteDoctorBtn" onclick="return confirm('Are you sure to delete?');">
+                                            </form>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endwhile; ?>
                     </tbody>
                 </table>
-                <div>
-                    <div>
-                        <a href="addDoctor.php" class="btn btn-success mt-3 ">Add Doctor</a>
-                    </div>
-                </div>
 
         </div>
 
@@ -221,6 +234,29 @@ if (!isset($_SESSION['adId'])) {
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#search').keyup(function() {
+                var search = $(this).val();
+
+                $.ajax({
+                    url: 'action.php',
+                    method: 'post',
+                    data: {
+                        searchDoctor: search
+                    },
+                    success: function(response) {
+                        $('#table-data').html(response);
+                    }
+                });
+            });
+        });
+    </script>
+
 </body>
 
 </html>

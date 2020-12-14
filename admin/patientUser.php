@@ -119,7 +119,7 @@ if (!isset($_SESSION['adId'])) {
                     </form>
 
                     <div>
-                        <a href="addPatientAppointment.php" class="btn btn-success mb-3 ">Add Patient from Appointment</a>
+                        <a href="addPatientAppointment.php" class="btn btn-success mb-3 ">Add Users</a>
                     </div>
                 </div>
                 <table class="table table-hover" id="table-data">
@@ -151,6 +151,12 @@ if (!isset($_SESSION['adId'])) {
                             $image = "../upload/user_profile_img/$pProfile";
                             unlink($image);
 
+                            // Delete all the existed appointments
+                            $sql = "DELETE FROM appointment WHERE pId = :id";
+                            $stmt = $con->prepare($sql);
+                            $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+                            $stmt->execute();
+
                             header("location:patientUser.php?succDelete=Successfully_deleted_user");
                             ob_end_flush();
                             exit(0);
@@ -169,7 +175,7 @@ if (!isset($_SESSION['adId'])) {
 
                             <tr>
                                 <th scope="row"><?= $patientAppointment['pId'] ?></th>
-                                <td><img src="../upload/user_profile_img/<?= $patientAppointment['pProfile'] ?>" width="50" style="border:1px solid #333; border-radius: 50%;" alt=""></td>
+                                <td><img src="../upload/user_profile_img/<?= $patientAppointment['pProfile'] ?>" width="50" height="50" style="border:1px solid #333; border-radius: 50%;" alt=""></td>
                                 <td><?= $patientAppointment['pName'] ?></td>
                                 <td><?= $patientAppointment['pEmail'] ?></td>
                                 <td><?= $patientAppointment['pAddress'] ?></td>
@@ -188,7 +194,7 @@ if (!isset($_SESSION['adId'])) {
                                             <form action="patientUser.php" method="post">
                                                 <input type="hidden" name="pId" value="<?= $patientAppointment['pId'] ?>">
                                                 <input type="hidden" name="pProfile" value="<?= $patientAppointment['pProfile'] ?>">
-                                                <input type="submit" value="Delete" class="btn btn-danger" name="deletePatient">
+                                                <input type="submit" value="Delete" class="btn btn-danger" name="deletePatient" onclick="return confirm('Are you sure to delete ?')">
                                             </form>
                                         </div>
                                     </div>
@@ -227,7 +233,7 @@ if (!isset($_SESSION['adId'])) {
                     url: 'action.php',
                     method: 'post',
                     data: {
-                        searchPatientAppointment: search
+                        searchPatientUser: search
                     },
                     success: function(response) {
                         $('#table-data').html(response);

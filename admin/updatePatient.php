@@ -232,13 +232,13 @@ if (!isset($_SESSION['adId'])) {
                         <div class="row my-3">
                             <div class="col">
                                 <label>Name</label>
-                                <?= ((isset($_GET['errName']) && $_GET['errName'] == "name_is_not_valid") || ((isset($_GET['errName1']) && $_GET['errName1'] == "Name_is_already_existed"))) ? '<input type="text" name="name" class="form-control is-invalid" value="' . $_SESSION['ad_updateName'] . '">' : '<input type="text" name="name" class="form-control" value="' . $_SESSION['ad_updateName'] . '">'; ?>
+                                <?= ((isset($_GET['errName']) && $_GET['errName'] == "name_is_not_valid") || ((isset($_GET['errName1']) && $_GET['errName1'] == "Name_is_already_existed"))) ? '<input type="text" name="name" class="form-control is-invalid" >' : '<input type="text" name="name" class="form-control" value="' . $_SESSION['ad_updateName'] . '">'; ?>
                                 <?= (isset($_GET['errName']) && $_GET['errName'] == "name_is_not_valid") ? '<small class="text-danger">Name is not valid!</small>' : ''; ?>
                                 <?= (isset($_GET['errName1']) && $_GET['errName1'] == "Name_is_already_existed") ? '<small class="text-danger">Name is already taken!</small>' : ''; ?>
                             </div>
                             <div class="col">
                                 <label>Email</label>
-                                <?= ((isset($_GET['errEmail']) && $_GET['errEmail'] == "email_is_invalid") || (isset($_GET['errEmail1']) && $_GET['errEmail1'] == "Email_is_already_existed")) ? '<input type="email" name="email" class="form-control is-invalid" value="' . $_SESSION['ad_updateEmail'] . '">' : '<input type="email" name="email" class="form-control" value="' . $_SESSION['ad_updateEmail'] . '">'; ?>
+                                <?= ((isset($_GET['errEmail']) && $_GET['errEmail'] == "email_is_invalid") || (isset($_GET['errEmail1']) && $_GET['errEmail1'] == "Email_is_already_existed")) ? '<input type="email" name="email" class="form-control is-invalid" >' : '<input type="email" name="email" class="form-control" value="' . $_SESSION['ad_updateEmail'] . '">'; ?>
                                 <?= (isset($_GET['errEmail']) && $_GET['errEmail'] == "email_is_invalid") ? '<small class="text-danger">Email is invalid!</small>' : ''; ?>
                                 <?= (isset($_GET['errEmail1']) && $_GET['errEmail1'] == "Email_is_already_existed") ? '<small class="text-danger">Email is already existed!</small>' : ''; ?>
                             </div>
@@ -250,7 +250,7 @@ if (!isset($_SESSION['adId'])) {
                             </div>
                             <div class="col">
                                 <label>Mobile Number</label>
-                                <?= (isset($_GET['errMobile']) && $_GET['errMobile'] == "Mobile_number_is_already_existed") ? '<input type="tel" name="mobile" class="form-control is-invalid" value="' . $_SESSION['ad_updateMobile'] . '">' : '<input type="tel" name="mobile" class="form-control" value="' . $_SESSION['ad_updateMobile'] . '">'; ?>
+                                <?= (isset($_GET['errMobile']) && $_GET['errMobile'] == "Mobile_number_is_already_existed") ? '<input type="tel" name="mobile" class="form-control is-invalid" >' : '<input type="tel" name="mobile" class="form-control" value="' . $_SESSION['ad_updateMobile'] . '">'; ?>
                                 <?= (isset($_GET['errMobile']) && $_GET['errMobile'] == "Mobile_number_is_already_existed") ? '<small class="text-danger">Mobile number is already existed!</small>' : ''; ?>
                             </div>
                         </div>
@@ -338,7 +338,7 @@ if (!isset($_SESSION['adId'])) {
                     <form action="updatePatient.php" method="post">
                         <div>
                             <label for="exampleInputEmail1">Current Password</label>
-                            <?= (isset($_GET['errCurrPass']) && $_GET['errCurrPass'] == "incorrect_current_password") ? '<input type="password" name="currentPass" class="form-control is-invalid" required>' : '<input type="password" name="currentPass" class="form-control" required>'; ?>
+                            <?= (isset($_GET['errCurrPass']) && $_GET['errCurrPass'] == "incorrect_current_password") ? '<input type="password" name="currentPass" minlength="6" class="form-control is-invalid" required>' : '<input type="password" name="currentPass" minlength="6" class="form-control" required>'; ?>
                             <?= (isset($_GET['errCurrPass']) && $_GET['errCurrPass'] == "incorrect_current_password") ? '<small class="text-danger">Incorrect Current Password!</small>' : ''; ?>
                         </div>
                         <div class="row my-3">
@@ -348,7 +348,7 @@ if (!isset($_SESSION['adId'])) {
                             </div>
                             <div class="col">
                                 <label for="exampleInputEmail1">Confirm New Password</label>
-                                <?= (isset($_GET['errConfirmPass']) && $_GET['errConfirmPass'] == "password_did_not_match") ? '<input type="password" name="confirmNewPass" class="form-control is-invalid" required>' : '<input type="password" name="confirmNewPass" class="form-control" required>'; ?>
+                                <?= (isset($_GET['errConfirmPass']) && $_GET['errConfirmPass'] == "password_did_not_match") ? '<input type="password" name="confirmNewPass" minlength="6" class="form-control is-invalid" required>' : '<input type="password" name="confirmNewPass" class="form-control" minlength="6" required>'; ?>
                                 <?= (isset($_GET['errConfirmPass']) && $_GET['errConfirmPass'] == "password_did_not_match") ? '<small class="text-danger">Password do not match!</small>' : ''; ?>
                             </div>
                         </div>
@@ -436,8 +436,6 @@ if (!isset($_SESSION['adId'])) {
                     </div>
 
                 </div>
-
-
 
             </main>
         </div>
