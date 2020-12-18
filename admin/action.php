@@ -588,3 +588,80 @@ if (isset($_POST['searchCancelledAppointment'])) {
         echo '<h3 style="color:red">No Cancelled Appointment</h3>';
     }
 }
+
+// MESSAGE AJAX
+if (isset($_POST['searchMessage'])) {
+
+    $search = trim(htmlspecialchars($_POST['searchMessage']));
+    $searchName = "%" . $search . "%";
+
+    $sql = "SELECT * FROM message WHERE msgPatientName LIKE :name ";
+    $stmt = $con->prepare($sql);
+    $stmt->bindParam(":name", $searchName, PDO::PARAM_STR);
+    $stmt->execute();
+
+    $numRows = $stmt->rowCount();
+
+    $messageOutput = '';
+
+    if ($stmt->rowCount() > 0) {
+
+
+
+        $messageOutput .= '
+    <thead class="thead-dark">
+    <tr>
+        <th scope="col">Patient ID</th>
+        <th scope="col">Patient Name</th>
+        <th scope="col">Message Content</th>
+        <th scope="col">Date</th>
+        <th scope="col">Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    ';
+
+        while ($messages = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $messageOutput .= '
+            <tr>
+                <th scope="row">' . $messages['msgPatientId'] . '</th>
+                <td>' . $messages['msgPatientName'] . '</td>
+                ';
+            if (strlen($messages['msgContent']) > 10) {
+                $messageOutput .= '<td> ' . substr($messages['msgContent'], 0, 10) . '...' . ' </td>';
+            } else {
+                $messageOutput .= '<td> ' . $messages['msgContent'] . ' </td>';
+            }
+            $messageOutput .= '
+                </td>
+                <td>' . date("M d, Y", strtotime($messages['msgMadeOn'])) . '</td>
+                <td>
+                    <div class="row">
+                        <div class="col">
+                            <form action="viewMessage.php" method="post">
+                                <input type="hidden" name="pId" value=' . $messages['msgPatientId'] . '>
+                                <input type="hidden" name="mId" value=' . $messages['msgId'] . '>
+                                <input type="submit" value="View Message" class="btn btn-info" name="viewMessageBtn">
+                            </form>
+                        </div>
+                        <div class="col">
+                            <form action="messages.php" method="post">
+                                <input type="hidden" name="pId" value=' . $messages['msgPatientId'] . '>
+                                <input type="hidden" name="mId" value=' . $messages['msgId'] . '>
+                                <input type="submit" value="Delete Message" class="btn btn-danger" name="viewMessageDeleteBtn" onclick="return confirm(\'Are you sure to delete ?\')">
+                            </form>
+                        </div>
+                    </div>
+                </td>
+        ';
+        }
+        $messageOutput .= '
+    </tr>
+    <tbody>
+    ';
+
+        echo $messageOutput;
+    } else {
+        echo '<h3 style="color:red">No Cancelled Appointment</h3>';
+    }
+}

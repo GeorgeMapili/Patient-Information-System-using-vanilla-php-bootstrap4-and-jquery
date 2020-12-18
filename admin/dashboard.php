@@ -95,6 +95,12 @@ if (!isset($_SESSION['adId'])) {
                                 View Cancelled Appointment
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="messages.php">
+                                <span data-feather="users"></span>
+                                View All Messages
+                            </a>
+                        </li>
                     </ul>
 
                 </div>
@@ -107,74 +113,147 @@ if (!isset($_SESSION['adId'])) {
 
                 <div class="col-md-12">
                     <div class="row">
-                        <div class="col-sm-6 col-md-4 col-lg-3 mt-2">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title mb-4">All Patients</h5>
-                                    <h1 class="display-5 mt-1 mb-3">1</h1>
-                                </div>
-                            </div>
-                        </div>
+
+                        <?php
+                        $sql = "SELECT * FROM walkinpatient";
+                        $stmt = $con->prepare($sql);
+                        $stmt->execute();
+
+                        $allWalkInPatient = $stmt->rowCount();
+                        ?>
 
                         <div class="col-sm-6 col-md-4 col-lg-3 mt-2">
                             <div class="card">
                                 <div class="card-body">
-                                    <h5 class="card-title mb-4">All Doctors</h5>
-                                    <h1 class="display-5 mt-1 mb-3">1</h1>
+                                    <h5 class="card-title mb-4">Walkin Patients</h5>
+                                    <h1 class="display-5 mt-1 mb-3"><?= $allWalkInPatient ?></h1>
                                 </div>
                             </div>
                         </div>
+
+                        <?php
+                        $accepted = "accepted";
+                        $done = "done";
+                        $sql = "SELECT * FROM appointment WHERE aStatus IN(:accepted,:done)";
+                        $stmt = $con->prepare($sql);
+                        $stmt->bindParam(":accepted", $accepted, PDO::PARAM_STR);
+                        $stmt->bindParam(":done", $done, PDO::PARAM_STR);
+                        $stmt->execute();
+
+                        $appointmentPatient = $stmt->rowCount();
+                        ?>
 
                         <div class="col-sm-6 col-md-4 col-lg-3 mt-2">
                             <div class="card">
                                 <div class="card-body">
-                                    <h5 class="card-title mb-4">All Rooms</h5>
-                                    <h1 class="display-5 mt-1 mb-3">1</h1>
+                                    <h5 class="card-title mb-4">Appointment Patient</h5>
+                                    <h1 class="display-5 mt-1 mb-3"><?= $appointmentPatient ?></h1>
                                 </div>
                             </div>
                         </div>
+
+                        <?php
+                        $sql = "SELECT * FROM doctor";
+                        $stmt = $con->prepare($sql);
+                        $stmt->execute();
+
+                        $allDoctor = $stmt->rowCount();
+                        ?>
 
                         <div class="col-sm-6 col-md-4 col-lg-3 mt-2">
                             <div class="card">
                                 <div class="card-body">
-                                    <h5 class="card-title mb-4">All Nurse Receptionist</h5>
-                                    <h1 class="display-5 mt-1 mb-3">1</h1>
+                                    <h5 class="card-title mb-4">Doctors</h5>
+                                    <h1 class="display-5 mt-1 mb-3"><?= $allDoctor ?></h1>
                                 </div>
                             </div>
                         </div>
+
+                        <?php
+                        $sql = "SELECT * FROM rooms";
+                        $stmt = $con->prepare($sql);
+                        $stmt->execute();
+
+                        $allRooms = $stmt->rowCount();
+                        ?>
 
                         <div class="col-sm-6 col-md-4 col-lg-3 mt-2">
                             <div class="card">
                                 <div class="card-body">
-                                    <h5 class="card-title mb-4">Done Appointment</h5>
-                                    <h1 class="display-5 mt-1 mb-3">1</h1>
+                                    <h5 class="card-title mb-4">Rooms</h5>
+                                    <h1 class="display-5 mt-1 mb-3"><?= $allRooms ?></h1>
                                 </div>
                             </div>
                         </div>
 
+                        <?php
+                        $sql = "SELECT * FROM nurse_receptionist";
+                        $stmt = $con->prepare($sql);
+                        $stmt->execute();
+
+                        $allNurse = $stmt->rowCount();
+                        ?>
+
+                        <div class="col-sm-6 col-md-4 col-lg-3 mt-2">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title mb-4">Nurse Receptionist</h5>
+                                    <h1 class="display-5 mt-1 mb-3"><?= $allNurse ?></h1>
+                                </div>
+                            </div>
+                        </div>
+
+                        <?php
+                        $dischargedStatus = "discharged";
+                        $sql = "SELECT * FROM appointment WHERE aStatus = :discharged";
+                        $stmt = $con->prepare($sql);
+                        $stmt->bindParam(":discharged", $dischargedStatus, PDO::PARAM_STR);
+                        $stmt->execute();
+
+                        $allDischargedPatient = $stmt->rowCount();
+                        ?>
+
+                        <div class="col-sm-6 col-md-4 col-lg-3 mt-2">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title mb-4">Finished Appointment</h5>
+                                    <h1 class="display-5 mt-1 mb-3"><?= $allDischargedPatient ?></h1>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <?php
+                        $cancelled = "cancelled";
+                        $sql = "SELECT * FROM appointment WHERE aStatus = :cancelled";
+                        $stmt = $con->prepare($sql);
+                        $stmt->bindParam(":cancelled", $cancelled, PDO::PARAM_STR);
+                        $stmt->execute();
+
+                        $allCancelledAppointment = $stmt->rowCount();
+                        ?>
                         <div class="col-sm-6 col-md-4 col-lg-3 mt-2">
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="card-title mb-4">Cancelled Appointment</h5>
-                                    <h1 class="display-5 mt-1 mb-3">1</h1>
+                                    <h1 class="display-5 mt-1 mb-3"><?= $allCancelledAppointment ?></h1>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="col-sm-6 col-md-4 col-lg-3 mt-2">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title mb-4">Current Patient</h5>
-                                    <h1 class="display-5 mt-1 mb-3">1</h1>
-                                </div>
-                            </div>
-                        </div>
+                        <?php
+                        $sql = "SELECT * FROM discharged_patient";
+                        $stmt = $con->prepare($sql);
+                        $stmt->execute();
+
+                        $allDischargedWalkIn = $stmt->rowCount();
+                        ?>
 
                         <div class="col-sm-6 col-md-4 col-lg-3 mt-2">
                             <div class="card">
                                 <div class="card-body">
-                                    <h5 class="card-title mb-4">Discharged Patients</h5>
-                                    <h1 class="display-5 mt-1 mb-3">1</h1>
+                                    <h5 class="card-title mb-4">Discharged Walkin Patients</h5>
+                                    <h1 class="display-5 mt-1 mb-3"><?= $allDischargedWalkIn ?></h1>
                                 </div>
                             </div>
                         </div>
@@ -186,13 +265,22 @@ if (!isset($_SESSION['adId'])) {
                     <h1 class="h2" id="primaryColor">Statistics</h1>
                 </div>
 
+                <h4 class="text-center my-3">Walk in Patient</h4>
                 <div class="row my-3">
-
                     <div class="col-lg-6 col-md-12 col-sm-12">
                         <canvas id="mycanvas"></canvas>
                     </div>
                     <div class="col-lg-6 col-md-12 col-sm-12">
                         <canvas id="mycanvasgender"></canvas>
+                    </div>
+                </div>
+                <h4 class="text-center mt-5">Patient Account</h4>
+                <div class="row my-3">
+                    <div class="col-lg-6 col-md-12 col-sm-12">
+                        <canvas id="mycanvasAgeAppointment"></canvas>
+                    </div>
+                    <div class="col-lg-6 col-md-12 col-sm-12">
+                        <canvas id="mycanvasGenderAppointment"></canvas>
                     </div>
                 </div>
 
@@ -214,6 +302,7 @@ if (!isset($_SESSION['adId'])) {
 
     <script>
         $(document).ready(function() {
+
             // Age stats
             $.ajax({
                 url: "stats.php",
@@ -232,8 +321,8 @@ if (!isset($_SESSION['adId'])) {
                             "40 up age"
                         ],
                         datasets: [{
-                            label: 'Number of Patient',
-                            backgroundColor: 'rgb(77, 246, 144)',
+                            label: 'Age of Patient',
+                            backgroundColor: 'rgba(77, 246, 144,0.6)',
                             borderColor: 'rgba(200,200,200, 6)',
                             hoverBackgroundColor: 'rgba(200,200,200, 1)',
                             hoverBorderColor: 'rgba(200,200,200, 1)',
@@ -301,6 +390,101 @@ if (!isset($_SESSION['adId'])) {
 
                     var barGraph = new Chart(ctx, {
                         type: 'pie',
+                        data: chartdata
+                    });
+                },
+                error: function(data) {
+                    console.log(data);
+                }
+            });
+
+            // Age appointment account
+            $.ajax({
+                url: "statsAgeAppointment.php",
+                method: "GET",
+                success: function(datas) {
+                    var tenBelow = datas[29]
+                    var elevToTwen = datas[42]
+                    var twentyOneToFourty = datas[55]
+                    var fourtyOneUp = datas[68]
+
+                    var chartdata = {
+                        labels: [
+                            "10 below age",
+                            "11 to 21 age",
+                            "21 to 40 age",
+                            "40 up age"
+                        ],
+                        datasets: [{
+                            label: 'Age of Patient',
+                            backgroundColor: 'rgba(56, 252, 219,0.6)',
+                            borderColor: 'rgba(200,200,200, 6)',
+                            hoverBackgroundColor: 'rgba(200,200,200, 1)',
+                            hoverBorderColor: 'rgba(200,200,200, 1)',
+                            data: [
+                                tenBelow,
+                                elevToTwen,
+                                twentyOneToFourty,
+                                fourtyOneUp
+                            ]
+                        }]
+                    };
+
+                    var ctx = $("#mycanvasAgeAppointment");
+
+                    var barGraph = new Chart(ctx, {
+                        type: 'bar',
+                        data: chartdata,
+                        options: {
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        precision: 0
+                                    }
+                                }]
+                            }
+                        }
+                    });
+                },
+                error: function(data) {
+                    console.log(data);
+                }
+            });
+
+            // Gender appointment account
+            document.getElementById("mycanvasGenderAppointment").getContext("2d");
+            $.ajax({
+                url: "statsGenderAppointment.php",
+                method: "GET",
+                success: function(datas) {
+                    var male = datas[29]
+                    var female = datas[42]
+
+                    var chartdata = {
+                        labels: [
+                            "Male",
+                            "Female"
+                        ],
+                        datasets: [{
+                            label: 'Gender of Patient',
+                            backgroundColor: [
+                                'rgb(95,168,240)',
+                                'rgb(250, 153, 231)'
+                            ],
+                            borderColor: 'rgba(200,200,200, 6)',
+                            hoverBackgroundColor: 'rgba(200,200,200, 1)',
+                            hoverBorderColor: 'rgba(200,200,200, 1)',
+                            data: [
+                                male,
+                                female
+                            ]
+                        }]
+                    };
+
+                    var ctx = $("#mycanvasGenderAppointment");
+
+                    var barGraph = new Chart(ctx, {
+                        type: 'doughnut',
                         data: chartdata
                     });
                 },

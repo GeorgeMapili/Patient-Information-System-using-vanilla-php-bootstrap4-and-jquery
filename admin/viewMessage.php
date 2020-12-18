@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 require_once '../connect.php';
 
@@ -19,7 +20,7 @@ if (!isset($_SESSION['adId'])) {
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/admin.css" />
-    <title>Admin | Dashboard</title>
+    <title>Admin | Messages</title>
 </head>
 
 <body>
@@ -54,7 +55,7 @@ if (!isset($_SESSION['adId'])) {
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link " href="patient.php" id="primaryColor">
+                            <a class="nav-link " href="patient.php">
                                 <span data-feather="file"></span>
                                 View All Appointments
                             </a>
@@ -86,17 +87,17 @@ if (!isset($_SESSION['adId'])) {
                         <li class="nav-item">
                             <a class="nav-link" href="doneAppointment.php">
                                 <span data-feather="users"></span>
-                                View Finished Appointment
+                                View All Finished Appointment
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="cancelledAppointment.php">
                                 <span data-feather="users"></span>
-                                View Cancelled Appointment
+                                View All Cancelled Appointment
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="messages.php">
+                            <a class="nav-link" href="messages.php" id="primaryColor">
                                 <span data-feather="users"></span>
                                 View All Messages
                             </a>
@@ -108,29 +109,46 @@ if (!isset($_SESSION['adId'])) {
 
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">All Patients</h1>
+                    <h1 class="h2" id="primaryColor">Message</h1>
                 </div>
 
-                <div class="mt-4 mb-4">
-                    <h1 class="Display-4 my-4" id="primaryColor">Update Patient</h1>
+                <div class="container">
+
+                    <?php
+                    if (isset($_POST['viewMessageBtn'])) {
+                        $mId = $_POST['mId'];
+                        $pId = $_POST['pId'];
+
+                        $sql = "SELECT * FROM message WHERE msgId = :mid AND msgPatientId = :pid";
+                        $stmt = $con->prepare($sql);
+                        $stmt->bindParam(":mid", $mId, PDO::PARAM_INT);
+                        $stmt->bindParam(":pid", $pId, PDO::PARAM_INT);
+                        $stmt->execute();
+
+                        $message = $stmt->fetch(PDO::FETCH_ASSOC);
+                    }
+                    ?>
+
+                    <form action="" method="">
+                        <div class="row">
+                            <div class="col form-group">
+                                <label>Name</label>
+                                <input type="text" name="name" value="<?= $message['msgPatientName'] ?>" class="form-control" readonly>
+                            </div>
+                            <div class="col form-group">
+                                <label>Date</label>
+                                <input type="text" name="date" value="<?= date("M d, Y", strtotime($message['msgMadeOn'])) ?>" class="form-control" readonly>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Message</label>
+                            <textarea name="message" class="form-control" cols="30" rows="10" readonly><?= $message['msgContent'] ?></textarea>
+                        </div>
+
+                    </form>
+
                 </div>
-
-                <form action="" method="post">
-                    <div class="row">
-                        <div class="col" class="form-group">
-                            <label>Name</label>
-                            <input type="text" name="name" class="form-control">
-                        </div>
-                        <div class="col" class="form-group">
-                            <label>Name</label>
-                            <input type="text" name="name" class="form-control">
-                        </div>
-                    </div>
-
-                </form>
-
-
-
 
             </main>
         </div>
@@ -139,14 +157,9 @@ if (!isset($_SESSION['adId'])) {
 
 
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
-
-    <!-- jQuery library -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 
 </html>

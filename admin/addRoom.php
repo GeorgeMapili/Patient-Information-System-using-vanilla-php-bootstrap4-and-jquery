@@ -96,6 +96,12 @@ if (!isset($_SESSION['adId'])) {
                                 View Cancelled Appointment
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="messages.php">
+                                <span data-feather="users"></span>
+                                View All Messages
+                            </a>
+                        </li>
                     </ul>
 
                 </div>
