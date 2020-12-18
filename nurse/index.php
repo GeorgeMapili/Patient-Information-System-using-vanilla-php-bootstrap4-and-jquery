@@ -42,7 +42,8 @@ if (isset($_SESSION['nId'])) {
 
         // PARTIAL VALIDATION WAIT FOR ADMIN TO FINISHED
         while ($nurseAcc = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            if ($password === $nurseAcc['nPassword']) {
+
+            if (password_verify($password, $nurseAcc['nPassword'])) {
                 $_SESSION['nId'] = $nurseAcc['nId'];
                 $_SESSION['nName'] = $nurseAcc['nName'];
                 $_SESSION['nEmail'] = $nurseAcc['nEmail'];

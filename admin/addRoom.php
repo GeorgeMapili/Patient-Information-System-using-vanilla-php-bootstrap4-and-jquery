@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 require_once '../connect.php';
 
@@ -66,6 +67,12 @@ if (!isset($_SESSION['adId'])) {
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="walkInPatient.php">
+                                <span data-feather="shopping-cart"></span>
+                                View All Walk in patient
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="room.php" id="primaryColor">
                                 <span data-feather="users"></span>
                                 View All Rooms
@@ -80,19 +87,13 @@ if (!isset($_SESSION['adId'])) {
                         <li class="nav-item">
                             <a class="nav-link" href="doneAppointment.php">
                                 <span data-feather="users"></span>
-                                View Done Appointment
+                                View Finished Appointment
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="cancelledAppointment.php">
                                 <span data-feather="users"></span>
                                 View Cancelled Appointment
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="dischargedPatient.php">
-                                <span data-feather="users"></span>
-                                View Discharged Patients
                             </a>
                         </li>
                     </ul>
@@ -106,20 +107,40 @@ if (!isset($_SESSION['adId'])) {
                 </div>
                 <div class="container">
 
-                    <form action="contactus.php" method="post">
+                    <?php
+                    if (isset($_POST['addRoomBtn'])) {
 
-                        <label for="exampleInputEmail1">Room Number</label>
-                        <input type="number" class="form-control">
+                        $roomNumber = trim(htmlspecialchars($_POST['roomNumber']));
+                        $roomFee = trim(htmlspecialchars($_POST['roomFee']));
+                        $roomStatus = trim(htmlspecialchars($_POST['roomStatus']));
+
+                        $sql =  "INSERT INTO rooms (room_number,room_fee,room_status)VALUES(:number,:fee,:status)";
+                        $stmt = $con->prepare($sql);
+                        $stmt->bindParam(":number", $roomNumber, PDO::PARAM_INT);
+                        $stmt->bindParam(":fee", $roomFee, PDO::PARAM_INT);
+                        $stmt->bindParam(":status", $roomStatus, PDO::PARAM_STR);
+                        $stmt->execute();
+
+                        header("location:room.php?succAddedRoom=Successfully_added_room");
+                        ob_end_flush();
+                        exit(0);
+                    }
+                    ?>
+
+                    <form action="addRoom.php" method="post">
+
+                        <label>Room Number</label>
+                        <input type="number" name="roomNumber" class="form-control" required>
 
 
-                        <label for="exampleInputEmail1">Room Fee</label>
-                        <input type="number" class="form-control">
+                        <label>Room Fee</label>
+                        <input type="number" name="roomFee" class="form-control" required>
 
-                        <label for="exampleInputEmail1">Room Status</label>
-                        <input type="text" class="form-control" value="Available" readonly>
+                        <label>Room Status</label>
+                        <input type="text" name="roomStatus" class="form-control" value="available" readonly>
 
                         <div class="text-center mt-3">
-                            <input type="submit" class="btn btn-primary" value="Add Room" name="submitAppointment">
+                            <input type="submit" class="btn btn-primary" value="Add Room" name="addRoomBtn">
                         </div>
                     </form>
                 </div>

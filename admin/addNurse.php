@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 require_once '../connect.php';
 
@@ -66,6 +67,12 @@ if (!isset($_SESSION['adId'])) {
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="walkInPatient.php">
+                                <span data-feather="shopping-cart"></span>
+                                View All Walk in patient
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="room.php">
                                 <span data-feather="users"></span>
                                 View All Rooms
@@ -80,19 +87,13 @@ if (!isset($_SESSION['adId'])) {
                         <li class="nav-item">
                             <a class="nav-link" href="doneAppointment.php">
                                 <span data-feather="users"></span>
-                                View Done Appointment
+                                View Finished Appointment
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="cancelledAppointment.php">
                                 <span data-feather="users"></span>
                                 View Cancelled Appointment
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="dischargedPatient.php">
-                                <span data-feather="users"></span>
-                                View Discharged Patients
                             </a>
                         </li>
                     </ul>
@@ -102,37 +103,172 @@ if (!isset($_SESSION['adId'])) {
 
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">Add Nurse Receptionist</h1>
+                    <h1 class="h2" id="primaryColor">Add Nurse Receptionist</h1>
                 </div>
                 <div class="container">
 
-                    <form action="contactus.php" method="post">
-                        <div class="row">
+                    <?php
+
+                    if (isset($_POST['addNurseBtn'])) {
+                        $name = trim(htmlspecialchars($_POST['name']));
+                        $email = trim(htmlspecialchars($_POST['email']));
+                        $address = trim(htmlspecialchars($_POST['address']));
+                        $mobile = trim(htmlspecialchars($_POST['mobile']));
+                        $profileImg = $_FILES['profileImg'];
+                        $password = trim(htmlspecialchars($_POST['password']));
+                        $confirmPassword = trim(htmlspecialchars($_POST['confirmPassword']));
+
+                        // check if name is valid
+                        if (!preg_match("/^([a-zA-Z' ]+)$/", $name)) {
+                            header("location:addNurse.php?errName=name_is_not_valid");
+                            ob_end_flush();
+                            exit(0);
+                        }
+
+                        // check if the name is already taken
+                        $sql = "SELECT * FROM nurse_receptionist WHERE nName= :name";
+                        $stmt = $con->prepare($sql);
+                        $stmt->bindParam(":name", $name, PDO::PARAM_STR);
+                        $stmt->execute();
+
+                        $nameCount = $stmt->rowCount();
+
+                        if ($nameCount > 0) {
+                            header("location:addNurse.php?errName1=Name_is_already_existed");
+                            exit(0);
+                        }
+
+                        // check if email is invalid
+                        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                            header("location:addNurse.php?errEmail=email_is_invalid");
+                            exit(0);
+                        }
+
+                        // check if the email is already taken
+                        $sql = "SELECT * FROM nurse_receptionist WHERE nEmail = :email";
+                        $stmt = $con->prepare($sql);
+                        $stmt->bindParam(":email", $email, PDO::PARAM_STR);
+                        $stmt->execute();
+
+                        $emailCount = $stmt->rowCount();
+
+                        if ($emailCount > 0) {
+                            header("location:addNurse.php?errEmail1=Email_is_already_existed");
+                            exit(0);
+                        }
+
+                        // check if the mobile number is already taken
+                        $sql = "SELECT * FROM nurse_receptionist WHERE nMobile = :mobile";
+                        $stmt = $con->prepare($sql);
+                        $stmt->bindParam(":mobile", $mobile, PDO::PARAM_INT);
+                        $stmt->execute();
+
+                        $mobileCount = $stmt->rowCount();
+
+                        if ($mobileCount > 0) {
+                            header("location:addNurse.php?errMobile=Mobile_number_is_already_existed");
+                            exit(0);
+                        }
+
+                        // Image
+                        $ext = $profileImg['type'];
+                        $extF = explode('/', $ext);
+
+                        // Unique Image Name
+                        $profileName =  uniqid(rand()) . "." . $extF[1];
+
+                        $tmpname = $profileImg['tmp_name'];
+                        $dest = __DIR__ . "/../upload/nurse_profile_img/" . $profileName;
+
+                        //check if the image is valid
+                        $allowed = array('jpg', 'jpeg', 'png');
+
+                        if (!in_array(strtolower($extF[1]), $allowed)) {
+                            header("location:addNurse.php?errorImgExt=image_is_not_valid");
+                            exit(0);
+                        }
+
+                        // Check if the image size is valid
+                        if ($profileImg['size'] > 5000000) {
+                            header("location:addNurse.php?errImgSize=Image_invalid_size");
+                            exit(0);
+                        }
+
+                        // Check if password does match
+                        if ($password !== $confirmPassword) {
+                            header("location:addNurse.php?errConfirmPass=password_did_not_match");
+                            exit(0);
+                        }
+
+                        // Hash Password
+                        $hashPass = password_hash($password, PASSWORD_DEFAULT);
+
+                        $sql = "INSERT INTO nurse_receptionist (nName,nEmail,nAddress,nMobile,nProfileImg,nPassword)VALUES(:name,:email,:address,:mobile,:profile,:password)";
+                        $stmt = $con->prepare($sql);
+                        $stmt->bindParam(":name", $name, PDO::PARAM_STR);
+                        $stmt->bindParam(":email", $email, PDO::PARAM_STR);
+                        $stmt->bindParam(":address", $address, PDO::PARAM_STR);
+                        $stmt->bindParam(":mobile", $mobile, PDO::PARAM_STR);
+                        $stmt->bindParam(":profile", $profileName, PDO::PARAM_STR);
+                        $stmt->bindParam(":password", $hashPass, PDO::PARAM_STR);
+                        $stmt->execute();
+
+                        // upload the file
+                        move_uploaded_file($tmpname, $dest);
+
+                        header("location:nurse.php?succAddedNurse=Successfully_added_nurse");
+                        exit(0);
+                    }
+
+                    ?>
+
+                    <form action="addNurse.php" method="post" enctype="multipart/form-data">
+                        <div class="row my-4">
                             <div class="col">
-                                <label for="exampleInputEmail1">Nurse Name</label>
-                                <input type="text" class="form-control">
+                                <label>Nurse Name</label>
+                                <?= ((isset($_GET['errName']) && $_GET['errName'] == "name_is_not_valid") || (isset($_GET['errName1']) && $_GET['errName1'] == "Name_is_already_existed")) ? '<input type="text" name="name" class="form-control is-invalid" required>' : '<input type="text" name="name" class="form-control" required>' ?>
+                                <?= (isset($_GET['errName']) && $_GET['errName'] == "name_is_not_valid") ? '<small class="text-danger">Name is not valid!</small>' : ''; ?>
+                                <?= (isset($_GET['errName1']) && $_GET['errName1'] == "Name_is_already_existed") ? '<small class="text-danger">Name is already existed!</small>' : ''; ?>
+
                             </div>
                             <div class="col">
-                                <label for="exampleInputEmail1">Nurse Email</label>
-                                <input type="text" class="form-control">
+                                <label>Nurse Email</label>
+                                <?= ((isset($_GET['errEmail']) && $_GET['errEmail'] == "email_is_invalid") || (isset($_GET['errEmail1']) && $_GET['errEmail1'] == "Email_is_already_existed")) ? '<input type="email" name="email" class="form-control is-invalid" required>' : '<input type="email" name="email" class="form-control" required>'; ?>
+                                <?= (isset($_GET['errEmail']) && $_GET['errEmail'] == "email_is_invalid") ? '<small class="text-danger">Email is invalid format!</small>' : ''; ?>
+                                <?= (isset($_GET['errEmail1']) && $_GET['errEmail1'] == "Email_is_already_existed") ? '<small class="text-danger">Email is already existed!</small>' : ''; ?>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row my-4">
                             <div class="col">
-                                <label for="exampleInputEmail1">Nurse Address</label>
-                                <input type="text" class="form-control">
+                                <label>Nurse Address</label>
+                                <input type="text" name="address" class="form-control" required>
                             </div>
                             <div class="col">
-                                <label for="exampleInputEmail1">Nurse Mobile Number</label>
-                                <input type="tel" class="form-control">
+                                <label>Nurse Mobile Number</label>
+                                <?= (isset($_GET['errMobile']) && $_GET['errMobile'] == "Mobile_number_is_already_existed") ? '<input type="tel" name="mobile" class="form-control is-invalid" placeholder="+639551243145 or 09123456789" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" required>' : '<input type="tel" name="mobile" class="form-control" placeholder="+639551243145 or 09123456789" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" required>'; ?>
+                                <?= (isset($_GET['errMobile']) && $_GET['errMobile'] == "Mobile_number_is_already_existed") ? '<small class="text-danger">Mobile number is already existed!</small>' : ''; ?>
                             </div>
                         </div>
 
-                        <label for="exampleInputEmail1">Nurse Profile Img</label>
-                        <input type="file" name="doctorProfileImg" class="form-control" id="">
+                        <label>Nurse Profile Img</label>
+                        <?= ((isset($_GET['errorImgExt']) && $_GET['errorImgExt'] == "image_is_not_valid") || (isset($_GET['errImgSize']) && $_GET['errImgSize'] == "Image_invalid_size")) ? '<input type="file" name="profileImg" class="form-control is-invalid" name="profileImg" required>' : '<input type="file" name="profileImg" class="form-control" name="profileImg" required>'; ?>
+                        <?= (isset($_GET['errorImgExt']) && $_GET['errorImgExt'] == "image_is_not_valid") ? '<small class="text-danger">Image is not valid only(JPEG,JPG,PNG)!</small>' : ''; ?>
+                        <?= (isset($_GET['errImgSize']) && $_GET['errImgSize'] == "Image_invalid_size") ? '<small class="text-danger">Image is not valid only less size(5MB)!</small>' : ''; ?>
+
+                        <div class="row my-4">
+                            <div class="col">
+                                <label>Password</label>
+                                <input type="password" name="password" minlength="6" class="form-control" required>
+                            </div>
+                            <div class="col">
+                                <label>Confirm Password</label>
+                                <?= (isset($_GET['errConfirmPass']) && $_GET['errConfirmPass'] == "password_did_not_match") ? '<input type="password" name="confirmPassword" minlength="6" class="form-control is-invalid" required>' : '<input type="password" name="confirmPassword" minlength="6" class="form-control" required>'; ?>
+                                <?= (isset($_GET['errConfirmPass']) && $_GET['errConfirmPass'] == "password_did_not_match") ? '<small class="text-danger">Confirm Password did not match!</small>' : ''; ?>
+                            </div>
+                        </div>
 
                         <div class="text-center mt-3">
-                            <input type="submit" class="btn btn-primary" value="Add Nurse" name="submitAppointment">
+                            <input type="submit" class="btn btn-info" value="Add Nurse" name="addNurseBtn">
                         </div>
                     </form>
                 </div>

@@ -66,6 +66,12 @@ if (!isset($_SESSION['adId'])) {
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="walkInPatient.php">
+                                <span data-feather="shopping-cart"></span>
+                                View All Walk in patient
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="room.php">
                                 <span data-feather="users"></span>
                                 View All Rooms
@@ -80,19 +86,13 @@ if (!isset($_SESSION['adId'])) {
                         <li class="nav-item">
                             <a class="nav-link" href="doneAppointment.php">
                                 <span data-feather="users"></span>
-                                View Done Appointment
+                                View Finished Appointment
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="cancelledAppointment.php">
                                 <span data-feather="users"></span>
                                 View Cancelled Appointment
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="dischargedPatient.php">
-                                <span data-feather="users"></span>
-                                View Discharged Patients
                             </a>
                         </li>
                     </ul>
@@ -102,7 +102,7 @@ if (!isset($_SESSION['adId'])) {
 
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">Dashboard</h1>
+                    <h1 class="h2" id="primaryColor">Dashboard</h1>
                 </div>
 
                 <div class="col-md-12">
@@ -182,9 +182,24 @@ if (!isset($_SESSION['adId'])) {
                     </div>
                 </div>
 
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 my-3 border-bottom">
+                    <h1 class="h2" id="primaryColor">Statistics</h1>
+                </div>
+
+                <div class="row my-3">
+
+                    <div class="col-lg-6 col-md-12 col-sm-12">
+                        <canvas id="mycanvas"></canvas>
+                    </div>
+                    <div class="col-lg-6 col-md-12 col-sm-12">
+                        <canvas id="mycanvasgender"></canvas>
+                    </div>
+                </div>
+
             </main>
         </div>
     </div>
+
 
 
 
@@ -192,6 +207,110 @@ if (!isset($_SESSION['adId'])) {
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            // Age stats
+            $.ajax({
+                url: "stats.php",
+                method: "GET",
+                success: function(datas) {
+                    var tenBelow = datas[29]
+                    var elevToTwen = datas[42]
+                    var twentyOneToFourty = datas[55]
+                    var fourtyOneUp = datas[68]
+
+                    var chartdata = {
+                        labels: [
+                            "10 below age",
+                            "11 to 21 age",
+                            "21 to 40 age",
+                            "40 up age"
+                        ],
+                        datasets: [{
+                            label: 'Number of Patient',
+                            backgroundColor: 'rgb(77, 246, 144)',
+                            borderColor: 'rgba(200,200,200, 6)',
+                            hoverBackgroundColor: 'rgba(200,200,200, 1)',
+                            hoverBorderColor: 'rgba(200,200,200, 1)',
+                            data: [
+                                tenBelow,
+                                elevToTwen,
+                                twentyOneToFourty,
+                                fourtyOneUp
+                            ]
+                        }]
+                    };
+
+                    var ctx = $("#mycanvas");
+
+                    var barGraph = new Chart(ctx, {
+                        type: 'line',
+                        data: chartdata,
+                        options: {
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        precision: 0
+                                    }
+                                }]
+                            }
+                        }
+                    });
+                },
+                error: function(data) {
+                    console.log(data);
+                }
+            });
+
+            // Gender Stats
+            document.getElementById("mycanvasgender").getContext("2d");
+            $.ajax({
+                url: "statsGender.php",
+                method: "GET",
+                success: function(datas) {
+                    var male = datas[29]
+                    var female = datas[42]
+
+                    var chartdata = {
+                        labels: [
+                            "Male",
+                            "Female"
+                        ],
+                        datasets: [{
+                            label: 'Gender of Patient',
+                            backgroundColor: [
+                                'rgb(95,168,240)',
+                                'rgb(250, 153, 231)'
+                            ],
+                            borderColor: 'rgba(200,200,200, 6)',
+                            hoverBackgroundColor: 'rgba(200,200,200, 1)',
+                            hoverBorderColor: 'rgba(200,200,200, 1)',
+                            data: [
+                                male,
+                                female
+                            ]
+                        }]
+                    };
+
+                    var ctx = $("#mycanvasgender");
+
+                    var barGraph = new Chart(ctx, {
+                        type: 'pie',
+                        data: chartdata
+                    });
+                },
+                error: function(data) {
+                    console.log(data);
+                }
+            });
+        });
+    </script>
+
 </body>
 
 </html>

@@ -67,6 +67,12 @@ if (!isset($_SESSION['adId'])) {
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="walkInPatient.php">
+                                <span data-feather="shopping-cart"></span>
+                                View All Walk in patient
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="room.php">
                                 <span data-feather="users"></span>
                                 View All Rooms
@@ -81,19 +87,13 @@ if (!isset($_SESSION['adId'])) {
                         <li class="nav-item">
                             <a class="nav-link" href="doneAppointment.php">
                                 <span data-feather="users"></span>
-                                View Done Appointment
+                                View Finished Appointment
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="cancelledAppointment.php">
                                 <span data-feather="users"></span>
                                 View Cancelled Appointment
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="dischargedPatient.php">
-                                <span data-feather="users"></span>
-                                View Discharged Patients
                             </a>
                         </li>
                     </ul>
@@ -306,6 +306,7 @@ if (!isset($_SESSION['adId'])) {
                         if (password_verify($currentPassword, $currentAcc['pPassword'])) {
                             // Check if the new password and confirm password match
                             if ($newPassword !== $confirmNewPassword) {
+
                                 header("location:updatePatient.php?errConfirmPass=password_did_not_match");
                                 exit(0);
                             } else {

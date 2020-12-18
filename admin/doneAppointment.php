@@ -66,6 +66,12 @@ if (!isset($_SESSION['adId'])) {
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="walkInPatient.php">
+                                <span data-feather="shopping-cart"></span>
+                                View All Walk in patient
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="room.php">
                                 <span data-feather="users"></span>
                                 View All Rooms
@@ -80,19 +86,13 @@ if (!isset($_SESSION['adId'])) {
                         <li class="nav-item">
                             <a class="nav-link" href="doneAppointment.php" id="primaryColor">
                                 <span data-feather="users"></span>
-                                View Done Appointment
+                                View Finished Appointment
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="cancelledAppointment.php">
                                 <span data-feather="users"></span>
                                 View Cancelled Appointment
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="dischargedPatient.php">
-                                <span data-feather="users"></span>
-                                View Discharged Patients
                             </a>
                         </li>
                     </ul>
@@ -102,14 +102,14 @@ if (!isset($_SESSION['adId'])) {
 
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">Done Appointments</h1>
+                    <h1 class="h2" id="primaryColor">Finished Appointments</h1>
                 </div>
                 <div>
                     <form class="form-inline">
-                        <input class="form-control mb-3" type="search" placeholder="Search Patient" aria-label="Search">
+                        <input class="form-control mb-3" type="search" id="search" placeholder="Search Patient" aria-label="Search">
                     </form>
                 </div>
-                <table class="table table-hover ">
+                <table class="table table-hover " id="table-data">
                     <thead class="thead-dark">
                         <tr>
                             <th scope="col">Appointment ID</th>
@@ -117,68 +117,43 @@ if (!isset($_SESSION['adId'])) {
                             <th scope="col">Patient Address</th>
                             <th scope="col">Patient Doctor</th>
                             <th scope="col">Appointment Reason</th>
+                            <th scope="col">Appointment Fee</th>
+                            <th scope="col">Date</th>
                             <th scope="col">Status</th>
+                            <th scope="col">Generate Medical Certificate</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Qwerty</td>
-                            <td>12345 St.</td>
-                            <td>Dr. Qwerty</td>
-                            <td>Fever</td>
-                            <td>
-                                <p class="btn btn-success disabled">Done</p>
-                            </td>
-                        </tr>
+                        <?php
 
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Qwerty</td>
-                            <td>12345 St.</td>
-                            <td>Dr. Qwerty</td>
-                            <td>Fever</td>
-                            <td>
-                                <p class="btn btn-success disabled">Done</p>
-                            </td>
-                        </tr>
+                        $discharged = "discharged";
+                        $sql = "SELECT * FROM appointment WHERE aStatus = :discharged";
+                        $stmt = $con->prepare($sql);
+                        $stmt->bindParam(":discharged", $discharged, PDO::PARAM_STR);
+                        $stmt->execute();
 
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Qwerty</td>
-                            <td>12345 St.</td>
-                            <td>Dr. Qwerty</td>
-                            <td>Fever</td>
-                            <td>
-                                <p class="btn btn-success disabled">Done</p>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Qwerty</td>
-                            <td>12345 St.</td>
-                            <td>Dr. Qwerty</td>
-                            <td>Fever</td>
-                            <td>
-                                <p class="btn btn-success disabled">Done</p>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Qwerty</td>
-                            <td>12345 St.</td>
-                            <td>Dr. Qwerty</td>
-                            <td>Fever</td>
-                            <td>
-                                <p class="btn btn-success disabled">Done</p>
-                            </td>
-                        </tr>
-
-
-
-
+                        while ($dischargedPatient = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                        ?>
+                            <tr>
+                                <th scope="row"><?= $dischargedPatient['aId'] ?></th>
+                                <td><?= $dischargedPatient['pName'] ?></td>
+                                <td><?= $dischargedPatient['pAddress'] ?></td>
+                                <td><?= $dischargedPatient['pDoctor'] ?></td>
+                                <td><?= $dischargedPatient['aReason'] ?></td>
+                                <td><?= $dischargedPatient['dFee'] ?></td>
+                                <td><?= date("M d, Y", strtotime($dischargedPatient['aMadeOn'])) ?> at <?= $dischargedPatient['aTime'] ?></td>
+                                <td>
+                                    <p class="btn btn-success disabled">Finished</p>
+                                </td>
+                                <td>
+                                    <form action="medicalCert.php" method="post" target="_blank">
+                                        <input type="hidden" name="aId" value="<?= $dischargedPatient['aId'] ?>">
+                                        <input type="hidden" name="pId" value="<?= $dischargedPatient['pId'] ?>">
+                                        <input type="submit" class="btn btn-info" name="medicalCertBtn" target="_blank" value="Medical Certificate">
+                                    </form>
+                                </td>
+                            </tr>
+                        <?php endwhile; ?>
                     </tbody>
                 </table>
 
@@ -195,6 +170,29 @@ if (!isset($_SESSION['adId'])) {
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#search').keyup(function() {
+                var search = $(this).val();
+
+                $.ajax({
+                    url: 'action.php',
+                    method: 'post',
+                    data: {
+                        searchFinishedAppointment: search
+                    },
+                    success: function(response) {
+                        $('#table-data').html(response);
+                    }
+                });
+            });
+        });
+    </script>
+
 </body>
 
 </html>

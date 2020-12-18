@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 require_once '../connect.php';
 
@@ -66,6 +67,12 @@ if (!isset($_SESSION['adId'])) {
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="walkInPatient.php">
+                                <span data-feather="shopping-cart"></span>
+                                View All Walk in patient
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="room.php">
                                 <span data-feather="users"></span>
                                 View All Rooms
@@ -80,7 +87,7 @@ if (!isset($_SESSION['adId'])) {
                         <li class="nav-item">
                             <a class="nav-link" href="doneAppointment.php">
                                 <span data-feather="users"></span>
-                                View Done Appointment
+                                View Finished Appointment
                             </a>
                         </li>
                         <li class="nav-item">
@@ -89,27 +96,65 @@ if (!isset($_SESSION['adId'])) {
                                 View Cancelled Appointment
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="dischargedPatient.php">
-                                <span data-feather="users"></span>
-                                View Discharged Patients
-                            </a>
-                        </li>
                     </ul>
 
                 </div>
             </nav>
 
+            <?php
+
+            if (isset($_POST['deleteNurse'])) {
+                $nId = $_POST['id'];
+
+                // Select the nurse image
+                $sql = "SELECT * FROM nurse_receptionist WHERE nId = :id";
+                $stmt = $con->prepare($sql);
+                $stmt->bindParam(":id", $nId, PDO::PARAM_INT);
+                $stmt->execute();
+
+                // Nurse image
+                $nurse = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                //Nurse current image
+                $nurseImage = $nurse['nProfileImg'];
+
+                // Delete the image
+                $path = __DIR__ . "/../upload/nurse_profile_img/" . $nurseImage;
+                unlink($path);
+
+                $sql = "DELETE FROM nurse_receptionist WHERE nId = :id";
+                $stmt = $con->prepare($sql);
+                $stmt->bindParam(":id", $nId, PDO::PARAM_INT);
+                $stmt->execute();
+
+                header("location:nurse.php?succDeleteNurse=Successfully_deleted_nurse");
+                ob_end_flush();
+                exit(0);
+            }
+            ?>
+
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">All Nurse Receptionist</h1>
+                    <h1 class="h2" id="primaryColor">All Nurse Receptionist</h1>
                 </div>
-                <div>
+
+                <div class="text-center">
+                    <?= (isset($_GET['succAddedNurse']) && $_GET['succAddedNurse'] == "Successfully_added_nurse") ? '<span class="text-success">Successfully added nurse!</span>' : '' ?>
+                    <?= (isset($_GET['errUpdateNurseChanged']) && $_GET['errUpdateNurseChanged'] == "Nothing_to_changed") ? '<span class="text-danger">Nothing to changed!</span>' : '' ?>
+                    <?= (isset($_GET['succDeleteNurse']) && $_GET['succDeleteNurse'] == "Successfully_deleted_nurse") ? '<span class="text-success">Successfully deleted nurse!</span>' : '' ?>
+                    <?= (isset($_GET['succUpdateNurse']) && $_GET['succUpdateNurse'] == "Successfully_updated_nurse") ? '<span class="text-success">Successfully updated nurse!</span>' : '' ?>
+                </div>
+
+                <div class="d-flex justify-content-between mb-3">
                     <form class="form-inline">
-                        <input class="form-control mb-3" type="search" placeholder="Search Nurse Receptionist" aria-label="Search">
+                        <input class="form-control" type="search" id="search" placeholder="Search Nurse Name" aria-label="Search">
                     </form>
+                    <div>
+                        <a href="addNurse.php" class="btn btn-success mt-3 ">Add Nurse</a>
+                    </div>
                 </div>
-                <table class="table table-hover ">
+
+                <table class="table table-hover" id="table-data">
                     <thead class="thead-dark">
                         <tr>
                             <th scope="col">Nurse ID</th>
@@ -122,83 +167,41 @@ if (!isset($_SESSION['adId'])) {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td><img src="../upload/nurse_profile_img/nurse1.jpg" width="50" style="border:1px solid #333; border-radius: 50%;" alt=""></td>
-                            <td>Qwer</td>
-                            <td>qwerty@gmail.com</td>
-                            <td>12345 St.</td>
-                            <td>09510195578</td>
-                            <td>
-                                <input type="submit" value="Update" class="btn btn-secondary" name="appointmentStatus" onclick="return confirm('Are you sure to update?');">
-                                |
-                                <input type="submit" value="Delete" class="btn btn-danger" name="appointmentStatus" onclick="return confirm('Are you sure to delete?');">
-                            </td>
-                        </tr>
+                        <?php
+                        $sql = "SELECT * FROM nurse_receptionist";
+                        $stmt = $con->prepare($sql);
+                        $stmt->execute();
 
-                        <tr>
-                            <th scope="row">1</th>
-                            <td><img src="../upload/nurse_profile_img/nurse2.jpg" width="50" style="border:1px solid #333; border-radius: 50%;" alt=""></td>
-                            <td>Qwer</td>
-                            <td>qwerty@gmail.com</td>
-                            <td>12345 St.</td>
-                            <td>09510195578</td>
-                            <td>
-                                <input type="submit" value="Update" class="btn btn-secondary" name="appointmentStatus" onclick="return confirm('Are you sure to update?');">
-                                |
-                                <input type="submit" value="Delete" class="btn btn-danger" name="appointmentStatus" onclick="return confirm('Are you sure to delete?');">
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <th scope="row">1</th>
-                            <td><img src="../upload/nurse_profile_img/nurse3.jpg" width="50" style="border:1px solid #333; border-radius: 50%;" alt=""></td>
-                            <td>Qwer</td>
-                            <td>qwerty@gmail.com</td>
-                            <td>12345 St.</td>
-                            <td>09510195578</td>
-                            <td>
-                                <input type="submit" value="Update" class="btn btn-secondary" name="appointmentStatus" onclick="return confirm('Are you sure to update?');">
-                                |
-                                <input type="submit" value="Delete" class="btn btn-danger" name="appointmentStatus" onclick="return confirm('Are you sure to delete?');">
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <th scope="row">1</th>
-                            <td><img src="../upload/nurse_profile_img/nurse4.jpg" width="50" style="border:1px solid #333; border-radius: 50%;" alt=""></td>
-                            <td>Qwer</td>
-                            <td>qwerty@gmail.com</td>
-                            <td>12345 St.</td>
-                            <td>09510195578</td>
-                            <td>
-                                <input type="submit" value="Update" class="btn btn-secondary" name="appointmentStatus" onclick="return confirm('Are you sure to update?');">
-                                |
-                                <input type="submit" value="Delete" class="btn btn-danger" name="appointmentStatus" onclick="return confirm('Are you sure to delete?');">
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td><img src="../upload/nurse_profile_img/nurse5.jpg" width="50" style="border:1px solid #333; border-radius: 50%;" alt=""></td>
-                            <td>Qwer</td>
-                            <td>qwerty@gmail.com</td>
-                            <td>12345 St.</td>
-                            <td>09510195578</td>
-                            <td>
-                                <input type="submit" value="Update" class="btn btn-secondary" name="appointmentStatus" onclick="return confirm('Are you sure to update?');">
-                                |
-                                <input type="submit" value="Delete" class="btn btn-danger" name="appointmentStatus" onclick="return confirm('Are you sure to delete?');">
-                            </td>
-                        </tr>
-
-
+                        while ($nurse = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                        ?>
+                            <tr>
+                                <th scope="row"><?= $nurse['nId'] ?></th>
+                                <td><img src="../upload/nurse_profile_img/<?= $nurse['nProfileImg'] ?>" width="50" height="50" style="border:1px solid #333; border-radius: 50%;" alt=""></td>
+                                <td><?= $nurse['nName'] ?></td>
+                                <td><?= $nurse['nEmail'] ?></td>
+                                <td><?= $nurse['nAddress'] ?></td>
+                                <td><?= $nurse['nMobile'] ?></td>
+                                <td>
+                                    <div class="row">
+                                        <div class="col">
+                                            <form action="updateNurse.php" method="post">
+                                                <input type="hidden" name="id" value="<?= $nurse['nId'] ?>">
+                                                <input type="submit" value="Update" class="btn btn-secondary" name="updateNurseBtn">
+                                            </form>
+                                        </div>
+                                        <div class="col">
+                                            <form action="nurse.php" method="post">
+                                                <input type="hidden" name="id" value="<?= $nurse['nId'] ?>">
+                                                <input type="submit" value="Delete" class="btn btn-danger" name="deleteNurse" onclick="return confirm('Are you sure to delete?');">
+                                            </form>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endwhile; ?>
                     </tbody>
                 </table>
-                <div>
-                    <div>
-                        <a href="addNurse.php" class="btn btn-success mt-3 ">Add Nurse</a>
-                    </div>
-                </div>
+
 
         </div>
 
@@ -213,6 +216,29 @@ if (!isset($_SESSION['adId'])) {
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#search').keyup(function() {
+                var search = $(this).val();
+
+                $.ajax({
+                    url: 'action.php',
+                    method: 'post',
+                    data: {
+                        searchNurse: search
+                    },
+                    success: function(response) {
+                        $('#table-data').html(response);
+                    }
+                });
+            });
+        });
+    </script>
+
 </body>
 
 </html>

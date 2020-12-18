@@ -49,7 +49,7 @@ if (!isset($_SESSION['adId'])) {
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link " href="patientUser.php" id="primaryColor">
+                            <a class="nav-link " href="patientUser.php">
                                 <span data-feather="file"></span>
                                 View All Patient Users
                             </a>
@@ -67,7 +67,7 @@ if (!isset($_SESSION['adId'])) {
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="walkInPatient.php">
+                            <a class="nav-link" href="walkInPatient.php" id="primaryColor">
                                 <span data-feather="shopping-cart"></span>
                                 View All Walk in patient
                             </a>
@@ -103,98 +103,107 @@ if (!isset($_SESSION['adId'])) {
 
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">All Patients</h1>
+                    <h1 class="h2" id="primaryColor">All Walk in Patient</h1>
                 </div>
+
                 <div class="text-center">
-                    <?= (isset($_GET['errInfo']) && $_GET['errInfo'] == "Nothing_to_update") ? '<span class="text-danger">Nothing to update!</span>' : ''; ?>
-                    <?= (isset($_GET['succUpdate']) && $_GET['succUpdate'] == "Successfully_updated_information") ? '<span class="text-success">Successfully updated!</span>' : ''; ?>
-                    <?= (isset($_GET['succDelete']) && $_GET['succDelete'] == "Successfully_deleted_user") ? '<span class="text-success">Successfully deleted user!</span>' : ''; ?>
+                    <?= (isset($_GET['succAddWalkIn']) && $_GET['succAddWalkIn'] == "Successfully_added_walk_in_patient") ? '<span class="text-success">Successfully added walk in patient!</span>' : '' ?>
+                    <?= (isset($_GET['errUpdate']) && $_GET['errUpdate'] == "Nothing_to_update") ? '<span class="text-danger">Nothing to update!</span>' : '' ?>
+                    <?= (isset($_GET['succUpdateWalkIn']) && $_GET['succUpdateWalkIn'] == "Successfully_added_walk_in_patient") ? '<span class="text-success">Successfully updated walk in patient!</span>' : '' ?>
+                    <?= (isset($_GET['succDeleteWalkInPatient']) && $_GET['succDeleteWalkInPatient'] == "Successfully_deleted_a_walk_in_patient") ? '<span class="text-danger">Successfully deleted a walk in patient!</span>' : '' ?>
                 </div>
-                <div class="mt-4 mb-4">
-                    <h1 class="Display-4 my-4" id="primaryColor">Users</h1>
-                </div>
+
                 <div class="d-flex justify-content-between">
                     <form class="form-inline">
-                        <input class="form-control mb-3" id="search" autocomplete="off" type="search" placeholder="Search Patient Name" aria-label="Search">
+                        <input class="form-control mb-3" autocomplete="off" type="search" id="search" placeholder="Search Patient Name" aria-label="Search">
                     </form>
-
-                    <div>
-                        <a href="addPatientAppointment.php" class="btn btn-success mb-3 ">Add Users</a>
+                    <div class="mb-3">
+                        <a href="addWalkInPatient.php" class="btn btn-success mt-3 ">Add Walk in Patient</a>
                     </div>
                 </div>
-                <table class="table table-hover" id="table-data">
+
+                <?php
+
+                if (isset($_POST['deleteWalkInBtn'])) {
+                    $walkInId = $_POST['walkInId'];
+
+                    // Get the walk in patien room number
+                    $sql = "SELECT * FROM walkinpatient WHERE walkInId = :id";
+                    $stmt = $con->prepare($sql);
+                    $stmt->bindParam(":id", $walkInId, PDO::PARAM_INT);
+                    $stmt->execute();
+
+                    $walkIn = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                    $roomNumber = $walkIn['walkInRoomNumber'];
+
+                    // Remove the room status from occupied to available
+                    $status = "available";
+                    $sql = "UPDATE rooms SET room_status = :status WHERE room_number = :roomNumber";
+                    $stmt = $con->prepare($sql);
+                    $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+                    $stmt->bindParam(":roomNumber", $roomNumber, PDO::PARAM_INT);
+                    $stmt->execute();
+
+                    $sql = "DELETE FROM walkinpatient WHERE walkInId = :id";
+                    $stmt = $con->prepare($sql);
+                    $stmt->bindParam(":id", $walkInId, PDO::PARAM_INT);
+                    $stmt->execute();
+
+                    header("location:walkInPatient.php?succDeleteWalkInPatient=Successfully_deleted_a_walk_in_patient");
+                    ob_end_flush();
+                    exit(0);
+                }
+
+                ?>
+
+                <table class="table table-hover " id="table-data">
                     <thead class="thead-dark">
                         <tr>
                             <th scope="col">Patient ID</th>
-                            <th scope="col">Patient Profile</th>
                             <th scope="col">Patient Name</th>
                             <th scope="col">Patient Email</th>
                             <th scope="col">Patient Address</th>
                             <th scope="col">Patient Mobile</th>
+                            <th scope="col">Patient Disease</th>
                             <th scope="col">Patient Age</th>
                             <th scope="col">Patient Gender</th>
+                            <th scope="col">Patient Doctor</th>
+                            <th scope="col">Patient Room</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
-
-                        if (isset($_POST['deletePatient'])) {
-                            $id = $_POST['pId'];
-                            $pProfile = $_POST['pProfile'];
-
-                            $sql = "DELETE FROM patientappointment WHERE pId = :id";
-                            $stmt = $con->prepare($sql);
-                            $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-                            $stmt->execute();
-
-                            $image = "../upload/user_profile_img/$pProfile";
-                            unlink($image);
-
-                            // Delete all the existed appointments
-                            $sql = "DELETE FROM appointment WHERE pId = :id";
-                            $stmt = $con->prepare($sql);
-                            $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-                            $stmt->execute();
-
-                            header("location:patientUser.php?succDelete=Successfully_deleted_user");
-                            ob_end_flush();
-                            exit(0);
-                        }
-
-                        ?>
-
-                        <?php
-
-                        $sql = "SELECT * FROM patientappointment";
+                        $sql = "SELECT * FROM walkinpatient";
                         $stmt = $con->prepare($sql);
                         $stmt->execute();
 
-                        while ($patientAppointment = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                        while ($walkInPatient = $stmt->fetch(PDO::FETCH_ASSOC)) :
                         ?>
-
                             <tr>
-                                <th scope="row"><?= $patientAppointment['pId'] ?></th>
-                                <td><img src="../upload/user_profile_img/<?= $patientAppointment['pProfile'] ?>" width="50" height="50" style="border:1px solid #333; border-radius: 50%;" alt=""></td>
-                                <td><?= $patientAppointment['pName'] ?></td>
-                                <td><?= $patientAppointment['pEmail'] ?></td>
-                                <td><?= $patientAppointment['pAddress'] ?></td>
-                                <td><?= $patientAppointment['pMobile'] ?></td>
-                                <td><?= $patientAppointment['pAge'] ?></td>
-                                <td><?= ucwords($patientAppointment['pGender']) ?></td>
+                                <th scope="row"><?= $walkInPatient['walkInId'] ?></th>
+                                <td><?= $walkInPatient['walkInName'] ?></td>
+                                <td><?= $walkInPatient['walkInEmail'] ?></td>
+                                <td><?= $walkInPatient['walkInAddress'] ?></td>
+                                <td><?= $walkInPatient['walkInMobile'] ?></td>
+                                <td><?= $walkInPatient['walkInDisease'] ?></td>
+                                <td><?= $walkInPatient['walkInAge'] ?></td>
+                                <td><?= ucwords($walkInPatient['walkInGender']) ?></td>
+                                <td><?= $walkInPatient['walkInDoctor'] ?></td>
+                                <td><?= $walkInPatient['walkInRoomNumber'] ?></td>
                                 <td>
                                     <div class="row">
                                         <div class="col">
-                                            <form action="updatePatient.php" method="post">
-                                                <input type="hidden" name="pId" value="<?= $patientAppointment['pId'] ?>">
-                                                <input type="submit" value="Update" class="btn btn-secondary" name="updatePatient">
+                                            <form action="updateWalkInPatient.php" method="post">
+                                                <input type="hidden" name="walkInId" value="<?= $walkInPatient['walkInId'] ?>">
+                                                <input type="submit" value="Update" class="btn btn-secondary" name="updateWalkInBtn">
                                             </form>
                                         </div>
                                         <div class="col">
-                                            <form action="patientUser.php" method="post">
-                                                <input type="hidden" name="pId" value="<?= $patientAppointment['pId'] ?>">
-                                                <input type="hidden" name="pProfile" value="<?= $patientAppointment['pProfile'] ?>">
-                                                <input type="submit" value="Delete" class="btn btn-danger" name="deletePatient" onclick="return confirm('Are you sure to delete ?')">
+                                            <form action="walkInPatient.php" method="post">
+                                                <input type="hidden" name="walkInId" value="<?= $walkInPatient['walkInId'] ?>">
+                                                <input type="submit" value="Delete" class="btn btn-danger" name="deleteWalkInBtn" onclick="return confirm('Are you sure to delete?');">
                                             </form>
                                         </div>
                                     </div>
@@ -204,22 +213,19 @@ if (!isset($_SESSION['adId'])) {
                     </tbody>
                 </table>
 
-                <hr>
-
-
-
-            </main>
         </div>
+
+
+        </main>
+    </div>
     </div>
 
 
 
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -233,7 +239,7 @@ if (!isset($_SESSION['adId'])) {
                     url: 'action.php',
                     method: 'post',
                     data: {
-                        searchPatientUser: search
+                        searchWalkInPatient: search
                     },
                     success: function(response) {
                         $('#table-data').html(response);
@@ -242,6 +248,7 @@ if (!isset($_SESSION['adId'])) {
             });
         });
     </script>
+
 </body>
 
 </html>

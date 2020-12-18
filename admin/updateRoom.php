@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 require_once '../connect.php';
 
@@ -66,6 +67,12 @@ if (!isset($_SESSION['adId'])) {
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="walkInPatient.php">
+                                <span data-feather="shopping-cart"></span>
+                                View All Walk in patient
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="room.php" id="primaryColor">
                                 <span data-feather="users"></span>
                                 View All Rooms
@@ -80,7 +87,7 @@ if (!isset($_SESSION['adId'])) {
                         <li class="nav-item">
                             <a class="nav-link" href="doneAppointment.php">
                                 <span data-feather="users"></span>
-                                View Done Appointment
+                                View Finished Appointment
                             </a>
                         </li>
                         <li class="nav-item">
@@ -89,16 +96,54 @@ if (!isset($_SESSION['adId'])) {
                                 View Cancelled Appointment
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="dischargedPatient.php">
-                                <span data-feather="users"></span>
-                                View Discharged Patients
-                            </a>
-                        </li>
                     </ul>
 
                 </div>
             </nav>
+
+            <?php
+
+            if (isset($_POST['updateRoom'])) {
+
+                $id = $_POST['id'];
+                $roomNumber = $_POST['roomNumber'];
+                $roomFee = $_POST['roomFee'];
+
+                // check if nothing changed
+                if ($_SESSION['roomNumber'] == $roomNumber && $_SESSION['roomFee'] == $roomFee) {
+                    header("location:room.php?errRoomUpdate=Nothing_to_update");
+                    ob_end_flush();
+                    exit(0);
+                }
+
+                // check if the room number is already taken
+                $sql = "SELECT * FROM rooms WHERE room_number = :number AND room_id <> :id";
+                $stmt = $con->prepare($sql);
+                $stmt->bindParam(":number", $roomNumber, PDO::PARAM_INT);
+                $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+                $stmt->execute();
+
+                $roomNumbers = $stmt->rowCount();
+
+                if ($roomNumbers > 0) {
+                    header("location:updateRoom.php?errRoomNumber=Room_number_is_already_existed");
+                    exit(0);
+                }
+
+
+
+                $sql = "UPDATE rooms SET room_number = :number, room_fee = :fee WHERE room_id = :id";
+                $stmt = $con->prepare($sql);
+                $stmt->bindParam(":number", $roomNumber, PDO::PARAM_INT);
+                $stmt->bindParam(":fee", $roomFee, PDO::PARAM_INT);
+                $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+                $stmt->execute();
+
+                header("location:room.php?succRoomUpdate=Successfully_updated_room");
+                exit(0);
+            }
+
+            ?>
 
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -106,20 +151,35 @@ if (!isset($_SESSION['adId'])) {
                 </div>
                 <div class="container">
 
-                    <form action="contactus.php" method="post">
+                    <?php
+                    if (isset($_POST['updateRoomBtn'])) {
 
-                        <label for="exampleInputEmail1">Room Number</label>
-                        <input type="number" class="form-control" value="101">
+                        $roomId = $_POST['roomId'];
 
+                        $sql = "SELECT * FROM rooms WHERE room_id = :roomid";
+                        $stmt = $con->prepare($sql);
+                        $stmt->bindParam(":roomid", $roomId, PDO::PARAM_INT);
+                        $stmt->execute();
 
-                        <label for="exampleInputEmail1">Room Fee</label>
-                        <input type="number" class="form-control" value="2000">
+                        $room = $stmt->fetch(PDO::FETCH_ASSOC);
+                        $_SESSION['roomId'] = $room['room_id'];
+                        $_SESSION['roomNumber'] = $room['room_number'];
+                        $_SESSION['roomFee'] = $room['room_fee'];
+                    }
+                    ?>
 
-                        <label for="exampleInputEmail1">Room Status</label>
-                        <input type="text" class="form-control" value="Available">
+                    <form action="updateRoom.php" method="post">
+                        <input type="hidden" name="id" value="<?= $_SESSION['roomId'] ?>">
+                        <label>Room Number</label>
+                        <?= (isset($_GET['errRoomNumber']) && $_GET['errRoomNumber'] == "Room_number_is_already_existed") ? '<input type="number" name="roomNumber" class="form-control is-invalid" required>' : '<input type="number" name="roomNumber" class="form-control" value=' . $_SESSION['roomNumber'] . '>' ?>
+                        <?= (isset($_GET['errRoomNumber']) && $_GET['errRoomNumber'] == "Room_number_is_already_existed") ? '<span class="text-danger">Room number is already existed!</span>' : '' ?>
+
+                        <br>
+                        <label>Room Fee</label>
+                        <input type="number" name="roomFee" class="form-control" value="<?= $_SESSION['roomFee'] ?>" required>
 
                         <div class="text-center mt-3">
-                            <input type="submit" class="btn btn-primary" value="Update Room" name="submitAppointment">
+                            <input type="submit" class="btn btn-primary" value="Update Room" name="updateRoom">
                         </div>
                     </form>
                 </div>

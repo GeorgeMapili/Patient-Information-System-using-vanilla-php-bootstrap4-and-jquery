@@ -66,6 +66,12 @@ if (!isset($_SESSION['adId'])) {
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="walkInPatient.php">
+                                <span data-feather="shopping-cart"></span>
+                                View All Walk in patient
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="room.php">
                                 <span data-feather="users"></span>
                                 View All Rooms
@@ -80,19 +86,13 @@ if (!isset($_SESSION['adId'])) {
                         <li class="nav-item">
                             <a class="nav-link" href="doneAppointment.php">
                                 <span data-feather="users"></span>
-                                View Done Appointment
+                                View Finished Appointment
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="cancelledAppointment.php" id="primaryColor">
                                 <span data-feather="users"></span>
                                 View Cancelled Appointment
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="dischargedPatient.php">
-                                <span data-feather="users"></span>
-                                View Discharged Patients
                             </a>
                         </li>
                     </ul>
@@ -106,10 +106,10 @@ if (!isset($_SESSION['adId'])) {
                 </div>
                 <div>
                     <form class="form-inline">
-                        <input class="form-control mb-3" type="search" placeholder="Search Patient" aria-label="Search">
+                        <input class="form-control mb-3" type="search" id="search" placeholder="Search Patient" aria-label="Search">
                     </form>
                 </div>
-                <table class="table table-hover ">
+                <table class="table table-hover " id="table-data">
                     <thead class="thead-dark">
                         <tr>
                             <th scope="col">Appointment ID</th>
@@ -121,63 +121,27 @@ if (!isset($_SESSION['adId'])) {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Qwerty</td>
-                            <td>12345 St.</td>
-                            <td>Dr. Qwerty</td>
-                            <td>Fever</td>
-                            <td>
-                                <p class="btn btn-danger disabled">Cancelled</p>
-                            </td>
-                        </tr>
+                        <?php
 
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Qwerty</td>
-                            <td>12345 St.</td>
-                            <td>Dr. Qwerty</td>
-                            <td>Fever</td>
-                            <td>
-                                <p class="btn btn-danger disabled">Cancelled</p>
-                            </td>
-                        </tr>
+                        $status = "cancelled";
+                        $sql = "SELECT * FROM appointment WHERE aStatus = :status";
+                        $stmt = $con->prepare($sql);
+                        $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+                        $stmt->execute();
 
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Qwerty</td>
-                            <td>12345 St.</td>
-                            <td>Dr. Qwerty</td>
-                            <td>Fever</td>
-                            <td>
-                                <p class="btn btn-danger disabled">Cancelled</p>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Qwerty</td>
-                            <td>12345 St.</td>
-                            <td>Dr. Qwerty</td>
-                            <td>Fever</td>
-                            <td>
-                                <p class="btn btn-danger disabled">Cancelled</p>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Qwerty</td>
-                            <td>12345 St.</td>
-                            <td>Dr. Qwerty</td>
-                            <td>Fever</td>
-                            <td>
-                                <p class="btn btn-danger disabled">Cancelled</p>
-                            </td>
-                        </tr>
-
-
-
+                        while ($cancelledAppointment = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                        ?>
+                            <tr>
+                                <th scope="row"><?= $cancelledAppointment['aId'] ?></th>
+                                <td><?= $cancelledAppointment['pName'] ?></td>
+                                <td><?= $cancelledAppointment['pAddress'] ?></td>
+                                <td><?= $cancelledAppointment['pDoctor'] ?></td>
+                                <td><?= $cancelledAppointment['aReason'] ?></td>
+                                <td>
+                                    <p class="btn btn-danger disabled">Cancelled</p>
+                                </td>
+                            </tr>
+                        <?php endwhile; ?>
 
                     </tbody>
                 </table>
@@ -195,6 +159,29 @@ if (!isset($_SESSION['adId'])) {
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#search').keyup(function() {
+                var search = $(this).val();
+
+                $.ajax({
+                    url: 'action.php',
+                    method: 'post',
+                    data: {
+                        searchCancelledAppointment: search
+                    },
+                    success: function(response) {
+                        $('#table-data').html(response);
+                    }
+                });
+            });
+        });
+    </script>
+
 </body>
 
 </html>

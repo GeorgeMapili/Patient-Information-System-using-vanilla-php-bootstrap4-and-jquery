@@ -67,6 +67,12 @@ if (!isset($_SESSION['adId'])) {
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="walkInPatient.php">
+                                <span data-feather="shopping-cart"></span>
+                                View All Walk in patient
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="room.php">
                                 <span data-feather="users"></span>
                                 View All Rooms
@@ -81,19 +87,13 @@ if (!isset($_SESSION['adId'])) {
                         <li class="nav-item">
                             <a class="nav-link" href="doneAppointment.php">
                                 <span data-feather="users"></span>
-                                View Done Appointment
+                                View Finished Appointment
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="cancelledAppointment.php">
                                 <span data-feather="users"></span>
                                 View Cancelled Appointment
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="dischargedPatient.php">
-                                <span data-feather="users"></span>
-                                View Discharged Patients
                             </a>
                         </li>
                     </ul>
@@ -116,7 +116,7 @@ if (!isset($_SESSION['adId'])) {
 
                 <div class="d-flex justify-content-between">
                     <form class="form-inline">
-                        <input class="form-control mb-3" type="search" id="search" placeholder="Search Doctor" aria-label="Search">
+                        <input class="form-control mb-3" autocomplete="off" type="search" id="search" placeholder="Search Doctor" aria-label="Search">
                     </form>
                     <div class="mb-3">
                         <a href="addDoctor.php" class="btn btn-success mt-3 ">Add Doctor</a>

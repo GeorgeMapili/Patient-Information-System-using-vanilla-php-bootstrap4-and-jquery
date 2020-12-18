@@ -27,5 +27,31 @@ unset($_SESSION['dFee']);
 unset($_SESSION['dSpecializationInfo']);
 unset($_SESSION['dProfileImg']);
 
+// SESSION FROM UPDATE WALKIN PATIENT
+unset($_SESSION['walkInPatientId']);
+unset($_SESSION['walkInPatientName']);
+unset($_SESSION['walkInPatientEmail']);
+unset($_SESSION['walkInPatientAddress']);
+unset($_SESSION['walkInPatientMobile']);
+unset($_SESSION['walkInPatientDisease']);
+unset($_SESSION['walkInPatientAge']);
+unset($_SESSION['walkInPatientGender']);
+unset($_SESSION['walkInPatientDoctor']);
+unset($_SESSION['walkInPatientRoomNumber']);
+
+// SESSION FROM UPDATE ROOM
+unset($_SESSION['roomId']);
+unset($_SESSION['roomNumber']);
+unset($_SESSION['roomFee']);
+unset($_SESSION['roomStatus']);
+
+// SESSION FROM UPDATE NURSE
+unset($_SESSION['nurseId']);
+unset($_SESSION['nurseName']);
+unset($_SESSION['nurseEmail']);
+unset($_SESSION['nurseAddress']);
+unset($_SESSION['nurseMobile']);
+unset($_SESSION['nurseProfile']);
+
 header("location:index.php");
 exit(0);
