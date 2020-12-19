@@ -40,7 +40,7 @@ if (!isset($_SESSION['nId'])) {
                     <li class="nav-item">
                         <a class="nav-link" href="patient.php">Patient from appointments</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item active">
                         <a class="nav-link" href="patientWalkIn.php">Patient Walk in</a>
                     </li>
                     <li class="nav-item">
@@ -100,6 +100,102 @@ if (!isset($_SESSION['nId'])) {
                 $_SESSION['room_fee'] = $patientBill['roomFee'];
                 $_SESSION['dFee'] = $patientBill['doctorFee'];
                 $_SESSION['walkInDisease'] = $patientBill['walkInDisease'];
+            } else {
+
+                if (isset($_POST['discharge'])) {
+                    // Data in field
+                    $id = $_POST['id'];
+                    $name = $_POST['name'];
+                    $email = $_POST['email'];
+                    $address = $_POST['address'];
+                    $mobilenumber = $_POST['mobilenumber'];
+                    $patientStatus = $_POST['patientStatus'];
+                    $roomNumber = $_POST['roomNumber'];
+                    $roomFee = $_POST['roomFee'];
+                    $doctorName = $_POST['doctorName'];
+                    $doctorFee = $_POST['doctorFee'];
+                    $prescribeMed = $_POST['prescribeMed'];
+                    $medicineFee = $_POST['medicineFee'];
+                    $amountInput = $_POST['amountInput'];
+                    $totalAmount = $_POST['totalAmount'];
+
+                    // Change of the bill
+                    $changeBill = 0;
+
+                    // SESSION ------------------------------------------------------
+                    $_SESSION['amountInput'] = $amountInput;
+
+                    if ($amountInput >= $totalAmount) {
+                        $_SESSION['change'] = $amountInput -  $totalAmount;
+
+                        $discharge = 1;
+                        // CHANGE STATUS
+                        $sql = "UPDATE walkinpatient SET walkInDischarged = :discharged WHERE walkInId = :id";
+                        $stmt = $con->prepare($sql);
+                        $stmt->bindParam(":discharged", $discharge, PDO::PARAM_INT);
+                        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+                        $stmt->execute();
+
+                        // INSERT INTO DISCHARGED PATIENT TABLE
+                        $sql = "INSERT INTO discharged_patient(pId,pName,pEmail,pAddress, pMobile, pRoomNumber, pDoctor, pPrescription, pDisease, pTotalAmount,pStatus,pAmountPay,pChange)VALUES(:id,:name,:email,:address,:mobile,:roomNumber,:doctor,:prescription,:disease,:totalAmount,:status,:amountPay,:change)";
+                        $stmt = $con->prepare($sql);
+                        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+                        $stmt->bindParam(":name", $name, PDO::PARAM_STR);
+                        $stmt->bindParam(":email", $email, PDO::PARAM_STR);
+                        $stmt->bindParam(":address", $address, PDO::PARAM_STR);
+                        $stmt->bindParam(":mobile", $mobilenumber, PDO::PARAM_STR);
+                        $stmt->bindParam(":roomNumber", $roomNumber, PDO::PARAM_INT);
+                        $stmt->bindParam(":doctor", $doctorName, PDO::PARAM_STR);
+                        $stmt->bindParam(":prescription", $prescribeMed, PDO::PARAM_STR);
+                        $stmt->bindParam(":disease", $_SESSION['walkInDisease'], PDO::PARAM_STR);
+                        $stmt->bindParam(":totalAmount", $totalAmount, PDO::PARAM_STR);
+                        $stmt->bindParam(":status", $patientStatus, PDO::PARAM_STR);
+                        $stmt->bindParam(":amountPay", $_SESSION['amountInput'], PDO::PARAM_INT);
+                        $stmt->bindParam(":change", $_SESSION['change'], PDO::PARAM_INT);
+                        $stmt->execute();
+
+                        // DELETE IT FROM PATIENTWALKIN TABLE || JUST COMMENT IF SOMETHING MAKE WRONG
+                        $sql = "DELETE FROM walkinpatient WHERE walkInId = :id";
+                        $stmt = $con->prepare($sql);
+                        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+                        $stmt->execute();
+
+                        // INSERT INTO RETURNEE PATIENT TABLE FOR DOCTOR MEDICAL HISTORY
+                        $sql = "INSERT INTO returnee_patient(pId,pName,pEmail,pAddress, pMobile, pRoomNumber, pDoctor, pPrescription, pDisease, pTotalAmount,pStatus,pAmountPay,pChange)VALUES(:id,:name,:email,:address,:mobile,:roomNumber,:doctor,:prescription,:disease,:totalAmount,:status,:amountPay,:change)";
+                        $stmt = $con->prepare($sql);
+                        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+                        $stmt->bindParam(":name", $name, PDO::PARAM_STR);
+                        $stmt->bindParam(":email", $email, PDO::PARAM_STR);
+                        $stmt->bindParam(":address", $address, PDO::PARAM_STR);
+                        $stmt->bindParam(":mobile", $mobilenumber, PDO::PARAM_STR);
+                        $stmt->bindParam(":roomNumber", $roomNumber, PDO::PARAM_INT);
+                        $stmt->bindParam(":doctor", $doctorName, PDO::PARAM_STR);
+                        $stmt->bindParam(":prescription", $prescribeMed, PDO::PARAM_STR);
+                        $stmt->bindParam(":disease", $_SESSION['walkInDisease'], PDO::PARAM_STR);
+                        $stmt->bindParam(":totalAmount", $totalAmount, PDO::PARAM_STR);
+                        $stmt->bindParam(":status", $patientStatus, PDO::PARAM_STR);
+                        $stmt->bindParam(":amountPay", $_SESSION['amountInput'], PDO::PARAM_INT);
+                        $stmt->bindParam(":change", $_SESSION['change'], PDO::PARAM_INT);
+                        $stmt->execute();
+
+                        // Update the table from occupied to available
+                        $status = "available";
+                        $sql = "UPDATE rooms SET room_status = :status WHERE room_number = :number";
+                        $stmt = $con->prepare($sql);
+                        $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+                        $stmt->bindParam(":number", $roomNumber, PDO::PARAM_INT);
+                        $stmt->execute();
+
+                        header("location:discharge.php?dischargeWalkInPatient=true");
+                        exit(0);
+                    } else {
+                        header("location:generateBill.php?errAmount=too_low_amount");
+                        exit(0);
+                    }
+                } else {
+                    header("location:dashboard.php");
+                    exit(0);
+                }
             }
 
             ?>
@@ -108,100 +204,6 @@ if (!isset($_SESSION['nId'])) {
                 <div class="row justify-content-center bg-light">
                     <div class="col-lg-6 px-4 pb-4" id="order">
 
-                        <?php
-
-                        if (isset($_POST['discharge'])) {
-                            // Data in field
-                            $id = $_POST['id'];
-                            $name = $_POST['name'];
-                            $email = $_POST['email'];
-                            $address = $_POST['address'];
-                            $mobilenumber = $_POST['mobilenumber'];
-                            $patientStatus = $_POST['patientStatus'];
-                            $roomNumber = $_POST['roomNumber'];
-                            $roomFee = $_POST['roomFee'];
-                            $doctorName = $_POST['doctorName'];
-                            $doctorFee = $_POST['doctorFee'];
-                            $prescribeMed = $_POST['prescribeMed'];
-                            $medicineFee = $_POST['medicineFee'];
-                            $amountInput = $_POST['amountInput'];
-                            $totalAmount = $_POST['totalAmount'];
-
-                            // Change of the bill
-                            $changeBill = 0;
-
-                            // SESSION ------------------------------------------------------
-                            $_SESSION['amountInput'] = $amountInput;
-
-                            if ($amountInput >= $totalAmount) {
-                                $_SESSION['change'] = $amountInput -  $totalAmount;
-
-                                $discharge = 1;
-                                // CHANGE STATUS
-                                $sql = "UPDATE walkinpatient SET walkInDischarged = :discharged WHERE walkInId = :id";
-                                $stmt = $con->prepare($sql);
-                                $stmt->bindParam(":discharged", $discharge, PDO::PARAM_INT);
-                                $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-                                $stmt->execute();
-
-                                // INSERT INTO DISCHARGED PATIENT TABLE
-                                $sql = "INSERT INTO discharged_patient(pId,pName,pEmail,pAddress, pMobile, pRoomNumber, pDoctor, pPrescription, pDisease, pTotalAmount,pStatus,pAmountPay,pChange)VALUES(:id,:name,:email,:address,:mobile,:roomNumber,:doctor,:prescription,:disease,:totalAmount,:status,:amountPay,:change)";
-                                $stmt = $con->prepare($sql);
-                                $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-                                $stmt->bindParam(":name", $name, PDO::PARAM_STR);
-                                $stmt->bindParam(":email", $email, PDO::PARAM_STR);
-                                $stmt->bindParam(":address", $address, PDO::PARAM_STR);
-                                $stmt->bindParam(":mobile", $mobilenumber, PDO::PARAM_STR);
-                                $stmt->bindParam(":roomNumber", $roomNumber, PDO::PARAM_INT);
-                                $stmt->bindParam(":doctor", $doctorName, PDO::PARAM_STR);
-                                $stmt->bindParam(":prescription", $prescribeMed, PDO::PARAM_STR);
-                                $stmt->bindParam(":disease", $_SESSION['walkInDisease'], PDO::PARAM_STR);
-                                $stmt->bindParam(":totalAmount", $totalAmount, PDO::PARAM_STR);
-                                $stmt->bindParam(":status", $patientStatus, PDO::PARAM_STR);
-                                $stmt->bindParam(":amountPay", $_SESSION['amountInput'], PDO::PARAM_INT);
-                                $stmt->bindParam(":change", $_SESSION['change'], PDO::PARAM_INT);
-                                $stmt->execute();
-
-                                // DELETE IT FROM PATIENTWALKIN TABLE || JUST COMMENT IF SOMETHING MAKE WRONG
-                                $sql = "DELETE FROM walkinpatient WHERE walkInId = :id";
-                                $stmt = $con->prepare($sql);
-                                $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-                                $stmt->execute();
-
-                                // INSERT INTO RETURNEE PATIENT TABLE FOR DOCTOR MEDICAL HISTORY
-                                $sql = "INSERT INTO returnee_patient(pId,pName,pEmail,pAddress, pMobile, pRoomNumber, pDoctor, pPrescription, pDisease, pTotalAmount,pStatus,pAmountPay,pChange)VALUES(:id,:name,:email,:address,:mobile,:roomNumber,:doctor,:prescription,:disease,:totalAmount,:status,:amountPay,:change)";
-                                $stmt = $con->prepare($sql);
-                                $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-                                $stmt->bindParam(":name", $name, PDO::PARAM_STR);
-                                $stmt->bindParam(":email", $email, PDO::PARAM_STR);
-                                $stmt->bindParam(":address", $address, PDO::PARAM_STR);
-                                $stmt->bindParam(":mobile", $mobilenumber, PDO::PARAM_STR);
-                                $stmt->bindParam(":roomNumber", $roomNumber, PDO::PARAM_INT);
-                                $stmt->bindParam(":doctor", $doctorName, PDO::PARAM_STR);
-                                $stmt->bindParam(":prescription", $prescribeMed, PDO::PARAM_STR);
-                                $stmt->bindParam(":disease", $_SESSION['walkInDisease'], PDO::PARAM_STR);
-                                $stmt->bindParam(":totalAmount", $totalAmount, PDO::PARAM_STR);
-                                $stmt->bindParam(":status", $patientStatus, PDO::PARAM_STR);
-                                $stmt->bindParam(":amountPay", $_SESSION['amountInput'], PDO::PARAM_INT);
-                                $stmt->bindParam(":change", $_SESSION['change'], PDO::PARAM_INT);
-                                $stmt->execute();
-
-                                // Update the table from occupied to available
-                                $status = "available";
-                                $sql = "UPDATE rooms SET room_status = :status WHERE room_number = :number";
-                                $stmt = $con->prepare($sql);
-                                $stmt->bindParam(":status", $status, PDO::PARAM_STR);
-                                $stmt->bindParam(":number", $roomNumber, PDO::PARAM_INT);
-                                $stmt->execute();
-
-                                header("location:discharge.php");
-                                exit(0);
-                            } else {
-                                header("location:generateBill.php?errAmount=too_low_amount");
-                                exit(0);
-                            }
-                        }
-                        ?>
                         <form action="generateBill.php" method="post" id="placeOrder">
                             <!-- <input type="hidden" name="orderedfood" value="123">
                             <input type="hidden" name="orderedtotalamount" value="123">

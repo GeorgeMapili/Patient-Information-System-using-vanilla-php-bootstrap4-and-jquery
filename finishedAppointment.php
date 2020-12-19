@@ -112,7 +112,7 @@ if (!isset($_SESSION['id'])) {
                             <td><?= $appointment['aReason']; ?></td>
                             <td><?= date("M d, Y", strtotime($appointment['aDate'])); ?> at <?= $appointment['aTime']; ?></td>
                             <td>
-                                <form action="medicalCert.php" method="post">
+                                <form action="medicalCert.php" method="post" target="_blank">
                                     <input type="hidden" name="aId" value="<?= $appointment['aId'] ?>">
                                     <input type="hidden" name="pId" value="<?= $appointment['pId'] ?>">
                                     <input type="submit" value="Generate a Medical Certificate" class="btn btn-primary" name="medicalCertBtn">

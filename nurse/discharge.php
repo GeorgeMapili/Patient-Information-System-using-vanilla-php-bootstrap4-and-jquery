@@ -40,7 +40,7 @@ if (!isset($_SESSION['nId'])) {
                     <li class="nav-item">
                         <a class="nav-link" href="patient.php">Patient from appointments</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item active">
                         <a class="nav-link" href="patientWalkIn.php">Patient Walk in</a>
                     </li>
                     <li class="nav-item">
@@ -71,52 +71,64 @@ if (!isset($_SESSION['nId'])) {
     </header>
 
     <main role="main">
-        <div class="container">
 
-            <h3 class="display-4 mt-5 my-4" id="primaryColor">Patient Bill</h3>
+        <?php
 
+        if (isset($_GET['dischargeWalkInPatient']) && $_GET['dischargeWalkInPatient'] == "true") {
+        ?>
             <div class="container">
-                <div class="row justify-content-center bg-light">
-                    <div class="col-lg-6 px-4 pb-4" id="order">
-                        <form action="checkout.php" method="post" id="placeOrder">
-                            <input type="hidden" name="orderedfood" value="123">
-                            <input type="hidden" name="orderedtotalamount" value="123">
-                            <input type="hidden" name="userId" value="123">
-                            <h1 class=" text-center mt-3">Patient information</h1>
 
-                            <?php
-                            $sql = "SELECT * FROM discharged_patient WHERE pId = :id";
-                            $stmt = $con->prepare($sql);
-                            $stmt->bindParam(":id", $_SESSION['walkInId'], PDO::PARAM_INT);
-                            $stmt->execute();
+                <h3 class="display-4 mt-5 my-4" id="primaryColor">Patient Bill</h3>
 
-                            $dischargePatient = $stmt->fetch(PDO::FETCH_ASSOC);
-                            ?>
-                            <div class="text-center">
-                                <h1 class="display-4 mt-2 text-danger">Patient Discharged Successfully</h1>
-                                <h6 class="lead text-center">Patient Name: <?= $dischargePatient['pName'] ?></h6>
-                                <h6 class="lead text-center">Email: <?= $dischargePatient['pEmail'] ?></h6>
-                                <h6 class="lead text-center">Address: <?= $dischargePatient['pAddress'] ?></h6>
-                                <h6 class="lead text-center">Mobile Number: <?= $dischargePatient['pMobile'] ?></h6>
-                                <h6 class="lead text-center">Patient Status: <?= $dischargePatient['pStatus'] ?></h6>
-                                <h6 class="lead text-center">Room Number: <?= $dischargePatient['pRoomNumber'] ?></h6>
-                                <h6 class="lead text-center">Doctor Name: <?= $dischargePatient['pDoctor'] ?></h6>
-                                <h6 class="lead text-center">Doctor Prescribe Medicine: <?= $dischargePatient['pPrescription'] ?></h6>
-                                <h6 class="lead text-center">Amount Input: <?= $dischargePatient['pAmountPay'] ?></h6>
-                                <h6 class="lead text-center">Total Amount: <?= $dischargePatient['pTotalAmount'] ?></h6>
-                                <h6 class="lead text-center">Change: <?= $dischargePatient['pChange'] ?></h6>
-                            </div>
+                <div class="container">
+                    <div class="row justify-content-center bg-light">
+                        <div class="col-lg-6 px-4 pb-4" id="order">
+                            <form action="checkout.php" method="post" id="placeOrder">
+                                <input type="hidden" name="orderedfood" value="123">
+                                <input type="hidden" name="orderedtotalamount" value="123">
+                                <input type="hidden" name="userId" value="123">
+                                <h1 class=" text-center mt-3">Patient information</h1>
 
-                            <div class="col">
-                                <div class="form-group mt-3">
-                                    <!-- <input type="submit" name="placeorder" class="btn btn-primary" value="Show Bill"> -->
-                                    <a href='pdfDischarge.php' class="btn btn-primary" target="_blank">Print Billings</a>
+                                <?php
+                                $sql = "SELECT * FROM discharged_patient WHERE pId = :id";
+                                $stmt = $con->prepare($sql);
+                                $stmt->bindParam(":id", $_SESSION['walkInId'], PDO::PARAM_INT);
+                                $stmt->execute();
+
+                                $dischargePatient = $stmt->fetch(PDO::FETCH_ASSOC);
+                                ?>
+                                <div class="text-center">
+                                    <h1 class="display-4 mt-2 text-danger">Patient Discharged Successfully</h1>
+                                    <h6 class="lead text-center">Patient Name: <?= $dischargePatient['pName'] ?></h6>
+                                    <h6 class="lead text-center">Email: <?= $dischargePatient['pEmail'] ?></h6>
+                                    <h6 class="lead text-center">Address: <?= $dischargePatient['pAddress'] ?></h6>
+                                    <h6 class="lead text-center">Mobile Number: <?= $dischargePatient['pMobile'] ?></h6>
+                                    <h6 class="lead text-center">Patient Status: <?= $dischargePatient['pStatus'] ?></h6>
+                                    <h6 class="lead text-center">Room Number: <?= $dischargePatient['pRoomNumber'] ?></h6>
+                                    <h6 class="lead text-center">Doctor Name: <?= $dischargePatient['pDoctor'] ?></h6>
+                                    <h6 class="lead text-center">Doctor Prescribe Medicine: <?= $dischargePatient['pPrescription'] ?></h6>
+                                    <h6 class="lead text-center">Amount Input: <?= $dischargePatient['pAmountPay'] ?></h6>
+                                    <h6 class="lead text-center">Total Amount: <?= $dischargePatient['pTotalAmount'] ?></h6>
+                                    <h6 class="lead text-center">Change: <?= $dischargePatient['pChange'] ?></h6>
                                 </div>
-                            </div>
-                        </form>
+
+                                <div class="col">
+                                    <div class="form-group mt-3">
+                                        <!-- <input type="submit" name="placeorder" class="btn btn-primary" value="Show Bill"> -->
+                                        <a href='pdfDischarge.php?walkInDischargeReceipt=true' class="btn btn-primary" target="_blank">Print Billings</a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
+
+            <?php
+        } else {
+            header("location:dashboard.php");
+            exit(0);
+        }
+            ?>
 
 
             <hr class="featurette-divider">
@@ -127,7 +139,7 @@ if (!isset($_SESSION['nId'])) {
             <footer class="text-center">
                 <p>&copy; 2017-2018 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
             </footer>
-        </div>
+            </div>
     </main>
 
 

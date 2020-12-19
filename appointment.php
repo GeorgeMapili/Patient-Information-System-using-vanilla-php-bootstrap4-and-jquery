@@ -93,7 +93,7 @@ if (!isset($_SESSION['id'])) {
             $aReason = trim(htmlspecialchars($_POST['reasonAppointment']));
 
             // Check if the Date is already pass by
-            if (strtotime($aDate) < strtotime('now')) {
+            if (date("M d, Y", strtotime($aDate)) < date("M d, Y", strtotime('now'))) {
                 header("location:appointment.php?errDate=date_already_pass_by");
                 exit(0);
             }

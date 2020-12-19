@@ -101,6 +101,59 @@ if (!isset($_SESSION['nId'])) {
                 $_SESSION['Pa_totalPay'] = $patientAppointmentBill['pTotalPay'];
                 $_SESSION['Pa_dFee'] = $patientAppointmentBill['dFee'];
                 $_SESSION['Pa_Disease'] = $patientAppointmentBill['aReason'];
+            } else {
+
+                if (isset($_POST['dischargeAppointment'])) {
+                    // Data in field
+                    $aid = $_POST['aId'];
+                    $pid = $_POST['pId'];
+                    $name = $_POST['name'];
+                    $email = $_POST['email'];
+                    $address = $_POST['address'];
+                    $mobilenumber = $_POST['mobilenumber'];
+                    $patientStatus = $_POST['patientStatus'];
+                    $doctorName = $_POST['doctorName'];
+                    $doctorFee = $_POST['doctorFee'];
+                    $prescribeMed = $_POST['prescribeMed'];
+                    $medicineFee = $_POST['medicineFee'];
+                    $amountInput = $_POST['amountInput'];
+                    $totalAmount = $_POST['totalAmount'];
+
+                    // Change of the bill
+                    $changeBill = 0;
+
+                    // SESSION ------------------------------------------------------
+                    // $_SESSION['amountInput'] = $amountInput;
+
+                    if ($amountInput >= $totalAmount) {
+                        $changeBill = $amountInput -  $totalAmount;
+                        $date = date("M d, Y");
+
+                        $status = "discharged";
+                        $discharge = 1;
+                        // UPDATE THE STATUS OF THE PATIENT FROM DONE TO DISCHARGE
+                        $sql = "UPDATE appointment SET aStatus = :status, pDischarge = :discharge, patientStatus =:statusPatient, pAmountPay = :amountPay, pChange = :change, dischargedOn = :dischargedOn  WHERE aId = :aid AND pId = :pid";
+                        $stmt = $con->prepare($sql);
+                        $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+                        $stmt->bindParam(":discharge", $discharge, PDO::PARAM_INT);
+                        $stmt->bindParam(":statusPatient", $patientStatus, PDO::PARAM_STR);
+                        $stmt->bindParam(":amountPay", $amountInput, PDO::PARAM_INT);
+                        $stmt->bindParam(":change", $changeBill, PDO::PARAM_INT);
+                        $stmt->bindParam(":dischargedOn", $date, PDO::PARAM_STR);
+                        $stmt->bindParam(":aid", $aid, PDO::PARAM_INT);
+                        $stmt->bindParam(":pid", $pid, PDO::PARAM_INT);
+                        $stmt->execute();
+
+                        header("location:dischargePa.php?dischargedAppointment=1");
+                        exit(0);
+                    } else {
+                        header("location:generateBillAppointment.php?errAmount=too_low_amount");
+                        exit(0);
+                    }
+                } else {
+                    header("location:dashboard.php");
+                    exit(0);
+                }
             }
 
             ?>
@@ -111,54 +164,7 @@ if (!isset($_SESSION['nId'])) {
 
                         <?php
 
-                        if (isset($_POST['dischargeAppointment'])) {
-                            // Data in field
-                            $aid = $_POST['aId'];
-                            $pid = $_POST['pId'];
-                            $name = $_POST['name'];
-                            $email = $_POST['email'];
-                            $address = $_POST['address'];
-                            $mobilenumber = $_POST['mobilenumber'];
-                            $patientStatus = $_POST['patientStatus'];
-                            $doctorName = $_POST['doctorName'];
-                            $doctorFee = $_POST['doctorFee'];
-                            $prescribeMed = $_POST['prescribeMed'];
-                            $medicineFee = $_POST['medicineFee'];
-                            $amountInput = $_POST['amountInput'];
-                            $totalAmount = $_POST['totalAmount'];
 
-                            // Change of the bill
-                            $changeBill = 0;
-
-                            // SESSION ------------------------------------------------------
-                            // $_SESSION['amountInput'] = $amountInput;
-
-                            if ($amountInput >= $totalAmount) {
-                                $changeBill = $amountInput -  $totalAmount;
-                                $date = date("M d, Y");
-
-                                $status = "discharged";
-                                $discharge = 1;
-                                // UPDATE THE STATUS OF THE PATIENT FROM DONE TO DISCHARGE
-                                $sql = "UPDATE appointment SET aStatus = :status, pDischarge = :discharge, patientStatus =:statusPatient, pAmountPay = :amountPay, pChange = :change, dischargedOn = :dischargedOn  WHERE aId = :aid AND pId = :pid";
-                                $stmt = $con->prepare($sql);
-                                $stmt->bindParam(":status", $status, PDO::PARAM_STR);
-                                $stmt->bindParam(":discharge", $discharge, PDO::PARAM_INT);
-                                $stmt->bindParam(":statusPatient", $patientStatus, PDO::PARAM_STR);
-                                $stmt->bindParam(":amountPay", $amountInput, PDO::PARAM_INT);
-                                $stmt->bindParam(":change", $changeBill, PDO::PARAM_INT);
-                                $stmt->bindParam(":dischargedOn", $date, PDO::PARAM_STR);
-                                $stmt->bindParam(":aid", $aid, PDO::PARAM_INT);
-                                $stmt->bindParam(":pid", $pid, PDO::PARAM_INT);
-                                $stmt->execute();
-
-                                header("location:dischargePa.php");
-                                exit(0);
-                            } else {
-                                header("location:generateBillAppointment.php?errAmount=too_low_amount");
-                                exit(0);
-                            }
-                        }
                         ?>
                         <form action="generateBillAppointment.php" method="post" id="placeOrder">
                             <h1 class=" text-center mt-3">Patient information</h1>

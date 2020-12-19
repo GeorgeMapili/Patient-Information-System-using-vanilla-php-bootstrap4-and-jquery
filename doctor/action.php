@@ -14,8 +14,9 @@ if (isset($_POST['sortBy'])) {
             // DEFAULT
         case 'default':
             $status = "accepted";
-            $sql = "SELECT * FROM appointment WHERE aStatus = :status";
+            $sql = "SELECT * FROM appointment WHERE pDoctor = :doctor AND aStatus = :status";
             $stmt = $con->prepare($sql);
+            $stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);
             $stmt->bindParam(":status", $status, PDO::PARAM_STR);
             $stmt->execute();
 
@@ -69,8 +70,9 @@ if (isset($_POST['sortBy'])) {
             // TODAY
         case 'today':
             $status = "accepted";
-            $sql = "SELECT * FROM appointment WHERE aStatus = :status AND aDate = DATE(NOW()) ORDER BY aTime ASC";
+            $sql = "SELECT * FROM appointment WHERE pDoctor = :doctor AND aStatus = :status AND aDate = DATE(NOW()) ORDER BY aTime ASC";
             $stmt = $con->prepare($sql);
+            $stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);
             $stmt->bindParam(":status", $status, PDO::PARAM_STR);
             $stmt->execute();
 
@@ -124,8 +126,9 @@ if (isset($_POST['sortBy'])) {
             // TOMORROW 
         case 'tomorrow':
             $status = "accepted";
-            $sql = "SELECT * FROM appointment WHERE aStatus = :status AND aDate = curdate() + interval 1 day ORDER BY aTime ASC";
+            $sql = "SELECT * FROM appointment WHERE pDoctor = :doctor AND aStatus = :status AND aDate = curdate() + interval 1 day ORDER BY aTime ASC";
             $stmt = $con->prepare($sql);
+            $stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);
             $stmt->bindParam(':status', $status, PDO::PARAM_STR);
             $stmt->execute();
 
@@ -179,8 +182,9 @@ if (isset($_POST['sortBy'])) {
             // THIS WEEK
         case 'this_week':
             $status = "accepted";
-            $sql = "SELECT * FROM appointment WHERE aStatus = :status AND YEARWEEK(aDate) = YEARWEEK(NOW()) ORDER BY aDate,aTime ASC";
+            $sql = "SELECT * FROM appointment WHERE pDoctor = :doctor AND aStatus = :status AND YEARWEEK(aDate) = YEARWEEK(NOW()) ORDER BY aDate,aTime ASC";
             $stmt = $con->prepare($sql);
+            $stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);
             $stmt->bindParam(":status", $status, PDO::PARAM_STR);
             $stmt->execute();
 
@@ -234,8 +238,9 @@ if (isset($_POST['sortBy'])) {
             // NEXT WEEK
         case 'next_week':
             $status = "accepted";
-            $sql = "SELECT * FROM appointment WHERE aStatus = :status AND YEARWEEK(aDate) = YEARWEEK(NOW() + INTERVAL 7 DAY) ORDER BY aDate, aTime ASC";
+            $sql = "SELECT * FROM appointment WHERE pDoctor = :doctor AND aStatus = :status AND YEARWEEK(aDate) = YEARWEEK(NOW() + INTERVAL 7 DAY) ORDER BY aDate, aTime ASC";
             $stmt = $con->prepare($sql);
+            $stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);
             $stmt->bindParam(":status", $status, PDO::PARAM_STR);
             $stmt->execute();
 
@@ -291,8 +296,9 @@ if (isset($_POST['sortBy'])) {
             $status = "accepted";
             $month = date("m");
 
-            $sql = "SELECT * FROM appointment WHERE aStatus = :status AND EXTRACT(MONTH FROM aDate) = :months ORDER BY aDate, aTime ASC";
+            $sql = "SELECT * FROM appointment WHERE pDoctor = :doctor AND aStatus = :status AND EXTRACT(MONTH FROM aDate) = :months ORDER BY aDate, aTime ASC";
             $stmt = $con->prepare($sql);
+            $stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);
             $stmt->bindParam(":status", $status, PDO::PARAM_STR);
             $stmt->bindParam(":months", $month, PDO::PARAM_INT);
             $stmt->execute();

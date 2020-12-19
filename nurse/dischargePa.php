@@ -75,50 +75,62 @@ if (!isset($_SESSION['nId'])) {
 
             <h3 class="display-4 mt-5 my-4" id="primaryColor">Patient Appointment Bill</h3>
 
-            <div class="container">
-                <div class="row justify-content-center bg-light">
-                    <div class="col-lg-6 px-4 pb-4" id="order">
-                        <form action="checkout.php" method="post" id="placeOrder">
-                            <input type="hidden" name="orderedfood" value="123">
-                            <input type="hidden" name="orderedtotalamount" value="123">
-                            <input type="hidden" name="userId" value="123">
+            <?php
 
-                            <?php
-                            $discharge = 1;
-                            $sql = "SELECT * FROM appointment WHERE aId = :aid AND pId= :pid AND pDischarge = :discharge";
-                            $stmt = $con->prepare($sql);
-                            $stmt->bindParam(":aid", $_SESSION['Pa_aId'], PDO::PARAM_INT);
-                            $stmt->bindParam(":pid", $_SESSION['Pa_pId'], PDO::PARAM_INT);
-                            $stmt->bindParam(":discharge", $discharge, PDO::PARAM_INT);
-                            $stmt->execute();
+            if (isset($_GET['dischargedAppointment']) && $_GET['dischargedAppointment'] == 1) {
+            ?>
 
-                            $dischargePatientAppointment = $stmt->fetch(PDO::FETCH_ASSOC);
-                            ?>
-                            <div class="text-center">
-                                <h1 class="display-4 mt-2 text-danger">Patient Discharged Successfully</h1>
-                                <h6 class="lead text-center">Patient Name: <?= $dischargePatientAppointment['pName'] ?></h6>
-                                <h6 class="lead text-center">Email: <?= $dischargePatientAppointment['pEmail'] ?></h6>
-                                <h6 class="lead text-center">Address: <?= $dischargePatientAppointment['pAddress'] ?></h6>
-                                <h6 class="lead text-center">Mobile Number: <?= $dischargePatientAppointment['pMobile'] ?></h6>
-                                <h6 class="lead text-center">Patient Status: <?= ucwords($dischargePatientAppointment['patientStatus']) ?></h6>
-                                <h6 class="lead text-center">Doctor Name: <?= $dischargePatientAppointment['pDoctor'] ?></h6>
-                                <h6 class="lead text-center">Doctor Prescribe Medicine: <?= $dischargePatientAppointment['pPrescription'] ?></h6>
-                                <h6 class="lead text-center">Amount Input: <?= $dischargePatientAppointment['pAmountPay'] ?></h6>
-                                <h6 class="lead text-center">Total Amount: <?= $dischargePatientAppointment['pTotalPay'] ?></h6>
-                                <h6 class="lead text-center">Change: <?= $dischargePatientAppointment['pChange'] ?></h6>
-                            </div>
+                <div class="container">
+                    <div class="row justify-content-center bg-light">
+                        <div class="col-lg-6 px-4 pb-4" id="order">
+                            <form action="checkout.php" method="post" id="placeOrder">
+                                <input type="hidden" name="orderedfood" value="123">
+                                <input type="hidden" name="orderedtotalamount" value="123">
+                                <input type="hidden" name="userId" value="123">
 
-                            <div class="col">
-                                <div class="form-group mt-3">
-                                    <!-- <input type="submit" name="placeorder" class="btn btn-primary" value="Show Bill"> -->
-                                    <a href='pdfDischargeAppointment.php' class="btn btn-primary" target="_blank">Print Billings</a>
+                                <?php
+                                $discharge = 1;
+                                $sql = "SELECT * FROM appointment WHERE aId = :aid AND pId= :pid AND pDischarge = :discharge";
+                                $stmt = $con->prepare($sql);
+                                $stmt->bindParam(":aid", $_SESSION['Pa_aId'], PDO::PARAM_INT);
+                                $stmt->bindParam(":pid", $_SESSION['Pa_pId'], PDO::PARAM_INT);
+                                $stmt->bindParam(":discharge", $discharge, PDO::PARAM_INT);
+                                $stmt->execute();
+
+                                $dischargePatientAppointment = $stmt->fetch(PDO::FETCH_ASSOC);
+                                ?>
+                                <div class="text-center">
+                                    <h1 class="display-4 mt-2 text-danger">Patient Discharged Successfully</h1>
+                                    <h6 class="lead text-center">Patient Name: <?= $dischargePatientAppointment['pName'] ?></h6>
+                                    <h6 class="lead text-center">Email: <?= $dischargePatientAppointment['pEmail'] ?></h6>
+                                    <h6 class="lead text-center">Address: <?= $dischargePatientAppointment['pAddress'] ?></h6>
+                                    <h6 class="lead text-center">Mobile Number: <?= $dischargePatientAppointment['pMobile'] ?></h6>
+                                    <h6 class="lead text-center">Patient Status: <?= ucwords($dischargePatientAppointment['patientStatus']) ?></h6>
+                                    <h6 class="lead text-center">Doctor Name: <?= $dischargePatientAppointment['pDoctor'] ?></h6>
+                                    <h6 class="lead text-center">Doctor Prescribe Medicine: <?= $dischargePatientAppointment['pPrescription'] ?></h6>
+                                    <h6 class="lead text-center">Amount Input: <?= $dischargePatientAppointment['pAmountPay'] ?></h6>
+                                    <h6 class="lead text-center">Total Amount: <?= $dischargePatientAppointment['pTotalPay'] ?></h6>
+                                    <h6 class="lead text-center">Change: <?= $dischargePatientAppointment['pChange'] ?></h6>
                                 </div>
-                            </div>
-                        </form>
+
+                                <div class="col">
+                                    <div class="form-group mt-3">
+                                        <!-- <input type="submit" name="placeorder" class="btn btn-primary" value="Show Bill"> -->
+                                        <a href='pdfDischargeAppointment.php?printBillings=true' class="btn btn-primary" target="_blank">Print Billings</a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
 
+            <?php
+
+            } else {
+                header("location:dashboard.php");
+                exit(0);
+            }
+            ?>
 
             <hr class="featurette-divider">
 

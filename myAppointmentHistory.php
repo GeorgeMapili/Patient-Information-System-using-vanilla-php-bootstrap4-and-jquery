@@ -119,11 +119,11 @@ if (!isset($_SESSION['id'])) {
                             <td>
                                 <?php
                                 if ($myAppointmentHistory['aStatus'] === "discharged") { ?>
-                                    <input type="submit" value="Discharged" class="btn btn-primary disabled" name="appointmentStatus">
+                                    <p class="btn btn-primary disabled">Discharged</p>
                                 <?php
                                 } else if ($myAppointmentHistory['aStatus'] === "cancelled") {
                                 ?>
-                                    <input type="submit" value="Cancelled" class="btn btn-danger disabled" name="appointmentStatus">
+                                    <p class="btn btn-danger disabled">Cancelled</p>
                                 <?php } ?>
                             </td>
                         </tr>

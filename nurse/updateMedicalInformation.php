@@ -40,7 +40,7 @@ if (!isset($_SESSION['nId'])) {
                     <li class="nav-item">
                         <a class="nav-link" href="patient.php">Patient from appointments</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item active">
                         <a class="nav-link" href="patientWalkIn.php">Patient Walk in</a>
                     </li>
                     <li class="nav-item">
@@ -70,102 +70,113 @@ if (!isset($_SESSION['nId'])) {
         </nav>
     </header>
 
-    <main role="main">
-        <div class="container">
+    <?php
+    if (isset($_GET['medicalInformation'])) {
+    ?>
 
-            <h3 class="display-4 mt-5 my-4" id="primaryColor">Update Medical Information</h3>
+        <main role="main">
+            <div class="container">
 
-
-            <?php
-
-            if (isset($_GET['id'])) {
-                $id = trim(htmlspecialchars($_GET['id']));
-
-                $sql = "SELECT * FROM medicalinformation WHERE pId = :id";
-                $stmt = $con->prepare($sql);
-                $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-                $stmt->execute();
-
-                $updateMedicalInfo = $stmt->fetch(PDO::FETCH_ASSOC);
-
-                $arrayInfo = explode(",", $updateMedicalInfo['pMedicalInfo']);
-                $arrsLen = count($arrayInfo);
-            }
-
-            ?>
+                <h3 class="display-4 mt-5 my-4" id="primaryColor">Update Medical Information</h3>
 
 
-            <form action="action.php" method="post">
-                <?php $id = $_GET['id']; ?>
-                <input type="hidden" name="id" value="<?= $id; ?>">
-
-                <div class="row">
-                    <div class="col m-1">
-                        <label>Height</label>
-                        <input type="number" name="height" value="<?= $updateMedicalInfo['pHeight'] ?>" min="0" class="form-control" required>
-                    </div>
-                    <div class="col m-1">
-                        <label>Weight</label>
-                        <input type="number" name="weight" min="0" value="<?= $updateMedicalInfo['pWeight'] ?>" class="form-control" required>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col m-1">
-                        <label>Blood Type</label>
-                        <select name="bloodType" class="form-control" required>
-                            <option value="">select a blood type</option>
-                            <?php
-                            $sql = "SELECT * FROM bloodtype";
-                            $stmt = $con->prepare($sql);
-                            $stmt->execute();
-
-                            while ($bloodType = $stmt->fetch(PDO::FETCH_ASSOC)) :
-                            ?>
-                                <option value="<?= $bloodType['bloodType'] ?>" <?= ($bloodType['bloodType'] == $updateMedicalInfo['pBloodType']) ? 'selected' : ''; ?>><?= $bloodType['bloodType'] ?></option>
-                            <?php endwhile; ?>
-                        </select>
-                    </div>
-                    <div class="col m-1">
-                        <label>Allergy</label>
-                        <input type="text" name="allergy" class="form-control" value="<?= $updateMedicalInfo['pAllergy'] ?>" required>
-                    </div>
-                </div>
-
-                <h6 class=" mt-5 my-4" id="primaryColor">Have you ever the following ?</h6>
                 <?php
 
-                $sql = "SELECT * FROM ffmedicaldisease";
-                $stmt = $con->prepare($sql);
-                $stmt->execute();
-                $inc = 0;
-                while ($md = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                if (isset($_GET['id'])) {
+                    $id = trim(htmlspecialchars($_GET['id']));
+
+                    $sql = "SELECT * FROM medicalinformation WHERE pId = :id";
+                    $stmt = $con->prepare($sql);
+                    $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+                    $stmt->execute();
+
+                    $updateMedicalInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                    $arrayInfo = explode(",", $updateMedicalInfo['pMedicalInfo']);
+                    $arrsLen = count($arrayInfo);
+                }
 
                 ?>
-                    <label for=""><?= ucwords($md['md_name']); ?></label>
-                    <input type="checkbox" name="followingMed[]" value="<?= $md['md_name'] ?>" <?php
-                                                                                                for ($i = 0; $i < $arrsLen; $i++) {
-                                                                                                    if ($md['md_name'] == $arrayInfo[$i]) {
-                                                                                                        echo 'checked';
+
+
+                <form action="action.php" method="post">
+                    <?php $id = $_GET['id']; ?>
+                    <input type="hidden" name="id" value="<?= $id; ?>">
+
+                    <div class="row">
+                        <div class="col m-1">
+                            <label>Height</label>
+                            <input type="number" name="height" value="<?= $updateMedicalInfo['pHeight'] ?>" min="0" class="form-control" required>
+                        </div>
+                        <div class="col m-1">
+                            <label>Weight</label>
+                            <input type="number" name="weight" min="0" value="<?= $updateMedicalInfo['pWeight'] ?>" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col m-1">
+                            <label>Blood Type</label>
+                            <select name="bloodType" class="form-control" required>
+                                <option value="">select a blood type</option>
+                                <?php
+                                $sql = "SELECT * FROM bloodtype";
+                                $stmt = $con->prepare($sql);
+                                $stmt->execute();
+
+                                while ($bloodType = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                                ?>
+                                    <option value="<?= $bloodType['bloodType'] ?>" <?= ($bloodType['bloodType'] == $updateMedicalInfo['pBloodType']) ? 'selected' : ''; ?>><?= $bloodType['bloodType'] ?></option>
+                                <?php endwhile; ?>
+                            </select>
+                        </div>
+                        <div class="col m-1">
+                            <label>Allergy</label>
+                            <input type="text" name="allergy" class="form-control" value="<?= $updateMedicalInfo['pAllergy'] ?>" required>
+                        </div>
+                    </div>
+
+                    <h6 class=" mt-5 my-4" id="primaryColor">Have you ever the following ?</h6>
+                    <?php
+
+                    $sql = "SELECT * FROM ffmedicaldisease";
+                    $stmt = $con->prepare($sql);
+                    $stmt->execute();
+                    $inc = 0;
+                    while ($md = $stmt->fetch(PDO::FETCH_ASSOC)) :
+
+                    ?>
+                        <label for=""><?= ucwords($md['md_name']); ?></label>
+                        <input type="checkbox" name="followingMed[]" value="<?= $md['md_name'] ?>" <?php
+                                                                                                    for ($i = 0; $i < $arrsLen; $i++) {
+                                                                                                        if ($md['md_name'] == $arrayInfo[$i]) {
+                                                                                                            echo 'checked';
+                                                                                                        }
                                                                                                     }
-                                                                                                }
-                                                                                                ?>><br>
-                <?php endwhile; ?>
-                <div class="text-center">
-                    <input type="submit" value="Update Medical Information" name="updateMedInfo" class="btn btn-primary mt-3">
-                </div>
-            </form>
+                                                                                                    ?>><br>
+                    <?php endwhile; ?>
+                    <div class="text-center">
+                        <input type="submit" value="Update Medical Information" name="updateMedInfo" class="btn btn-primary mt-3">
+                    </div>
+                </form>
 
 
-            <hr class="featurette-divider">
+                <hr class="featurette-divider">
 
-            <!-- /END THE FEATURETTES -->
+                <!-- /END THE FEATURETTES -->
 
-            <!-- FOOTER -->
-            <footer class="text-center">
-                <p>&copy; 2017-2018 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
-            </footer>
-        </div>
-    </main>
+                <!-- FOOTER -->
+                <footer class="text-center">
+                    <p>&copy; 2017-2018 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+                </footer>
+            </div>
+        </main>
+
+    <?php
+    } else {
+        header("location:dashboard.php");
+        exit(0);
+    }
+    ?>
 
 
     <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->

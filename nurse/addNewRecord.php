@@ -77,210 +77,94 @@ if (!isset($_SESSION['nId'])) {
 
             <?php
 
-            if (isset($_POST['addRecord'])) {
-
-                $name = trim(htmlspecialchars($_POST['name']));
-                $address = trim(htmlspecialchars($_POST['address']));
-                $email = trim(htmlspecialchars($_POST['email']));
-                $mobileNumber = trim(htmlspecialchars($_POST['mobileNumber']));
-                $disease = trim(htmlspecialchars($_POST['disease']));
-                $age = trim(htmlspecialchars($_POST['age']));
-                $gender = trim(htmlspecialchars($_POST['gender']));
-                $doctor = trim(htmlspecialchars($_POST['doctor']));
-                $roomNumber = trim(htmlspecialchars($_POST['roomNumber']));
-
-                // Check if to fill all fields
-                if (empty($name) || empty($address) || empty($email) || empty($mobileNumber) || empty($disease) || empty($age) || empty($gender) || empty($doctor) || empty($roomNumber)) {
-                    header("location:addPatient.php?errField=please_input_all_fields");
-                    exit(0);
-                }
-
-                // Check if the name is valid
-                if (!preg_match("/^([a-zA-Z' ]+)$/", $name)) {
-                    header("location:addPatient.php?errName=name_is_not_valid");
-                    exit(0);
-                }
-
-                // Check if the name is already taken
-                $sql = "SELECT * FROM walkinpatient WHERE walkInName = :name";
-                $stmt = $con->prepare($sql);
-                $stmt->bindParam(":name", $name, PDO::PARAM_STR);
-                $stmt->execute();
-
-                $nameCount = $stmt->rowCount();
-
-                if ($nameCount > 0) {
-                    header("location:addPatient.php?errName1=name_is_already_taken");
-                    exit(0);
-                }
-
-                // Check if the email is valid
-                if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                    header("location:addPatient.php?errEmail1=email_is_not_valid");
-                    exit(0);
-                }
-
-                // Check  if the email is already existed
-                $sql = "SELECT * FROM walkinpatient WHERE walkInEmail = :email";
-                $stmt = $con->prepare($sql);
-                $stmt->bindParam(":email", $email, PDO::PARAM_STR);
-                $stmt->execute();
-
-                $emailCount = $stmt->rowCount();
-
-                if ($emailCount > 0) {
-                    header("location:addPatient.php?errEmail2=email_is_already_taken");
-                    exit(0);
-                }
-
-                // Check if the mobile number is already taken
-                $sql = "SELECT * FROM walkinpatient WHERE walkInMobile = :mobile";
-                $stmt = $con->prepare($sql);
-                $stmt->bindParam(":mobile", $mobileNumber, PDO::PARAM_INT);
-                $stmt->execute();
-
-                $mobileCount = $stmt->rowCount();
-
-                if ($mobileCount > 0) {
-                    header("location:addPatient.php?errMobile=mobile_number_is_already_taken");
-                    exit(0);
-                }
-
-                // Doctor Fee
-                $sql = "SELECT * FROM doctor WHERE dName = :name";
-                $stmt = $con->prepare($sql);
-                $stmt->bindParam(":name", $doctor, PDO::PARAM_STR);
-                $stmt->execute();
-
-                $doctorfee = $stmt->fetch(PDO::FETCH_ASSOC);
-
-                // Room Fee
-                $sql = "SELECT * FROM rooms WHERE room_number = :number";
-                $stmt = $con->prepare($sql);
-                $stmt->bindParam(":number", $roomNumber, PDO::PARAM_INT);
-                $stmt->execute();
-
-                $roomfee = $stmt->fetch(PDO::FETCH_ASSOC);
-
-                // Total Pay
-                $totalPay = $doctorfee['dFee'] + $roomfee['room_fee'];
-
-                $sql = "INSERT INTO walkinpatient(walkInName,walkInEmail,walkInAddress,walkInAge,walkInGender,walkInDoctor,walkInDisease,walkInRoomNumber,walkInMobile,doctorFee,roomFee,walkInTotalPay)VALUES(:name,:email,:address,:age,:gender,:doctor,:disease,:roomNumber,:mobile,:doctorFee,:roomFee,:totalPay)";
-                $stmt = $con->prepare($sql);
-                $stmt->bindParam(":name", $name, PDO::PARAM_STR);
-                $stmt->bindParam(":email", $email, PDO::PARAM_STR);
-                $stmt->bindParam(":address", $address, PDO::PARAM_STR);
-                $stmt->bindParam(":age", $age, PDO::PARAM_STR);
-                $stmt->bindParam(":gender", $gender, PDO::PARAM_STR);
-                $stmt->bindParam(":doctor", $doctor, PDO::PARAM_STR);
-                $stmt->bindParam(":disease", $disease, PDO::PARAM_STR);
-                $stmt->bindParam(":roomNumber", $roomNumber, PDO::PARAM_STR);
-                $stmt->bindParam(":mobile", $mobileNumber, PDO::PARAM_STR);
-                $stmt->bindParam(":doctorFee", $doctorfee['dFee'], PDO::PARAM_STR);
-                $stmt->bindParam(":roomFee", $roomfee['room_fee'], PDO::PARAM_STR);
-                $stmt->bindParam(":totalPay", $totalPay, PDO::PARAM_STR);
-                $stmt->execute();
-
-                header("location:addPatient.php?addSucc=Successfully_added_new_walkin_patient");
-
-                // Update the rooms from AVAILABLE to OCCUPIED
-                $status = "occupied";
-                $sql = "UPDATE rooms SET room_status = :status WHERE room_number = :number";
-                $stmt = $con->prepare($sql);
-                $stmt->bindParam(":status", $status, PDO::PARAM_STR);
-                $stmt->bindParam(":number", $roomNumber, PDO::PARAM_INT);
-                $stmt->execute();
-
-                exit(0);
-            }
-
+            if (isset($_GET['addNewRec']) && $_GET['addNewRec'] == "true") {
             ?>
 
-            <?= (isset($_GET['addSucc']) && $_GET['addSucc'] == "Successfully_added_new_walkin_patient") ? '<div class="text-center"><h3 class="text-success">Successfully added new walk in patient!</h3></div>' : '';  ?>
-            <?= (isset($_GET['errField']) && $_GET['errField'] == "please_input_all_fields") ? '<div class="text-center"><h3 class="text-danger">Please input all fields!</h3></div>' : '';  ?>
+                <?= (isset($_GET['addSucc']) && $_GET['addSucc'] == "Successfully_added_new_walkin_patient") ? '<div class="text-center"><h3 class="text-success">Successfully added new walk in patient!</h3></div>' : '';  ?>
+                <?= (isset($_GET['errField']) && $_GET['errField'] == "please_input_all_fields") ? '<div class="text-center"><h3 class="text-danger">Please input all fields!</h3></div>' : '';  ?>
 
-            <?php
+                <?php
 
-            ?>
-            <form action="addNewRecord.php" method="post">
-                <div class="row">
-                    <?php
+                ?>
+                <form action="addNewRecord.php" method="post">
+                    <div class="row">
+                        <?php
 
-                    if (isset($_GET['pName'])) {
-                        $pName = $_GET['pName'];
+                        if (isset($_GET['pName'])) {
+                            $pName = $_GET['pName'];
 
-                        $sql = "SELECT * FROM returnee_patient WHERE pName = :name";
-                        $stmt = $con->prepare($sql);
-                        $stmt->bindParam(":name", $pName, PDO::PARAM_STR);
-                        $stmt->execute();
-
-                        $addRecord = $stmt->fetch(PDO::FETCH_ASSOC);
-                    }
-                    ?>
-                    <div class="col m-1">
-                        <label>Full Name</label>
-                        <input type="text" name="name" class="form-control" value="<?= $addRecord['pName'] ?>" readonly>
-                    </div>
-                    <div class="col m-1">
-                        <label>Address</label>
-                        <input type="text" name="address" class="form-control" required>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col m-1">
-                        <label>Email</label>
-                        <?= ((isset($_GET['errEmail1']) && $_GET['errEmail1'] == "email_is_not_valid") || (isset($_GET['errEmail2']) && $_GET['errEmail2'] == "email_is_already_taken")) ? '<input type="text" name="email" class="form-control is-invalid" required>' : '<input type="text" name="email" class="form-control" required>'; ?>
-                        <?= (isset($_GET['errEmail1']) && $_GET['errEmail1'] == "email_is_not_valid") ? '<span class="text-danger">Email is not valid!</span>' : ''; ?>
-                        <?= (isset($_GET['errEmail2']) && $_GET['errEmail2'] == "email_is_already_taken") ? '<span class="text-danger">Email is already taken!</span>' : ''; ?>
-                    </div>
-                    <div class="col m-1">
-                        <label>Mobile Number</label>
-                        <!-- <input type="tel" class="form-control" name="mobileNumber" placeholder="+639876543210 or 09876543210" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" required> -->
-                        <?= (isset($_GET['errMobile']) && $_GET['errMobile'] == "mobile_number_is_already_taken") ? '<input type="tel" class="form-control is-invalid" name="mobileNumber" placeholder="+639876543210 or 09876543210" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" required>' : '<input type="tel" class="form-control" name="mobileNumber" placeholder="+639876543210 or 09876543210" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" required>'; ?>
-                        <?= (isset($_GET['errMobile']) && $_GET['errMobile'] == "mobile_number_is_already_taken") ? '<span class="text-danger">Mobile Number is already taken!</span>' : ''; ?>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col m-1">
-                        <label>Disease</label>
-                        <input type="text" name="disease" class="form-control" required>
-                    </div>
-                    <div class="col m-1">
-                        <label>Age</label>
-                        <input type="number" name="age" class="form-control" min="1" required>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col m-1">
-                        <label>Gender</label>
-                        <select name="gender" class="form-control" required>
-                            <option value="">select a gender</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                        </select>
-                    </div>
-                    <div class="col m-1">
-                        <label>Select a Doctor</label>
-                        <select class="form-control" name="doctor" required>
-                            <option value="">select a doctor</option>
-                            <?php
-                            $sql = "SELECT * FROM doctor";
+                            $sql = "SELECT * FROM returnee_patient WHERE pName = :name";
                             $stmt = $con->prepare($sql);
+                            $stmt->bindParam(":name", $pName, PDO::PARAM_STR);
                             $stmt->execute();
 
-                            while ($doctors = $stmt->fetch(PDO::FETCH_ASSOC)) :
-                            ?>
-                                <option value="<?= $doctors['dName'] ?>"><?= $doctors['dName'] ?> -> <?= $doctors['dSpecialization'] ?></option>
-                            <?php endwhile; ?>
-                        </select>
+                            $addRecord = $stmt->fetch(PDO::FETCH_ASSOC);
+                        }
+                        ?>
+                        <div class="col m-1">
+                            <label>Full Name</label>
+                            <input type="text" name="name" class="form-control" value="<?= $addRecord['pName'] ?>" readonly>
+                        </div>
+                        <div class="col m-1">
+                            <label>Address</label>
+                            <input type="text" name="address" class="form-control" required>
+                        </div>
                     </div>
-                </div>
+                    <div class="row">
+                        <div class="col m-1">
+                            <label>Email</label>
+                            <?= ((isset($_GET['errEmail1']) && $_GET['errEmail1'] == "email_is_not_valid") || (isset($_GET['errEmail2']) && $_GET['errEmail2'] == "email_is_already_taken")) ? '<input type="text" name="email" class="form-control is-invalid" required>' : '<input type="text" name="email" class="form-control" required>'; ?>
+                            <?= (isset($_GET['errEmail1']) && $_GET['errEmail1'] == "email_is_not_valid") ? '<span class="text-danger">Email is not valid!</span>' : ''; ?>
+                            <?= (isset($_GET['errEmail2']) && $_GET['errEmail2'] == "email_is_already_taken") ? '<span class="text-danger">Email is already taken!</span>' : ''; ?>
+                        </div>
+                        <div class="col m-1">
+                            <label>Mobile Number</label>
+                            <!-- <input type="tel" class="form-control" name="mobileNumber" placeholder="+639876543210 or 09876543210" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" required> -->
+                            <?= (isset($_GET['errMobile']) && $_GET['errMobile'] == "mobile_number_is_already_taken") ? '<input type="tel" class="form-control is-invalid" name="mobileNumber" placeholder="+639876543210 or 09876543210" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" required>' : '<input type="tel" class="form-control" name="mobileNumber" placeholder="+639876543210 or 09876543210" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" required>'; ?>
+                            <?= (isset($_GET['errMobile']) && $_GET['errMobile'] == "mobile_number_is_already_taken") ? '<span class="text-danger">Mobile Number is already taken!</span>' : ''; ?>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col m-1">
+                            <label>Disease</label>
+                            <input type="text" name="disease" class="form-control" required>
+                        </div>
+                        <div class="col m-1">
+                            <label>Age</label>
+                            <input type="number" name="age" class="form-control" min="1" required>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col m-1">
+                            <label>Gender</label>
+                            <select name="gender" class="form-control" required>
+                                <option value="">select a gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                        <div class="col m-1">
+                            <label>Select a Doctor</label>
+                            <select class="form-control" name="doctor" required>
+                                <option value="">select a doctor</option>
+                                <?php
+                                $sql = "SELECT * FROM doctor";
+                                $stmt = $con->prepare($sql);
+                                $stmt->execute();
+
+                                while ($doctors = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                                ?>
+                                    <option value="<?= $doctors['dName'] ?>"><?= $doctors['dName'] ?> -> <?= $doctors['dSpecialization'] ?></option>
+                                <?php endwhile; ?>
+                            </select>
+                        </div>
+                    </div>
 
 
-                <div class="row">
-                    <!-- <div class="col m-1">
+                    <div class="row">
+                        <!-- <div class="col m-1">
                         <label>Select a Building</label>
                         <select class="form-control" name="doctor" required>
                             <option selected="selected" disabled="disabled" value="">select a building</option>
@@ -291,48 +175,176 @@ if (!isset($_SESSION['nId'])) {
                             <option value="5">Bldg5</option>
                         </select>
                     </div> -->
-                    <div class="col m-1">
-                        <label>Select a room</label>
-                        <select class="form-control" name="roomNumber" required>
-                            <option value="">select a room</option>
-                            <!-- SELECTING A ROOM QUERY -->
+                        <div class="col m-1">
+                            <label>Select a room</label>
+                            <select class="form-control" name="roomNumber" required>
+                                <option value="">select a room</option>
+                                <!-- SELECTING A ROOM QUERY -->
 
-                            <?php
-                            $status = "available";
-                            $sql = "SELECT * FROM rooms WHERE room_status = :status";
-                            $stmt = $con->prepare($sql);
-                            $stmt->bindParam(":status", $status, PDO::PARAM_STR);
-                            $stmt->execute();
-
-                            if (isset($_POST['availableRoom'])) {
-                                $addPatientRoom = $_POST['roomNumber'];
-                            }
-
-                            while ($rooms = $stmt->fetch(PDO::FETCH_ASSOC)) :
-                            ?>
                                 <?php
+                                $status = "available";
+                                $sql = "SELECT * FROM rooms WHERE room_status = :status";
+                                $stmt = $con->prepare($sql);
+                                $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+                                $stmt->execute();
 
-                                if ($rooms['room_number'] == $addPatientRoom) {
-                                ?>
-
-                                    <option value="<?= $rooms['room_number'] ?>" selected><?= $rooms['room_number'] ?></option>
-                                <?php
-                                } else {
-                                ?>
-                                    <option value="<?= $rooms['room_number'] ?>"><?= $rooms['room_number'] ?></option>
-                                <?php
+                                if (isset($_POST['availableRoom'])) {
+                                    $addPatientRoom = $_POST['roomNumber'];
                                 }
+
+                                while ($rooms = $stmt->fetch(PDO::FETCH_ASSOC)) :
                                 ?>
+                                    <?php
+
+                                    if ($rooms['room_number'] == $addPatientRoom) {
+                                    ?>
+
+                                        <option value="<?= $rooms['room_number'] ?>" selected><?= $rooms['room_number'] ?></option>
+                                    <?php
+                                    } else {
+                                    ?>
+                                        <option value="<?= $rooms['room_number'] ?>"><?= $rooms['room_number'] ?></option>
+                                    <?php
+                                    }
+                                    ?>
 
 
-                            <?php endwhile; ?>
-                        </select>
+                                <?php endwhile; ?>
+                            </select>
+                        </div>
                     </div>
-                </div>
-                <div class="text-center">
-                    <input type="submit" name="addRecord" value="Add Record" class="mt-5 btn btn-primary">
-                </div>
-            </form>
+                    <div class="text-center">
+                        <input type="submit" name="addRecord" value="Add Record" class="mt-5 btn btn-primary">
+                    </div>
+                </form>
+
+            <?php
+            } else {
+
+                if (isset($_POST['addRecord'])) {
+
+                    $name = trim(htmlspecialchars($_POST['name']));
+                    $address = trim(htmlspecialchars($_POST['address']));
+                    $email = trim(htmlspecialchars($_POST['email']));
+                    $mobileNumber = trim(htmlspecialchars($_POST['mobileNumber']));
+                    $disease = trim(htmlspecialchars($_POST['disease']));
+                    $age = trim(htmlspecialchars($_POST['age']));
+                    $gender = trim(htmlspecialchars($_POST['gender']));
+                    $doctor = trim(htmlspecialchars($_POST['doctor']));
+                    $roomNumber = trim(htmlspecialchars($_POST['roomNumber']));
+
+                    // Check if to fill all fields
+                    if (empty($name) || empty($address) || empty($email) || empty($mobileNumber) || empty($disease) || empty($age) || empty($gender) || empty($doctor) || empty($roomNumber)) {
+                        header("location:addPatient.php?errField=please_input_all_fields");
+                        exit(0);
+                    }
+
+                    // Check if the name is valid
+                    if (!preg_match("/^([a-zA-Z' ]+)$/", $name)) {
+                        header("location:addPatient.php?errName=name_is_not_valid");
+                        exit(0);
+                    }
+
+                    // Check if the name is already taken
+                    $sql = "SELECT * FROM walkinpatient WHERE walkInName = :name";
+                    $stmt = $con->prepare($sql);
+                    $stmt->bindParam(":name", $name, PDO::PARAM_STR);
+                    $stmt->execute();
+
+                    $nameCount = $stmt->rowCount();
+
+                    if ($nameCount > 0) {
+                        header("location:addPatient.php?errName1=name_is_already_taken");
+                        exit(0);
+                    }
+
+                    // Check if the email is valid
+                    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                        header("location:addPatient.php?errEmail1=email_is_not_valid");
+                        exit(0);
+                    }
+
+                    // Check  if the email is already existed
+                    $sql = "SELECT * FROM walkinpatient WHERE walkInEmail = :email";
+                    $stmt = $con->prepare($sql);
+                    $stmt->bindParam(":email", $email, PDO::PARAM_STR);
+                    $stmt->execute();
+
+                    $emailCount = $stmt->rowCount();
+
+                    if ($emailCount > 0) {
+                        header("location:addPatient.php?errEmail2=email_is_already_taken");
+                        exit(0);
+                    }
+
+                    // Check if the mobile number is already taken
+                    $sql = "SELECT * FROM walkinpatient WHERE walkInMobile = :mobile";
+                    $stmt = $con->prepare($sql);
+                    $stmt->bindParam(":mobile", $mobileNumber, PDO::PARAM_INT);
+                    $stmt->execute();
+
+                    $mobileCount = $stmt->rowCount();
+
+                    if ($mobileCount > 0) {
+                        header("location:addPatient.php?errMobile=mobile_number_is_already_taken");
+                        exit(0);
+                    }
+
+                    // Doctor Fee
+                    $sql = "SELECT * FROM doctor WHERE dName = :name";
+                    $stmt = $con->prepare($sql);
+                    $stmt->bindParam(":name", $doctor, PDO::PARAM_STR);
+                    $stmt->execute();
+
+                    $doctorfee = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                    // Room Fee
+                    $sql = "SELECT * FROM rooms WHERE room_number = :number";
+                    $stmt = $con->prepare($sql);
+                    $stmt->bindParam(":number", $roomNumber, PDO::PARAM_INT);
+                    $stmt->execute();
+
+                    $roomfee = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                    // Total Pay
+                    $totalPay = $doctorfee['dFee'] + $roomfee['room_fee'];
+
+                    $sql = "INSERT INTO walkinpatient(walkInName,walkInEmail,walkInAddress,walkInAge,walkInGender,walkInDoctor,walkInDisease,walkInRoomNumber,walkInMobile,doctorFee,roomFee,walkInTotalPay)VALUES(:name,:email,:address,:age,:gender,:doctor,:disease,:roomNumber,:mobile,:doctorFee,:roomFee,:totalPay)";
+                    $stmt = $con->prepare($sql);
+                    $stmt->bindParam(":name", $name, PDO::PARAM_STR);
+                    $stmt->bindParam(":email", $email, PDO::PARAM_STR);
+                    $stmt->bindParam(":address", $address, PDO::PARAM_STR);
+                    $stmt->bindParam(":age", $age, PDO::PARAM_STR);
+                    $stmt->bindParam(":gender", $gender, PDO::PARAM_STR);
+                    $stmt->bindParam(":doctor", $doctor, PDO::PARAM_STR);
+                    $stmt->bindParam(":disease", $disease, PDO::PARAM_STR);
+                    $stmt->bindParam(":roomNumber", $roomNumber, PDO::PARAM_STR);
+                    $stmt->bindParam(":mobile", $mobileNumber, PDO::PARAM_STR);
+                    $stmt->bindParam(":doctorFee", $doctorfee['dFee'], PDO::PARAM_STR);
+                    $stmt->bindParam(":roomFee", $roomfee['room_fee'], PDO::PARAM_STR);
+                    $stmt->bindParam(":totalPay", $totalPay, PDO::PARAM_STR);
+                    $stmt->execute();
+
+                    header("location:addPatient.php?addSucc=Successfully_added_new_walkin_patient");
+
+                    // Update the rooms from AVAILABLE to OCCUPIED
+                    $status = "occupied";
+                    $sql = "UPDATE rooms SET room_status = :status WHERE room_number = :number";
+                    $stmt = $con->prepare($sql);
+                    $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+                    $stmt->bindParam(":number", $roomNumber, PDO::PARAM_INT);
+                    $stmt->execute();
+
+                    exit(0);
+                } else {
+                    header("location:dashboard.php");
+                    exit(0);
+                }
+
+                header("location:dashboard.php");
+                exit(0);
+            }
+            ?>
 
 
             <hr class="featurette-divider">
