@@ -374,9 +374,12 @@ if (!isset($_SESSION['adId'])) {
                         $profileImg = $_FILES['profileImg'];
 
                         // Image
-                        $profileName = $profileImg['name'];
                         $ext = $profileImg['type'];
                         $extF = explode('/', $ext);
+
+                        // Unique Image Name
+                        $profileName =  uniqid(rand()) . "." . $extF[1];
+
                         $tmpname = $profileImg['tmp_name'];
                         $dest = __DIR__ . "/../upload/user_profile_img/" . $profileName;
 

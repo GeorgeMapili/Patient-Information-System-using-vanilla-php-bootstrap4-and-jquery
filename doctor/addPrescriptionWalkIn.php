@@ -112,6 +112,10 @@ if (!isset($_SESSION['dId'])) {
                         $stmt->execute();
 
                         $addPrescription = $stmt->fetch(PDO::FETCH_ASSOC);
+                    } else {
+
+                        header("location:dashboard.php");
+                        exit(0);
                     }
                     ?>
                     <div class="col">

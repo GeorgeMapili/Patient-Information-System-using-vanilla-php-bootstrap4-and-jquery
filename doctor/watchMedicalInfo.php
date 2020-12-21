@@ -103,6 +103,9 @@ if (!isset($_SESSION['dId'])) {
                 $arrayInfo = explode(",", $watchMedInfo['pMedicalInfo']);
 
                 $arrsLen = count($arrayInfo);
+            } else {
+                header("location:dashboard.php");
+                exit(0);
             }
 
             ?>

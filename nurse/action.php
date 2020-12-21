@@ -30,7 +30,6 @@ if (isset($_POST['query'])) {
         $output = '
     <thead class="thead-dark">
         <tr>
-            <th scope="col">Patient ID</th>
             <th scope="col">Patient Name</th>
             <th scope="col">Patient Address</th>
             <th scope="col">Patient Mobile</th>
@@ -46,7 +45,6 @@ if (isset($_POST['query'])) {
         while ($patientAppointment = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $output .= '
         <tr>
-            <th scope="row">' . $patientAppointment['pId'] . '</th>
             <td>' . $patientAppointment['pName'] . '</td>
             <td>' . $patientAppointment['pAddress'] . '</td>
             <td>' . $patientAppointment['pMobile'] . '</td>
@@ -57,9 +55,10 @@ if (isset($_POST['query'])) {
 
             $output .= '
             <td>
-            <form action="generateBill.php" method="post">
+            <form action="generateBillAppointment.php" method="post">
                 <input type="hidden" name="id" value=' . $patientAppointment['pId'] . '>
-                <input type="submit" value="GENERATE BILL" class="btn btn-primary" name="generateBill">
+                <input type="hidden" name="aid" value=' . $patientAppointment['aId'] . '>
+                <input type="submit" value="GENERATE BILL" class="btn btn-primary" name="generateBillAppointment">
             </form>
             </td>
         </tr>

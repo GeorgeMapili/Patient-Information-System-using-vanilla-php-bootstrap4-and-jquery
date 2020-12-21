@@ -156,11 +156,15 @@ if (isset($_POST['updateImg'])) {
 
     $img = $_FILES['profileImg'];
 
-    $profileImgName = $img['name'];
+    // Image
     $ext = $img['type'];
     $extF = explode('/', $ext);
+
+    // Unique Image Name
+    $profileName =  uniqid(rand()) . "." . $extF[1];
+
     $tmpname = $img['tmp_name'];
-    $dest = __DIR__ . "/upload/user_profile_img/" . $profileImgName;
+    $dest = __DIR__ . "/upload/user_profile_img/" . $profileName;
 
     // Check if the image extension is valid
     $allowed = array('jpg', 'jpeg', 'png');
@@ -180,14 +184,13 @@ if (isset($_POST['updateImg'])) {
     $currentProfile = $_SESSION['profile'];
 
     // New Profile Img
-    $newProfile = $profileImgName;
+    $newProfile = $profileName;
 
     // Path of the current profile
     $path = __DIR__ . "/upload/user_profile_img/" . $currentProfile;
 
     // Remove the img of the current profile
-    // unlink($path);
-    var_dump(unlink($path));
+    unlink($path);
 
     // Add the img of the new profile
     move_uploaded_file($tmpname, $dest);

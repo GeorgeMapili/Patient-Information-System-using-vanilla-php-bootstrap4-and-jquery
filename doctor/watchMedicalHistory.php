@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 require_once '../connect.php';
 
@@ -131,6 +132,10 @@ if (!isset($_SESSION['dId'])) {
 
                     <?php
                         endwhile;
+                    } else {
+                        header("location:dashboard.php");
+                        ob_end_flush();
+                        exit(0);
                     }
                     ?>
                 </tbody>

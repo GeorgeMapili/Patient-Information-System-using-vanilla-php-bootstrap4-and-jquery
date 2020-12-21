@@ -85,6 +85,8 @@ if (!isset($_SESSION['nId'])) {
             $countPatientAppointment = $stmt->rowCount();
             $pages = ceil($countPatientAppointment / $limit);
 
+            $firstPageValue = $pages;
+
             if ($pages == 0) {
                 $pages = 1;
             }
@@ -173,7 +175,7 @@ if (!isset($_SESSION['nId'])) {
                     <?php endwhile; ?>
                 </tbody>
             </table>
-            <div class="mt-3">
+            <div class="mt-3 <?= ($firstPageValue == 0) ? 'd-none' : '' ?>">
                 <nav aria-label="Page navigation example ">
                     <ul class="pagination justify-content-center">
                         <li class="page-item <?= ($prev <= 0) ? 'disabled' : ''; ?>">

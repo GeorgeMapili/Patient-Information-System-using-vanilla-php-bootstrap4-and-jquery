@@ -403,8 +403,9 @@ if (isset($_POST['patientQuery'])) {
             if (empty($patientAppointment['pPrescription'])) {
                 $patientOutput .= '
                 <form action="addPrescription.php" method="post">
-                    <input type="hidden" name="id" value=' . $patientAppointment['pId'] . '>
-                    <input type="submit" value="Add Prescription" class="btn btn-info" name="medicalInformation">
+                    <input type="hidden" name="aid" value=' . $patientAppointment['aId'] . '>
+                    <input type="hidden" name="pid" value=' . $patientAppointment['pId'] . '>
+                    <input type="submit" value="Add Prescription" class="btn btn-info" name="addPrescriptionBtn">
                 </form>
                 ';
             } else {
@@ -427,9 +428,10 @@ if (isset($_POST['patientQuery'])) {
                     </form>
                 </td>
                 <td>
-                    <form action="generateBill.php" method="post">
-                        <input type="hidden" name="id" value=' . $patientAppointment['pId'] . '>
-                        <input type="submit" value="Watch appointment history" class="btn btn-primary" name="generateBill">
+                    <form action="patientMedicalHistory.php" method="post">
+                        <input type="hidden" name="aId" value=' . $patientAppointment['aId'] . '>
+                        <input type="hidden" name="pId" value=' . $patientAppointment['pId'] . '>
+                        <input type="submit" value="Watch appointment history" class="btn btn-primary" name="watchHistory">
                     </form>
                 </td>
             </tr>
@@ -485,30 +487,38 @@ if (isset($_POST['walkInQuery'])) {
                     <td>' . $walkIn['walkInAddress'] . '</td>
                     <td>' . $walkIn['walkInMobile'] . '</td>
                     <td>' . $walkIn['walkInDisease'] . '</td>
-                    <td>
-                        <form action="addPrescriptionWalkIn.php" method="post">
-                            <input type="hidden" name="id" value=' . $walkIn['walkInId'] . '>
-                            <input type="submit" value="Add Prescription" class="btn btn-primary" name="appointmentStatus">
-                        </form>
-                    </td>
-                    <td>
-                        <form action="updatePrescriptionWalkIn.php" method="post">
-                            <input type="hidden" name="id" value=' . $walkIn['walkInId'] . '>
-                            <input type="submit" value="Update Disease" class="btn btn-primary" name="appointmentStatus">
-                        </form>
-                    </td>
-                    <td>
-                        <form action="watchMedicalInfo.php" method="post">
-                            <input type="hidden" name="id" value=' . $walkIn['walkInId'] . '>
-                            <input type="submit" value="Watch Medical Information" class="btn btn-primary" name="appointmentStatus">
-                        </form>
-                    </td>
-                    <td>
-                        <form action="watchMedicalHistory.php" method="post">
-                            <input type="hidden" name="id" value=' . $walkIn['walkInId'] . '>
-                            <input type="submit" value="Watch Medical History" class="btn btn-info" name="appointmentStatus">
-                        </form>
-                    </td>
+                    <td>';
+            if (empty($walkIn['walkInPrescription'])) {
+                $walkInOutput .= '    <form action="addPrescriptionWalkIn.php" method="post">
+                                        <input type="hidden" name="id" value=' . $walkIn['walkInId'] . '>
+                                        <input type="submit" value="Add Prescription" class="btn btn-primary" name="addPrescriptionWalkIn">
+                                    </form>';
+            } else {
+                $walkInOutput .= '    <form action="updatePrescriptionWalkIn.php" method="post">
+                                        <input type="hidden" name="id" value=' . $walkIn['walkInId'] . '>
+                                        <input type="submit" value="Update Prescription" class="btn btn-secondary" name="updatePrescriptionWalkIn">
+                                    </form>';
+            }
+            $walkInOutput .= '
+                            </td>
+                            <td>
+                            <form action="updateDiseaseWalkIn.php" method="post">
+                                <input type="hidden" name="id" value=' . $walkIn['walkInId'] . '>
+                                <input type="submit" value="Update Disease" class="btn btn-primary" name="updateDiseaseWalkIn">
+                            </form>
+                        </td>
+                        <td>
+                            <form action="watchMedicalInfo.php" method="post">
+                                <input type="hidden" name="id" value=' . $walkIn['walkInId'] . '>
+                                <input type="submit" value="Watch Medical Information" class="btn btn-primary" name="watchMedInfo">
+                            </form>
+                        </td>
+                        <td>
+                            <form action="watchMedicalHistory.php" method="post">
+                                <input type="hidden" name="name" value="' . $walkIn['walkInName'] . '">
+                                <input type="submit" value="Watch Medical History" class="btn btn-info" name="watchMedHistory">
+                            </form>
+                        </td>
                 </tr>
             </tbody>
             ';

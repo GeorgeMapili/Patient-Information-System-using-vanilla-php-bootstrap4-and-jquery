@@ -113,6 +113,9 @@ if (!isset($_SESSION['dId'])) {
 
                 $updateDisease = $stmt->fetch(PDO::FETCH_ASSOC);
                 $_SESSION['updateDiseaseWalkIn'] = $updateDisease['walkInDisease'];
+            } else {
+                header("location:dashboard.php");
+                exit(0);
             }
             ?>
 

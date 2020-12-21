@@ -122,6 +122,9 @@ if (!isset($_SESSION['dId'])) {
 
                         $updatePrescriptionBtn = $stmt->fetch(PDO::FETCH_ASSOC);
                         $_SESSION['updatePrescription'] = $updatePrescriptionBtn['pPrescription'];
+                    } else {
+                        header("location:dashboard.php");
+                        exit(0);
                     }
                     ?>
                     <div class="col">

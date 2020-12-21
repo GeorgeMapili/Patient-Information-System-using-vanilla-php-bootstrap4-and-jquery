@@ -117,7 +117,7 @@ if (!isset($_SESSION['adId'])) {
                     <?= (isset($_GET['succDelete']) && $_GET['succDelete'] == "Successfully_deleted_user") ? '<span class="text-success">Successfully deleted user!</span>' : ''; ?>
                 </div>
                 <div class="mt-4 mb-4">
-                    <h1 class="Display-4 my-4" id="primaryColor">Users</h1>
+                    <h1 class="Display-4 my-4" id="primaryColor">Users Account</h1>
                 </div>
                 <div class="d-flex justify-content-between">
                     <form class="form-inline">

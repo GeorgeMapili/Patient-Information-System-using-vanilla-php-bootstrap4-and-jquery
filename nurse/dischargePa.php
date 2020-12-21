@@ -37,7 +37,7 @@ if (!isset($_SESSION['nId'])) {
                     <li class="nav-item">
                         <a class="nav-link" href="appointmentPending.php">Pending Appointments</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item active">
                         <a class="nav-link" href="patient.php">Patient from appointments</a>
                     </li>
                     <li class="nav-item">

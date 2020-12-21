@@ -116,6 +116,9 @@ if (!isset($_SESSION['dId'])) {
 
                     $updateWalkIn = $stmt->fetch(PDO::FETCH_ASSOC);
                     $_SESSION['updateWalkInPrescription'] = $updateWalkIn['walkInPrescription'];
+                } else {
+                    header("location:dashboard.php");
+                    exit(0);
                 }
                 ?>
 

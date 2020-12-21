@@ -73,6 +73,29 @@ if (!isset($_SESSION['dId'])) {
         </nav>
     </header>
 
+    <?php
+    if (isset($_POST['update'])) {
+        $aId = $_POST['aId'];
+        $pId = $_POST['pId'];
+        $updateDisease = trim(htmlspecialchars($_POST['disease']));
+
+        if ($updateDisease == $_SESSION['updateAppointmentDisease']) {
+            header("location:patient.php?errUpdateDisease=nothing_to_update");
+            exit(0);
+        }
+
+        $sql = "UPDATE appointment SET aReason = :reason WHERE aId = :aid AND pId = :pid";
+        $stmt = $con->prepare($sql);
+        $stmt->bindParam(":reason", $updateDisease, PDO::PARAM_STR);
+        $stmt->bindParam(":aid", $aId, PDO::PARAM_INT);
+        $stmt->bindParam(":pid", $pId, PDO::PARAM_INT);
+        $stmt->execute();
+
+        header("location:patient.php?succUpdate=disease_updated_successfully");
+        exit(0);
+    }
+    ?>
+
     <main role="main">
 
         <?php
@@ -88,31 +111,12 @@ if (!isset($_SESSION['dId'])) {
 
             $updateDisease = $stmt->fetch(PDO::FETCH_ASSOC);
             $_SESSION['updateAppointmentDisease'] = $updateDisease['aReason'];
-        }
-        ?>
-
-        <?php
-        if (isset($_POST['update'])) {
-            $aId = $_POST['aId'];
-            $pId = $_POST['pId'];
-            $updateDisease = trim(htmlspecialchars($_POST['disease']));
-
-            if ($updateDisease == $_SESSION['updateAppointmentDisease']) {
-                header("location:patient.php?errUpdateDisease=nothing_to_update");
-                exit(0);
-            }
-
-            $sql = "UPDATE appointment SET aReason = :reason WHERE aId = :aid AND pId = :pid";
-            $stmt = $con->prepare($sql);
-            $stmt->bindParam(":reason", $updateDisease, PDO::PARAM_STR);
-            $stmt->bindParam(":aid", $aId, PDO::PARAM_INT);
-            $stmt->bindParam(":pid", $pId, PDO::PARAM_INT);
-            $stmt->execute();
-
-            header("location:patient.php?succUpdate=disease_updated_successfully");
+        } else {
+            header("location:dashboard.php");
             exit(0);
         }
         ?>
+
         <div class="container-fluid">
 
             <div class="mt-4 mb-4">

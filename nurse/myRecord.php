@@ -91,7 +91,7 @@ if (!isset($_SESSION['nId'])) {
                             <th scope="col">Patient Doctor</th>
                             <th scope="col">Doctor Prescription</th>
                             <th scope="col">Patient Disease</th>
-                            <th scope="col">Patient Status</th>
+                            <th scope="col">Patient Discharged Status</th>
                             <th scope="col">Total Amount</th>
                             <th scope="col">Patient Amount Pay</th>
                             <th scope="col">Patient Change</th>
@@ -120,7 +120,7 @@ if (!isset($_SESSION['nId'])) {
                                     <td><?= $returneePatient['pDoctor'] ?></td>
                                     <td><?= $returneePatient['pPrescription'] ?></td>
                                     <td><?= $returneePatient['pDisease'] ?></td>
-                                    <td><?= $returneePatient['pStatus'] ?></td>
+                                    <td><?= ucwords($returneePatient['pStatus']) ?></td>
                                     <td><?= $returneePatient['pTotalAmount'] ?></td>
                                     <td><?= $returneePatient['pAmountPay'] ?></td>
                                     <td><?= $returneePatient['pChange'] ?></td>

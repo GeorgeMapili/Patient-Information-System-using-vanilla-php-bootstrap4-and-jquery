@@ -92,10 +92,13 @@ if (isset($_POST['register'])) {
         exit(0);
     }
 
-    // Check Image
-    $profileName = $profileImg['name'];
+    // Image
     $ext = $profileImg['type'];
     $extF = explode('/', $ext);
+
+    // Unique Image Name
+    $profileName =  uniqid(rand()) . "." . $extF[1];
+
     $tmpname = $profileImg['tmp_name'];
     $dest = __DIR__ . "/upload/user_profile_img/" . $profileName;
 
