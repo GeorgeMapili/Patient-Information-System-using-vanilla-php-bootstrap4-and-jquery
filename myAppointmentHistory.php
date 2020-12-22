@@ -115,7 +115,7 @@ if (!isset($_SESSION['id'])) {
                             <td><?= $myAppointmentHistory['pDoctor']; ?></td>
                             <td>₱ <?= number_format($myAppointmentHistory['dFee'], 2); ?></td>
                             <td><?= $myAppointmentHistory['aReason']; ?></td>
-                            <td><?= date("M d, Y", strtotime($myAppointmentHistory['aDate'])); ?> at <?= date("h:i A", strtotime($myAppointmentHistory['aTime'])); ?></td>
+                            <td><?= date("M d, Y", strtotime($myAppointmentHistory['aDate'])); ?> at <?= $myAppointmentHistory['aTime'] ?></td>
                             <td>
                                 <?php
                                 if ($myAppointmentHistory['aStatus'] === "discharged") { ?>

@@ -36,7 +36,7 @@ if (isset($_POST['register'])) {
 
     // Check the name if valid
     if (!preg_match("/^([a-zA-Z' ]+)$/", $name)) {
-        header("location:register.php?errName=name_is_not_valid");
+        header("location:register.php?errName=name_is_not_valid&email=$email&address=$address&age=$age&gender=$gender&mobile=$mobileNumber");
         exit(0);
     }
 
@@ -49,13 +49,13 @@ if (isset($_POST['register'])) {
     $nameCount = $stmt->rowCount();
 
     if ($nameCount >= 1) {
-        header("location:register.php?errName1=Name_is_already_existed");
+        header("location:register.php?errName1=Name_is_already_existed&email=$email&address=$address&age=$age&gender=$gender&mobile=$mobileNumber");
         exit(0);
     }
 
     // Check the email if valid
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        header("location:register.php?errEmail1=email_is_not_valid");
+        header("location:register.php?errEmail1=email_is_not_valid&name=$name&address=$address&age=$age&gender=$gender&mobile=$mobileNumber");
         exit(0);
     }
 
@@ -68,7 +68,7 @@ if (isset($_POST['register'])) {
     $emailCount = $stmt->rowCount();
 
     if ($emailCount >= 1) {
-        header("location:register.php?errEmail2=email_already_taken");
+        header("location:register.php?errEmail2=email_already_taken&name=$name&address=$address&age=$age&gender=$gender&mobile=$mobileNumber");
         exit(0);
     }
 
@@ -81,14 +81,14 @@ if (isset($_POST['register'])) {
     $mobileCount = $stmt->rowCount();
 
     if ($mobileCount >= 1) {
-        header("location:register.php?errMobile=mobile_number_already_taken");
+        header("location:register.php?errMobile=mobile_number_already_taken&name=$name&email=$email&address=$address&age=$age&gender=$gender");
         exit(0);
     }
 
     // Check if the password does not match
 
     if ($password !== $confirmPassword) {
-        header("location:register.php?errPass=password_do_not_match");
+        header("location:register.php?errPass=password_do_not_match&name=$name&email=$email&address=$address&age=$age&gender=$gender&mobile=$mobileNumber");
         exit(0);
     }
 
@@ -106,14 +106,14 @@ if (isset($_POST['register'])) {
     $allowed = array('jpg', 'jpeg', 'png');
 
     if (!in_array(strtolower($extF[1]), $allowed)) {
-        header("location:register.php?errorImg1=image_is_not_valid");
+        header("location:register.php?errorImg1=image_is_not_valid&name=$name&email=$email&address=$address&age=$age&gender=$gender&mobile=$mobileNumber");
         exit(0);
     }
 
     // Check if the image size is valid
 
     if ($profileImg['size'] > 5000000) {
-        header("location:register.php?errorImg2=image_is_only_less_than_5MB");
+        header("location:register.php?errorImg2=image_is_only_less_than_5MB&name=$name&email=$email&address=$address&age=$age&gender=$gender&mobile=$mobileNumber");
         exit(0);
     }
 
@@ -142,33 +142,46 @@ if (isset($_POST['register'])) {
 <body>
     <h2 class="display-4 mb-3 text-center" style="color: rgb(15, 208, 214);">Create an account</h2>
 
-    <form class="form-registration" action="register.php" method="post" enctype="multipart/form-data">
+    <form class="form-registration my-3" action="register.php" method="post" enctype="multipart/form-data">
         <div class="form-group">
             <label>Full Name</label>
-            <?= (isset($_GET['errName']) || isset($_GET['errName1'])) ? '<input type="text" name="name" class="form-control is-invalid" required>' : '<input type="text" name="name" class="form-control" required>'; ?>
+            <?= (isset($_GET['errName']) || isset($_GET['errName1'])) ? '<input type="text" name="name" class="form-control is-invalid" required>' : ((isset($_GET['name'])) ? '<input type="text" name="name" value="' . $_GET['name'] . '" class="form-control" required>' : '<input type="text" name="name" class="form-control" required>'); ?>
             <?= (isset($_GET['errName'])) ? '<small class="text-danger">Name is not valid!</small>' : ""; ?>
             <?= (isset($_GET['errName1'])) ? '<small class="text-danger">Name is already taken!</small>' : ""; ?>
         </div>
         <div class="form-group">
             <label>Email</label>
-            <?= (isset($_GET['errEmail1']) || isset($_GET['errEmail2'])) ? '<input type="text" name="email" class="form-control is-invalid" required>' : '<input type="text" name="email" class="form-control" required>'; ?>
+            <?= (isset($_GET['errEmail1']) || isset($_GET['errEmail2'])) ? '<input type="text" name="email" class="form-control is-invalid" required>' : ((isset($_GET['email'])) ? '<input type="text" name="email" class="form-control" value=' . $_GET['email'] . ' required>' : '<input type="text" name="email" class="form-control" required>') ?>
             <?= (isset($_GET['errEmail1'])) ? '<small class="text-danger">Email is not valid!</small>' : ""; ?>
             <?= (isset($_GET['errEmail2'])) ? '<small class="text-danger">Email is already taken!</small>' : ""; ?>
         </div>
         <div class="form-group">
             <label>Address</label>
-            <input type="text" name="address" class="form-control" required>
+            <?= (isset($_GET['address']) ? '<input type="text" name="address" class="form-control" value="' . $_GET['address'] . '" required>' : '<input type="text" name="address" class="form-control" required>') ?>
         </div>
 
         <div class="form-group">
             <label>Age</label>
-            <input type="number" class="form-control" name="age" min="1" required>
+            <?= (isset($_GET['age']) ? '<input type="number" class="form-control" name="age" value=' . $_GET['age'] . ' min="1" required>' : '<input type="number" class="form-control" name="age" min="1" required>') ?>
         </div>
 
         <div class="form-group">
             <label>Gender</label>
             <select name="gender" id="" class="form-control" required>
                 <option selected="selected" disabled="disabled" value="">Select a gender</option>
+                <?php
+                if (isset($_GET['gender']) && $_GET['gender'] == "male") {
+                ?>
+                    <option value="male" selected>Male</option>
+                    <option value="female">Female</option>
+                <?php
+                } else if (isset($_GET['gender']) && $_GET['gender'] == "female") {
+                ?>
+                    <option value="male">Male</option>
+                    <option value="female" selected>Female</option>
+                <?php
+                }
+                ?>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
             </select>
@@ -177,7 +190,7 @@ if (isset($_POST['register'])) {
 
         <div class="form-group">
             <label>Mobile Number</label>
-            <?= (isset($_GET['errMobile'])) ? '<input type="tel" class="form-control is-invalid" name="mobileNumber" placeholder="+639876543210 or 09876543210" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" required>' : '<input type="tel" class="form-control" name="mobileNumber" placeholder="+639876543210 or 09876543210" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" required>'; ?>
+            <?= (isset($_GET['errMobile'])) ? '<input type="tel" class="form-control is-invalid" name="mobileNumber" placeholder="+639876543210 or 09876543210" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" required>' : ((isset($_GET['mobile'])) ? '<input type="tel" class="form-control" name="mobileNumber" value= "' . str_replace(' ', '+', $_GET['mobile']) . '" placeholder="+639876543210 or 09876543210" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" required>' : '<input type="tel" class="form-control" name="mobileNumber" placeholder="+639876543210 or 09876543210" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" required>'); ?>
             <?= (isset($_GET['errMobile'])) ? '<small class="text-danger">Mobile number is already taken!</small>' : ""; ?>
         </div>
 
