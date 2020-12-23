@@ -1,5 +1,4 @@
 <?php
-ob_start();
 session_start();
 require_once '../connect.php';
 
@@ -73,7 +72,7 @@ if (!isset($_SESSION['adId'])) {
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="room.php" id="primaryColor">
+                            <a class="nav-link" href="room.php">
                                 <span data-feather="users"></span>
                                 View All Rooms
                             </a>
@@ -97,7 +96,7 @@ if (!isset($_SESSION['adId'])) {
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="walkInDischarged.php">
+                            <a class="nav-link" href="cancelledAppointment.php" id="primaryColor">
                                 <span data-feather="users"></span>
                                 View Walkin Patient Discharged
                             </a>
@@ -115,49 +114,61 @@ if (!isset($_SESSION['adId'])) {
 
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">Add Rooms</h1>
-                </div>
-                <div class="container">
-
-                    <?php
-                    if (isset($_POST['addRoomBtn'])) {
-
-                        $roomNumber = trim(htmlspecialchars($_POST['roomNumber']));
-                        $roomFee = trim(htmlspecialchars($_POST['roomFee']));
-                        $roomStatus = trim(htmlspecialchars($_POST['roomStatus']));
-
-                        $sql =  "INSERT INTO rooms (room_number,room_fee,room_status)VALUES(:number,:fee,:status)";
-                        $stmt = $con->prepare($sql);
-                        $stmt->bindParam(":number", $roomNumber, PDO::PARAM_INT);
-                        $stmt->bindParam(":fee", $roomFee, PDO::PARAM_INT);
-                        $stmt->bindParam(":status", $roomStatus, PDO::PARAM_STR);
-                        $stmt->execute();
-
-                        header("location:room.php?succAddedRoom=Successfully_added_room");
-                        ob_end_flush();
-                        exit(0);
-                    }
-                    ?>
-
-                    <form action="addRoom.php" method="post">
-
-                        <label>Room Number</label>
-                        <input type="number" name="roomNumber" class="form-control" required>
-
-
-                        <label>Room Fee</label>
-                        <input type="number" name="roomFee" class="form-control" required>
-
-                        <label>Room Status</label>
-                        <input type="text" name="roomStatus" class="form-control" value="available" readonly>
-
-                        <div class="text-center mt-3">
-                            <input type="submit" class="btn btn-primary" value="Add Room" name="addRoomBtn">
-                        </div>
-                    </form>
+                    <h1 class="h2" id="primaryColor">Walkin Discharged</h1>
                 </div>
                 <div>
+                    <form class="form-inline">
+                        <input class="form-control mb-3" type="search" id="search" placeholder="Search Patient" aria-label="Search">
+                    </form>
                 </div>
+                <table class="table table-hover " id="table-data">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Discharged Patient ID</th>
+                            <th scope="col">Patient ID</th>
+                            <th scope="col">Patient Name</th>
+                            <th scope="col">Patient Address</th>
+                            <th scope="col">Patient Doctor</th>
+                            <th scope="col">Patient Disease</th>
+                            <th scope="col">Doctor Prescription</th>
+                            <th scope="col">Discharged Date</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Generate Certificate</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+
+                        $discharged = "discharged";
+                        $sql = "SELECT * FROM discharged_patient";
+                        $stmt = $con->prepare($sql);
+                        $stmt->execute();
+
+                        while ($dischargedPatient = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                        ?>
+                            <tr>
+                                <th scope="row"><?= $dischargedPatient['dpId'] ?></th>
+                                <td><?= $dischargedPatient['pId'] ?></td>
+                                <td><?= $dischargedPatient['pName'] ?></td>
+                                <td><?= $dischargedPatient['pAddress'] ?></td>
+                                <td><?= $dischargedPatient['pDoctor'] ?></td>
+                                <td><?= $dischargedPatient['pDisease'] ?></td>
+                                <td><?= $dischargedPatient['pPrescription'] ?></td>
+                                <td><?= date("M d, Y", strtotime($dischargedPatient['pMadeOn'])) ?></td>
+                                <td>
+                                    <p class="btn btn-success disabled">Discharged</p>
+                                </td>
+                                <td>
+                                    <form action="pdfWalkInDischarge.php?walkInDischargeReceipt=true" method="post" target="_blank">
+                                        <input type="hidden" name="dpId" value="<?= $dischargedPatient['dpId'] ?>">
+                                        <input type="hidden" name="pId" value="<?= $dischargedPatient['pId'] ?>">
+                                        <input type="submit" class="btn btn-info" name="receiptBtn" target="_blank" value="Medical Certificate">
+                                    </form>
+                                </td>
+                            </tr>
+                        <?php endwhile; ?>
+                    </tbody>
+                </table>
 
         </div>
 
@@ -172,6 +183,29 @@ if (!isset($_SESSION['adId'])) {
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#search').keyup(function() {
+                var search = $(this).val();
+
+                $.ajax({
+                    url: 'action.php',
+                    method: 'post',
+                    data: {
+                        walkInDischarged: search
+                    },
+                    success: function(response) {
+                        $('#table-data').html(response);
+                    }
+                });
+            });
+        });
+    </script>
+
 </body>
 
 </html>

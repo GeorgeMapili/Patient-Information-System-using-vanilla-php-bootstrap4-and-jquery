@@ -95,7 +95,7 @@ if (!isset($_SESSION['dId'])) {
                 <tbody>
                     <?php
                     $status = "cancelled";
-                    $sql = "SELECT * FROM appointment WHERE aStatus = :status AND pDoctor = :doctor";
+                    $sql = "SELECT * FROM appointment WHERE aStatus = :status AND pDoctor = :doctor ORDER BY aDate,aTime ASC";
                     $stmt = $con->prepare($sql);
                     $stmt->bindParam(":status", $status, PDO::PARAM_STR);
                     $stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);

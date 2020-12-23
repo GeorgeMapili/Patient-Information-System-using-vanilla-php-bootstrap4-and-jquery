@@ -147,15 +147,20 @@ if (isset($_POST['walkInQuery'])) {
             }
             $walkInOutput .= '
             </td>
-            <td>
-            <form action="generateBill.php" method="post">
-                <input type="hidden" name="id" value=' . $walkInPatient['walkInId'] . '>
-                <input type="submit" value="GENERATE BILL" class="btn btn-primary" name="generateBill">
-            </form>
-            </td>
-        </tr>
-        ';
-
+            <td>';
+            if (empty($walkInPatient['walkInPrescription'])) {
+                $walkInOutput .= '
+                <p class="btn btn-primary disabled">GENERATE BILL</p> ';
+            } else {
+                $walkInOutput .= '
+                    <form action="generateBill.php" method="post">
+                    <input type="hidden" name="id" value=' . $walkInPatient['walkInId'] . '>
+                    <input type="submit" value="GENERATE BILL" class="btn btn-primary" name="generateBill">
+                </form>
+                </td>
+            </tr>
+            ';
+            }
 
             $walkInOutput .= '</tbody>';
         }

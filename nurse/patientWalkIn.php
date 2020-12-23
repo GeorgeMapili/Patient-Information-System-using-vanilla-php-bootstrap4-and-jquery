@@ -196,10 +196,21 @@ if (!isset($_SESSION['nId'])) {
                                 ?>
                             </td>
                             <td>
-                                <form action="generateBill.php" method="post">
-                                    <input type="hidden" name="id" value="<?= $walkInPatient['walkInId']; ?>">
-                                    <input type="submit" value="GENERATE BILL" class="btn btn-primary" name="generateBill">
-                                </form>
+                                <?php
+                                if (empty($walkInPatient['walkInPrescription'])) {
+                                ?>
+                                    <p class="btn btn-primary disabled">GENERATE BILL</p>
+                                <?php
+                                } else {
+                                ?>
+                                    <form action="generateBill.php" method="post">
+                                        <input type="hidden" name="id" value="<?= $walkInPatient['walkInId']; ?>">
+                                        <input type="submit" value="GENERATE BILL" class="btn btn-primary" name="generateBill">
+                                    </form>
+                                <?php
+                                }
+                                ?>
+
                             </td>
                         </tr>
 

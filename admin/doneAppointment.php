@@ -96,6 +96,12 @@ if (!isset($_SESSION['adId'])) {
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="walkInDischarged.php">
+                                <span data-feather="users"></span>
+                                View Walkin Patient Discharged
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="messages.php">
                                 <span data-feather="users"></span>
                                 View All Messages
@@ -119,6 +125,7 @@ if (!isset($_SESSION['adId'])) {
                     <thead class="thead-dark">
                         <tr>
                             <th scope="col">Appointment ID</th>
+                            <th scope="col">Patient ID</th>
                             <th scope="col">Patient Name</th>
                             <th scope="col">Patient Address</th>
                             <th scope="col">Patient Doctor</th>
@@ -142,6 +149,7 @@ if (!isset($_SESSION['adId'])) {
                         ?>
                             <tr>
                                 <th scope="row"><?= $dischargedPatient['aId'] ?></th>
+                                <td><?= $dischargedPatient['pId'] ?></td>
                                 <td><?= $dischargedPatient['pName'] ?></td>
                                 <td><?= $dischargedPatient['pAddress'] ?></td>
                                 <td><?= $dischargedPatient['pDoctor'] ?></td>

@@ -143,7 +143,7 @@ require_once '../connect.php';
                 <tbody>
                     <?php
                     $status1 = "accepted";
-                    $sql = "SELECT * FROM appointment WHERE pDoctor = :doctor AND aStatus = :status1";
+                    $sql = "SELECT * FROM appointment WHERE pDoctor = :doctor AND aStatus = :status1 ORDER BY aDate,aTime ASC";
                     $stmt = $con->prepare($sql);
                     $stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);
                     $stmt->bindParam(":status1", $status1, PDO::PARAM_STR);
@@ -160,17 +160,27 @@ require_once '../connect.php';
                             <td>
                                 <div class="row">
                                     <div class="col">
-                                        <form action="incomingAppointment.php" method="post">
-                                            <input type="hidden" name="aId" value="<?= $upcomingAppointment['aId'] ?>">
-                                            <input type="hidden" name="pId" value="<?= $upcomingAppointment['pId'] ?>">
-                                            <input type="submit" value="Done" class="btn btn-success" name="doneAppointment">
-                                        </form>
+                                        <?php
+                                        if (date("M d, Y") === date("M d, Y", strtotime($upcomingAppointment['aDate']))) {
+                                        ?>
+                                            <form action="incomingAppointment.php" method="post">
+                                                <input type="hidden" name="aId" value="<?= $upcomingAppointment['aId'] ?>">
+                                                <input type="hidden" name="pId" value="<?= $upcomingAppointment['pId'] ?>">
+                                                <input type="submit" value="Done" class="btn btn-success" name="doneAppointment">
+                                            </form>
+                                        <?php
+                                        } else {
+                                        ?>
+                                            <p class="btn btn-success disabled">Done</p>
+                                        <?php
+                                        }
+                                        ?>
                                     </div>
                                     <div class="col">
                                         <form action="incomingAppointment.php" method="post">
                                             <input type="hidden" name="aId" value="<?= $upcomingAppointment['aId'] ?>">
                                             <input type="hidden" name="pId" value="<?= $upcomingAppointment['pId'] ?>">
-                                            <input type="submit" value="Cancel" class="btn btn-danger" name="cancelAppointment">
+                                            <input type="submit" value="Cancel" class="btn btn-danger" name="cancelAppointment" onclick="return confirm('Are you sure to delete ?')">
                                         </form>
                                     </div>
                                 </div>

@@ -14,7 +14,7 @@ if (isset($_POST['sortBy'])) {
             // DEFAULT
         case 'default':
             $status = "accepted";
-            $sql = "SELECT * FROM appointment WHERE pDoctor = :doctor AND aStatus = :status";
+            $sql = "SELECT * FROM appointment WHERE pDoctor = :doctor AND aStatus = :status ORDER BY aDate,aTime ASC";
             $stmt = $con->prepare($sql);
             $stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);
             $stmt->bindParam(":status", $status, PDO::PARAM_STR);
@@ -41,21 +41,26 @@ if (isset($_POST['sortBy'])) {
                     <td>' . $default['pAddress'] . '</td>
                     <td>' . $default['pMobile'] . '</td>
                     <td>' . $default['aReason'] . '</td>
-                    <td>' . date("M d, Y", strtotime($default['aDate'])) . "at" . $default['aTime'] . '</td>
+                    <td>' . date("M d, Y", strtotime($default['aDate'])) . " at " . $default['aTime'] . '</td>
                     <td>
                         <div class="row">
-                            <div class="col">
-                                <form action="incomingAppointment.php" method="post">
-                                    <input type="hidden" name="aId" value=' . $default['aId'] . '>
-                                    <input type="hidden" name="pId" value=' . $default['pId'] . '>
-                                    <input type="submit" value="Done" class="btn btn-success" name="doneAppointment">
-                                </form>
+                            <div class="col">';
+                if (date("M d, Y") === date("M d, Y", strtotime($default['aDate']))) {
+                    $output .= '   <form action="incomingAppointment.php" method="post">
+                                        <input type="hidden" name="aId" value=' . $default['aId'] . '>
+                                        <input type="hidden" name="pId" value=' . $default['pId'] . '>
+                                        <input type="submit" value="Done" class="btn btn-success" name="doneAppointment">
+                                    </form>';
+                } else {
+                    $output .= ' <p class="btn btn-success disabled">Done</p>';
+                }
+                $output .= '
                             </div>
                             <div class="col">
                                 <form action="incomingAppointment.php" method="post">
                                     <input type="hidden" name="aId" value=' . $default['aId'] . '>
                                     <input type="hidden" name="pId" value=' . $default['pId'] . '>
-                                    <input type="submit" value="Cancel" class="btn btn-danger" name="cancelAppointment">
+                                    <input type="submit" value="Cancel" class="btn btn-danger" name="cancelAppointment" onclick="return confirm(\'Are you sure to delete ?\')">
                                 </form>
                             </div>
                         </div>
@@ -100,18 +105,23 @@ if (isset($_POST['sortBy'])) {
                     <td>' . date("M d, Y", strtotime($today['aDate'])) . " at " . $today['aTime'] . '</td>
                     <td>
                         <div class="row">
-                            <div class="col">
-                                <form action="incomingAppointment.php" method="post">
-                                    <input type="hidden" name="aId" value=' . $today['aId'] . '>
-                                    <input type="hidden" name="pId" value=' . $today['pId'] . '>
-                                    <input type="submit" value="Done" class="btn btn-success" name="doneAppointment">
-                                </form>
+                            <div class="col">';
+                if (date("M d, Y") === date("M d, Y", strtotime($today['aDate']))) {
+                    $output .= '   <form action="incomingAppointment.php" method="post">
+                                        <input type="hidden" name="aId" value=' . $today['aId'] . '>
+                                        <input type="hidden" name="pId" value=' . $today['pId'] . '>
+                                        <input type="submit" value="Done" class="btn btn-success" name="doneAppointment">
+                                    </form>';
+                } else {
+                    $output .= ' <p class="btn btn-success disabled">Done</p>';
+                }
+                $output .= '
                             </div>
                             <div class="col">
                                 <form action="incomingAppointment.php" method="post">
                                     <input type="hidden" name="aId" value=' . $today['aId'] . '>
                                     <input type="hidden" name="pId" value=' . $today['pId'] . '>
-                                    <input type="submit" value="Cancel" class="btn btn-danger" name="cancelAppointment">
+                                    <input type="submit" value="Cancel" class="btn btn-danger" name="cancelAppointment" onclick="return confirm(\'Are you sure to delete ?\')">
                                 </form>
                             </div>
                         </div>
@@ -156,18 +166,23 @@ if (isset($_POST['sortBy'])) {
                     <td>' . date("M d, Y", strtotime($tomorrow['aDate'])) . " at " . $tomorrow['aTime'] . '</td>
                     <td>
                         <div class="row">
-                            <div class="col">
-                                <form action="incomingAppointment.php" method="post">
-                                    <input type="hidden" name="aId" value=' . $tomorrow['aId'] . '>
-                                    <input type="hidden" name="pId" value=' . $tomorrow['pId'] . '>
-                                    <input type="submit" value="Done" class="btn btn-success" name="doneAppointment">
-                                </form>
+                            <div class="col">';
+                if (date("M d, Y") === date("M d, Y", strtotime($tomorrow['aDate']))) {
+                    $output .= '   <form action="incomingAppointment.php" method="post">
+                                        <input type="hidden" name="aId" value=' . $tomorrow['aId'] . '>
+                                        <input type="hidden" name="pId" value=' . $tomorrow['pId'] . '>
+                                        <input type="submit" value="Done" class="btn btn-success" name="doneAppointment">
+                                    </form>';
+                } else {
+                    $output .= ' <p class="btn btn-success disabled">Done</p>';
+                }
+                $output .= '
                             </div>
                             <div class="col">
                                 <form action="incomingAppointment.php" method="post">
                                     <input type="hidden" name="aId" value=' . $tomorrow['aId'] . '>
                                     <input type="hidden" name="pId" value=' . $tomorrow['pId'] . '>
-                                    <input type="submit" value="Cancel" class="btn btn-danger" name="cancelAppointment">
+                                    <input type="submit" value="Cancel" class="btn btn-danger" name="cancelAppointment" onclick="return confirm(\'Are you sure to delete ?\')">
                                 </form>
                             </div>
                         </div>
@@ -212,18 +227,23 @@ if (isset($_POST['sortBy'])) {
                     <td>' . date("M d, Y", strtotime($thisWeek['aDate'])) . " at " . $thisWeek['aTime'] . '</td>
                     <td>
                         <div class="row">
-                            <div class="col">
-                                <form action="incomingAppointment.php" method="post">
-                                    <input type="hidden" name="aId" value=' . $thisWeek['aId'] . '>
-                                    <input type="hidden" name="pId" value=' . $thisWeek['pId'] . '>
-                                    <input type="submit" value="Done" class="btn btn-success" name="doneAppointment">
-                                </form>
+                            <div class="col">';
+                if (date("M d, Y") === date("M d, Y", strtotime($thisWeek['aDate']))) {
+                    $output .= '   <form action="incomingAppointment.php" method="post">
+                                        <input type="hidden" name="aId" value=' . $thisWeek['aId'] . '>
+                                        <input type="hidden" name="pId" value=' . $thisWeek['pId'] . '>
+                                        <input type="submit" value="Done" class="btn btn-success" name="doneAppointment">
+                                    </form>';
+                } else {
+                    $output .= ' <p class="btn btn-success disabled">Done</p>';
+                }
+                $output .= '
                             </div>
                             <div class="col">
                                 <form action="incomingAppointment.php" method="post">
                                     <input type="hidden" name="aId" value=' . $thisWeek['aId'] . '>
                                     <input type="hidden" name="pId" value=' . $thisWeek['pId'] . '>
-                                    <input type="submit" value="Cancel" class="btn btn-danger" name="cancelAppointment">
+                                    <input type="submit" value="Cancel" class="btn btn-danger" name="cancelAppointment" onclick="return confirm(\'Are you sure to delete ?\')">
                                 </form>
                             </div>
                         </div>
@@ -268,18 +288,23 @@ if (isset($_POST['sortBy'])) {
                     <td>' . date("M d, Y", strtotime($nextWeek['aDate'])) . " at " . $nextWeek['aTime'] . '</td>
                     <td>
                         <div class="row">
-                            <div class="col">
-                                <form action="incomingAppointment.php" method="post">
-                                    <input type="hidden" name="aId" value=' . $nextWeek['aId'] . '>
-                                    <input type="hidden" name="pId" value=' . $nextWeek['pId'] . '>
-                                    <input type="submit" value="Done" class="btn btn-success" name="doneAppointment">
-                                </form>
+                            <div class="col">';
+                if (date("M d, Y") === date("M d, Y", strtotime($nextWeek['aDate']))) {
+                    $output .= '   <form action="incomingAppointment.php" method="post">
+                                        <input type="hidden" name="aId" value=' . $nextWeek['aId'] . '>
+                                        <input type="hidden" name="pId" value=' . $nextWeek['pId'] . '>
+                                        <input type="submit" value="Done" class="btn btn-success" name="doneAppointment">
+                                    </form>';
+                } else {
+                    $output .= ' <p class="btn btn-success disabled">Done</p>';
+                }
+                $output .= '
                             </div>
                             <div class="col">
                                 <form action="incomingAppointment.php" method="post">
                                     <input type="hidden" name="aId" value=' . $nextWeek['aId'] . '>
                                     <input type="hidden" name="pId" value=' . $nextWeek['pId'] . '>
-                                    <input type="submit" value="Cancel" class="btn btn-danger" name="cancelAppointment">
+                                    <input type="submit" value="Cancel" class="btn btn-danger" name="cancelAppointment" onclick="return confirm(\'Are you sure to delete ?\')">
                                 </form>
                             </div>
                         </div>
@@ -327,18 +352,23 @@ if (isset($_POST['sortBy'])) {
                     <td>' . date("M d, Y", strtotime($thisMonth['aDate'])) . " at " . $thisMonth['aTime'] . '</td>
                     <td>
                         <div class="row">
-                            <div class="col">
-                                <form action="incomingAppointment.php" method="post">
-                                    <input type="hidden" name="aId" value=' . $thisMonth['aId'] . '>
-                                    <input type="hidden" name="pId" value=' . $thisMonth['pId'] . '>
-                                    <input type="submit" value="Done" class="btn btn-success" name="doneAppointment">
-                                </form>
+                            <div class="col">';
+                if (date("M d, Y") === date("M d, Y", strtotime($thisMonth['aDate']))) {
+                    $output .= '   <form action="incomingAppointment.php" method="post">
+                                        <input type="hidden" name="aId" value=' . $thisMonth['aId'] . '>
+                                        <input type="hidden" name="pId" value=' . $thisMonth['pId'] . '>
+                                        <input type="submit" value="Done" class="btn btn-success" name="doneAppointment">
+                                    </form>';
+                } else {
+                    $output .= ' <p class="btn btn-success disabled">Done</p>';
+                }
+                $output .= '
                             </div>
                             <div class="col">
                                 <form action="incomingAppointment.php" method="post">
                                     <input type="hidden" name="aId" value=' . $thisMonth['aId'] . '>
                                     <input type="hidden" name="pId" value=' . $thisMonth['pId'] . '>
-                                    <input type="submit" value="Cancel" class="btn btn-danger" name="cancelAppointment">
+                                    <input type="submit" value="Cancel" class="btn btn-danger" name="cancelAppointment" onclick="return confirm(\'Are you sure to delete ?\')">
                                 </form>
                             </div>
                         </div>

@@ -483,6 +483,7 @@ if (isset($_POST['searchFinishedAppointment'])) {
     <thead class="thead-dark">
         <tr>
             <th scope="col">Appointment ID</th>
+            <th scope="col">Patient ID</th>
             <th scope="col">Patient Name</th>
             <th scope="col">Patient Address</th>
             <th scope="col">Patient Doctor</th>
@@ -500,6 +501,7 @@ if (isset($_POST['searchFinishedAppointment'])) {
             $finishedAppointmentOutput .= '
             <tr>
                 <th scope="row">' . $finishedAppointment['aId'] . '</th>
+                <td>' . $finishedAppointment['pId'] . '</td>
                 <td>' . $finishedAppointment['pName'] . '</td>
                 <td>' . $finishedAppointment['pAddress'] . '</td>
                 <td>' . $finishedAppointment['pDoctor'] . '</td>
@@ -663,5 +665,77 @@ if (isset($_POST['searchMessage'])) {
         echo $messageOutput;
     } else {
         echo '<h3 style="color:red">No Cancelled Appointment</h3>';
+    }
+}
+
+
+// SEARCH DISCHARGED PATIENT  AJAX
+if (isset($_POST['walkInDischarged'])) {
+
+    $search = trim(htmlspecialchars($_POST['walkInDischarged']));
+    $searchName = "%" . $search . "%";
+
+    $sql = "SELECT * FROM discharged_patient WHERE pName LIKE :name";
+    $stmt = $con->prepare($sql);
+    $stmt->bindParam(":name", $searchName, PDO::PARAM_STR);
+    $stmt->execute();
+
+    $numRows = $stmt->rowCount();
+
+    $walkInDischargedOutput = '';
+
+    if ($stmt->rowCount() > 0) {
+
+
+
+        $walkInDischargedOutput .= '
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Discharged Patient ID</th>
+            <th scope="col">Patient ID</th>
+            <th scope="col">Patient Name</th>
+            <th scope="col">Patient Address</th>
+            <th scope="col">Patient Doctor</th>
+            <th scope="col">Patient Disease</th>
+            <th scope="col">Doctor Prescription</th>
+            <th scope="col">Discharged Date</th>
+            <th scope="col">Status</th>
+            <th scope="col">Generate Certificate</th>
+        </tr>
+    </thead>
+    <tbody>
+    ';
+
+        while ($dischargedPatient = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $walkInDischargedOutput .= '
+            <tr>
+            <th scope="row">' . $dischargedPatient['dpId'] . '</th>
+            <td>' . $dischargedPatient['pId'] . '</td>
+            <td>' . $dischargedPatient['pName'] . '</td>
+            <td>' . $dischargedPatient['pAddress'] . '</td>
+            <td>' . $dischargedPatient['pDoctor'] . '</td>
+            <td>' . $dischargedPatient['pDisease'] . '</td>
+            <td>' . $dischargedPatient['pPrescription'] . '</td>
+            <td>' . date("M d, Y", strtotime($dischargedPatient['pMadeOn'])) . '</td>
+            <td>
+                <p class="btn btn-success disabled">Discharged</p>
+            </td>
+            <td>
+                <form action="pdfWalkInDischarge.php?walkInDischargeReceipt=true" method="post" target="_blank">
+                    <input type="hidden" name="dpId" value="' . $dischargedPatient['dpId'] . '">
+                    <input type="hidden" name="pId" value="' . $dischargedPatient['pId'] . '">
+                    <input type="submit" class="btn btn-info" name="receiptBtn" target="_blank" value="Medical Certificate">
+                </form>
+            </td>
+        ';
+        }
+        $walkInDischargedOutput .= '
+    </tr>
+    <tbody>
+    ';
+
+        echo $walkInDischargedOutput;
+    } else {
+        echo '<h3 style="color:red">No Discharged Patient Found</h3>';
     }
 }

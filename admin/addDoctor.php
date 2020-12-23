@@ -97,6 +97,12 @@ if (!isset($_SESSION['adId'])) {
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="walkInDischarged.php">
+                                <span data-feather="users"></span>
+                                View Walkin Patient Discharged
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="messages.php">
                                 <span data-feather="users"></span>
                                 View All Messages

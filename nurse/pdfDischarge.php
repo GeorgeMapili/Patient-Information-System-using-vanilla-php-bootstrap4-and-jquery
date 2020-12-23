@@ -40,10 +40,12 @@ if (isset($_GET['walkInDischargeReceipt']) && $_GET['walkInDischargeReceipt'] ==
     $pdf->Cell(34, 5, date("M d, Y", strtotime($dischargePatient['pMadeOn'])), 0, 1);
 
     $pdf->Cell(130, 5, '[Contact Number]', 0, 0);
-    $pdf->Cell(25, 5, 'Patient ID', 0, 0);
+    $pdf->Cell(25, 5, 'Patient ID:', 0, 0);
     $pdf->Cell(34, 5, $dischargePatient['pId'], 0, 1);
 
-    $pdf->Cell(130, 5, '[Fax #]', 0, 1);
+    $pdf->Cell(130, 5, '[Fax #]', 0, 0);
+    $pdf->Cell(29, 5, 'Discharged ID:', 0, 0);
+    $pdf->Cell(30, 5, $dischargePatient['dpId'], 0, 1);
 
     // empty cell as a vertical spacer
     $pdf->Cell('189', 10, '', 0, 1);
@@ -62,10 +64,14 @@ if (isset($_GET['walkInDischargeReceipt']) && $_GET['walkInDischargeReceipt'] ==
     $pdf->Cell(90, 5, 'Disease: ' . $dischargePatient['pDisease'], 0, 1);
 
     $pdf->Cell(10, 5, '', 0, 0);
-    $pdf->Cell(90, 5, 'Prescription: ' . $dischargePatient['pPrescription'], 0, 1);
+    $pdf->Cell(90, 5, 'Doctor: ' . $dischargePatient['pDoctor'], 0, 1);
 
     $pdf->Cell(10, 5, '', 0, 0);
-    $pdf->Cell(90, 5, 'Doctor: ' . $dischargePatient['pDoctor'], 0, 1);
+    $pdf->Cell(90, 5, 'Prescription: ', 0, 1);
+    $pdf->Cell(10, 5, '', 0, 1);
+    $pdf->Write(5, $dischargePatient['pPrescription']);
+
+
 
     // empty cell as a vertical spacer
     $pdf->Cell('189', 10, '', 0, 1);

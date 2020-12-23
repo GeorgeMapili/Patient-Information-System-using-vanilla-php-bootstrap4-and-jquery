@@ -120,14 +120,36 @@ if (!isset($_SESSION['id'])) {
                 exit(0);
             }
 
+            // Check if it is a dubplicate appointment with the same user patient
+            $status1 = "pending";
+            $status2 = "accepted";
+            $status3 = "done";
+            $sql = "SELECT * FROM appointment WHERE pId = :id AND pDoctor = :doctor AND aDate =:date AND aTime = :time AND aStatus IN(:status1,:status2,:status3)";
+            $stmt = $con->prepare($sql);
+            $stmt->bindParam(":id", $pId, PDO::PARAM_INT);
+            $stmt->bindParam(":doctor", $pDoctor, PDO::PARAM_STR);
+            $stmt->bindParam(":date", $aDate, PDO::PARAM_STR);
+            $stmt->bindParam(":time", $aTime, PDO::PARAM_STR);
+            $stmt->bindParam(":status1", $status1, PDO::PARAM_STR);
+            $stmt->bindParam(":status2", $status2, PDO::PARAM_STR);
+            $stmt->bindParam(":status3", $status3, PDO::PARAM_STR);
+            $stmt->execute();
+
+            $duplicateRow = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($duplicateRow > 0) {
+                header("location:appointment.php?errDup1=you_already_made_an_appointment");
+                exit(0);
+            }
 
 
             // Check if it is already requested an appointment with the same date and time
             $status1 = "pending";
             $status2 = "accepted";
             $status3 = "done";
-            $sql = "SELECT * FROM appointment WHERE pDoctor = :doctor AND aDate =:date AND aTime = :time AND aStatus IN(:status1,:status2,:status3)";
+            $sql = "SELECT * FROM appointment WHERE pId <> :id AND pDoctor = :doctor AND aDate =:date AND aTime = :time AND aStatus IN(:status1,:status2,:status3)";
             $stmt = $con->prepare($sql);
+            $stmt->bindParam(":id", $pId, PDO::PARAM_INT);
             $stmt->bindParam(":doctor", $pDoctor, PDO::PARAM_STR);
             $stmt->bindParam(":date", $aDate, PDO::PARAM_STR);
             $stmt->bindParam(":time", $aTime, PDO::PARAM_STR);
@@ -264,7 +286,7 @@ if (!isset($_SESSION['id'])) {
                 <?= (isset($_GET['errDate']) && $_GET['errDate'] == "date_already_pass_by") ? '<input type="date" class="form-control is-invalid" name="dateOfAppointment" required>' : '<input type="date" class="form-control" name="dateOfAppointment" required>'; ?>
                 <?= (isset($_GET['errDate']) && $_GET['errDate'] == "date_already_pass_by") ? '<span class="text-danger">Date has already passed!</span>' : ''; ?>
 
-                <?= ((isset($_GET['errTime']) && $_GET['errTime'] == "all_ready_taken_time") || (isset($_GET['errDup']) && $_GET['errDup'] == "you_have_already_an_appointment_in_that_time_with_different_doctor")) ? '<select class="form-control is-invalid" name="selectTime" required>' : '<select class="form-control" name="selectTime" required>'; ?>
+                <?= ((isset($_GET['errTime']) && $_GET['errTime'] == "all_ready_taken_time") || (isset($_GET['errDup']) && $_GET['errDup'] == "you_have_already_an_appointment_in_that_time_with_different_doctor") || (isset($_GET['errDup1']) && $_GET['errDup1'] == "you_already_made_an_appointment")) ? '<select class="form-control is-invalid" name="selectTime" required>' : '<select class="form-control" name="selectTime" required>'; ?>
                 <option value="">select a time</option>
                 <option value="8:00-9:00 A.M.">8:00-9:00 A.M.</option>
                 <option value="9:00-10:00 A.M.">9:00-10:00 A.M.</option>
@@ -277,6 +299,7 @@ if (!isset($_SESSION['id'])) {
                 </select>
                 <?= (isset($_GET['errTime']) && $_GET['errTime'] == "all_ready_taken_time") ? '<span class="text-danger">Someone already have an appointment that time!</span> <br>' : ''; ?>
                 <?= (isset($_GET['errDup']) && $_GET['errDup'] == "you_have_already_an_appointment_in_that_time_with_different_doctor") ? '<span class="text-danger text-center">Already have an appointment in that time with different doctor!</span> <br>' : ''; ?>
+                <?= (isset($_GET['errDup1']) && $_GET['errDup1'] == "you_already_made_an_appointment") ? '<span class="text-danger text-center">You can\'t duplicate a appointment!</span> <br>' : ''; ?>
 
                 <label for="">Reason for Appointment or Diagnosis</label>
                 <textarea name="reasonAppointment" class="form-control resize-0" cols="30" rows="10" required></textarea>
