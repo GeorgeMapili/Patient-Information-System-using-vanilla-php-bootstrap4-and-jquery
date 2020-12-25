@@ -97,7 +97,7 @@ if (!isset($_SESSION['nId'])) {
 
                 // Check if the name is valid
                 if (!preg_match("/^([a-zA-Z' ]+)$/", $name)) {
-                    header("location:addPatient.php?errName=name_is_not_valid");
+                    header("location:addPatient.php?errName=name_is_not_valid&address=$address&email=$email&mobile=$mobileNumber&disease=$disease&age=$age&gender=$gender&doctor=$doctor&room=$roomNumber");
                     exit(0);
                 }
 
@@ -110,13 +110,13 @@ if (!isset($_SESSION['nId'])) {
                 $nameCount = $stmt->rowCount();
 
                 if ($nameCount > 0) {
-                    header("location:addPatient.php?errName1=name_is_already_taken");
+                    header("location:addPatient.php?errName1=name_is_already_taken&address=$address&email=$email&mobile=$mobileNumber&disease=$disease&age=$age&gender=$gender&doctor=$doctor&room=$roomNumber");
                     exit(0);
                 }
 
                 // Check if the email is valid
                 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                    header("location:addPatient.php?errEmail1=email_is_not_valid");
+                    header("location:addPatient.php?errEmail1=email_is_not_valid&address=$address&name=$name&mobile=$mobileNumber&disease=$disease&age=$age&gender=$gender&doctor=$doctor&room=$roomNumber");
                     exit(0);
                 }
 
@@ -129,7 +129,7 @@ if (!isset($_SESSION['nId'])) {
                 $emailCount = $stmt->rowCount();
 
                 if ($emailCount > 0) {
-                    header("location:addPatient.php?errEmail2=email_is_already_taken");
+                    header("location:addPatient.php?errEmail2=email_is_already_taken&address=$address&name=$name&mobile=$mobileNumber&disease=$disease&age=$age&gender=$gender&doctor=$doctor&room=$roomNumber");
                     exit(0);
                 }
 
@@ -142,7 +142,7 @@ if (!isset($_SESSION['nId'])) {
                 $mobileCount = $stmt->rowCount();
 
                 if ($mobileCount > 0) {
-                    header("location:addPatient.php?errMobile=mobile_number_is_already_taken");
+                    header("location:addPatient.php?errMobile=mobile_number_is_already_taken&address=$address&name=$name&email=$email&disease=$disease&age=$age&gender=$gender&doctor=$doctor&room=$roomNumber");
                     exit(0);
                 }
 
@@ -203,38 +203,38 @@ if (!isset($_SESSION['nId'])) {
                 <div class="row">
                     <div class="col m-1">
                         <label>Full Name</label>
-                        <?= ((isset($_GET['errName']) && $_GET['errName'] == "name_is_not_valid") || (isset($_GET['errName1']) && $_GET['errName1'] == "name_is_already_taken")) ? '<input type="text" name="name" class="form-control is-invalid" required>' : '<input type="text" name="name" class="form-control" required>'; ?>
-                        <?= (isset($_GET['errName']) && $_GET['errName'] == "name_is_not_valid") ? '<span class="text-danger">Name is not valid!</span>' : ''; ?>
-                        <?= (isset($_GET['errName1']) && $_GET['errName1'] == "name_is_already_taken") ? '<span class="text-danger">Name is already taken!</span>' : ''; ?>
+                        <?= ((isset($_GET['errName']) && $_GET['errName'] == "name_is_not_valid") || (isset($_GET['errName1']) && $_GET['errName1'] == "name_is_already_taken")) ? '<input type="text" name="name" class="form-control is-invalid" required>' : ((isset($_GET['name'])) ? '<input type="text" name="name" value="' . $_GET['name'] . '" class="form-control" required>' : '<input type="text" name="name" class="form-control" required>') ?>
+                        <?= (isset($_GET['errName']) && $_GET['errName'] == "name_is_not_valid") ? '<small class="text-danger">Name is not valid!</small>' : ''; ?>
+                        <?= (isset($_GET['errName1']) && $_GET['errName1'] == "name_is_already_taken") ? '<small class="text-danger">Name is already taken!</small>' : ''; ?>
                     </div>
                     <div class="col m-1">
                         <label>Address</label>
-                        <input type="text" name="address" class="form-control" required>
+                        <?= (isset($_GET['address'])) ? '<input type="text" name="address" value="' . $_GET['address'] . '" class="form-control" required>' : '<input type="text" name="address" class="form-control" required>' ?>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col m-1">
                         <label>Email</label>
-                        <?= ((isset($_GET['errEmail1']) && $_GET['errEmail1'] == "email_is_not_valid") || (isset($_GET['errEmail2']) && $_GET['errEmail2'] == "email_is_already_taken")) ? '<input type="text" name="email" class="form-control is-invalid" required>' : '<input type="text" name="email" class="form-control" required>'; ?>
-                        <?= (isset($_GET['errEmail1']) && $_GET['errEmail1'] == "email_is_not_valid") ? '<span class="text-danger">Email is not valid!</span>' : ''; ?>
-                        <?= (isset($_GET['errEmail2']) && $_GET['errEmail2'] == "email_is_already_taken") ? '<span class="text-danger">Email is already taken!</span>' : ''; ?>
+                        <?= ((isset($_GET['errEmail1']) && $_GET['errEmail1'] == "email_is_not_valid") || (isset($_GET['errEmail2']) && $_GET['errEmail2'] == "email_is_already_taken")) ? '<input type="text" name="email" class="form-control is-invalid" required>' : ((isset($_GET['email'])) ? '<input type="text" name="email" value="' . $_GET['email'] . '" class="form-control" required>' : '<input type="text" name="email" class="form-control" required>') ?>
+                        <?= (isset($_GET['errEmail1']) && $_GET['errEmail1'] == "email_is_not_valid") ? '<small class="text-danger">Email is not valid!</small>' : ''; ?>
+                        <?= (isset($_GET['errEmail2']) && $_GET['errEmail2'] == "email_is_already_taken") ? '<small class="text-danger">Email is already taken!</small>' : ''; ?>
                     </div>
                     <div class="col m-1">
                         <label>Mobile Number</label>
                         <!-- <input type="tel" class="form-control" name="mobileNumber" placeholder="+639876543210 or 09876543210" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" required> -->
-                        <?= (isset($_GET['errMobile']) && $_GET['errMobile'] == "mobile_number_is_already_taken") ? '<input type="tel" class="form-control is-invalid" name="mobileNumber" placeholder="+639876543210 or 09876543210" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" required>' : '<input type="tel" class="form-control" name="mobileNumber" placeholder="+639876543210 or 09876543210" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" required>'; ?>
-                        <?= (isset($_GET['errMobile']) && $_GET['errMobile'] == "mobile_number_is_already_taken") ? '<span class="text-danger">Mobile Number is already taken!</span>' : ''; ?>
+                        <?= (isset($_GET['errMobile']) && $_GET['errMobile'] == "mobile_number_is_already_taken") ? '<input type="tel" class="form-control is-invalid" name="mobileNumber" placeholder="+639876543210 or 09876543210" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" required>' : ((isset($_GET['mobile'])) ? '<input type="tel" class="form-control" name="mobileNumber" value= "' . str_replace(' ', '+', $_GET['mobile']) . '" placeholder="+639876543210 or 09876543210" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" required>' : '<input type="tel" class="form-control" name="mobileNumber" placeholder="+639876543210 or 09876543210" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" required>') ?>
+                        <?= (isset($_GET['errMobile']) && $_GET['errMobile'] == "mobile_number_is_already_taken") ? '<small class="text-danger">Mobile Number is already taken!</small>' : ''; ?>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col m-1">
                         <label>Disease</label>
-                        <input type="text" name="disease" class="form-control" required>
+                        <?= (isset($_GET['disease'])) ? '<input type="text" name="disease" value="' . $_GET['disease'] . '" class="form-control" required>' : '<input type="text" name="disease" class="form-control" required>' ?>
                     </div>
                     <div class="col m-1">
                         <label>Age</label>
-                        <input type="number" name="age" class="form-control" min="1" required>
+                        <?= (isset($_GET['age'])) ? '<input type="number" name="age" value="' . $_GET['age'] . '" class="form-control" min="1" required>' : '<input type="number" name="age" class="form-control" min="1" required>' ?>
                     </div>
                 </div>
 
@@ -243,6 +243,19 @@ if (!isset($_SESSION['nId'])) {
                         <label>Gender</label>
                         <select name="gender" class="form-control" required>
                             <option value="">select a gender</option>
+                            <?php
+                            if (isset($_GET['gender']) == "male") {
+                            ?>
+                                <option value="male" selected>Male</option>
+                                <option value="female">Female</option>
+                            <?php
+                            } else if (isset($_GET['gender']) == "female") {
+                            ?>
+                                <option value="male">Male</option>
+                                <option value="female" selected>Female</option>
+                            <?php
+                            }
+                            ?>
                             <option value="male">Male</option>
                             <option value="female">Female</option>
                         </select>
@@ -258,7 +271,11 @@ if (!isset($_SESSION['nId'])) {
 
                             while ($doctors = $stmt->fetch(PDO::FETCH_ASSOC)) :
                             ?>
-                                <option value="<?= $doctors['dName'] ?>"><?= $doctors['dName'] ?> -> <?= $doctors['dSpecialization'] ?></option>
+                                <option value="<?= $doctors['dName'] ?>" <?php
+                                                                            if (isset($_GET['doctor']) && $_GET['doctor'] == $doctors['dName']) {
+                                                                                echo "selected";
+                                                                            }
+                                                                            ?>><?= $doctors['dName'] ?> -> <?= $doctors['dSpecialization'] ?></option>
                             <?php endwhile; ?>
                         </select>
                     </div>
@@ -301,6 +318,10 @@ if (!isset($_SESSION['nId'])) {
                                 if ($rooms['room_number'] == $addPatientRoom) {
                                 ?>
 
+                                    <option value="<?= $rooms['room_number'] ?>" selected><?= $rooms['room_number'] ?></option>
+                                <?php
+                                } else if ($_GET['room'] == $rooms['room_number']) {
+                                ?>
                                     <option value="<?= $rooms['room_number'] ?>" selected><?= $rooms['room_number'] ?></option>
                                 <?php
                                 } else {

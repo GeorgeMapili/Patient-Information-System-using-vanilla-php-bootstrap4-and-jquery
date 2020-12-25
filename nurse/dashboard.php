@@ -155,7 +155,7 @@ if (!isset($_SESSION['nId'])) {
                 ?>
                 <div class="col-sm-6 col-md-4 col-lg-3">
                     <div class="card text-white bg-dark mb-3">
-                        <div class="card-header h2">Discharged Patient</div>
+                        <div class="card-header h2">Discharged Walkin Patient</div>
                         <div class="card-body">
                             <h5 class="card-title"><?= $dischargedPatient ?></h5>
                         </div>

@@ -104,6 +104,7 @@ if (isset($_POST['walkInQuery'])) {
         <th scope="col">Room #</th>
         <th scope="col">Add</th>
         <th scope="col">Generate</th>
+        <th scope="col">Action</th>
     </tr>
 </thead>
 <tbody>
@@ -161,6 +162,13 @@ if (isset($_POST['walkInQuery'])) {
             </tr>
             ';
             }
+            $walkInOutput .= '
+            <td>
+                <form action="patientWalkIn.php" method="post">
+                    <input type="hidden" name="walkInId" value=' . $walkInPatient['walkInId'] . '>
+                    <input type="submit" name="deleteWalkInPatientBtn" class="btn btn-danger" value="DELETE" onclick="return confirm(\'Are you sure to delete ?\')">
+                </form>
+            </td>';
 
             $walkInOutput .= '</tbody>';
         }

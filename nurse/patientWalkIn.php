@@ -73,6 +73,40 @@ if (!isset($_SESSION['nId'])) {
     <main role="main">
         <div class="container-fluid">
 
+            <?php
+
+            if (isset($_POST['deleteWalkInPatientBtn'])) {
+                $walkInId = $_POST['walkInId'];
+
+                // Get the roomNumber of the walkin patient
+                $sql = "SELECT * FROM walkinpatient WHERE walkInId = :id";
+                $stmt = $con->prepare($sql);
+                $stmt->bindParam(":id", $walkInId, PDO::PARAM_INT);
+                $stmt->execute();
+
+                $room = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                $roomNumber = $room['walkInRoomNumber'];
+
+                // Update the room FROM occupied to available
+                $status = "available";
+                $sql = "UPDATE rooms SET room_status = :status WHERE room_number = :roomNumber";
+                $stmt = $con->prepare($sql);
+                $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+                $stmt->bindParam(":roomNumber", $roomNumber, PDO::PARAM_INT);
+                $stmt->execute();
+
+                // Delete the walkin patient
+                $sql = "DELETE FROM walkinpatient WHERE walkInId = :id";
+                $stmt = $con->prepare($sql);
+                $stmt->bindParam(":id", $walkInId, PDO::PARAM_INT);
+                $stmt->execute();
+
+                header("location:patientWalkIn.php?succDeleteWalkInPatient=successfully_deleted_walk_in_patient");
+                exit(0);
+            }
+            ?>
+
             <h3 class="display-4 mt-5 my-4" id="primaryColor">All Walk in Patients</h3>
 
             <?php
@@ -111,12 +145,9 @@ if (!isset($_SESSION['nId'])) {
             ?>
             <div class="text-center">
                 <?= (isset($_GET['succAdd']) && $_GET['succAdd'] == "Successfully_added_medical_information") ? '<span class="text-success">Successfully added medical information!</span>' : ''; ?>
-            </div>
-            <div class="text-center">
                 <?= (isset($_GET['errUp']) && $_GET['errUp'] == "Nothing_to_update") ? '<span class="text-danger">Nothing to update!</span>' : ''; ?>
-            </div>
-            <div class="text-center">
                 <?= (isset($_GET['succUp']) && $_GET['succUp'] == "Updated_successfully") ? '<span class="text-success">Successfully updated!</span>' : ''; ?>
+                <?= (isset($_GET['succDeleteWalkInPatient']) && $_GET['succDeleteWalkInPatient'] == "successfully_deleted_walk_in_patient") ? '<span class="text-success">Successfully deleted walk in patient!</span>' : ''; ?>
             </div>
             <div class="row">
                 <div class="col">
@@ -137,6 +168,7 @@ if (!isset($_SESSION['nId'])) {
                         <th scope="col">Room #</th>
                         <th scope="col">Add</th>
                         <th scope="col">Generate</th>
+                        <th scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -211,6 +243,12 @@ if (!isset($_SESSION['nId'])) {
                                 }
                                 ?>
 
+                            </td>
+                            <td>
+                                <form action="patientWalkIn.php" method="post">
+                                    <input type="hidden" name="walkInId" value="<?= $walkInPatient['walkInId']; ?>">
+                                    <input type="submit" name="deleteWalkInPatientBtn" class="btn btn-danger" value="DELETE" onclick="return confirm('Are you sure to delete ?')">
+                                </form>
                             </td>
                         </tr>
 
