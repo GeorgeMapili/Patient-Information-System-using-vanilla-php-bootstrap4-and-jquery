@@ -68,7 +68,7 @@ if (isset($_SESSION['nId'])) {
 
     ?>
 
-    <h2 class="display-4 mb-3" style="color: rgb(15, 208, 214);">Nurse Login</h2>
+    <h2 class="display-4 mb-3" style="color: rgb(15, 208, 214);">Nurse Receptionist Login</h2>
     <form action="index.php" method="post">
 
         <?= (isset($_GET['errField']) && $_GET['errField'] == "Please_input_all_field") ? '<div class="text-center my-3"><span class="text-danger text">Please input all fields</span></div>' : ''; ?>

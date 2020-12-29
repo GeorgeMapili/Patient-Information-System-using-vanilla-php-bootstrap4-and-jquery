@@ -159,7 +159,7 @@ if (isset($_POST['walkInQuery'])) {
                     <input type="submit" value="GENERATE BILL" class="btn btn-primary" name="generateBill">
                 </form>
                 </td>
-            </tr>
+            
             ';
             }
             $walkInOutput .= '
@@ -170,7 +170,7 @@ if (isset($_POST['walkInQuery'])) {
                 </form>
             </td>';
 
-            $walkInOutput .= '</tbody>';
+            $walkInOutput .= '</tr></tbody>';
         }
         echo $walkInOutput;
     } else {
