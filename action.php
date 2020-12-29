@@ -6,7 +6,7 @@ require_once 'connect.php';
 // Health Library live search
 if (isset($_REQUEST["term"])) {
     // Prepare a select statement
-    $sql = "SELECT * FROM `diseases&treatment` WHERE dtName LIKE :name";
+    $sql = "SELECT * FROM `diseases_treatment` WHERE dtName LIKE :name";
 
     if ($stmt  = $con->prepare($sql)) {
         // Bind Parameters

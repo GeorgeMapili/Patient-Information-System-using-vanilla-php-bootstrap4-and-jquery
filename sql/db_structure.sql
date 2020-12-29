@@ -1,6 +1,8 @@
 /* Create a database */
 CREATE DATABASE pis;
 
+USE pis;
+
 /* Create admin table */
 CREATE TABLE admin(
 `ad_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -63,8 +65,8 @@ CREATE TABLE discharged_patient(
 PRIMARY KEY(`dpId`)
 );
 
-/* Create diseases&treatment table */
-CREATE TABLE diseases&treatment(
+/* Create diseases_treatment table */
+CREATE TABLE diseases_treatment(
 `dtId` int(11) NOT NULL AUTO_INCREMENT,
 `dtName` varchar(255) NOT NULL,
 `dtMeaning` TEXT NOT NULL,
@@ -225,8 +227,8 @@ INSERT INTO bloodtype(bloodType)VALUES
 ('AB+'),
 ('AB-');
 
--- Add data in the diseases&treatment table
-INSERT INTO diseases&treatment(dtName,dtMeaning,dtSymptoms,dtPrevention,dtTreatment,dtMadeOn) VALUES
+-- Add data in the diseases_treatment table
+INSERT INTO diseases_treatment(dtName,dtMeaning,dtSymptoms,dtPrevention,dtTreatment) VALUES
 ('Fever', "A fever is a temporary increase in your body temperature, often due to an illness. Having a fever is a sign that something out of the ordinary is going on in your body.
 
 For an adult, a fever may be uncomfortable, but usually isn't a cause for concern unless it reaches 103 F (39.4 C) or higher. For infants and toddlers, a slightly elevated temperature may indicate a serious infection.
@@ -335,15 +337,15 @@ Prescription drugs for severe headaches"),
 
 -- Add data in the doctor table
 INSERT INTO doctor(dName,dEmail,dAddress,dMobile,dSpecialization,dSpecializationInfo,dProfileImg,dFee,dPassword) VALUES
-('Dr. Bailey Sheehan', 'bailey@gmail.com', '12345 St.', '09510192919', 'Cardiologists', "They’re experts on the heart and blood vessels. You might see them for heart failure, a heart attack, high blood pressure, or an irregular heartbeat.", "18060193915fd70717276e0.jpeg", 5000, '$2y$10$QvPidR/ro2fmrJK9jWLIe.6qbMybpqPoNXK1P5bNuFI9zEKWh18g6'),
-('Dr. Ayaz Lewis', 'ayaz@gmail.com', '123456 St.', '09223345131', 'Dermatologists', "Have problems with your skin, hair, nails? Do you have moles, scars, acne, or skin allergies? Dermatologists can help.", "868689955fd707dcc8dee.png", 6000 , '$2y$10$lhCSeb2zogA2tT8m6jC7MOZSh.1A0nM1JDCrHUe.DbdM/e2TXVGum'),
-('Dr. Caspar Mclean', 'caspar@gmail.com', '123 St.', '09123463542', 'Immunologists', "They treat immune system disorders such as asthma, eczema, food allergies, insect sting allergies, and some autoimmune diseases.", "16468818425fd7082062b8e.jpeg", 5000, '$2y$10$m6nt2dTAXqqiDTBcxNyCWeyCEU2m6t.V1f7ioxBzw10Sl2RBkyo2C'),
-('Dr. Tom Corona', 'tom@gmail.com', '1234567 St.', '0953435731', 'Anesthesiologists', "These doctors give you drugs to numb your pain or to put you under during surgery, childbirth, or other procedures. They monitor your vital signs while you’re under anesthesia.", "16668826975fd70893d22b4.jpeg", 8000, '$2y$10$9Crs9UQWxFPs8hamyRkRJugPZlIibKLh8.1u54xCG2ZzKwHvZGktq'),
-('Dr. Lola Whelan', 'lola@gmail.com', '12345678 St.', '09123578324', 'Neurologists', "These are specialists in the nervous system, which includes the brain, spinal cord, and nerves. They treat strokes, brain and spinal tumors, epilepsy, Parkinson's disease, and Alzheimer's disease.", "17884721315fd708eba9ddc.jpeg", 10000, '$2y$10$89V7nKL7iLjUmG1utso2CeTpHUPd/tlWs16qges4ekQ8oSz1Yk2r.'),
-('Dr. Anoushka Delacruz', 'anoushka@gmail.com', '987546 St.', '09563214578', 'Endocrinologists', "These are experts on hormones and metabolism. They can treat conditions like diabetes, thyroid problems, infertility, and calcium and bone disorders.", "1243365995fd7095809583.jpeg", 8000, '$2y$10$ZMPvLQWdMBjbT1CWOqqdoOwYqHVU9WEkltk9ubNLc2shS/cje1Fy.'),
-('Dr. Reilly Leblanc', 'reilly@gmail.com', '3475893749 St.', '09564257815', 'Gastroenterologists', "They’re specialists in digestive organs, including the stomach, bowels, pancreas, liver, and gallbladder. You might see them for abdominal pain, ulcers, diarrhea, jaundice, or cancers in your digestive organs. They also do a colonoscopy and other tests for colon cancer.", '14631379195fd709cb51bc6.jpeg', 7000, $2y$10$n.CI6ZgCQnjmCvnhi9jRs.g30C7okiiirSVEsRE6COOwTY4CHG6ny),
-('Dr. Lexie Robins', 'lexie@gmail.com', '457883 St.', '09456432172', 'Colon Surgeons', "You would see these doctors for problems with your small intestine, colon, and bottom. They can treat colon cancer, hemorrhoids, and inflammatory bowel disease.", '5867497055fd70a1e4daf0.jpeg', 13000, '$2y$10$zd2wmk5mHCjVUVHoqBHAtOAwlNDocDgDkzU9FXXNQzlruhD.N/v.u'),
-('Dr. Jose Rizal', 'jose@gmail.com', '12345 Main St.', '+639550596633', 'Psychiatrist', "A psychiatrist is a physician who specializes in psychiatry, the branch of medicine devoted to the diagnosis, prevention, study, and treatment of mental disorders.", '15001381415fe6e74ee9ace.jpeg', 6000 , '$2y$10$BsR7bZefAuDa6GzgGSHFeu.eXLv5s9LmEBneCI7vG8xLFGE6DRqpO');
+('Dr. Bailey Sheehan', 'bailey@gmail.com', '12345 St.', '09510192919', 'Cardiologists', "They’re experts on the heart and blood vessels. You might see them for heart failure, a heart attack, high blood pressure, or an irregular heartbeat.", "18060193915fd70717276e0.jpeg", 5000, "$2y$10$QvPidR/ro2fmrJK9jWLIe.6qbMybpqPoNXK1P5bNuFI9zEKWh18g6"),
+('Dr. Ayaz Lewis', 'ayaz@gmail.com', '123456 St.', '09223345131', 'Dermatologists', "Have problems with your skin, hair, nails? Do you have moles, scars, acne, or skin allergies? Dermatologists can help.", "868689955fd707dcc8dee.png", 6000 , "$2y$10$lhCSeb2zogA2tT8m6jC7MOZSh.1A0nM1JDCrHUe.DbdM/e2TXVGum"),
+('Dr. Caspar Mclean', 'caspar@gmail.com', '123 St.', '09123463542', 'Immunologists', "They treat immune system disorders such as asthma, eczema, food allergies, insect sting allergies, and some autoimmune diseases.", "16468818425fd7082062b8e.jpeg", 5000, "$2y$10$m6nt2dTAXqqiDTBcxNyCWeyCEU2m6t.V1f7ioxBzw10Sl2RBkyo2C"),
+('Dr. Tom Corona', 'tom@gmail.com', '1234567 St.', '0953435731', 'Anesthesiologists', "These doctors give you drugs to numb your pain or to put you under during surgery, childbirth, or other procedures. They monitor your vital signs while you’re under anesthesia.", "16668826975fd70893d22b4.jpeg", 8000, "$2y$10$9Crs9UQWxFPs8hamyRkRJugPZlIibKLh8.1u54xCG2ZzKwHvZGktq"),
+('Dr. Lola Whelan', 'lola@gmail.com', '12345678 St.', '09123578324', 'Neurologists', "These are specialists in the nervous system, which includes the brain, spinal cord, and nerves. They treat strokes, brain and spinal tumors, epilepsy, Parkinson's disease, and Alzheimer's disease.", "17884721315fd708eba9ddc.jpeg", 10000, "$2y$10$89V7nKL7iLjUmG1utso2CeTpHUPd/tlWs16qges4ekQ8oSz1Yk2r."),
+('Dr. Anoushka Delacruz', 'anoushka@gmail.com', '987546 St.', '09563214578', 'Endocrinologists', "These are experts on hormones and metabolism. They can treat conditions like diabetes, thyroid problems, infertility, and calcium and bone disorders.", "1243365995fd7095809583.jpeg", 8000, "$2y$10$ZMPvLQWdMBjbT1CWOqqdoOwYqHVU9WEkltk9ubNLc2shS/cje1Fy."),
+('Dr. Reilly Leblanc', 'reilly@gmail.com', '3475893749 St.', '09564257815', 'Gastroenterologists', "They’re specialists in digestive organs, including the stomach, bowels, pancreas, liver, and gallbladder. You might see them for abdominal pain, ulcers, diarrhea, jaundice, or cancers in your digestive organs. They also do a colonoscopy and other tests for colon cancer.", '14631379195fd709cb51bc6.jpeg', 7000, "$2y$10$n.CI6ZgCQnjmCvnhi9jRs.g30C7okiiirSVEsRE6COOwTY4CHG6ny"),
+('Dr. Lexie Robins', 'lexie@gmail.com', '457883 St.', '09456432172', 'Colon Surgeons', "You would see these doctors for problems with your small intestine, colon, and bottom. They can treat colon cancer, hemorrhoids, and inflammatory bowel disease.", '5867497055fd70a1e4daf0.jpeg', 13000, "$2y$10$zd2wmk5mHCjVUVHoqBHAtOAwlNDocDgDkzU9FXXNQzlruhD.N/v.u"),
+('Dr. Jose Rizal', 'jose@gmail.com', '12345 Main St.', '+639550596633', 'Psychiatrist', "A psychiatrist is a physician who specializes in psychiatry, the branch of medicine devoted to the diagnosis, prevention, study, and treatment of mental disorders.", '15001381415fe6e74ee9ace.jpeg', 6000 , "$2y$10$BsR7bZefAuDa6GzgGSHFeu.eXLv5s9LmEBneCI7vG8xLFGE6DRqpO");
 
 -- Add data in the ffmedicaldisease table
 INSERT INTO ffmedicaldisease(md_name)VALUES
@@ -368,7 +370,7 @@ INSERT INTO nurse_receptionist(nName,nEmail,nAddress,nMobile,nProfileImg,nPasswo
 INSERT INTO patientappointment(pName,pEmail,pAddress,pAge,pGender,pMobile,pPassword,pProfile)VALUES
 ('Test', 'test@gmail.com', '123456789 Main St.', 26, 'female', '+639550596633', '$2y$10$s2LbH.I72xrA68JMp/7uK.0gMJ3BUlETlo6DWc.q49BQCdQEh4nNe','11253286695fe0a42101412.jpeg'),
 ('TestOne', 'testone@gmail.com', '123456789 Main St.', 15, 'female', '+639550594444', '$2y$10$QYyTcuxC./LPr3UnRFUEoeBhnU0ZNr.RAyMFhhDsUte0qqwQZw61a', '16910215945fe0a47d78480.jpeg'),
-('TestTwo', 'test2@gmail.com', 'test2@gmail.com', '123456789 Main St.', 8, 'male', '+639550596888', '$2y$10$hHZ0EqFSfa/0XZBfyj5m2e9Yuv7N4ONW/eUgBimoyBKBKkrYCjq.G', '10026098655fe0a48ab83dd.jpeg'),
+('TestTwo', 'test2@gmail.com', '123456789 Main St.', 8, 'male', '+639550596888', '$2y$10$hHZ0EqFSfa/0XZBfyj5m2e9Yuv7N4ONW/eUgBimoyBKBKkrYCjq.G', '10026098655fe0a48ab83dd.jpeg'),
 ('TestThree', 'testthree@gmail.com', '123456789 Main St.', 45, 'male', '+639550596898', '$2y$10$wUYS46EsspVTmMtCM/3lYu6vaXGa.gXCV.nx9zypbv/Te2DzBMu2e', '3510427535fe0cb65b7d83.jpeg'),
 ('TestFour', 'testfour@gmail.com', '1234567 Main St.', 25, 'male', '+639550596333', '$2y$10$BspJN3qZ6koPLZH04tWi5eY6urpiYgAk3.7ZlfEuE39/M5.pJSY0.', '7576211125fe1c4d923b50.jpeg');
 

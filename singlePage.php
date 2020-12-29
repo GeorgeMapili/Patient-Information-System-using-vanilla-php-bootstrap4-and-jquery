@@ -96,7 +96,7 @@ if (!isset($_SESSION['id'])) {
 
                 $id = $_GET['id'];
 
-                $sql = "SELECT * FROM `diseases&treatment` WHERE dtId = :id";
+                $sql = "SELECT * FROM `diseases_treatment` WHERE dtId = :id";
                 $stmt = $con->prepare($sql);
                 $stmt->bindParam(":id", $id, PDO::PARAM_INT);
                 $stmt->execute();
