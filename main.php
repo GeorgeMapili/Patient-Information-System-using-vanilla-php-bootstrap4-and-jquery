@@ -41,7 +41,7 @@ $stmt->execute();
                         <a class="nav-link" href="main.php">Home <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="appointment.php">Set an Appointment</a>
+                        <a class="nav-link" href="appointment.php">Set Appointment</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link " href="doctors.php">Doctors</a>
@@ -53,7 +53,7 @@ $stmt->execute();
                         <a class="nav-link " href="healthLibrary.php">Health Library</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " href="myappointment.php">My Appointments</a>
+                        <a class="nav-link " href="myappointment.php">Appointments</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link " href="acceptedAppointment.php">Accepted Appointments</a>
