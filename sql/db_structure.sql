@@ -367,12 +367,12 @@ INSERT INTO nurse_receptionist(nName,nEmail,nAddress,nMobile,nProfileImg,nPasswo
 ('Test', 'test@gmail.com', '12345 Main St.', '+639550596223', '11249402855fdc3dde397b0.jpeg', "$2y$10$Gw.Y7WrvEiNfm0RxX1jkw.4YbJFi/Whfk4cVOTHcM78pqTckbBg56");
 
 -- Add data in the patientappointment table
-INSERT INTO patientappointment(pName,pEmail,pAddress,pAge,pGender,pMobile,pPassword,pProfile)VALUES
-('Test', 'test@gmail.com', '123456789 Main St.', 26, 'female', '+639550596633', '$2y$10$s2LbH.I72xrA68JMp/7uK.0gMJ3BUlETlo6DWc.q49BQCdQEh4nNe','11253286695fe0a42101412.jpeg'),
-('TestOne', 'testone@gmail.com', '123456789 Main St.', 15, 'female', '+639550594444', '$2y$10$QYyTcuxC./LPr3UnRFUEoeBhnU0ZNr.RAyMFhhDsUte0qqwQZw61a', '16910215945fe0a47d78480.jpeg'),
-('TestTwo', 'test2@gmail.com', '123456789 Main St.', 8, 'male', '+639550596888', '$2y$10$hHZ0EqFSfa/0XZBfyj5m2e9Yuv7N4ONW/eUgBimoyBKBKkrYCjq.G', '10026098655fe0a48ab83dd.jpeg'),
-('TestThree', 'testthree@gmail.com', '123456789 Main St.', 45, 'male', '+639550596898', '$2y$10$wUYS46EsspVTmMtCM/3lYu6vaXGa.gXCV.nx9zypbv/Te2DzBMu2e', '3510427535fe0cb65b7d83.jpeg'),
-('TestFour', 'testfour@gmail.com', '1234567 Main St.', 25, 'male', '+639550596333', '$2y$10$BspJN3qZ6koPLZH04tWi5eY6urpiYgAk3.7ZlfEuE39/M5.pJSY0.', '7576211125fe1c4d923b50.jpeg');
+-- INSERT INTO patientappointment(pName,pEmail,pAddress,pAge,pGender,pMobile,pPassword,pProfile)VALUES
+-- ('Test', 'test@gmail.com', '123456789 Main St.', 26, 'female', '+639550596633', '$2y$10$s2LbH.I72xrA68JMp/7uK.0gMJ3BUlETlo6DWc.q49BQCdQEh4nNe','11253286695fe0a42101412.jpeg'),
+-- ('TestOne', 'testone@gmail.com', '123456789 Main St.', 15, 'female', '+639550594444', '$2y$10$QYyTcuxC./LPr3UnRFUEoeBhnU0ZNr.RAyMFhhDsUte0qqwQZw61a', '16910215945fe0a47d78480.jpeg'),
+-- ('TestTwo', 'test2@gmail.com', '123456789 Main St.', 8, 'male', '+639550596888', '$2y$10$hHZ0EqFSfa/0XZBfyj5m2e9Yuv7N4ONW/eUgBimoyBKBKkrYCjq.G', '10026098655fe0a48ab83dd.jpeg'),
+-- ('TestThree', 'testthree@gmail.com', '123456789 Main St.', 45, 'male', '+639550596898', '$2y$10$wUYS46EsspVTmMtCM/3lYu6vaXGa.gXCV.nx9zypbv/Te2DzBMu2e', '3510427535fe0cb65b7d83.jpeg'),
+-- ('TestFour', 'testfour@gmail.com', '1234567 Main St.', 25, 'male', '+639550596333', '$2y$10$BspJN3qZ6koPLZH04tWi5eY6urpiYgAk3.7ZlfEuE39/M5.pJSY0.', '7576211125fe1c4d923b50.jpeg');
 
 -- Add data in the rooms table 
 INSERT INTO rooms(room_number,room_fee,room_status)VALUES

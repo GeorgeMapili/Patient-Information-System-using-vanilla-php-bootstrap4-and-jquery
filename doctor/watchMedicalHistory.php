@@ -48,7 +48,7 @@ if (!isset($_SESSION['dId'])) {
                         <a class="nav-link " href="cancelledAppointment.php">Cancelled Appointment</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " href="doneAppointment.php">Done Appointment</a>
+                        <a class="nav-link " href="doneAppointment.php">Finished Appointment</a>
                     </li>
                 </ul>
                 <!-- search bar -->

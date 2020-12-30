@@ -150,9 +150,6 @@ if (!isset($_SESSION['nId'])) {
                         header("location:generateBillAppointment.php?errAmount=too_low_amount");
                         exit(0);
                     }
-                } else {
-                    header("location:dashboard.php");
-                    exit(0);
                 }
             }
 
@@ -161,11 +158,9 @@ if (!isset($_SESSION['nId'])) {
             <div class="container">
                 <div class="row justify-content-center bg-light">
                     <div class="col-lg-6 px-4 pb-4" id="order">
-
-                        <?php
-
-
-                        ?>
+                        <div class="text-center my-3">
+                            <?= (isset($_GET['errAmount']) && $_GET['errAmount'] == "too_low_amount" ? '<span class="text-danger">Amount is too low!</span>' : '') ?>
+                        </div>
                         <form action="generateBillAppointment.php" method="post" id="placeOrder">
                             <h1 class=" text-center mt-3">Patient information</h1>
 
