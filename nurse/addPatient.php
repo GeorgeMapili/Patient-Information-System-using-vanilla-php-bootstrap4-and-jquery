@@ -89,6 +89,18 @@ if (!isset($_SESSION['nId'])) {
                 $doctor = trim(htmlspecialchars($_POST['doctor']));
                 $roomNumber = trim(htmlspecialchars($_POST['roomNumber']));
 
+                // check if the patient is already been patient before
+                $sql = "SELECT * FROM returnee_patient WHERE pName = :name";
+                $stmt = $con->prepare($sql);
+                $stmt->bindParam(":name", $name, PDO::PARAM_STR);
+                $stmt->execute();
+
+                $patientRow = $stmt->rowCount();
+                if ($patientRow > 0) {
+                    header("location:addPatient.php?errPatient=already_an_patient_before");
+                    exit(0);
+                }
+
                 // Check if to fill all fields
                 if (empty($name) || empty($address) || empty($email) || empty($mobileNumber) || empty($disease) || empty($age) || empty($gender) || empty($doctor) || empty($roomNumber)) {
                     header("location:addPatient.php?errField=please_input_all_fields");
@@ -198,6 +210,7 @@ if (!isset($_SESSION['nId'])) {
 
             <?= (isset($_GET['addSucc']) && $_GET['addSucc'] == "Successfully_added_new_walkin_patient") ? '<div class="text-center"><h3 class="text-success">Successfully added new walk in patient!</h3></div>' : '';  ?>
             <?= (isset($_GET['errField']) && $_GET['errField'] == "please_input_all_fields") ? '<div class="text-center"><h3 class="text-danger">Please input all fields!</h3></div>' : '';  ?>
+            <?= (isset($_GET['errPatient']) && $_GET['errPatient'] == "already_an_patient_before") ? '<div class="text-center"><h3 class="text-danger">Already an patient before!</h3></div>' : '';  ?>
 
             <form action="addPatient.php" method="post">
                 <div class="row">
