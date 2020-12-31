@@ -130,15 +130,17 @@ if (!isset($_SESSION['nId'])) {
                 </div>
 
                 <?php
-                $sql = "SELECT * FROM rooms";
+                $status = "available";
+                $sql = "SELECT * FROM rooms WHERE room_status = :status";
                 $stmt = $con->prepare($sql);
+                $stmt->bindParam(":status", $status, PDO::PARAM_STR);
                 $stmt->execute();
 
                 $roomCount = $stmt->rowCount();
                 ?>
                 <div class="col-sm-6 col-md-4 col-lg-3">
                     <div class="card text-white bg-dark mb-3">
-                        <div class="card-header h2"> Total Rooms</div>
+                        <div class="card-header h2"> Available Rooms</div>
                         <div class="card-body">
                             <h5 class="card-title"><?= $roomCount ?></h5>
                         </div>
@@ -189,7 +191,7 @@ if (!isset($_SESSION['nId'])) {
 
             <!-- FOOTER -->
             <footer class="text-center">
-                <p>&copy; 2017-2018 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+                <p>&copy; <?= date("Y") ?> Company, Inc. &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
             </footer>
         </div>
     </main>

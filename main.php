@@ -96,8 +96,8 @@ $stmt->execute();
                     <img class="first-slide" src="img/carousel1.jpg" style="opacity: 0.7;" alt="First slide">
                     <div class="container">
                         <div class="carousel-caption text-left" id="carouselText">
-                            <h1>Example headline.</h1>
-                            <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                            <h1>Professional Doctors.</h1>
+                            <p>A Great Place to Work. A Great Place to Receive Care.</p>
                         </div>
                     </div>
                 </div>
@@ -105,8 +105,8 @@ $stmt->execute();
                     <img class="second-slide" src="img/carousel2.jpeg" style="opacity: 0.7;" alt="Second slide">
                     <div class="container">
                         <div class="carousel-caption" id="carouselText">
-                            <h1>Another example headline.</h1>
-                            <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                            <h1>Care You Can Trust.</h1>
+                            <p>Passionate About Medicine. Compassionate About People.</p>
                         </div>
                     </div>
                 </div>
@@ -114,8 +114,8 @@ $stmt->execute();
                     <img class="third-slide" src="img/carousel3.jpg" style="opacity: 0.7;" alt="Third slide">
                     <div class="container">
                         <div class="carousel-caption text-right" id="carouselText">
-                            <h1>One more for good measure.</h1>
-                            <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                            <h1>Caring For You And Your Family.</h1>
+                            <p>A Wealth of Experience To Heal and Help You.</p>
                         </div>
                     </div>
                 </div>
@@ -143,11 +143,11 @@ $stmt->execute();
 
             <div class="row featurette">
                 <div class="col-md-7">
-                    <h2 class="featurette-heading">First featurette heading. <span class="text-muted">It'll blow your mind.</span></h2>
-                    <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+                    <h2 class="featurette-heading">Pleasant atmosphere.</h2>
+                    <p class="lead">These beds have special features both for the comfort and well-being of the patient and for the convenience of health care workers.</p>
                 </div>
                 <div class="col-md-5">
-                    <img class="featurette-image img-fluid mx-auto" src="img/feature1.jpeg" alt="Generic placeholder image">
+                    <img class="featurette-image img-fluid mx-auto" src="img/clinic.jpg" alt="Generic placeholder image">
                 </div>
             </div>
 
@@ -155,8 +155,8 @@ $stmt->execute();
 
             <div class="row featurette">
                 <div class="col-md-7 order-md-2">
-                    <h2 class="featurette-heading">Oh yeah, it's that good. <span class="text-muted">See for yourself.</span></h2>
-                    <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+                    <h2 class="featurette-heading">Top of the line equipments.</h2>
+                    <p class="lead">With the latest technology and medical equipment in patient care that helps the doctors diagnose diseases and treat patients effectively and efficiently.</p>
                 </div>
                 <div class="col-md-5 order-md-1">
                     <img class="featurette-image img-fluid mx-auto" src="img/feature2.jpeg" alt="Generic placeholder image">
@@ -167,8 +167,8 @@ $stmt->execute();
 
             <div class="row featurette">
                 <div class="col-md-7">
-                    <h2 class="featurette-heading">And lastly, this one. <span class="text-muted">Checkmate.</span></h2>
-                    <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+                    <h2 class="featurette-heading">Skilled Doctors.</h2>
+                    <p class="lead">Doctors take an oath to care for people to the best of their ability as their profession.</p>
                 </div>
                 <div class="col-md-5">
                     <img class="featurette-image img-fluid mx-auto" src="img/feature3.jpeg" alt="Generic placeholder image">
@@ -185,7 +185,7 @@ $stmt->execute();
         <!-- FOOTER -->
         <footer class="container">
             <p class="float-right"><a href="#">Back to top</a></p>
-            <p>&copy; 2017-2018 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+            <p>&copy; <?= date("Y") ?> Company, Inc. &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
         </footer>
     </main>
 

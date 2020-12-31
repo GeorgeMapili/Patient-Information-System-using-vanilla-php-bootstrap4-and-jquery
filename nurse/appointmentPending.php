@@ -18,7 +18,7 @@ if (!isset($_SESSION['nId'])) {
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/main.css" />
-    <title>Nurse | Patient</title>
+    <title>Nurse | Pending Appointment</title>
 </head>
 
 <body>
@@ -169,6 +169,13 @@ if (!isset($_SESSION['nId'])) {
                     <?php endwhile; ?>
                 </tbody>
             </table>
+
+            <hr class="featurette-divider">
+
+            <!-- FOOTER -->
+            <footer class="text-center">
+                <p>&copy; <?= date("Y") ?> Company, Inc. &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
+            </footer>
     </main>
 
 

@@ -22,6 +22,8 @@ if (isset($_GET['walkInDischargeReceipt']) && $_GET['walkInDischargeReceipt'] ==
 
     $pdf = new FPDF('P', 'mm', 'A4');
 
+    $pdf->SetTitle($dischargePatient['pName'] . " Receipt");
+
     $pdf->AddPage();
 
     // STart here

@@ -18,7 +18,7 @@ if (!isset($_SESSION['dId'])) {
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/main.css" />
-    <title>Doctor | Add Prescription</title>
+    <title>Doctor | Home</title>
 </head>
 
 <body>
@@ -34,7 +34,7 @@ if (!isset($_SESSION['dId'])) {
                     <li class="nav-item">
                         <a class="nav-link" href="dashboard.php">Home <span class="sr-only">(current)</span></a>
                     </li>
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="walkInPatient.php">Walk in Patient</a>
                     </li>
                     <li class="nav-item">
@@ -46,7 +46,7 @@ if (!isset($_SESSION['dId'])) {
                     <li class="nav-item">
                         <a class="nav-link " href="cancelledAppointment.php">Cancelled Appointment</a>
                     </li>
-                    <li class="nav-item ">
+                    <li class="nav-item">
                         <a class="nav-link " href="doneAppointment.php">Finished Appointment</a>
                     </li>
                 </ul>
@@ -75,87 +75,37 @@ if (!isset($_SESSION['dId'])) {
 
     <main role="main">
 
-        <?php
-        if (isset($_POST['submitAddPrescriptionWalkIn'])) {
-            $id = $_POST['id'];
-            $prescription = trim(htmlspecialchars($_POST['patientPrescription']));
-
-            $sql = "UPDATE walkinpatient SET walkInPrescription = :prescription WHERE walkInId= :id";
-            $stmt = $con->prepare($sql);
-            $stmt->bindParam(":prescription", $prescription, PDO::PARAM_STR);
-            $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-            $stmt->execute();
-
-            header("location:walkInPatient.php?succAddPrescription=Successfully_added_prescription");
-            exit(0);
-        }
-        ?>
-
         <div class="container">
 
-            <div class="mt-4 mb-4">
-                <h1 class="Display-4" id="primaryColor">Walk in Patient Prescription</h1>
+
+            <div class="my-5">
+                <div class="text-center">
+                    <h1 id="primaryColor" class="display-3">Privacy Policy</h1>
+                </div>
             </div>
 
+            <div class="px-5">
+                <p class="lead">
+                    Company Name we operate https://localhost/pis. This page informs you of our policies regarding the collection, use and disclosure of Personal Information we receive from users of the Site.
+                </p>
+                <p class="lead">
+                    We use your Personal Information only for providing and improving the Site. By using the Site, you agree to the collection and use of information in accordance with this policy.
+                </p>
+            </div>
 
+            <h4 class="text-center my-5" id="primaryColor">Information Collection and Use</h4>
+            <div class="px-5">
+                <p class="lead">
+                    While using our Site, we may ask you to provide us with certain personally identifiable information that can be used to contact or identify you. Personally identifiable information may include, but is not limited to your name or personal information.
+                </p>
+            </div>
 
-            <form action="addPrescriptionWalkIn.php" method="post">
-                <div class="row">
+            <hr class="featurette-divider">
 
-                    <?php
-                    if (isset($_POST['addPrescriptionWalkIn'])) {
-                        $id = $_POST['id'];
-
-                        $sql = "SELECT * FROM walkinpatient WHERE walkInId = :id";
-                        $stmt = $con->prepare($sql);
-                        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-                        $stmt->execute();
-
-                        $addPrescription = $stmt->fetch(PDO::FETCH_ASSOC);
-                    } else {
-
-                        header("location:dashboard.php");
-                        exit(0);
-                    }
-                    ?>
-                    <div class="col">
-                        <input type="hidden" name="id" value="<?= $id ?>">
-                        <label>Patient Name</label>
-                        <input type="text" name="patientName" class="form-control" value="<?= $addPrescription['walkInName'] ?>" readonly>
-                    </div>
-                    <div class="col">
-                        <label>Patient Disease</label>
-                        <input type="text" name="patientDisease" class="form-control" value="<?= $addPrescription['walkInDisease'] ?>" readonly>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <label>Address</label>
-                        <input type="text" name="patientAddress" class="form-control" value="<?= $addPrescription['walkInAddress'] ?>" readonly>
-                    </div>
-                    <div class="col">
-                        <label>Mobile Number</label>
-                        <input type="tel" name="patientMobile" class="form-control" value="<?= $addPrescription['walkInMobile'] ?>" readonly>
-                    </div>
-                </div>
-
-                <label for="">Prescription or Medicines</label>
-                <textarea name="patientPrescription" class="form-control resize-0" cols="30" rows="10"></textarea>
-                <div class="text-center mt-3">
-                    <input type="submit" class="btn" id="docBtnApt" value="Submit" name="submitAddPrescriptionWalkIn">
-                </div>
-            </form>
-        </div>
-
-
-        <hr class="featurette-divider">
-
-
-
-        <!-- FOOTER -->
-        <footer class="container text-center">
-            <p>&copy; <?= date("Y") ?> Company, Inc. &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
-        </footer>
+            <!-- FOOTER -->
+            <footer class="container text-center">
+                <p>&copy; <?= date("Y") ?> Company, Inc. &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
+            </footer>
     </main>
 
 

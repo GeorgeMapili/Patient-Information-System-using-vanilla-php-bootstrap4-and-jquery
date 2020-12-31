@@ -18,7 +18,7 @@ if (!isset($_SESSION['dId'])) {
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/main.css" />
-    <title>Doctor | Add Prescription</title>
+    <title>Doctor | Home</title>
 </head>
 
 <body>
@@ -34,7 +34,7 @@ if (!isset($_SESSION['dId'])) {
                     <li class="nav-item">
                         <a class="nav-link" href="dashboard.php">Home <span class="sr-only">(current)</span></a>
                     </li>
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="walkInPatient.php">Walk in Patient</a>
                     </li>
                     <li class="nav-item">
@@ -46,7 +46,7 @@ if (!isset($_SESSION['dId'])) {
                     <li class="nav-item">
                         <a class="nav-link " href="cancelledAppointment.php">Cancelled Appointment</a>
                     </li>
-                    <li class="nav-item ">
+                    <li class="nav-item">
                         <a class="nav-link " href="doneAppointment.php">Finished Appointment</a>
                     </li>
                 </ul>
@@ -75,87 +75,27 @@ if (!isset($_SESSION['dId'])) {
 
     <main role="main">
 
-        <?php
-        if (isset($_POST['submitAddPrescriptionWalkIn'])) {
-            $id = $_POST['id'];
-            $prescription = trim(htmlspecialchars($_POST['patientPrescription']));
-
-            $sql = "UPDATE walkinpatient SET walkInPrescription = :prescription WHERE walkInId= :id";
-            $stmt = $con->prepare($sql);
-            $stmt->bindParam(":prescription", $prescription, PDO::PARAM_STR);
-            $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-            $stmt->execute();
-
-            header("location:walkInPatient.php?succAddPrescription=Successfully_added_prescription");
-            exit(0);
-        }
-        ?>
-
         <div class="container">
 
-            <div class="mt-4 mb-4">
-                <h1 class="Display-4" id="primaryColor">Walk in Patient Prescription</h1>
+
+            <div class="my-5">
+                <div class="text-center">
+                    <h1 id="primaryColor" class="display-3">About Us</h1>
+                </div>
             </div>
 
+            <div class="px-5">
+                <p class="lead">
+                    Company Name is open to all patients every day and provides fundamental medical care and cutting-edge medicine in a central location in the area. We use our superior academic knowledge to treat a wide range of health issues, taking a personal touch and utilizing highly specialized and up-to-date research and is known for providing quality healthcare and valuable experience to all local and international patients. Our healthcare offerings are supported by a team of compassionate and dedicated medical professionals who have rich knowledge and experience in their respective domains.
+                </p>
+            </div>
 
+            <hr class="featurette-divider">
 
-            <form action="addPrescriptionWalkIn.php" method="post">
-                <div class="row">
-
-                    <?php
-                    if (isset($_POST['addPrescriptionWalkIn'])) {
-                        $id = $_POST['id'];
-
-                        $sql = "SELECT * FROM walkinpatient WHERE walkInId = :id";
-                        $stmt = $con->prepare($sql);
-                        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-                        $stmt->execute();
-
-                        $addPrescription = $stmt->fetch(PDO::FETCH_ASSOC);
-                    } else {
-
-                        header("location:dashboard.php");
-                        exit(0);
-                    }
-                    ?>
-                    <div class="col">
-                        <input type="hidden" name="id" value="<?= $id ?>">
-                        <label>Patient Name</label>
-                        <input type="text" name="patientName" class="form-control" value="<?= $addPrescription['walkInName'] ?>" readonly>
-                    </div>
-                    <div class="col">
-                        <label>Patient Disease</label>
-                        <input type="text" name="patientDisease" class="form-control" value="<?= $addPrescription['walkInDisease'] ?>" readonly>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <label>Address</label>
-                        <input type="text" name="patientAddress" class="form-control" value="<?= $addPrescription['walkInAddress'] ?>" readonly>
-                    </div>
-                    <div class="col">
-                        <label>Mobile Number</label>
-                        <input type="tel" name="patientMobile" class="form-control" value="<?= $addPrescription['walkInMobile'] ?>" readonly>
-                    </div>
-                </div>
-
-                <label for="">Prescription or Medicines</label>
-                <textarea name="patientPrescription" class="form-control resize-0" cols="30" rows="10"></textarea>
-                <div class="text-center mt-3">
-                    <input type="submit" class="btn" id="docBtnApt" value="Submit" name="submitAddPrescriptionWalkIn">
-                </div>
-            </form>
-        </div>
-
-
-        <hr class="featurette-divider">
-
-
-
-        <!-- FOOTER -->
-        <footer class="container text-center">
-            <p>&copy; <?= date("Y") ?> Company, Inc. &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
-        </footer>
+            <!-- FOOTER -->
+            <footer class="container text-center">
+                <p>&copy; <?= date("Y") ?> Company, Inc. &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
+            </footer>
     </main>
 
 

@@ -30,6 +30,7 @@ if (isset($_POST['medicalCertBtn'])) {
 
 
     $pdf->SetFont('Arial', 'B', 14);
+    $pdf->SetTitle($medicalCertificate['pName'] . " Medical Certificate");
 
     $pdf->Cell(190, 5, 'COMPANY NAME', 0, 1);
 

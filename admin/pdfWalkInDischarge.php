@@ -27,6 +27,8 @@ if (isset($_POST['receiptBtn'])) {
 
     $medicalCertificate = $stmt->fetch(PDO::FETCH_ASSOC);
 
+    $pdf->SetTitle($medicalCertificate['pName'] . " Medical Certificate");
+
 
     $pdf->SetFont('Arial', 'B', 14);
 

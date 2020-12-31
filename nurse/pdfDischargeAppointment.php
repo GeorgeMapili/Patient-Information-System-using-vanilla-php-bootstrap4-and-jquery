@@ -25,6 +25,8 @@ if (isset($_GET['printBillings']) && $_GET['printBillings'] == "true") {
 
     $pdf = new FPDF('P', 'mm', 'A4');
 
+    $pdf->SetTitle($dischargePatientAppointment['pName'] . " Receipt");
+
     $pdf->AddPage();
 
     // STart here

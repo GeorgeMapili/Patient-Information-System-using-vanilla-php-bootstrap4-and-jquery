@@ -18,7 +18,7 @@ if (!isset($_SESSION['id'])) {
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" href="css/main.css" />
-    <title>Patient | Health Library</title>
+    <title>Patient | Set Appointment</title>
 </head>
 
 <body>
@@ -43,7 +43,7 @@ if (!isset($_SESSION['id'])) {
                     <li class="nav-item">
                         <a class="nav-link " href="contactus.php">Contact Us</a>
                     </li>
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link " href="healthLibrary.php">Health Library</a>
                     </li>
                     <li class="nav-item">
@@ -80,58 +80,32 @@ if (!isset($_SESSION['id'])) {
     <main role="main">
 
         <div class="container">
-            <div class="mt-4 mb-4">
-                <h1 class="Display-4" id="primaryColor">Health Library</h1>
+
+
+            <div class="my-5">
+                <div class="text-center">
+                    <h1 id="primaryColor" class="display-3">About Us</h1>
+                </div>
             </div>
-            <input class="form-control mr-sm-2" type="search" name="search" id="search" placeholder="Search Treatment or Diseases..." autocomplete="off" aria-label="Search">
-            <div class="list-group" id="data">
+
+            <div class="px-5">
+                <p class="lead">
+                    Company Name is open to all patients every day and provides fundamental medical care and cutting-edge medicine in a central location in the area. We use our superior academic knowledge to treat a wide range of health issues, taking a personal touch and utilizing highly specialized and up-to-date research and is known for providing quality healthcare and valuable experience to all local and international patients. Our healthcare offerings are supported by a team of compassionate and dedicated medical professionals who have rich knowledge and experience in their respective domains.
+                </p>
             </div>
 
-        </div>
+            <hr class="featurette-divider">
 
-
-        <hr class="featurette-divider">
-
-
-
-        <!-- FOOTER -->
-        <footer class="container text-center">
-            <p>&copy; <?= date("Y") ?> Company, Inc. &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
-        </footer>
+            <!-- FOOTER -->
+            <footer class="container text-center">
+                <p>&copy; <?= date("Y") ?> Company, Inc. &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
+            </footer>
     </main>
 
 
     <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
-    <!-- jQuery library -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-    <script>
-        $(document).ready(function() {
-            $('#search').keyup(function() {
-                // Get input value on change
-                var inputVal = $(this).val();
-                var resultDropdown = $(this).siblings("#data");
-
-                if (inputVal.length) {
-                    $.get("action.php", {
-                        term: inputVal
-                    }).done(function(data) {
-                        // Display the returned data in browser
-                        resultDropdown.html(data);
-                    });
-                } else {
-                    resultDropdown.empty();
-                }
-            });
-            // Set search input value on click of result item
-            $(document).on("click", "#data", function() {
-                $(this).parents("#search-box").find('input[type="text"]').val($(this).text());
-                $(this).parent("#result").empty();
-            });
-        });
-    </script>
 </body>
 
 </html>

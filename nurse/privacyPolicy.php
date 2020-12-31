@@ -18,7 +18,7 @@ if (!isset($_SESSION['nId'])) {
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/main.css" />
-    <title>Nurse | Patient Before</title>
+    <title>Nurse | Home</title>
 </head>
 
 <body>
@@ -40,7 +40,7 @@ if (!isset($_SESSION['nId'])) {
                     <li class="nav-item">
                         <a class="nav-link" href="patient.php">Patient from appointments</a>
                     </li>
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="patientWalkIn.php">Patient Walk in</a>
                     </li>
                     <li class="nav-item">
@@ -73,53 +73,42 @@ if (!isset($_SESSION['nId'])) {
     <main role="main">
 
         <div class="container">
-            <div class="mt-4 mb-4">
-                <h1 class="Display-4" id="primaryColor">Patient Before</h1>
+
+
+            <div class="my-5">
+                <div class="text-center">
+                    <h1 id="primaryColor" class="display-3">Privacy Policy</h1>
+                </div>
             </div>
-            <input class="form-control mr-sm-2" type="search" name="search" id="search" placeholder="Search Patient Name" autocomplete="off" aria-label="Search">
-            <div class="list-group" id="data">
+
+            <div class="px-5">
+                <p class="lead">
+                    Company Name we operate https://localhost/pis. This page informs you of our policies regarding the collection, use and disclosure of Personal Information we receive from users of the Site.
+                </p>
+                <p class="lead">
+                    We use your Personal Information only for providing and improving the Site. By using the Site, you agree to the collection and use of information in accordance with this policy.
+                </p>
             </div>
 
-        </div>
+            <h4 class="text-center my-5" id="primaryColor">Information Collection and Use</h4>
+            <div class="px-5">
+                <p class="lead">
+                    While using our Site, we may ask you to provide us with certain personally identifiable information that can be used to contact or identify you. Personally identifiable information may include, but is not limited to your name or personal information.
+                </p>
+            </div>
 
+            <hr class="featurette-divider">
 
-        <hr class="featurette-divider">
-
-
-
-        <!-- FOOTER -->
-        <footer class="container text-center">
-            <p>&copy; <?= date("Y") ?> Company, Inc. &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
-        </footer>
+            <!-- FOOTER -->
+            <footer class="container text-center">
+                <p>&copy; <?= date("Y") ?> Company, Inc. &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
+            </footer>
     </main>
 
 
     <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
-    <!-- jQuery library -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-    <script>
-        $(document).ready(function() {
-            $('#search').keyup(function() {
-                // Get input value on change
-                var patientBefore = $(this).val();
-                var resultDropdown = $(this).siblings("#data");
-
-                if (patientBefore.length) {
-                    $.get("action1.php", {
-                        patientBefore: patientBefore
-                    }).done(function(data) {
-                        // Display the returned data in browser
-                        resultDropdown.html(data);
-                    });
-                } else {
-                    resultDropdown.empty();
-                }
-            });
-        });
-    </script>
 </body>
 
 </html>
