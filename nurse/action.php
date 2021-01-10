@@ -101,7 +101,6 @@ if (isset($_POST['walkInQuery'])) {
         <th scope="col">Patient Disease</th>
         <th scope="col">Patient Doctor</th>
         <th scope="col">Doctor Prescription</th>
-        <th scope="col">Room #</th>
         <th scope="col">Add</th>
         <th scope="col">Generate</th>
         <th scope="col">Action</th>
@@ -127,7 +126,6 @@ if (isset($_POST['walkInQuery'])) {
         <td>' . $walkInPatient['walkInDisease'] . '</td>
         <td>' . $walkInPatient['walkInDoctor'] . '</td>
         <td>' . $walkInPatient['walkInPrescription'] . '</td>
-        <td>' . $walkInPatient['walkInRoomNumber'] . '</td>
         <td>';
 
             $medInfoExst = $medInfoExst['pId'] ?? 0;

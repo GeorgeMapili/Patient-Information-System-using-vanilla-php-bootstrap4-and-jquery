@@ -43,9 +43,6 @@ if (!isset($_SESSION['nId'])) {
                     <li class="nav-item">
                         <a class="nav-link" href="patientWalkIn.php">Patient Walk in</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="room.php">Room</a>
-                    </li>
                 </ul>
                 <!-- search bar -->
                 <!-- <form class="form-inline mt-2 mt-md-0">
@@ -125,24 +122,6 @@ if (!isset($_SESSION['nId'])) {
                         <div class="card-header h2"> Walk in Patients</div>
                         <div class="card-body">
                             <h5 class="card-title"><?= $walkInPatientCount ?></h5>
-                        </div>
-                    </div>
-                </div>
-
-                <?php
-                $status = "available";
-                $sql = "SELECT * FROM rooms WHERE room_status = :status";
-                $stmt = $con->prepare($sql);
-                $stmt->bindParam(":status", $status, PDO::PARAM_STR);
-                $stmt->execute();
-
-                $roomCount = $stmt->rowCount();
-                ?>
-                <div class="col-sm-6 col-md-4 col-lg-3">
-                    <div class="card text-white bg-dark mb-3">
-                        <div class="card-header h2"> Available Rooms</div>
-                        <div class="card-body">
-                            <h5 class="card-title"><?= $roomCount ?></h5>
                         </div>
                     </div>
                 </div>

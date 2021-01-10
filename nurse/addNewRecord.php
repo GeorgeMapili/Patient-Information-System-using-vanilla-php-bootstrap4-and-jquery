@@ -43,9 +43,6 @@ if (!isset($_SESSION['nId'])) {
                     <li class="nav-item active">
                         <a class="nav-link" href="patientWalkIn.php">Patient Walk in</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="room.php">Room</a>
-                    </li>
                 </ul>
                 <!-- search bar -->
                 <!-- <form class="form-inline mt-2 mt-md-0">
@@ -186,48 +183,6 @@ if (!isset($_SESSION['nId'])) {
                         </div>
                     </div>
 
-
-                    <div class="row">
-                        <div class="col m-1">
-                            <label>Select a room</label>
-                            <select class="form-control" name="roomNumber" required>
-                                <option value="">select a room</option>
-                                <?php
-                                $status = "available";
-                                $sql = "SELECT * FROM rooms WHERE room_status = :status";
-                                $stmt = $con->prepare($sql);
-                                $stmt->bindParam(":status", $status, PDO::PARAM_STR);
-                                $stmt->execute();
-
-                                if (isset($_POST['availableRoom'])) {
-                                    $addPatientRoom = $_POST['roomNumber'];
-                                }
-
-                                while ($rooms = $stmt->fetch(PDO::FETCH_ASSOC)) :
-                                ?>
-                                    <?php
-
-                                    if ($rooms['room_number'] == $addPatientRoom) {
-                                    ?>
-
-                                        <option value="<?= $rooms['room_number'] ?>" selected><?= $rooms['room_number'] ?></option>
-                                    <?php
-                                    } else if ($rooms['room_number'] == $_GET['room']) {
-                                    ?>
-                                        <option value="<?= $rooms['room_number'] ?>" selected><?= $rooms['room_number'] ?></option>
-                                    <?php
-                                    } else {
-                                    ?>
-                                        <option value="<?= $rooms['room_number'] ?>"><?= $rooms['room_number'] ?></option>
-                                    <?php
-                                    }
-                                    ?>
-
-
-                                <?php endwhile; ?>
-                            </select>
-                        </div>
-                    </div>
                     <div class="text-center">
                         <input type="submit" name="addRecord" value="Add Record" class="mt-5 btn btn-primary">
                     </div>
@@ -246,10 +201,9 @@ if (!isset($_SESSION['nId'])) {
                     $age = trim(htmlspecialchars($_POST['age']));
                     $gender = trim(htmlspecialchars($_POST['gender']));
                     $doctor = trim(htmlspecialchars($_POST['doctor']));
-                    $roomNumber = trim(htmlspecialchars($_POST['roomNumber']));
 
                     // Check if to fill all fields
-                    if (empty($name) || empty($address) || empty($email) || empty($mobileNumber) || empty($disease) || empty($age) || empty($gender) || empty($doctor) || empty($roomNumber)) {
+                    if (empty($name) || empty($address) || empty($email) || empty($mobileNumber) || empty($disease) || empty($age) || empty($gender) || empty($doctor)) {
                         header("location:addNewRecord.php?addNewRec=true&pName=$name&errField=please_input_all_fields");
                         exit(0);
                     }
@@ -313,18 +267,10 @@ if (!isset($_SESSION['nId'])) {
 
                     $doctorfee = $stmt->fetch(PDO::FETCH_ASSOC);
 
-                    // Room Fee
-                    $sql = "SELECT * FROM rooms WHERE room_number = :number";
-                    $stmt = $con->prepare($sql);
-                    $stmt->bindParam(":number", $roomNumber, PDO::PARAM_INT);
-                    $stmt->execute();
-
-                    $roomfee = $stmt->fetch(PDO::FETCH_ASSOC);
-
                     // Total Pay
-                    $totalPay = $doctorfee['dFee'] + $roomfee['room_fee'];
+                    $totalPay = $doctorfee['dFee'];
 
-                    $sql = "INSERT INTO walkinpatient(walkInName,walkInEmail,walkInAddress,walkInAge,walkInGender,walkInDoctor,walkInDisease,walkInRoomNumber,walkInMobile,doctorFee,roomFee,walkInTotalPay)VALUES(:name,:email,:address,:age,:gender,:doctor,:disease,:roomNumber,:mobile,:doctorFee,:roomFee,:totalPay)";
+                    $sql = "INSERT INTO walkinpatient(walkInName,walkInEmail,walkInAddress,walkInAge,walkInGender,walkInDoctor,walkInDisease,walkInMobile,doctorFee,walkInTotalPay)VALUES(:name,:email,:address,:age,:gender,:doctor,:disease,:mobile,:doctorFee,:totalPay)";
                     $stmt = $con->prepare($sql);
                     $stmt->bindParam(":name", $name, PDO::PARAM_STR);
                     $stmt->bindParam(":email", $email, PDO::PARAM_STR);
@@ -333,19 +279,9 @@ if (!isset($_SESSION['nId'])) {
                     $stmt->bindParam(":gender", $gender, PDO::PARAM_STR);
                     $stmt->bindParam(":doctor", $doctor, PDO::PARAM_STR);
                     $stmt->bindParam(":disease", $disease, PDO::PARAM_STR);
-                    $stmt->bindParam(":roomNumber", $roomNumber, PDO::PARAM_STR);
                     $stmt->bindParam(":mobile", $mobileNumber, PDO::PARAM_STR);
                     $stmt->bindParam(":doctorFee", $doctorfee['dFee'], PDO::PARAM_STR);
-                    $stmt->bindParam(":roomFee", $roomfee['room_fee'], PDO::PARAM_STR);
                     $stmt->bindParam(":totalPay", $totalPay, PDO::PARAM_STR);
-                    $stmt->execute();
-
-                    // Update the rooms from AVAILABLE to OCCUPIED
-                    $status = "occupied";
-                    $sql = "UPDATE rooms SET room_status = :status WHERE room_number = :number";
-                    $stmt = $con->prepare($sql);
-                    $stmt->bindParam(":status", $status, PDO::PARAM_STR);
-                    $stmt->bindParam(":number", $roomNumber, PDO::PARAM_INT);
                     $stmt->execute();
 
                     header("location:addNewRecord.php?addNewRec=true&pName=$name&addSucc=Successfully_added_new_walkin_patient");

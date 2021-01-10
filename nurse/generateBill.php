@@ -43,9 +43,6 @@ if (!isset($_SESSION['nId'])) {
                     <li class="nav-item active">
                         <a class="nav-link" href="patientWalkIn.php">Patient Walk in</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="room.php">Room</a>
-                    </li>
                 </ul>
                 <!-- search bar -->
                 <!-- <form class="form-inline mt-2 mt-md-0">
@@ -92,12 +89,10 @@ if (!isset($_SESSION['nId'])) {
                 $_SESSION['walkInEmail'] = $patientBill['walkInEmail'];
                 $_SESSION['walkInAddress'] = $patientBill['walkInAddress'];
                 $_SESSION['walkInMobile'] = $patientBill['walkInMobile'];
-                $_SESSION['walkInRoomNumber'] = $patientBill['walkInRoomNumber'];
                 $_SESSION['walkInDoctor'] = $patientBill['walkInDoctor'];
                 $_SESSION['walkInPrescription'] = $patientBill['walkInPrescription'];
                 $_SESSION['medicineFee'] = $patientBill['medicineFee'];
                 $_SESSION['walkInTotalPay'] = $patientBill['walkInTotalPay'];
-                $_SESSION['room_fee'] = $patientBill['roomFee'];
                 $_SESSION['dFee'] = $patientBill['doctorFee'];
                 $_SESSION['walkInDisease'] = $patientBill['walkInDisease'];
             } else {
@@ -110,8 +105,6 @@ if (!isset($_SESSION['nId'])) {
                     $address = $_POST['address'];
                     $mobilenumber = $_POST['mobilenumber'];
                     $patientStatus = $_POST['patientStatus'];
-                    $roomNumber = $_POST['roomNumber'];
-                    $roomFee = $_POST['roomFee'];
                     $doctorName = $_POST['doctorName'];
                     $doctorFee = $_POST['doctorFee'];
                     $prescribeMed = $_POST['prescribeMed'];
@@ -137,14 +130,13 @@ if (!isset($_SESSION['nId'])) {
                         $stmt->execute();
 
                         // INSERT INTO DISCHARGED PATIENT TABLE
-                        $sql = "INSERT INTO discharged_patient(pId,pName,pEmail,pAddress, pMobile, pRoomNumber, pDoctor, pPrescription, pDisease, pTotalAmount,pStatus,pAmountPay,pChange)VALUES(:id,:name,:email,:address,:mobile,:roomNumber,:doctor,:prescription,:disease,:totalAmount,:status,:amountPay,:change)";
+                        $sql = "INSERT INTO discharged_patient(pId,pName,pEmail,pAddress, pMobile, pDoctor, pPrescription, pDisease, pTotalAmount,pStatus,pAmountPay,pChange)VALUES(:id,:name,:email,:address,:mobile,:doctor,:prescription,:disease,:totalAmount,:status,:amountPay,:change)";
                         $stmt = $con->prepare($sql);
                         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
                         $stmt->bindParam(":name", $name, PDO::PARAM_STR);
                         $stmt->bindParam(":email", $email, PDO::PARAM_STR);
                         $stmt->bindParam(":address", $address, PDO::PARAM_STR);
                         $stmt->bindParam(":mobile", $mobilenumber, PDO::PARAM_STR);
-                        $stmt->bindParam(":roomNumber", $roomNumber, PDO::PARAM_INT);
                         $stmt->bindParam(":doctor", $doctorName, PDO::PARAM_STR);
                         $stmt->bindParam(":prescription", $prescribeMed, PDO::PARAM_STR);
                         $stmt->bindParam(":disease", $_SESSION['walkInDisease'], PDO::PARAM_STR);
@@ -161,14 +153,13 @@ if (!isset($_SESSION['nId'])) {
                         $stmt->execute();
 
                         // INSERT INTO RETURNEE PATIENT TABLE FOR DOCTOR MEDICAL HISTORY
-                        $sql = "INSERT INTO returnee_patient(pId,pName,pEmail,pAddress, pMobile, pRoomNumber, pDoctor, pPrescription, pDisease, pTotalAmount,pStatus,pAmountPay,pChange)VALUES(:id,:name,:email,:address,:mobile,:roomNumber,:doctor,:prescription,:disease,:totalAmount,:status,:amountPay,:change)";
+                        $sql = "INSERT INTO returnee_patient(pId,pName,pEmail,pAddress, pMobile, pDoctor, pPrescription, pDisease, pTotalAmount,pStatus,pAmountPay,pChange)VALUES(:id,:name,:email,:address,:mobile,:doctor,:prescription,:disease,:totalAmount,:status,:amountPay,:change)";
                         $stmt = $con->prepare($sql);
                         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
                         $stmt->bindParam(":name", $name, PDO::PARAM_STR);
                         $stmt->bindParam(":email", $email, PDO::PARAM_STR);
                         $stmt->bindParam(":address", $address, PDO::PARAM_STR);
                         $stmt->bindParam(":mobile", $mobilenumber, PDO::PARAM_STR);
-                        $stmt->bindParam(":roomNumber", $roomNumber, PDO::PARAM_INT);
                         $stmt->bindParam(":doctor", $doctorName, PDO::PARAM_STR);
                         $stmt->bindParam(":prescription", $prescribeMed, PDO::PARAM_STR);
                         $stmt->bindParam(":disease", $_SESSION['walkInDisease'], PDO::PARAM_STR);
@@ -176,14 +167,6 @@ if (!isset($_SESSION['nId'])) {
                         $stmt->bindParam(":status", $patientStatus, PDO::PARAM_STR);
                         $stmt->bindParam(":amountPay", $_SESSION['amountInput'], PDO::PARAM_INT);
                         $stmt->bindParam(":change", $_SESSION['change'], PDO::PARAM_INT);
-                        $stmt->execute();
-
-                        // Update the table from occupied to available
-                        $status = "available";
-                        $sql = "UPDATE rooms SET room_status = :status WHERE room_number = :number";
-                        $stmt = $con->prepare($sql);
-                        $stmt->bindParam(":status", $status, PDO::PARAM_STR);
-                        $stmt->bindParam(":number", $roomNumber, PDO::PARAM_INT);
                         $stmt->execute();
 
                         header("location:discharge.php?dischargeWalkInPatient=true");
@@ -230,16 +213,6 @@ if (!isset($_SESSION['nId'])) {
                                 <input type="tel" name="mobilenumber" class="form-control" value="<?= $_SESSION['walkInMobile'] ?>" readonly>
                             </div>
 
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="">Room Number</label>
-                                    <input type="text" name="roomNumber" value="<?= $_SESSION['walkInRoomNumber'] ?>" class="form-control" readonly>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="">Room Fee</label>
-                                    <input type="text" name="roomFee" class="form-control roomFee" value="<?= $_SESSION['room_fee'] ?>" readonly>
-                                </div>
-                            </div>
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="">Doctor Name</label>

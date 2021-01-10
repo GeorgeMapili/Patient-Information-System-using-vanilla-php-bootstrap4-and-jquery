@@ -43,9 +43,6 @@ if (!isset($_SESSION['nId'])) {
                     <li class="nav-item active">
                         <a class="nav-link" href="patientWalkIn.php">Patient Walk in</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="room.php">Room</a>
-                    </li>
                 </ul>
                 <!-- search bar -->
                 <!-- <form class="form-inline mt-2 mt-md-0">
@@ -103,8 +100,7 @@ if (!isset($_SESSION['nId'])) {
                                     <h6 class="lead text-center">Email: <?= $dischargePatient['pEmail'] ?></h6>
                                     <h6 class="lead text-center">Address: <?= $dischargePatient['pAddress'] ?></h6>
                                     <h6 class="lead text-center">Mobile Number: <?= $dischargePatient['pMobile'] ?></h6>
-                                    <h6 class="lead text-center">Patient Status: <?= $dischargePatient['pStatus'] ?></h6>
-                                    <h6 class="lead text-center">Room Number: <?= $dischargePatient['pRoomNumber'] ?></h6>
+                                    <h6 class="lead text-center">Patient Status: <?= ucwords($dischargePatient['pStatus']) ?></h6>
                                     <h6 class="lead text-center">Doctor Name: <?= $dischargePatient['pDoctor'] ?></h6>
                                     <h6 class="lead text-center">Doctor Prescribe Medicine: <?= $dischargePatient['pPrescription'] ?></h6>
                                     <h6 class="lead text-center">Amount Input: <?= $dischargePatient['pAmountPay'] ?></h6>

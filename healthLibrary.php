@@ -88,7 +88,122 @@ if (!isset($_SESSION['id'])) {
             </div>
 
         </div>
+        <div class="container">
+            <hr class="featurette-divider">
+        </div>
 
+        <h2 class="text-center my-3">COVID UPDATE</h2>
+
+        <?php
+
+        $activeTotalCases = "";
+        $country = "";
+        $newCases = "";
+        $newDeath = "";
+        $totalCases = "";
+        $totalDeaths = "";
+        $totalRecovered = "";
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, [
+            CURLOPT_URL => "https://covid-19-tracking.p.rapidapi.com/v1",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_HTTPHEADER => [
+                "x-rapidapi-host: covid-19-tracking.p.rapidapi.com",
+                "x-rapidapi-key: be2c696d44mshb9b799af2a01320p16607fjsnf0cff2149651"
+            ],
+        ]);
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+            echo "cURL Error #:" . $err;
+        } else {
+
+            if (isset($_POST['search'])) {
+                $searchCoutryName = strtolower(trim(htmlspecialchars($_POST['searchCountry'])));
+
+                $datas = json_decode($response);
+
+                $country = $searchCoutryName;
+
+                $data = (array) $datas;
+
+                foreach ($data as $key => $value) {
+                    $countryInfo = (array) $datas[$key];
+                    // var_dump(strtolower($countryInfo['Country_text']));
+                    $countryName = strtolower($countryInfo['Country_text']);
+                    // var_dump($countryName);
+                    if ($countryName == $country) {
+                        $currentData =  (array) $data[$key];
+                        break;
+                    }
+                }
+                // var_dump($currentData);
+                // die();
+                // $data = (array) $datas[$currentData];
+
+                $activeTotalCases = $currentData['Active Cases_text'];
+                $country = $currentData['Country_text'];
+                $newCases = $currentData['New Cases_text'];
+                $newDeath = $currentData['New Deaths_text'];
+                $totalCases = $currentData['Total Cases_text'];
+                $totalDeaths = $currentData['Total Deaths_text'];
+                $totalRecovered = $currentData['Total Recovered_text'];
+            }
+        }
+        ?>
+
+
+        <div class="container my-5">
+            <div class="w-50 m-auto">
+                <form action="healthLibrary.php" method="post">
+                    <select name="searchCountry" class="form-control" required>
+                        <option value="">Select a Country</option>
+                        <?php
+                        $datas = json_decode($response);
+                        foreach ($datas as $key => $value) {
+                            $countryInfo = (array) $datas[$key];
+                            $countryName = strtolower($countryInfo['Country_text']);
+                        ?>
+                            <option value="<?= $countryName ?>"><?= ucwords($countryName) ?></option>
+                        <?php
+                        }
+                        ?>
+                    </select>
+                    <div class="text-center my-3">
+                        <input class="btn btn-secondary" type="submit" value="Search" name="search">
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="container text-center">
+            <h2 class="lead">Covid 19 Information</h2>
+        </div>
+        <div class="container bg-dark text-light my-5">
+            <div class="d-flex justify-content-center align-items-center">
+                <div class="text-center my-3">
+                    <h3 class="activeCasesText"><b>Country:</b> <?php echo $country; ?></h3>
+                    <h5 class="countryText"><b>Total Active Cases:</b> <?php echo $activeTotalCases; ?></h5>
+                    <p class="newCasesText"><b>New Cases:</b> <?php echo $newCases; ?></p>
+                    <p class="newDeathsText"><b>Death:</b> <?php echo $newDeath; ?></p>
+                    <p class="totalCasesText"><b>Total Cases:</b> <?php echo $totalCases; ?></p>
+                    <p class="totalDeathsText"><b>Total Deaths:</b> <?php echo $totalDeaths; ?></p>
+                    <p class="totalRecoveredText"><b>Recovered:</b> <?php echo $totalRecovered; ?></p>
+                </div>
+            </div>
+        </div>
 
         <hr class="featurette-divider">
 

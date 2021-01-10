@@ -99,17 +99,6 @@ if (isset($_GET['walkInDischargeReceipt']) && $_GET['walkInDischargeReceipt'] ==
     $pdf->Cell(25, 5, $doctor['dFee'], 1, 0);
     $pdf->Cell(34, 5, $doctor['dFee'], 1, 1, 'R');
 
-    $sql = "SELECT * FROM rooms WHERE room_number = :number";
-    $stmt = $con->prepare($sql);
-    $stmt->bindParam(":number", $_SESSION['walkInRoomNumber'], PDO::PARAM_INT);
-    $stmt->execute();
-
-    $room = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    $pdf->Cell(130, 5, 'Room Fee: ', 1, 0);
-    $pdf->Cell(25, 5, $room['room_fee'], 1, 0);
-    $pdf->Cell(34, 5, $room['room_fee'], 1, 1, 'R');
-
     $pdf->Cell(130, 5, 'Medicine Fee: ', 1, 0);
     $pdf->Cell(25, 5, $_SESSION['medicineFee'], 1, 0);
     $pdf->Cell(34, 5, $_SESSION['medicineFee'], 1, 1, 'R');

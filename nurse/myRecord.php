@@ -46,9 +46,6 @@ if (!isset($_SESSION['nId'])) {
                         <li class="nav-item active">
                             <a class="nav-link" href="patientWalkIn.php">Patient Walk in</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="room.php">Room</a>
-                        </li>
                     </ul>
                     <!-- search bar -->
                     <!-- <form class="form-inline mt-2 mt-md-0">
@@ -87,7 +84,6 @@ if (!isset($_SESSION['nId'])) {
                             <th scope="col">Patient Address</th>
                             <th scope="col">Patient Email</th>
                             <th scope="col">Patient Mobile</th>
-                            <th scope="col">Room #</th>
                             <th scope="col">Patient Doctor</th>
                             <th scope="col">Doctor Prescription</th>
                             <th scope="col">Patient Disease</th>
@@ -116,7 +112,6 @@ if (!isset($_SESSION['nId'])) {
                                     <td><?= $returneePatient['pAddress'] ?></td>
                                     <td><?= $returneePatient['pEmail'] ?></td>
                                     <td><?= $returneePatient['pMobile'] ?></td>
-                                    <td><?= $returneePatient['pRoomNumber'] ?></td>
                                     <td><?= $returneePatient['pDoctor'] ?></td>
                                     <td><?= $returneePatient['pPrescription'] ?></td>
                                     <td><?= $returneePatient['pDisease'] ?></td>
