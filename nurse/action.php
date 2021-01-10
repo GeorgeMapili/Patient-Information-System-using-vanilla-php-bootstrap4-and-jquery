@@ -149,7 +149,7 @@ if (isset($_POST['walkInQuery'])) {
             <td>';
             if (empty($walkInPatient['walkInPrescription'])) {
                 $walkInOutput .= '
-                <p class="btn btn-primary disabled">GENERATE BILL</p> ';
+                <p class="btn btn-primary disabled" title="Can\'t generate bill without prescription">GENERATE BILL</p> ';
             } else {
                 $walkInOutput .= '
                     <form action="generateBill.php" method="post">

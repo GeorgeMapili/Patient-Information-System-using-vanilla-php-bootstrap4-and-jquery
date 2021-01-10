@@ -116,9 +116,9 @@ if (!isset($_SESSION['nId'])) {
                                     <td><?= $returneePatient['pPrescription'] ?></td>
                                     <td><?= $returneePatient['pDisease'] ?></td>
                                     <td><?= ucwords($returneePatient['pStatus']) ?></td>
-                                    <td><?= $returneePatient['pTotalAmount'] ?></td>
-                                    <td><?= $returneePatient['pAmountPay'] ?></td>
-                                    <td><?= $returneePatient['pChange'] ?></td>
+                                    <td>₱<?= number_format($returneePatient['pTotalAmount'], 2) ?></td>
+                                    <td>₱<?= number_format($returneePatient['pAmountPay'], 2) ?></td>
+                                    <td>₱<?= number_format($returneePatient['pChange'], 2) ?></td>
                                     <td><?= date("M d, Y", strtotime($returneePatient['rpMadeOn'])) ?></td>
                                 </tr>
                         <?php

@@ -226,7 +226,7 @@ if (!isset($_SESSION['nId'])) {
                                 <?php
                                 if (empty($walkInPatient['walkInPrescription'])) {
                                 ?>
-                                    <p class="btn btn-primary disabled">GENERATE BILL</p>
+                                    <p class="btn btn-primary disabled" title="Can't generate bill without prescription">GENERATE BILL</p>
                                 <?php
                                 } else {
                                 ?>
