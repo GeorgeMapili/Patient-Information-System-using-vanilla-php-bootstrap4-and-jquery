@@ -37,13 +37,6 @@ unset($_SESSION['walkInPatientDisease']);
 unset($_SESSION['walkInPatientAge']);
 unset($_SESSION['walkInPatientGender']);
 unset($_SESSION['walkInPatientDoctor']);
-unset($_SESSION['walkInPatientRoomNumber']);
-
-// SESSION FROM UPDATE ROOM
-unset($_SESSION['roomId']);
-unset($_SESSION['roomNumber']);
-unset($_SESSION['roomFee']);
-unset($_SESSION['roomStatus']);
 
 // SESSION FROM UPDATE NURSE
 unset($_SESSION['nurseId']);
@@ -52,6 +45,10 @@ unset($_SESSION['nurseEmail']);
 unset($_SESSION['nurseAddress']);
 unset($_SESSION['nurseMobile']);
 unset($_SESSION['nurseProfile']);
+
+// SESSSION FROM MESSAGES
+unset($_SESSION['msgPatientId']);
+unset($_SESSION['msgId']);
 
 header("location:index.php");
 exit(0);

@@ -73,12 +73,6 @@ if (!isset($_SESSION['adId'])) {
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="room.php">
-                                <span data-feather="users"></span>
-                                View All Rooms
-                            </a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link" href="nurse.php">
                                 <span data-feather="users"></span>
                                 View All Nurse Receptionist
@@ -126,9 +120,8 @@ if (!isset($_SESSION['adId'])) {
                 $age = trim(htmlspecialchars($_POST['age']));
                 $gender = trim(htmlspecialchars($_POST['gender']));
                 $doctor = trim(htmlspecialchars($_POST['doctor']));
-                $room = trim(htmlspecialchars($_POST['room']));
 
-                if ($name == $_SESSION['walkInPatientName'] && $email == $_SESSION['walkInPatientEmail'] && $address == $_SESSION['walkInPatientAddress'] && $mobile == $_SESSION['walkInPatientMobile'] && $disease == $_SESSION['walkInPatientDisease'] && $age == $_SESSION['walkInPatientAge'] && $gender == $_SESSION['walkInPatientGender'] && $doctor == $_SESSION['walkInPatientDoctor'] && $room == $_SESSION['walkInPatientRoomNumber']) {
+                if ($name == $_SESSION['walkInPatientName'] && $email == $_SESSION['walkInPatientEmail'] && $address == $_SESSION['walkInPatientAddress'] && $mobile == $_SESSION['walkInPatientMobile'] && $disease == $_SESSION['walkInPatientDisease'] && $age == $_SESSION['walkInPatientAge'] && $gender == $_SESSION['walkInPatientGender'] && $doctor == $_SESSION['walkInPatientDoctor']) {
                     header("location:walkInPatient.php?errUpdate=Nothing_to_update");
                     exit(0);
                 }
@@ -189,7 +182,7 @@ if (!isset($_SESSION['adId'])) {
                 }
 
                 // Update THE WALK IN PATIENT INFO
-                $sql = "UPDATE walkinpatient SET walkInName = :name, walkInEmail = :email, walkInAddress = :address, walkInAge = :age, walkInGender = :gender, walkInMobile = :mobile, walkInDoctor = :doctor, walkInDisease = :disease, walkInRoomNumber = :room WHERE walkInId = :id";
+                $sql = "UPDATE walkinpatient SET walkInName = :name, walkInEmail = :email, walkInAddress = :address, walkInAge = :age, walkInGender = :gender, walkInMobile = :mobile, walkInDoctor = :doctor, walkInDisease = :disease WHERE walkInId = :id";
                 $stmt = $con->prepare($sql);
                 $stmt->bindParam(":name", $name, PDO::PARAM_STR);
                 $stmt->bindParam(":email", $email, PDO::PARAM_STR);
@@ -199,27 +192,8 @@ if (!isset($_SESSION['adId'])) {
                 $stmt->bindParam(":age", $age, PDO::PARAM_INT);
                 $stmt->bindParam(":gender", $gender, PDO::PARAM_STR);
                 $stmt->bindParam(":doctor", $doctor, PDO::PARAM_STR);
-                $stmt->bindParam(":room", $room, PDO::PARAM_INT);
                 $stmt->bindParam(":id", $id, PDO::PARAM_INT);
                 $stmt->execute();
-
-                // UPDATE THE OLD SELECTED ROOM TO AVAILABLE
-                if ($_SESSION['walkInPatientRoomNumber'] != $room) {
-                    $status = "available";
-                    $sql = "UPDATE rooms SET room_status = :status WHERE room_number = :room";
-                    $stmt = $con->prepare($sql);
-                    $stmt->bindParam(":status", $status, PDO::PARAM_STR);
-                    $stmt->bindParam(":room", $_SESSION['walkInPatientRoomNumber'], PDO::PARAM_INT);
-                    $stmt->execute();
-
-                    // UPDATE THE NEW SELECTED ROOM TO OCCUPIED
-                    $status = "occupied";
-                    $sql = "UPDATE rooms SET room_status = :status WHERE room_number = :room";
-                    $stmt = $con->prepare($sql);
-                    $stmt->bindParam(":status", $status, PDO::PARAM_STR);
-                    $stmt->bindParam(":room", $room, PDO::PARAM_INT);
-                    $stmt->execute();
-                }
 
                 header("location:walkInPatient.php?succUpdateWalkIn=Successfully_added_walk_in_patient");
                 exit(0);
@@ -246,7 +220,6 @@ if (!isset($_SESSION['adId'])) {
                 $_SESSION['walkInPatientAge'] = $walkIn['walkInAge'];
                 $_SESSION['walkInPatientGender'] = $walkIn['walkInGender'];
                 $_SESSION['walkInPatientDoctor'] = $walkIn['walkInDoctor'];
-                $_SESSION['walkInPatientRoomNumber'] = $walkIn['walkInRoomNumber'];
             }
             ?>
 
@@ -297,25 +270,6 @@ if (!isset($_SESSION['adId'])) {
                             </div>
                         </div>
 
-                        <label>Gender</label>
-                        <select name="gender" class="form-control" required>
-                            <option value="">Select a gender</option>
-                            <?php
-                            if ($_SESSION['walkInPatientGender'] == "male") {
-                            ?>
-                                <option value="male" selected>Male</option>
-                                <option value="female">Female</option>
-                            <?php
-                            } else {
-                            ?>
-                                <option value="male">Male</option>
-                                <option value="female" selected>Female</option>
-                            <?php
-                            }
-                            ?>
-
-                        </select>
-
                         <div class="row my-4">
                             <div class="col">
                                 <label>Doctor</label>
@@ -337,22 +291,23 @@ if (!isset($_SESSION['adId'])) {
                                 </select>
                             </div>
 
-                            <?php
-                            $status = "available";
-                            $sql  = "SELECT * FROM rooms WHERE room_status =:status";
-                            $stmt = $con->prepare($sql);
-                            $stmt->bindParam(":status", $status, PDO::PARAM_STR);
-                            $stmt->execute();
-                            ?>
                             <div class="col">
-                                <label>Select a room</label>
-                                <select name="room" class="form-control" required>
-                                    <option value="<?= $_SESSION['walkInPatientRoomNumber'] ?>"><?= $_SESSION['walkInPatientRoomNumber'] ?></option>
+                                <label>Gender</label>
+                                <select name="gender" class="form-control" required>
+                                    <option value="">Select a gender</option>
                                     <?php
-                                    while ($rooms = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                                    if ($_SESSION['walkInPatientGender'] == "male") {
                                     ?>
-                                        <option value="<?= $rooms['room_number'] ?>"><?= $rooms['room_number'] ?></option>
-                                    <?php endwhile; ?>
+                                        <option value="male" selected>Male</option>
+                                        <option value="female">Female</option>
+                                    <?php
+                                    } else {
+                                    ?>
+                                        <option value="male">Male</option>
+                                        <option value="female" selected>Female</option>
+                                    <?php
+                                    }
+                                    ?>
                                 </select>
                             </div>
                         </div>

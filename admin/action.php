@@ -266,7 +266,6 @@ if (isset($_POST['searchWalkInPatient'])) {
             <th scope="col">Patient Age</th>
             <th scope="col">Patient Gender</th>
             <th scope="col">Patient Doctor</th>
-            <th scope="col">Patient Room</th>
             <th scope="col">Action</th>
         </tr>
     </thead>
@@ -283,9 +282,8 @@ if (isset($_POST['searchWalkInPatient'])) {
             <td>' . $walkInPatient['walkInMobile'] . '</td>
             <td>' . $walkInPatient['walkInDisease'] . '</td>
             <td>' . $walkInPatient['walkInAge'] . '</td>
-            <td>' . $walkInPatient['walkInGender'] . '</td>
+            <td>' . ucwords($walkInPatient['walkInGender']) . '</td>
             <td>' . $walkInPatient['walkInDoctor'] . '</td>
-            <td>' . $walkInPatient['walkInRoomNumber'] . '</td>
             <td>
                 <div class="row">
                     <div class="col">

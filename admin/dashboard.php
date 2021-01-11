@@ -72,12 +72,6 @@ if (!isset($_SESSION['adId'])) {
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="room.php">
-                                <span data-feather="users"></span>
-                                View All Rooms
-                            </a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link" href="nurse.php">
                                 <span data-feather="users"></span>
                                 View All Nurse Receptionist
@@ -171,23 +165,6 @@ if (!isset($_SESSION['adId'])) {
                                 <div class="card-body">
                                     <h5 class="card-title mb-4">Doctors</h5>
                                     <h1 class="display-5 mt-1 mb-3"><?= $allDoctor ?></h1>
-                                </div>
-                            </div>
-                        </div>
-
-                        <?php
-                        $sql = "SELECT * FROM rooms";
-                        $stmt = $con->prepare($sql);
-                        $stmt->execute();
-
-                        $allRooms = $stmt->rowCount();
-                        ?>
-
-                        <div class="col-sm-6 col-md-4 col-lg-3 mt-2">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title mb-4">Rooms</h5>
-                                    <h1 class="display-5 mt-1 mb-3"><?= $allRooms ?></h1>
                                 </div>
                             </div>
                         </div>

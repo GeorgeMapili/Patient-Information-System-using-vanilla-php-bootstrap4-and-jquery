@@ -73,12 +73,6 @@ if (!isset($_SESSION['adId'])) {
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="room.php">
-                                <span data-feather="users"></span>
-                                View All Rooms
-                            </a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link" href="nurse.php">
                                 <span data-feather="users"></span>
                                 View All Nurse Receptionist
@@ -181,7 +175,6 @@ if (!isset($_SESSION['adId'])) {
                             <th scope="col">Patient Age</th>
                             <th scope="col">Patient Gender</th>
                             <th scope="col">Patient Doctor</th>
-                            <th scope="col">Patient Room</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
@@ -203,7 +196,6 @@ if (!isset($_SESSION['adId'])) {
                                 <td><?= $walkInPatient['walkInAge'] ?></td>
                                 <td><?= ucwords($walkInPatient['walkInGender']) ?></td>
                                 <td><?= $walkInPatient['walkInDoctor'] ?></td>
-                                <td><?= $walkInPatient['walkInRoomNumber'] ?></td>
                                 <td>
                                     <div class="row">
                                         <div class="col">

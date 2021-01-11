@@ -73,12 +73,6 @@ if (!isset($_SESSION['adId'])) {
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="room.php">
-                                <span data-feather="users"></span>
-                                View All Rooms
-                            </a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link" href="nurse.php">
                                 <span data-feather="users"></span>
                                 View All Nurse Receptionist
@@ -125,7 +119,6 @@ if (!isset($_SESSION['adId'])) {
                 $age = trim(htmlspecialchars($_POST['age']));
                 $gender = trim(htmlspecialchars($_POST['gender']));
                 $doctor = trim(htmlspecialchars($_POST['doctor']));
-                $room = trim(htmlspecialchars($_POST['room']));
 
                 // check if name is valid
                 if (!preg_match("/^([a-zA-Z' ]+)$/", $name)) {
@@ -179,7 +172,7 @@ if (!isset($_SESSION['adId'])) {
                     exit(0);
                 }
 
-                $sql = "INSERT INTO walkinpatient(walkInName,walkInEmail,walkInAddress,walkInMobile,walkInDisease,walkInAge,walkInGender,walkInDoctor,walkInRoomNumber)VALUES(:name,:email,:address,:mobile,:disease,:age,:gender,:doctor,:room)";
+                $sql = "INSERT INTO walkinpatient(walkInName,walkInEmail,walkInAddress,walkInMobile,walkInDisease,walkInAge,walkInGender,walkInDoctor)VALUES(:name,:email,:address,:mobile,:disease,:age,:gender,:doctor)";
                 $stmt = $con->prepare($sql);
                 $stmt->bindParam(":name", $name, PDO::PARAM_STR);
                 $stmt->bindParam(":email", $email, PDO::PARAM_STR);
@@ -189,15 +182,6 @@ if (!isset($_SESSION['adId'])) {
                 $stmt->bindParam(":age", $age, PDO::PARAM_STR);
                 $stmt->bindParam(":gender", $gender, PDO::PARAM_STR);
                 $stmt->bindParam(":doctor", $doctor, PDO::PARAM_STR);
-                $stmt->bindParam(":room", $room, PDO::PARAM_STR);
-                $stmt->execute();
-
-                // UPDATE THE SELECTED ROOM TO OCCUPIED
-                $status = "occupied";
-                $sql = "UPDATE rooms SET room_status = :status WHERE room_number = :room";
-                $stmt = $con->prepare($sql);
-                $stmt->bindParam(":status", $status, PDO::PARAM_STR);
-                $stmt->bindParam(":room", $room, PDO::PARAM_INT);
                 $stmt->execute();
 
                 header("location:walkInPatient.php?succAddWalkIn=Successfully_added_walk_in_patient");
@@ -255,13 +239,6 @@ if (!isset($_SESSION['adId'])) {
                             </div>
                         </div>
 
-                        <label>Gender</label>
-                        <select name="gender" class="form-control" required>
-                            <option value="">Select a gender</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                        </select>
-
                         <div class="row my-4">
                             <div class="col">
                                 <label>Doctor</label>
@@ -280,20 +257,11 @@ if (!isset($_SESSION['adId'])) {
                             </div>
 
                             <div class="col">
-                                <label>Select a room</label>
-                                <select name="room" class="form-control" required>
-                                    <option value="">Select a room</option>
-                                    <?php
-                                    $status = "available";
-                                    $sql  = "SELECT * FROM rooms WHERE room_status =:status";
-                                    $stmt = $con->prepare($sql);
-                                    $stmt->bindParam(":status", $status, PDO::PARAM_STR);
-                                    $stmt->execute();
-
-                                    while ($rooms = $stmt->fetch(PDO::FETCH_ASSOC)) :
-                                    ?>
-                                        <option value="<?= $rooms['room_number'] ?>"><?= $rooms['room_number'] ?></option>
-                                    <?php endwhile; ?>
+                                <label>Gender</label>
+                                <select name="gender" class="form-control" required>
+                                    <option value="">Select a gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
                                 </select>
                             </div>
                         </div>

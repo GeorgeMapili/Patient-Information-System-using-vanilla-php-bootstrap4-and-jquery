@@ -73,12 +73,6 @@ if (!isset($_SESSION['adId'])) {
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="room.php">
-                                <span data-feather="users"></span>
-                                View All Rooms
-                            </a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link" href="nurse.php" id="primaryColor">
                                 <span data-feather="users"></span>
                                 View All Nurse Receptionist

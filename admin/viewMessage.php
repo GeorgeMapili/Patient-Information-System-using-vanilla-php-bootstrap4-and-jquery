@@ -73,12 +73,6 @@ if (!isset($_SESSION['adId'])) {
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="room.php">
-                                <span data-feather="users"></span>
-                                View All Rooms
-                            </a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link" href="nurse.php">
                                 <span data-feather="users"></span>
                                 View All Nurse Receptionist
@@ -87,13 +81,13 @@ if (!isset($_SESSION['adId'])) {
                         <li class="nav-item">
                             <a class="nav-link" href="doneAppointment.php">
                                 <span data-feather="users"></span>
-                                View All Finished Appointment
+                                View Finished Appointment
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="cancelledAppointment.php">
                                 <span data-feather="users"></span>
-                                View All Cancelled Appointment
+                                View Cancelled Appointment
                             </a>
                         </li>
                         <li class="nav-item">
@@ -122,6 +116,7 @@ if (!isset($_SESSION['adId'])) {
 
                     <?php
                     if (isset($_POST['viewMessageBtn'])) {
+
                         $mId = $_POST['mId'];
                         $pId = $_POST['pId'];
 
@@ -132,6 +127,9 @@ if (!isset($_SESSION['adId'])) {
                         $stmt->execute();
 
                         $message = $stmt->fetch(PDO::FETCH_ASSOC);
+                        $_SESSION['messageName'] = $message['msgPatientName'];
+                        $_SESSION['messageDate'] = $message['msgMadeOn'];
+                        $_SESSION['messageContent'] = $message['msgContent'];
                     }
                     ?>
 
@@ -139,17 +137,17 @@ if (!isset($_SESSION['adId'])) {
                         <div class="row">
                             <div class="col form-group">
                                 <label>Name</label>
-                                <input type="text" name="name" value="<?= $message['msgPatientName'] ?>" class="form-control" readonly>
+                                <input type="text" name="name" value="<?= $_SESSION['messageName'] ?>" class="form-control" readonly>
                             </div>
                             <div class="col form-group">
                                 <label>Date</label>
-                                <input type="text" name="date" value="<?= date("M d, Y", strtotime($message['msgMadeOn'])) ?>" class="form-control" readonly>
+                                <input type="text" name="date" value="<?= date("M d, Y", strtotime($_SESSION['messageDate'])) ?>" class="form-control" readonly>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label>Message</label>
-                            <textarea name="message" class="form-control" cols="30" rows="10" readonly><?= $message['msgContent'] ?></textarea>
+                            <textarea name="message" class="form-control" cols="30" rows="10" readonly><?= $_SESSION['messageContent'] ?></textarea>
                         </div>
 
                     </form>
