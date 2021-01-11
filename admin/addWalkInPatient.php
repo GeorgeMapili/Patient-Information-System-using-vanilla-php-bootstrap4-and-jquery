@@ -172,7 +172,19 @@ if (!isset($_SESSION['adId'])) {
                     exit(0);
                 }
 
-                $sql = "INSERT INTO walkinpatient(walkInName,walkInEmail,walkInAddress,walkInMobile,walkInDisease,walkInAge,walkInGender,walkInDoctor)VALUES(:name,:email,:address,:mobile,:disease,:age,:gender,:doctor)";
+                // get the doctor fee
+                $sql = "SELECT * FROM doctor WHERE dName = :doctor";
+                $stmt  = $con->prepare($sql);
+                $stmt->bindParam(":doctor", $doctor, PDO::PARAM_STR);
+                $stmt->execute();
+                $docResult = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                $doctorFee = $docResult['dFee'];
+
+                // Set walkinTotalPay
+                $walkInTotalPay = $doctorFee;
+
+                $sql = "INSERT INTO walkinpatient(walkInName,walkInEmail,walkInAddress,walkInMobile,walkInDisease,walkInAge,walkInGender,walkInDoctor,doctorFee,walkInTotalPay)VALUES(:name,:email,:address,:mobile,:disease,:age,:gender,:doctor,:doctorFee,:walkInTotalPay)";
                 $stmt = $con->prepare($sql);
                 $stmt->bindParam(":name", $name, PDO::PARAM_STR);
                 $stmt->bindParam(":email", $email, PDO::PARAM_STR);
@@ -182,6 +194,8 @@ if (!isset($_SESSION['adId'])) {
                 $stmt->bindParam(":age", $age, PDO::PARAM_STR);
                 $stmt->bindParam(":gender", $gender, PDO::PARAM_STR);
                 $stmt->bindParam(":doctor", $doctor, PDO::PARAM_STR);
+                $stmt->bindParam(":doctorFee", $doctorFee, PDO::PARAM_STR);
+                $stmt->bindParam(":walkInTotalPay", $walkInTotalPay, PDO::PARAM_STR);
                 $stmt->execute();
 
                 header("location:walkInPatient.php?succAddWalkIn=Successfully_added_walk_in_patient");

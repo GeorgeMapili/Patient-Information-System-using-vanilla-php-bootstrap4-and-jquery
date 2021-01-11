@@ -89,7 +89,6 @@ if (!isset($_SESSION['dId'])) {
                         <th scope="col">Patient Address</th>
                         <th scope="col">Patient Email</th>
                         <th scope="col">Patient Mobile</th>
-                        <th scope="col">Room #</th>
                         <th scope="col">Patient Doctor</th>
                         <th scope="col">Doctor Prescription</th>
                         <th scope="col">Patient Disease</th>
@@ -119,11 +118,10 @@ if (!isset($_SESSION['dId'])) {
                                 <td><?= $history['pAddress'] ?></td>
                                 <td><?= $history['pEmail'] ?></td>
                                 <td><?= $history['pMobile'] ?></td>
-                                <td><?= $history['pRoomNumber'] ?></td>
                                 <td><?= $history['pDoctor'] ?></td>
                                 <td><?= $history['pPrescription'] ?></td>
                                 <td><?= $history['pDisease'] ?></td>
-                                <td><?= $history['pStatus'] ?></td>
+                                <td><?= ucwords($history['pStatus']) ?></td>
                                 <td><?= $history['pTotalAmount'] ?></td>
                                 <td><?= $history['pAmountPay'] ?></td>
                                 <td><?= $history['pChange'] ?></td>

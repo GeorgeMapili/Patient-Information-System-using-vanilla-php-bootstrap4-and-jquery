@@ -181,8 +181,21 @@ if (!isset($_SESSION['adId'])) {
                     exit(0);
                 }
 
+                // Get the doctorfee
+                $sql = "SELECT * FROM doctor WHERE dName = :dname";
+                $stmt = $con->prepare($sql);
+                $stmt->bindParam(":dname", $doctor, PDO::PARAM_STR);
+                $stmt->execute();
+
+                $doctorFees = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                $doctorFee = $doctorFees['dFee'];
+
+                // Update the walkInTotalPay
+                $walkInTotalPay = $doctorFee;
+
                 // Update THE WALK IN PATIENT INFO
-                $sql = "UPDATE walkinpatient SET walkInName = :name, walkInEmail = :email, walkInAddress = :address, walkInAge = :age, walkInGender = :gender, walkInMobile = :mobile, walkInDoctor = :doctor, walkInDisease = :disease WHERE walkInId = :id";
+                $sql = "UPDATE walkinpatient SET walkInName = :name, walkInEmail = :email, walkInAddress = :address, walkInAge = :age, walkInGender = :gender, walkInMobile = :mobile, walkInDoctor = :doctor, walkInDisease = :disease, doctorFee = :doctorFee, walkInTotalPay = :walkTotalPay WHERE walkInId = :id";
                 $stmt = $con->prepare($sql);
                 $stmt->bindParam(":name", $name, PDO::PARAM_STR);
                 $stmt->bindParam(":email", $email, PDO::PARAM_STR);
@@ -192,6 +205,8 @@ if (!isset($_SESSION['adId'])) {
                 $stmt->bindParam(":age", $age, PDO::PARAM_INT);
                 $stmt->bindParam(":gender", $gender, PDO::PARAM_STR);
                 $stmt->bindParam(":doctor", $doctor, PDO::PARAM_STR);
+                $stmt->bindParam(":doctorFee", $doctorFee, PDO::PARAM_STR);
+                $stmt->bindParam(":walkTotalPay", $walkInTotalPay, PDO::PARAM_STR);
                 $stmt->bindParam(":id", $id, PDO::PARAM_INT);
                 $stmt->execute();
 

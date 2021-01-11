@@ -53,7 +53,6 @@ CREATE TABLE discharged_patient(
 `pEmail` varchar(255) NOT NULL,
 `pAddress` varchar(255) NOT NULL,
 `pMobile` varchar(255) NOT NULL,
-`pRoomNumber` int(5) NOT NULL,
 `pDoctor` varchar(255) NOT NULL,
 `pPrescription` TEXT NOT NULL,
 `pDisease` varchar(255) NOT NULL,
@@ -169,7 +168,6 @@ CREATE TABLE returnee_patient(
 `pEmail` varchar(100) NOT NULL,
 `pAddress` varchar(255) NOT NULL,
 `pMobile` varchar(100) NOT NULL,
-`pRoomNumber` int(5) NOT NULL,
 `pDoctor` varchar(100) NOT NULL,
 `pPrescription` varchar(255) NOT NULL,
 `pDisease` varchar(100) NOT NULL,
@@ -179,15 +177,6 @@ CREATE TABLE returnee_patient(
 `pChange` int(11) NOT NULL,
 `rpMadeOn` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 PRIMARY KEY(`rpId`)
-);
-
-/* Create rooms table */
-CREATE TABLE rooms(
-`room_id` int(11) NOT NULL AUTO_INCREMENT,
-`room_number` int(11) NOT NULL,
-`room_fee` int(11) NOT NULL,
-`room_status` varchar(100) NOT NULL DEFAULT 'available',
-PRIMARY KEY(`room_id`)
 );
 
 /* Create walkinpatient table */
@@ -204,11 +193,9 @@ CREATE TABLE walkinpatient(
 `walkInDisease` varchar(255) NOT NULL,
 `walkInTotalPay` varchar(255) NOT NULL,
 `walkInDischarged` varchar(255) NOT NULL DEFAULT 0,
-`walkInRoomNumber` int(5) NOT NULL,
 `walkInStatus` varchar(100) NOT NULL,
 `walkInMadeOn` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 `doctorFee` int(11) NOT NULL,
-`roomFee` int(11) NOT NULL,
 `medicineFee` int(11) NOT NULL,
 PRIMARY KEY(`walkInId`)
 );
@@ -373,17 +360,3 @@ INSERT INTO nurse_receptionist(nName,nEmail,nAddress,nMobile,nProfileImg,nPasswo
 -- ('TestTwo', 'test2@gmail.com', '123456789 Main St.', 8, 'male', '+639550596888', '$2y$10$hHZ0EqFSfa/0XZBfyj5m2e9Yuv7N4ONW/eUgBimoyBKBKkrYCjq.G', '10026098655fe0a48ab83dd.jpeg'),
 -- ('TestThree', 'testthree@gmail.com', '123456789 Main St.', 45, 'male', '+639550596898', '$2y$10$wUYS46EsspVTmMtCM/3lYu6vaXGa.gXCV.nx9zypbv/Te2DzBMu2e', '3510427535fe0cb65b7d83.jpeg'),
 -- ('TestFour', 'testfour@gmail.com', '1234567 Main St.', 25, 'male', '+639550596333', '$2y$10$BspJN3qZ6koPLZH04tWi5eY6urpiYgAk3.7ZlfEuE39/M5.pJSY0.', '7576211125fe1c4d923b50.jpeg');
-
--- Add data in the rooms table 
-INSERT INTO rooms(room_number,room_fee,room_status)VALUES
-(101,1500,'available'),
-(102,1500,'available'),
-(103,1500,'available'),
-(104,1500,'available'),
-(105,1500,'available');
--- (106,1500,'available'),
--- (107,1500,'available'),
--- (108,1500,'available'),
--- (109,1500,'available'),
--- (110,1500,'available'),
--- (201,1500,'available');

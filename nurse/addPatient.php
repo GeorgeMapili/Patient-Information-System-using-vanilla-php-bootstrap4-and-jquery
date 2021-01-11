@@ -105,7 +105,7 @@ if (!isset($_SESSION['nId'])) {
 
                 // Check if the name is valid
                 if (!preg_match("/^([a-zA-Z' ]+)$/", $name)) {
-                    header("location:addPatient.php?errName=name_is_not_valid&address=$address&email=$email&mobile=$mobileNumber&disease=$disease&age=$age&gender=$gender&doctor=$doctor&room=$roomNumber");
+                    header("location:addPatient.php?errName=name_is_not_valid&address=$address&email=$email&mobile=$mobileNumber&disease=$disease&age=$age&gender=$gender&doctor=$doctor");
                     exit(0);
                 }
 
@@ -118,13 +118,13 @@ if (!isset($_SESSION['nId'])) {
                 $nameCount = $stmt->rowCount();
 
                 if ($nameCount > 0) {
-                    header("location:addPatient.php?errName1=name_is_already_taken&address=$address&email=$email&mobile=$mobileNumber&disease=$disease&age=$age&gender=$gender&doctor=$doctor&room=$roomNumber");
+                    header("location:addPatient.php?errName1=name_is_already_taken&address=$address&email=$email&mobile=$mobileNumber&disease=$disease&age=$age&gender=$gender&doctor=$doctor");
                     exit(0);
                 }
 
                 // Check if the email is valid
                 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                    header("location:addPatient.php?errEmail1=email_is_not_valid&address=$address&name=$name&mobile=$mobileNumber&disease=$disease&age=$age&gender=$gender&doctor=$doctor&room=$roomNumber");
+                    header("location:addPatient.php?errEmail1=email_is_not_valid&address=$address&name=$name&mobile=$mobileNumber&disease=$disease&age=$age&gender=$gender&doctor=$doctor");
                     exit(0);
                 }
 
@@ -137,7 +137,7 @@ if (!isset($_SESSION['nId'])) {
                 $emailCount = $stmt->rowCount();
 
                 if ($emailCount > 0) {
-                    header("location:addPatient.php?errEmail2=email_is_already_taken&address=$address&name=$name&mobile=$mobileNumber&disease=$disease&age=$age&gender=$gender&doctor=$doctor&room=$roomNumber");
+                    header("location:addPatient.php?errEmail2=email_is_already_taken&address=$address&name=$name&mobile=$mobileNumber&disease=$disease&age=$age&gender=$gender&doctor=$doctor");
                     exit(0);
                 }
 
@@ -150,7 +150,7 @@ if (!isset($_SESSION['nId'])) {
                 $mobileCount = $stmt->rowCount();
 
                 if ($mobileCount > 0) {
-                    header("location:addPatient.php?errMobile=mobile_number_is_already_taken&address=$address&name=$name&email=$email&disease=$disease&age=$age&gender=$gender&doctor=$doctor&room=$roomNumber");
+                    header("location:addPatient.php?errMobile=mobile_number_is_already_taken&address=$address&name=$name&email=$email&disease=$disease&age=$age&gender=$gender&doctor=$doctor");
                     exit(0);
                 }
 
