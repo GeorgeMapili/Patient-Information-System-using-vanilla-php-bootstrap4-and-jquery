@@ -204,7 +204,7 @@ if (isset($_POST['searchDoctor'])) {
             <td>' . $doctor['dAddress'] . '</td>
             <td>' . $doctor['dMobile'] . '</td>
             <td>' . $doctor['dSpecialization'] . '</td>
-            <td>' . $doctor['dFee'] . '</td>
+            <td>₱' . number_format($doctor['dFee'], 2) . '</td>
             <td>
                  <div class="row">
                             <div class="col">
@@ -505,7 +505,7 @@ if (isset($_POST['searchFinishedAppointment'])) {
                 <td>' . $finishedAppointment['pDoctor'] . '</td>
                 <td>' . $finishedAppointment['aReason'] . '</td>
                 <td>' . $finishedAppointment['dFee'] . '</td>
-                <td>' . date("M d, Y", strtotime($finishedAppointment['aMadeOn'])) . ' . at . ' . $finishedAppointment['aTime'] . '</td>
+                <td>' . date("M d, Y", strtotime($finishedAppointment['aMadeOn'])) . ' at ' . $finishedAppointment['aTime'] . '</td>
                 <td>
                     <p class="btn btn-success disabled">Finished</p>
                 </td>

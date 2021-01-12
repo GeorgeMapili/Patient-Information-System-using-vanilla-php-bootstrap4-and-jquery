@@ -133,24 +133,6 @@ if (!isset($_SESSION['adId'])) {
                 if (isset($_POST['deleteWalkInBtn'])) {
                     $walkInId = $_POST['walkInId'];
 
-                    // Get the walk in patien room number
-                    $sql = "SELECT * FROM walkinpatient WHERE walkInId = :id";
-                    $stmt = $con->prepare($sql);
-                    $stmt->bindParam(":id", $walkInId, PDO::PARAM_INT);
-                    $stmt->execute();
-
-                    $walkIn = $stmt->fetch(PDO::FETCH_ASSOC);
-
-                    $roomNumber = $walkIn['walkInRoomNumber'];
-
-                    // Remove the room status from occupied to available
-                    $status = "available";
-                    $sql = "UPDATE rooms SET room_status = :status WHERE room_number = :roomNumber";
-                    $stmt = $con->prepare($sql);
-                    $stmt->bindParam(":status", $status, PDO::PARAM_STR);
-                    $stmt->bindParam(":roomNumber", $roomNumber, PDO::PARAM_INT);
-                    $stmt->execute();
-
                     $sql = "DELETE FROM walkinpatient WHERE walkInId = :id";
                     $stmt = $con->prepare($sql);
                     $stmt->bindParam(":id", $walkInId, PDO::PARAM_INT);
