@@ -26,7 +26,7 @@ if (!isset($_SESSION['nId'])) {
 
     <header>
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-            <a class="navbar-brand " i id="primaryColor" href="dashboard.php">Company Name</a>
+            <a class="navbar-brand " i id="primaryColor" href="dashboard.php">SUMC Doctors Clinic</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -159,46 +159,49 @@ if (!isset($_SESSION['nId'])) {
 
         <div class="container">
 
-            <div class="mt-4 mb-4">
-                <h1 class="Display-4" id="primaryColor">Profile</h1>
-            </div>
+            <div class="shadow-lg p-3 mb-5 bg-white rounded mt-5">
+                <div class="mt-4 mb-4">
+                    <h1 class="Display-4" id="primaryColor">Profile</h1>
+                </div>
 
-            <div class="text-center my-3">
-                <?= (isset($_GET['errNurseInfoUpdate']) && $_GET['errNurseInfoUpdate'] == "Nothing_to_update") ? '<span class="text-danger">Nothing to update!</span>' : '' ?>
-                <?= (isset($_GET['succUpdateNurse']) && $_GET['succUpdateNurse'] == "Successfully_updated_information") ? '<span class="text-success">Successfully updated information!</span>' : '' ?>
-            </div>
 
-            <form action="nurseProfile.php" method="post">
-                <div class="row">
-                    <input type="hidden" name="nId" value="<?= $_SESSION['nId'] ?>">
-                    <div class="col">
-                        <label>Name</label>
-                        <?= ((isset($_GET['errNurseName']) && $_GET['errNurseName'] == "nurse_name_is_not_valid") || (isset($_GET['errNurseName1']) && $_GET['errNurseName1'] == "Nurse_name_is_already_taken")) ? '<input type="text" name="nurseName" class="form-control is-invalid" required>' : '<input type="text" name="nurseName" class="form-control" value="' . $_SESSION['nName'] . '">' ?>
-                        <?= (isset($_GET['errNurseName']) && $_GET['errNurseName'] == "nurse_name_is_not_valid") ? '<small class="text-danger">Nurse name is not valid!</small>' : '' ?>
-                        <?= (isset($_GET['errNurseName1']) && $_GET['errNurseName1'] == "Nurse_name_is_already_taken") ? '<small class="text-danger">Nurse name is already existed!</small>' : '' ?>
-                    </div>
-                    <div class="col">
-                        <label>Email</label>
-                        <?= ((isset($_GET['errEmail']) && $_GET['errEmail'] == "email_is_invalid") || (isset($_GET['errEmail1']) && $_GET['errEmail1'] == "Email_is_already_existed")) ? '<input type="email" name="nurseEmail" class="form-control is-invalid" required>' : '<input type="email" name="nurseEmail" class="form-control" value="' . $_SESSION['nEmail'] . '">' ?>
-                        <?= (isset($_GET['errEmail']) && $_GET['errEmail'] == "email_is_invalid") ? '<small class="text-danger">Email is invalid!</small>' : '' ?>
-                        <?= (isset($_GET['errEmail1']) && $_GET['errEmail1'] == "Email_is_already_existed") ? '<small class="text-danger">Email is already existed!</small>' : '' ?>
-                    </div>
+                <div class="text-center my-3">
+                    <?= (isset($_GET['errNurseInfoUpdate']) && $_GET['errNurseInfoUpdate'] == "Nothing_to_update") ? '<span class="text-danger">Nothing to update!</span>' : '' ?>
+                    <?= (isset($_GET['succUpdateNurse']) && $_GET['succUpdateNurse'] == "Successfully_updated_information") ? '<span class="text-success">Successfully updated information!</span>' : '' ?>
                 </div>
-                <div class="row">
-                    <div class="col">
-                        <label>Address</label>
-                        <input type="text" name="nurseAddress" class="form-control" value="<?= $_SESSION['nAddress'] ?>" required>
+
+                <form action="nurseProfile.php" method="post">
+                    <div class="row">
+                        <input type="hidden" name="nId" value="<?= $_SESSION['nId'] ?>">
+                        <div class="col">
+                            <label>Name</label>
+                            <?= ((isset($_GET['errNurseName']) && $_GET['errNurseName'] == "nurse_name_is_not_valid") || (isset($_GET['errNurseName1']) && $_GET['errNurseName1'] == "Nurse_name_is_already_taken")) ? '<input type="text" name="nurseName" class="form-control is-invalid" required>' : '<input type="text" name="nurseName" class="form-control" value="' . $_SESSION['nName'] . '">' ?>
+                            <?= (isset($_GET['errNurseName']) && $_GET['errNurseName'] == "nurse_name_is_not_valid") ? '<small class="text-danger">Nurse name is not valid!</small>' : '' ?>
+                            <?= (isset($_GET['errNurseName1']) && $_GET['errNurseName1'] == "Nurse_name_is_already_taken") ? '<small class="text-danger">Nurse name is already existed!</small>' : '' ?>
+                        </div>
+                        <div class="col">
+                            <label>Email</label>
+                            <?= ((isset($_GET['errEmail']) && $_GET['errEmail'] == "email_is_invalid") || (isset($_GET['errEmail1']) && $_GET['errEmail1'] == "Email_is_already_existed")) ? '<input type="email" name="nurseEmail" class="form-control is-invalid" required>' : '<input type="email" name="nurseEmail" class="form-control" value="' . $_SESSION['nEmail'] . '">' ?>
+                            <?= (isset($_GET['errEmail']) && $_GET['errEmail'] == "email_is_invalid") ? '<small class="text-danger">Email is invalid!</small>' : '' ?>
+                            <?= (isset($_GET['errEmail1']) && $_GET['errEmail1'] == "Email_is_already_existed") ? '<small class="text-danger">Email is already existed!</small>' : '' ?>
+                        </div>
                     </div>
-                    <div class="col">
-                        <label>Mobile Number</label>
-                        <?= (isset($_GET['errMobile']) && $_GET['errMobile'] == "Mobile_number_is_already_existed") ? '<input type="tel" name="nurseMobile" class="form-control is-invalid" placeholder="+639551243145 or 09123456789" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" required>' : '<input type="tel" name="nurseMobile" class="form-control" value="' . $_SESSION['nMobile'] . '">' ?>
-                        <?= (isset($_GET['errMobile']) && $_GET['errMobile'] == "Mobile_number_is_already_existed") ? '<small class="text-danger">Mobile number is already existed!</small>' : '' ?>
+                    <div class="row">
+                        <div class="col">
+                            <label>Address</label>
+                            <input type="text" name="nurseAddress" class="form-control" value="<?= $_SESSION['nAddress'] ?>" required>
+                        </div>
+                        <div class="col">
+                            <label>Mobile Number</label>
+                            <?= (isset($_GET['errMobile']) && $_GET['errMobile'] == "Mobile_number_is_already_existed") ? '<input type="tel" name="nurseMobile" class="form-control is-invalid" placeholder="+639551243145 or 09123456789" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" required>' : '<input type="tel" name="nurseMobile" class="form-control" value="' . $_SESSION['nMobile'] . '">' ?>
+                            <?= (isset($_GET['errMobile']) && $_GET['errMobile'] == "Mobile_number_is_already_existed") ? '<small class="text-danger">Mobile number is already existed!</small>' : '' ?>
+                        </div>
                     </div>
-                </div>
-                <div class="text-center my-5">
-                    <input type="submit" name="updateNurseInformationBtn" class="btn btn-info" value="Update Information">
-                </div>
-            </form>
+                    <div class="text-center my-5">
+                        <input type="submit" name="updateNurseInformationBtn" class="btn btn-info" value="Update Information">
+                    </div>
+                </form>
+            </div>
 
             <hr class="featurette-divider">
 
@@ -241,116 +244,120 @@ if (!isset($_SESSION['nId'])) {
             }
             ?>
 
-            <div class="text-center my-4">
-                <?= (isset($_GET['succUpdatePass']) && $_GET['succUpdatePass'] == "Successfully_updated_password") ? '<span class="text-success">Successfully updated password!</span>' : '' ?>
-            </div>
-
-            <div class="mt-4 mb-4">
-                <h1 class="Display-4" id="primaryColor">Password</h1>
-            </div>
-
-            <form action="nurseProfile.php" method="post">
-                <input type="hidden" name="nId" value="<?= $_SESSION['nId'] ?>">
-                <label>Current Password</label>
-                <?= (isset($_GET['errCurrPass']) && $_GET['errCurrPass'] == "incorrect_current_password") ? '<input type="password" name="currentPassword" class="form-control is-invalid" required>' : '<input type="password" name="currentPassword" class="form-control" required>' ?>
-                <?= (isset($_GET['errCurrPass']) && $_GET['errCurrPass'] == "incorrect_current_password") ? '<small class="text-danger">Incorrect current password!</small>' : '' ?>
-                <div class="row">
-                    <div class="col">
-                        <label>New Password</label>
-                        <input type="password" name="newPassword" minlength="6" class="form-control" required>
-                    </div>
-                    <div class="col">
-                        <label>Confirm Password</label>
-                        <?= (isset($_GET['errConfirmPass']) && $_GET['errConfirmPass'] == "password_did_not_match") ? '<input type="password" name="confirmNewPassword" minlength="6" class="form-control is-invalid" required>' : '<input type="password" name="confirmNewPassword" minlength="6" class="form-control" required>' ?>
-                        <?= (isset($_GET['errConfirmPass']) && $_GET['errConfirmPass'] == "password_did_not_match") ? '<small class="text-danger">Password did not match!</small>' : '' ?>
-                    </div>
+            <div class="shadow-lg p-3 mb-5 bg-white rounded mt-5">
+                <div class="text-center my-4">
+                    <?= (isset($_GET['succUpdatePass']) && $_GET['succUpdatePass'] == "Successfully_updated_password") ? '<span class="text-success">Successfully updated password!</span>' : '' ?>
                 </div>
-                <div class="text-center mt-3">
-                    <input type="submit" value="Update Password" name="updatePasswordBtn" class="btn btn-info">
+
+                <div class="mt-4 mb-4">
+                    <h1 class="Display-4" id="primaryColor">Password</h1>
                 </div>
-            </form>
+
+                <form action="nurseProfile.php" method="post">
+                    <input type="hidden" name="nId" value="<?= $_SESSION['nId'] ?>">
+                    <label>Current Password</label>
+                    <?= (isset($_GET['errCurrPass']) && $_GET['errCurrPass'] == "incorrect_current_password") ? '<input type="password" name="currentPassword" class="form-control is-invalid" required>' : '<input type="password" name="currentPassword" class="form-control" required>' ?>
+                    <?= (isset($_GET['errCurrPass']) && $_GET['errCurrPass'] == "incorrect_current_password") ? '<small class="text-danger">Incorrect current password!</small>' : '' ?>
+                    <div class="row">
+                        <div class="col">
+                            <label>New Password</label>
+                            <input type="password" name="newPassword" minlength="6" class="form-control" required>
+                        </div>
+                        <div class="col">
+                            <label>Confirm Password</label>
+                            <?= (isset($_GET['errConfirmPass']) && $_GET['errConfirmPass'] == "password_did_not_match") ? '<input type="password" name="confirmNewPassword" minlength="6" class="form-control is-invalid" required>' : '<input type="password" name="confirmNewPassword" minlength="6" class="form-control" required>' ?>
+                            <?= (isset($_GET['errConfirmPass']) && $_GET['errConfirmPass'] == "password_did_not_match") ? '<small class="text-danger">Password did not match!</small>' : '' ?>
+                        </div>
+                    </div>
+                    <div class="text-center mt-3">
+                        <input type="submit" value="Update Password" name="updatePasswordBtn" class="btn btn-info">
+                    </div>
+                </form>
+            </div>
 
             <hr class="featurette-divider">
 
-            <div class="mt-4 mb-4">
-                <h1 class="Display-4" id="primaryColor">Profile Image</h1>
-            </div>
+            <div class="shadow-lg p-3 mb-5 bg-white rounded mt-5">
+                <div class="mt-4 mb-4">
+                    <h1 class="Display-4" id="primaryColor">Profile Image</h1>
+                </div>
 
-            <?php
-            if (isset($_POST['updateImageBtn'])) {
-                $nId = $_POST['nId'];
-                $profileImg = $_FILES['profileImg'];
+                <?php
+                if (isset($_POST['updateImageBtn'])) {
+                    $nId = $_POST['nId'];
+                    $profileImg = $_FILES['profileImg'];
 
 
-                // Image
-                $ext = $profileImg['type'];
-                $extF = explode('/', $ext);
+                    // Image
+                    $ext = $profileImg['type'];
+                    $extF = explode('/', $ext);
 
-                // Unique Image Name
-                $profileName =  uniqid(rand()) . "." . $extF[1];
+                    // Unique Image Name
+                    $profileName =  uniqid(rand()) . "." . $extF[1];
 
-                $tmpname = $profileImg['tmp_name'];
-                $dest = __DIR__ . "/../upload/nurse_profile_img/" . $profileName;
+                    $tmpname = $profileImg['tmp_name'];
+                    $dest = __DIR__ . "/../upload/nurse_profile_img/" . $profileName;
 
-                //check if the image is valid
-                $allowed = array('jpg', 'jpeg', 'png');
+                    //check if the image is valid
+                    $allowed = array('jpg', 'jpeg', 'png');
 
-                if (!in_array(strtolower($extF[1]), $allowed)) {
-                    header("location:nurseProfile.php?errorImgExt=image_is_not_valid");
+                    if (!in_array(strtolower($extF[1]), $allowed)) {
+                        header("location:nurseProfile.php?errorImgExt=image_is_not_valid");
+                        exit(0);
+                    }
+
+                    // Check if the image size is valid
+                    if ($profileImg['size'] > 5000000) {
+                        header("location:nurseProfile.php?errImgSize=Image_invalid_size");
+                        exit(0);
+                    }
+
+                    // Current Profile Img
+                    $currentProfile = $_SESSION['nProfileImg'];
+
+                    // New Profile Img
+                    $newProfile = $profileName;
+
+                    // Path of the current profile
+                    $path = __DIR__ . "/../upload/nurse_profile_img/" . $currentProfile;
+
+                    // Delete the current Profile Img
+                    unlink($path);
+
+                    // Add the img of the new profile
+                    move_uploaded_file($tmpname, $dest);
+
+                    // New session Image
+                    $_SESSION['nProfileImg'] = $newProfile;
+
+                    $sql = "UPDATE nurse_receptionist SET nProfileImg = :profile WHERE nId = :id";
+                    $stmt = $con->prepare($sql);
+                    $stmt->bindParam(":profile", $profileName, PDO::PARAM_STR);
+                    $stmt->bindParam(":id", $nId, PDO::PARAM_INT);
+                    $stmt->execute();
+
+                    header("location:nurseProfile.php?succUpdateImg=Successfully_update_the_img");
                     exit(0);
                 }
+                ?>
 
-                // Check if the image size is valid
-                if ($profileImg['size'] > 5000000) {
-                    header("location:nurseProfile.php?errImgSize=Image_invalid_size");
-                    exit(0);
-                }
+                <div class="text-center my-4">
+                    <?= (isset($_GET['succUpdateImg']) && $_GET['succUpdateImg'] == "Successfully_update_the_img") ? '<span class="text-success">Successfully update the image!</span>' : '' ?>
+                </div>
 
-                // Current Profile Img
-                $currentProfile = $_SESSION['nProfileImg'];
-
-                // New Profile Img
-                $newProfile = $profileName;
-
-                // Path of the current profile
-                $path = __DIR__ . "/../upload/nurse_profile_img/" . $currentProfile;
-
-                // Delete the current Profile Img
-                unlink($path);
-
-                // Add the img of the new profile
-                move_uploaded_file($tmpname, $dest);
-
-                // New session Image
-                $_SESSION['nProfileImg'] = $newProfile;
-
-                $sql = "UPDATE nurse_receptionist SET nProfileImg = :profile WHERE nId = :id";
-                $stmt = $con->prepare($sql);
-                $stmt->bindParam(":profile", $profileName, PDO::PARAM_STR);
-                $stmt->bindParam(":id", $nId, PDO::PARAM_INT);
-                $stmt->execute();
-
-                header("location:nurseProfile.php?succUpdateImg=Successfully_update_the_img");
-                exit(0);
-            }
-            ?>
-
-            <div class="text-center my-4">
-                <?= (isset($_GET['succUpdateImg']) && $_GET['succUpdateImg'] == "Successfully_update_the_img") ? '<span class="text-success">Successfully update the image!</span>' : '' ?>
+                <form action="nurseProfile.php" class="my-4 mx-3" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="nId" value="<?= $_SESSION['nId'] ?>">
+                    <div class="row">
+                        <label>Nurse Profile Image</label>
+                        <?= (isset($_GET['errorImgExt']) && $_GET['errorImgExt'] == "image_is_not_valid") ? '<input type="file" name="profileImg" class="form-control is-invalid" required>' : '<input type="file" name="profileImg" class="form-control" required>' ?>
+                        <?= (isset($_GET['errorImgExt']) && $_GET['errorImgExt'] == "image_is_not_valid") ? '<small class="text-danger">Image is not valid only(JPEG,JPG,PNG)!</small>' : '' ?>
+                        <?= (isset($_GET['errImgSize']) && $_GET['errImgSize'] == "Image_invalid_size") ? '<small class="text-danger">Image is not valid only less size(5MB)!</small>' : '' ?>
+                    </div>
+                    <div class="text-center mt-3">
+                        <input type="submit" name="updateImageBtn" value="Update Image" class="btn btn-info">
+                    </div>
+                </form>
             </div>
-
-            <form action="nurseProfile.php" class="my-4" method="post" enctype="multipart/form-data">
-                <input type="hidden" name="nId" value="<?= $_SESSION['nId'] ?>">
-                <div class="row">
-                    <label>Nurse Profile Image</label>
-                    <?= (isset($_GET['errorImgExt']) && $_GET['errorImgExt'] == "image_is_not_valid") ? '<input type="file" name="profileImg" class="form-control is-invalid" required>' : '<input type="file" name="profileImg" class="form-control" required>' ?>
-                    <?= (isset($_GET['errorImgExt']) && $_GET['errorImgExt'] == "image_is_not_valid") ? '<small class="text-danger">Image is not valid only(JPEG,JPG,PNG)!</small>' : '' ?>
-                    <?= (isset($_GET['errImgSize']) && $_GET['errImgSize'] == "Image_invalid_size") ? '<small class="text-danger">Image is not valid only less size(5MB)!</small>' : '' ?>
-                </div>
-                <div class="text-center mt-3">
-                    <input type="submit" name="updateImageBtn" value="Update Image" class="btn btn-info">
-                </div>
-            </form>
 
 
         </div>
@@ -360,7 +367,7 @@ if (!isset($_SESSION['nId'])) {
 
     <!-- FOOTER -->
     <footer class="container text-center">
-        <p>&copy; <?= date("Y") ?> Company, Inc. &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
+        <p>&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
     </footer>
 
 

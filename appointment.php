@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once 'connect.php';
+require __DIR__ . '/vendor/autoload.php';
 
 if (!isset($_SESSION['id'])) {
     header("location:index.php");
@@ -25,7 +26,7 @@ if (!isset($_SESSION['id'])) {
 
     <header>
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-            <a class="navbar-brand " i id="primaryColor" href="main.php">Company Name</a>
+            <a class="navbar-brand " i id="primaryColor" href="main.php">SUMC Doctors Clinic</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -50,10 +51,10 @@ if (!isset($_SESSION['id'])) {
                         <a class="nav-link " href="myappointment.php">Appointments</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " href="acceptedAppointment.php">Accepted Appointments</a>
+                        <a class="nav-link " href="acceptedAppointment.php">Accepted</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " href="finishedAppointment.php">Finished Appointments</a>
+                        <a class="nav-link " href="finishedAppointment.php">Finished</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav ml-auto">
@@ -82,6 +83,18 @@ if (!isset($_SESSION['id'])) {
         <?php
 
         if (isset($_POST['submitAppointment'])) {
+
+            $options = array(
+                'cluster' => 'ap1',
+                'useTLS' => true
+            );
+            $pusher = new Pusher\Pusher(
+                '33e38cfddf441ae84e2d',
+                '9d6c92710887d31d41b4',
+                '1149333',
+                $options
+            );
+
             $pId = $_POST['id'];
             $pName = $_POST['name'];
             $pEmail = $_POST['email'];
@@ -188,6 +201,8 @@ if (!isset($_SESSION['id'])) {
             $stmt->bindParam(":totalPay", $dFee, PDO::PARAM_STR);
 
             if ($stmt->execute()) {
+                $data['message'] = 'hello world';
+                $pusher->trigger('my-channel', 'my-event', $data);
                 header("location:appointment.php?AppointmentSuccess=Successully_request_an_appointment");
                 exit(0);
             }
@@ -332,7 +347,7 @@ if (!isset($_SESSION['id'])) {
 
         <!-- FOOTER -->
         <footer class="container text-center">
-            <p>&copy; <?= date("Y") ?> Company, Inc. &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
+            <p>&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
         </footer>
     </main>
 

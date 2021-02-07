@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once '../connect.php';
+require __DIR__ . '/../vendor/autoload.php';
 
 ?>
 <!doctype html>
@@ -21,7 +22,7 @@ require_once '../connect.php';
 
     <header>
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-            <a class="navbar-brand " i id="primaryColor" href="dashboard.php">Company Name</a>
+            <a class="navbar-brand " i id="primaryColor" href="dashboard.php">SUMC Doctors Clinic</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -75,6 +76,18 @@ require_once '../connect.php';
 
             <?php
             if (isset($_POST['doneAppointment'])) {
+
+                $options = array(
+                    'cluster' => 'ap1',
+                    'useTLS' => true
+                );
+                $pusher = new Pusher\Pusher(
+                    '33e38cfddf441ae84e2d',
+                    '9d6c92710887d31d41b4',
+                    '1149333',
+                    $options
+                );
+
                 $aId = $_POST['aId'];
                 $pId = $_POST['pId'];
 
@@ -86,6 +99,8 @@ require_once '../connect.php';
                 $stmt->bindParam(":aid", $aId, PDO::PARAM_INT);
                 $stmt->bindParam(":pid", $pId, PDO::PARAM_INT);
                 $stmt->execute();
+                $data['message'] = 'hello world';
+                $pusher->trigger('my-channel', 'my-event', $data);
                 header("location:incomingAppointment.php?succDone=Successfully_done_appointment");
                 exit(0);
             }
@@ -199,7 +214,7 @@ require_once '../connect.php';
 
         <!-- FOOTER -->
         <footer class="container text-center">
-            <p>&copy; <?= date("Y") ?> Company, Inc. &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
+            <p>&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
         </footer>
     </main>
 

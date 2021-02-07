@@ -25,7 +25,7 @@ if (!isset($_SESSION['nId'])) {
 
     <header>
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-            <a class="navbar-brand " i id="primaryColor" href="dashboard.php">Company Name</a>
+            <a class="navbar-brand " i id="primaryColor" href="dashboard.php">SUMC Doctors Clinic</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -109,7 +109,7 @@ if (!isset($_SESSION['nId'])) {
                 <h1 class="Display-4 my-4" id="primaryColor">Pending Appointments</h1>
             </div>
 
-            <table class="table table-hover">
+            <table class="table table-hover shadow-lg p-3 mb-5 bg-white rounded">
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col">Patient Name</th>
@@ -150,7 +150,7 @@ if (!isset($_SESSION['nId'])) {
                                         <form action="appointmentPending.php" method="post">
                                             <input type="hidden" name="aId" value="<?= $appointmentPending['aId'] ?>">
                                             <input type="hidden" name="pId" value="<?= $appointmentPending['pId'] ?>">
-                                            <input type="submit" value="Accept" class="btn btn-primary" name="acceptStatus">
+                                            <input type="submit" value="Accept" class="btn btn-info" name="acceptStatus">
                                         </form>
                                     </div>
                                     <div class="col">
@@ -171,7 +171,7 @@ if (!isset($_SESSION['nId'])) {
 
             <!-- FOOTER -->
             <footer class="text-center">
-                <p>&copy; <?= date("Y") ?> Company, Inc. &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
+                <p>&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
             </footer>
     </main>
 
@@ -179,6 +179,13 @@ if (!isset($_SESSION['nId'])) {
     <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+
+    </script>
 </body>
 
 </html>

@@ -25,7 +25,7 @@ if (!isset($_SESSION['nId'])) {
 
     <header>
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-            <a class="navbar-brand " i id="primaryColor" href="dashboard.php">Company Name</a>
+            <a class="navbar-brand " i id="primaryColor" href="dashboard.php">SUMC Doctors Clinic</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -34,14 +34,36 @@ if (!isset($_SESSION['nId'])) {
                     <li class="nav-item active">
                         <a class="nav-link" href="dashboard.php">Home <span class="sr-only">(current)</span></a>
                     </li>
+                    <?php
+                    $status = "pending";
+                    $sql = "SELECT * FROM appointment WHERE aStatus = :status";
+                    $stmt = $con->prepare($sql);
+                    $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+                    $stmt->execute();
+                    $pendingCount = $stmt->rowCount();
+                    ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="appointmentPending.php">Pending Appointments</a>
+                        <a class="nav-link" href="appointmentPending.php">Pending Appointments&nbsp;<?= ($pendingCount > 0) ? '<span id="pending-appointment" class="badge bg-danger">' . $pendingCount . '</span>' : '<span id="pending-appointment" class="badge bg-danger"></span>'; ?></a>
                     </li>
+                    <?php
+                    $status = "done";
+                    $sql = "SELECT * FROM appointment WHERE aStatus = :status";
+                    $stmt = $con->prepare($sql);
+                    $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+                    $stmt->execute();
+                    $patientAppointment = $stmt->rowCount();
+                    ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="patient.php">Patient from appointments</a>
+                        <a class="nav-link" href="patient.php">Patient from appointments&nbsp;<?= ($patientAppointment > 0) ? '<span id="patient-appointment" class="badge bg-danger">' . $patientAppointment . '</span>' : '<span id="patient-appointment" class="badge bg-danger"></span>'; ?></a>
                     </li>
+                    <?php
+                    $sql = "SELECT * FROM walkinpatient";
+                    $stmt = $con->prepare($sql);
+                    $stmt->execute();
+                    $walkinpatient = $stmt->rowCount();
+                    ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="patientWalkIn.php">Patient Walk in</a>
+                        <a class="nav-link" href="patientWalkIn.php">Patient Walk in&nbsp;<?= ($walkinpatient > 0) ? '<span id="walkinpatient" class="badge bg-danger">' . $walkinpatient . '</span>' : '<span id="walkinpatient" class="badge bg-danger"></span>'; ?></a>
                     </li>
                 </ul>
                 <!-- search bar -->
@@ -73,55 +95,29 @@ if (!isset($_SESSION['nId'])) {
             <h3 class="display-4 mt-5 my-4" id="primaryColor">Dashboard</h3>
 
             <div class="row mt-3">
-
-                <?php
-                $status = "pending";
-                $sql = "SELECT * FROM appointment WHERE aStatus = :status";
-                $stmt = $con->prepare($sql);
-                $stmt->bindParam(":status", $status, PDO::PARAM_STR);
-                $stmt->execute();
-
-                $pendingAppointment = $stmt->rowCount();
-                ?>
                 <div class="col-sm-6 col-md-4 col-lg-3">
                     <div class="card text-white bg-dark mb-3">
                         <div class="card-header h2"> Pending Appointments</div>
                         <div class="card-body">
-                            <h5 class="card-title"><?= $pendingAppointment ?></h5>
+                            <h5 id="pending-appointment-dashboard" class="card-title"><?= ($pendingCount > 0) ? '<span>' . $pendingCount . '</span>' : "0" ?></h5>
                         </div>
                     </div>
                 </div>
 
-                <?php
-                $status = "done";
-                $sql = "SELECT DISTINCT(pName) FROM appointment WHERE aStatus =:status";
-                $stmt = $con->prepare($sql);
-                $stmt->bindParam(":status", $status, PDO::PARAM_STR);
-                $stmt->execute();
-
-                $patientAppointmentCount = $stmt->rowCount();
-                ?>
                 <div class="col-sm-6 col-md-4 col-lg-3">
                     <div class="card text-white bg-dark mb-3">
                         <div class="card-header h2"> Patient Appointments</div>
                         <div class="card-body">
-                            <h5 class="card-title"><?= $patientAppointmentCount; ?></h5>
+                            <h5 id="patient-appointment-dashboard" class="card-title"><?= ($patientAppointment > 0) ? '<span>' . $patientAppointment . '</span>' : "0" ?></h5>
                         </div>
                     </div>
                 </div>
 
-                <?php
-                $sql = "SELECT * FROM walkinpatient";
-                $stmt = $con->prepare($sql);
-                $stmt->execute();
-
-                $walkInPatientCount = $stmt->rowCount();
-                ?>
                 <div class="col-sm-6 col-md-4 col-lg-3">
                     <div class="card text-white bg-dark mb-3">
                         <div class="card-header h2"> Walk in Patients</div>
                         <div class="card-body">
-                            <h5 class="card-title"><?= $walkInPatientCount ?></h5>
+                            <h5 id="walkinpatient-dashboard" class="card-title"><?= ($walkinpatient > 0) ? '<span>' . $walkinpatient . '</span>' : "0" ?></h5>
                         </div>
                     </div>
                 </div>
@@ -170,7 +166,7 @@ if (!isset($_SESSION['nId'])) {
 
             <!-- FOOTER -->
             <footer class="text-center">
-                <p>&copy; <?= date("Y") ?> Company, Inc. &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
+                <p>&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
             </footer>
         </div>
     </main>
@@ -179,6 +175,75 @@ if (!isset($_SESSION['nId'])) {
     <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+    <script>
+        // Enable pusher logging - don't include this in production
+        Pusher.logToConsole = true;
+
+        var pusher = new Pusher('33e38cfddf441ae84e2d', {
+            cluster: 'ap1'
+        });
+
+        var channel = pusher.subscribe('my-channel');
+        channel.bind('my-event', function(data) {
+            // alert(JSON.stringify(data));
+            $.ajax({
+                url: "pendingCount.php",
+                success: function(result) {
+
+                    if (result == "0") {
+                        result = "";
+                        $("#pending-appointment").html(result);
+                        result = "0";
+                        $("#pending-appointment-dashboard").html(result);
+                    } else {
+                        $("#pending-appointment").html(result);
+                        $("#pending-appointment-dashboard").html(result);
+                    }
+                }
+            });
+
+            $.ajax({
+                url: "patientAppointment.php",
+                success: function(result) {
+
+                    if (result == "0") {
+                        result = "";
+                        $("#patient-appointment").html(result);
+                        result = "0";
+                        $("#patient-appointment-dashboard").html(result);
+                    } else {
+                        $("#patient-appointment").html(result);
+                        $("#patient-appointment-dashboard").html(result);
+                    }
+
+                }
+            });
+
+            $.ajax({
+                url: "walkinpatient.php",
+                success: function(result) {
+
+                    if (result == "0") {
+                        result = "";
+                        $("#walkinpatient").html(result);
+                        result = "0";
+                        $("#walkinpatient-dashboard").html(result);
+                    } else {
+                        $("#walkinpatient").html(result);
+                        $("#walkinpatient-dashboard").html(result);
+                    }
+
+                }
+            });
+
+        });
+    </script>
+
 </body>
 
 </html>

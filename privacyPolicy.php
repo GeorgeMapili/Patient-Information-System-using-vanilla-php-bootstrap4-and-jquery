@@ -25,7 +25,7 @@ if (!isset($_SESSION['id'])) {
 
     <header>
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-            <a class="navbar-brand " i id="primaryColor" href="main.php">Company Name</a>
+            <a class="navbar-brand " i id="primaryColor" href="main.php">SUMC Doctors Clinic</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -50,10 +50,10 @@ if (!isset($_SESSION['id'])) {
                         <a class="nav-link " href="myappointment.php">Appointments</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " href="acceptedAppointment.php">Accepted Appointments</a>
+                        <a class="nav-link " href="acceptedAppointment.php">Accepted</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " href="finishedAppointment.php">Finished Appointments</a>
+                        <a class="nav-link " href="finishedAppointment.php">Finished</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav ml-auto">
@@ -90,7 +90,7 @@ if (!isset($_SESSION['id'])) {
 
             <div class="px-5">
                 <p class="lead">
-                    Company Name we operate https://localhost/pis. This page informs you of our policies regarding the collection, use and disclosure of Personal Information we receive from users of the Site.
+                    SUMC Doctors Clinic we operate https://localhost/pis. This page informs you of our policies regarding the collection, use and disclosure of Personal Information we receive from users of the Site.
                 </p>
                 <p class="lead">
                     We use your Personal Information only for providing and improving the Site. By using the Site, you agree to the collection and use of information in accordance with this policy.
@@ -108,7 +108,7 @@ if (!isset($_SESSION['id'])) {
 
             <!-- FOOTER -->
             <footer class="container text-center">
-                <p>&copy; <?= date("Y") ?> Company, Inc. &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
+                <p>&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
             </footer>
     </main>
 

@@ -25,7 +25,7 @@ if (!isset($_SESSION['nId'])) {
 
     <header>
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-            <a class="navbar-brand " i id="primaryColor" href="dashboard.php">Company Name</a>
+            <a class="navbar-brand " i id="primaryColor" href="dashboard.php">SUMC Doctors Clinic</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -181,7 +181,7 @@ if (!isset($_SESSION['nId'])) {
             ?>
 
             <div class="container">
-                <div class="row justify-content-center bg-light">
+                <div class="row justify-content-center bg-light shadow-lg p-3 mb-5 bg-white rounded mt-5">
                     <div class="col-lg-6 px-4 pb-4" id="order">
 
                         <div class="text-center my-3">
@@ -260,23 +260,26 @@ if (!isset($_SESSION['nId'])) {
 
                             <div class="col">
                                 <div class="form-group">
-                                    <input type="submit" name="discharge" class="btn btn-primary" value="Discharge">
+                                    <input type="submit" name="discharge" class="btn btn-info" value="Discharge">
                                 </div>
                             </div>
                         </form>
+
                     </div>
+
                 </div>
             </div>
+        </div>
 
 
-            <hr class="featurette-divider">
+        <hr class="featurette-divider">
 
-            <!-- /END THE FEATURETTES -->
+        <!-- /END THE FEATURETTES -->
 
-            <!-- FOOTER -->
-            <footer class="text-center">
-                <p>&copy; <?= date("Y") ?> Company, Inc. &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
-            </footer>
+        <!-- FOOTER -->
+        <footer class="text-center">
+            <p>&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
+        </footer>
         </div>
     </main>
 

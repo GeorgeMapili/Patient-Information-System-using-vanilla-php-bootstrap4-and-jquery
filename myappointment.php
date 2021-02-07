@@ -25,7 +25,7 @@ if (!isset($_SESSION['id'])) {
 
     <header>
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-            <a class="navbar-brand " i id="primaryColor" href="main.php">Company Name</a>
+            <a class="navbar-brand " i id="primaryColor" href="main.php">SUMC Doctors Clinic</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -50,10 +50,10 @@ if (!isset($_SESSION['id'])) {
                         <a class="nav-link " href="myappointment.php">Appointments</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " href="acceptedAppointment.php">Accepted Appointments</a>
+                        <a class="nav-link " href="acceptedAppointment.php">Accepted</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " href="finishedAppointment.php">Finished Appointments</a>
+                        <a class="nav-link " href="finishedAppointment.php">Finished</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav ml-auto">
@@ -97,7 +97,7 @@ if (!isset($_SESSION['id'])) {
                 <h1 class="Display-4" id="primaryColor">My appointments</h1>
             </div>
 
-            <table class="table table-hover">
+            <table class="table table-hover shadow p-3 mb-5 bg-white rounded">
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col">Patient Doctor</th>
@@ -143,7 +143,7 @@ if (!isset($_SESSION['id'])) {
 
         <!-- FOOTER -->
         <footer class="container text-center">
-            <p>&copy; <?= date("Y") ?> Company, Inc. &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
+            <p>&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
         </footer>
     </main>
 

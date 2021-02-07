@@ -27,13 +27,13 @@ if (!isset($_SESSION['id'])) {
 
     <header>
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-            <a class="navbar-brand " i id="primaryColor" href="main.php">Company Name</a>
+            <a class="navbar-brand " i id="primaryColor" href="main.php">SUMC Doctors Clinic</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="main.php">Home <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
@@ -52,10 +52,10 @@ if (!isset($_SESSION['id'])) {
                         <a class="nav-link " href="myappointment.php">Appointments</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " href="acceptedAppointment.php">Accepted Appointments</a>
+                        <a class="nav-link " href="acceptedAppointment.php">Accepted</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " href="finishedAppointment.php">Finished Appointments</a>
+                        <a class="nav-link " href="finishedAppointment.php">Finished</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav ml-auto">

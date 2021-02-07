@@ -30,7 +30,7 @@ if (isset($_GET['walkInDischargeReceipt']) && $_GET['walkInDischargeReceipt'] ==
 
     $pdf->SetFont('Arial', 'B', 14);
 
-    $pdf->Cell(190, 5, 'COMPANY NAME', 0, 1);
+    $pdf->Cell(190, 5, 'SUMC Doctors Clinic', 0, 1);
 
     $pdf->SetFont('Arial', '', 12);
 

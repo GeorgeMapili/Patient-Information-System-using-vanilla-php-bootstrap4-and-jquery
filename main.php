@@ -31,7 +31,7 @@ $stmt->execute();
 
     <header>
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-            <a class="navbar-brand " i id="primaryColor" href="main.php">Company Name</a>
+            <a class="navbar-brand " id="primaryColor" href="main.php">SUMC Doctors Clinic</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -56,10 +56,10 @@ $stmt->execute();
                         <a class="nav-link " href="myappointment.php">Appointments</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " href="acceptedAppointment.php">Accepted Appointments</a>
+                        <a class="nav-link " href="acceptedAppointment.php">Accepted</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " href="finishedAppointment.php">Finished Appointments</a>
+                        <a class="nav-link " href="finishedAppointment.php">Finished</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav ml-auto">
@@ -143,11 +143,11 @@ $stmt->execute();
 
             <div class="row featurette">
                 <div class="col-md-7">
-                    <h2 class="featurette-heading">Pleasant atmosphere.</h2>
+                    <h2 class="featurette-heading" id="primaryColor">Pleasant atmosphere.</h2>
                     <p class="lead">These beds have special features both for the comfort and well-being of the patient and for the convenience of health care workers.</p>
                 </div>
                 <div class="col-md-5">
-                    <img class="featurette-image img-fluid mx-auto" src="img/clinic.jpg" alt="Generic placeholder image">
+                    <img class="featurette-image img-fluid mx-auto shadow-lg p-3 mb-5 bg-white rounded" src="img/clinic.jpg" alt="Generic placeholder image">
                 </div>
             </div>
 
@@ -155,11 +155,11 @@ $stmt->execute();
 
             <div class="row featurette">
                 <div class="col-md-7 order-md-2">
-                    <h2 class="featurette-heading">Top of the line equipments.</h2>
+                    <h2 class="featurette-heading" id="primaryColor">Top of the line equipments.</h2>
                     <p class="lead">With the latest technology and medical equipment in patient care that helps the doctors diagnose diseases and treat patients effectively and efficiently.</p>
                 </div>
                 <div class="col-md-5 order-md-1">
-                    <img class="featurette-image img-fluid mx-auto" src="img/feature2.jpeg" alt="Generic placeholder image">
+                    <img class="featurette-image img-fluid mx-auto shadow-lg p-3 mb-5 bg-white rounded" src="img/feature2.jpeg" alt="Generic placeholder image">
                 </div>
             </div>
 
@@ -167,11 +167,11 @@ $stmt->execute();
 
             <div class="row featurette">
                 <div class="col-md-7">
-                    <h2 class="featurette-heading">Skilled Doctors.</h2>
+                    <h2 class="featurette-heading" id="primaryColor">Skilled Doctors.</h2>
                     <p class="lead">Doctors take an oath to care for people to the best of their ability as their profession.</p>
                 </div>
                 <div class="col-md-5">
-                    <img class="featurette-image img-fluid mx-auto" src="img/feature3.jpeg" alt="Generic placeholder image">
+                    <img class="featurette-image img-fluid mx-auto shadow-lg p-3 mb-5 bg-white rounded" src="img/feature3.jpeg" alt="Generic placeholder image">
                 </div>
             </div>
 
@@ -185,7 +185,7 @@ $stmt->execute();
         <!-- FOOTER -->
         <footer class="container">
             <p class="float-right"><a href="#">Back to top</a></p>
-            <p>&copy; <?= date("Y") ?> Company, Inc. &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
+            <p>&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
         </footer>
     </main>
 

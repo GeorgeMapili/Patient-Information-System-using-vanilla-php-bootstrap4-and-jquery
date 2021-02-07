@@ -25,7 +25,7 @@ if (!isset($_SESSION['id'])) {
 
     <header>
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-            <a class="navbar-brand " i id="primaryColor" href="main.php">Company Name</a>
+            <a class="navbar-brand " i id="primaryColor" href="main.php">SUMC Doctors Clinic</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -50,10 +50,10 @@ if (!isset($_SESSION['id'])) {
                         <a class="nav-link " href="myappointment.php">Appointments</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " href="acceptedAppointment.php">Accepted Appointments</a>
+                        <a class="nav-link " href="acceptedAppointment.php">Accepted</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " href="finishedAppointment.php">Finished Appointments</a>
+                        <a class="nav-link " href="finishedAppointment.php">Finished</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav ml-auto">
@@ -172,6 +172,8 @@ if (!isset($_SESSION['id'])) {
                         <option value="">Select a Country</option>
                         <?php
                         $datas = json_decode($response);
+                        // var_dump($datas);
+                        // die();
                         foreach ($datas as $key => $value) {
                             $countryInfo = (array) $datas[$key];
                             $countryName = strtolower($countryInfo['Country_text']);
@@ -191,7 +193,7 @@ if (!isset($_SESSION['id'])) {
         <div class="container text-center">
             <h2 class="lead">Covid 19 Information</h2>
         </div>
-        <div class="container bg-dark text-light my-5">
+        <div class="container bg-dark text-light my-5 shadow p-3 mb-5 bg-dark rounded">
             <div class="d-flex justify-content-center align-items-center">
                 <div class="text-center my-3">
                     <h3 class="activeCasesText"><b>Country:</b> <?php echo $country; ?></h3>
@@ -211,7 +213,7 @@ if (!isset($_SESSION['id'])) {
 
         <!-- FOOTER -->
         <footer class="container text-center">
-            <p>&copy; <?= date("Y") ?> Company, Inc. &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
+            <p>&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
         </footer>
     </main>
 

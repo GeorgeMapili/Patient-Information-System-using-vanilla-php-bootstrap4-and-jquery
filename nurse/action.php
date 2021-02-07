@@ -248,3 +248,17 @@ if (isset($_POST['medPricePa'])) {
     $stmt->bindParam(":pid", $pid, PDO::PARAM_INT);
     $stmt->execute();
 }
+
+// Check for automatic notification for pending appointment
+
+if (isset($_POST['pendingAppointment'])) {
+    $status = "pending";
+    $sql = "SELECT * FROM `appointment` WHERE aStatus = :status";
+    $stmt = $con->prepare($sql);
+    $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+    $stmt->execute();
+
+    $pendingCount = $stmt->rowCount();
+
+    echo $pendingCount;
+}

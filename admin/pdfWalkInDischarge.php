@@ -32,7 +32,7 @@ if (isset($_POST['receiptBtn'])) {
 
     $pdf->SetFont('Arial', 'B', 14);
 
-    $pdf->Cell(190, 5, 'COMPANY NAME', 0, 1);
+    $pdf->Cell(190, 5, 'SUMC Doctors Clinic', 0, 1);
 
     $pdf->SetFont('Arial', '', 12);
 
@@ -69,7 +69,7 @@ if (isset($_POST['receiptBtn'])) {
     $diagnosis = $medicalCertificate['pDisease'];
     $doctor = $medicalCertificate['pDoctor'];
 
-    $body = "This is to certify that $name of $address. Was examined and treated at the Company Name on $date with the following diagnosis $diagnosis and would medical attention for $doctor days barring complication.";
+    $body = "This is to certify that $name of $address. Was examined and treated at the SUMC Doctors Clinic on $date with the following diagnosis $diagnosis and would medical attention for $doctor days barring complication.";
 
     $pdf->Cell(10, 5, '', 0, 0);
 
