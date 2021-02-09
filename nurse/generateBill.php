@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once '../connect.php';
+require_once '../vendor/autoload.php';
 
 if (!isset($_SESSION['nId'])) {
     header("location:index.php");
@@ -34,14 +35,36 @@ if (!isset($_SESSION['nId'])) {
                     <li class="nav-item">
                         <a class="nav-link" href="dashboard.php">Home <span class="sr-only">(current)</span></a>
                     </li>
+                    <?php
+                    $status = "pending";
+                    $sql = "SELECT * FROM appointment WHERE aStatus = :status";
+                    $stmt = $con->prepare($sql);
+                    $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+                    $stmt->execute();
+                    $pendingCount = $stmt->rowCount();
+                    ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="appointmentPending.php">Pending Appointments</a>
+                        <a class="nav-link" href="appointmentPending.php">Pending Appointments&nbsp;<?= ($pendingCount > 0) ? '<span id="pending-appointment" class="badge bg-danger">' . $pendingCount . '</span>' : '<span id="pending-appointment" class="badge bg-danger"></span>'; ?></a>
                     </li>
+                    <?php
+                    $status = "done";
+                    $sql = "SELECT * FROM appointment WHERE aStatus = :status";
+                    $stmt = $con->prepare($sql);
+                    $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+                    $stmt->execute();
+                    $patientAppointment = $stmt->rowCount();
+                    ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="patient.php">Patient from appointments</a>
+                        <a class="nav-link" href="patient.php">Patient from appointments&nbsp;<?= ($patientAppointment > 0) ? '<span id="patient-appointment" class="badge bg-danger">' . $patientAppointment . '</span>' : '<span id="patient-appointment" class="badge bg-danger"></span>'; ?></a>
                     </li>
+                    <?php
+                    $sql = "SELECT * FROM walkinpatient";
+                    $stmt = $con->prepare($sql);
+                    $stmt->execute();
+                    $walkinpatient = $stmt->rowCount();
+                    ?>
                     <li class="nav-item active">
-                        <a class="nav-link" href="patientWalkIn.php">Patient Walk in</a>
+                        <a class="nav-link" href="patientWalkIn.php">Patient Walk in&nbsp;<?= ($walkinpatient > 0) ? '<span id="walkinpatient" class="badge bg-danger">' . $walkinpatient . '</span>' : '<span id="walkinpatient" class="badge bg-danger"></span>'; ?></a>
                     </li>
                 </ul>
                 <!-- search bar -->
@@ -98,6 +121,18 @@ if (!isset($_SESSION['nId'])) {
             } else {
 
                 if (isset($_POST['discharge'])) {
+
+                    $options = array(
+                        'cluster' => 'ap1',
+                        'useTLS' => true
+                    );
+                    $pusher = new Pusher\Pusher(
+                        '33e38cfddf441ae84e2d',
+                        '9d6c92710887d31d41b4',
+                        '1149333',
+                        $options
+                    );
+
                     // Data in field
                     $id = $_POST['id'];
                     $name = $_POST['name'];
@@ -151,6 +186,9 @@ if (!isset($_SESSION['nId'])) {
                         $stmt = $con->prepare($sql);
                         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
                         $stmt->execute();
+
+                        $data['message'] = 'hello world';
+                        $pusher->trigger('my-channel', 'my-event', $data);
 
                         // INSERT INTO RETURNEE PATIENT TABLE FOR DOCTOR MEDICAL HISTORY
                         $sql = "INSERT INTO returnee_patient(pId,pName,pEmail,pAddress, pMobile, pDoctor, pPrescription, pDisease, pTotalAmount,pStatus,pAmountPay,pChange)VALUES(:id,:name,:email,:address,:mobile,:doctor,:prescription,:disease,:totalAmount,:status,:amountPay,:change)";
@@ -291,6 +329,70 @@ if (!isset($_SESSION['nId'])) {
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
+    <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+    <script>
+        // Enable pusher logging - don't include this in production
+        Pusher.logToConsole = true;
+
+        var pusher = new Pusher('33e38cfddf441ae84e2d', {
+            cluster: 'ap1'
+        });
+
+        var channel = pusher.subscribe('my-channel');
+        channel.bind('my-event', function(data) {
+            // alert(JSON.stringify(data));
+            $.ajax({
+                url: "pendingCount.php",
+                success: function(result) {
+
+                    if (result == "0") {
+                        result = "";
+                        $("#pending-appointment").html(result);
+                        result = "0";
+                        $("#pending-appointment-dashboard").html(result);
+                    } else {
+                        $("#pending-appointment").html(result);
+                        $("#pending-appointment-dashboard").html(result);
+                    }
+                }
+            });
+
+            $.ajax({
+                url: "patientAppointment.php",
+                success: function(result) {
+
+                    if (result == "0") {
+                        result = "";
+                        $("#patient-appointment").html(result);
+                        result = "0";
+                        $("#patient-appointment-dashboard").html(result);
+                    } else {
+                        $("#patient-appointment").html(result);
+                        $("#patient-appointment-dashboard").html(result);
+                    }
+
+                }
+            });
+
+            $.ajax({
+                url: "walkinpatient.php",
+                success: function(result) {
+
+                    if (result == "0") {
+                        result = "";
+                        $("#walkinpatient").html(result);
+                        result = "0";
+                        $("#walkinpatient-dashboard").html(result);
+                    } else {
+                        $("#walkinpatient").html(result);
+                        $("#walkinpatient-dashboard").html(result);
+                    }
+
+                }
+            });
+
+        });
+    </script>
 
     <script>
         $(document).ready(function() {

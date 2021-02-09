@@ -34,20 +34,38 @@ if (!isset($_SESSION['dId'])) {
                     <li class="nav-item active">
                         <a class="nav-link" href="dashboard.php">Home <span class="sr-only">(current)</span></a>
                     </li>
+                    <?php
+                    $discharge = 0;
+                    $sql = "SELECT * FROM walkinpatient WHERE walkInDoctor = :doctor AND walkInDischarged = :discharge";
+                    $stmt = $con->prepare($sql);
+                    $stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);
+                    $stmt->bindParam(":discharge", $discharge, PDO::PARAM_INT);
+                    $stmt->execute();
+                    $walkinCount = $stmt->rowCount();
+                    ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="walkInPatient.php">Walk in Patient</a>
+                        <a class="nav-link" href="walkInPatient.php">Walk in Patient&nbsp;<?= ($walkinCount > 0) ? '<span id="walkin-count" class="badge bg-danger">' . $walkinCount . '</span>' : '<span id="walkin-count" class="badge bg-danger"></span>'; ?></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="patient.php">Patient Appointment</a>
                     </li>
+                    <?php
+                    $status1 = "accepted";
+                    $sql = "SELECT * FROM appointment WHERE pDoctor = :doctor AND aStatus = :status1";
+                    $stmt = $con->prepare($sql);
+                    $stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);
+                    $stmt->bindParam(":status1", $status1, PDO::PARAM_STR);
+                    $stmt->execute();
+                    $upcomingAppointmentCount = $stmt->rowCount();
+                    ?>
                     <li class="nav-item">
-                        <a class="nav-link " href="incomingAppointment.php">Upcoming Appointment</a>
+                        <a class="nav-link" href="incomingAppointment.php">Upcoming&nbsp;<?= ($upcomingAppointmentCount > 0) ? '<span id="upcoming-count" class="badge bg-danger">' . $upcomingAppointmentCount . '</span>' : '<span id="upcoming-count" class="badge bg-danger"></span>'; ?></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " href="cancelledAppointment.php">Cancelled Appointment</a>
+                        <a class="nav-link " href="cancelledAppointment.php">Cancelled</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " href="doneAppointment.php">Finished Appointment</a>
+                        <a class="nav-link " href="doneAppointment.php">Finished</a>
                     </li>
                 </ul>
                 <!-- search bar -->
@@ -81,29 +99,18 @@ if (!isset($_SESSION['dId'])) {
             <div class="row mt-3">
 
                 <?php
-                $status = "accepted";
-                $sql = "SELECT * FROM appointment WHERE aStatus =:status AND pDoctor = :doctor";
-                $stmt = $con->prepare($sql);
-                $stmt->bindParam(":status", $status, PDO::PARAM_STR);
-                $stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);
-                $stmt->execute();
-
-                $appointmentCount = $stmt->rowCount();
-
                 $sql = "SELECT * FROM walkinpatient WHERE walkInDoctor = :doctor";
                 $stmt = $con->prepare($sql);
                 $stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);
                 $stmt->execute();
 
                 $walkInCount = $stmt->rowCount();
-
-                $totalPatient = $appointmentCount + $walkInCount;
                 ?>
                 <div class="col-sm-6 col-md-4 col-lg-3">
                     <div class="card text-white bg-dark mb-3">
-                        <div class="card-header h2">Current Patient</div>
+                        <div class="card-header h2">Walk in Patient</div>
                         <div class="card-body">
-                            <h5 class="card-title"><?= $totalPatient ?></h5>
+                            <h5 id="walkin-count-dashboard" class="card-title"><?= ($walkInCount > 0) ? '<span>' . $walkInCount . '</span>' : "0" ?></h5>
                         </div>
                     </div>
                 </div>
@@ -123,7 +130,7 @@ if (!isset($_SESSION['dId'])) {
                     <div class="card text-white bg-dark mb-3">
                         <div class="card-header h2">Upcoming Appointment</div>
                         <div class="card-body">
-                            <h5 class="card-title"><?= $upcomingAppointment ?></h5>
+                            <h5 id="upcoming-count-dashboard" class="card-title"><?= ($upcomingAppointment > 0) ? '<span>' . $upcomingAppointment . '</span>' : "0" ?></h5>
                         </div>
                     </div>
                 </div>
@@ -186,6 +193,58 @@ if (!isset($_SESSION['dId'])) {
     <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+    <script>
+        // Enable pusher logging - don't include this in production
+        Pusher.logToConsole = true;
+
+        var pusher = new Pusher('33e38cfddf441ae84e2d', {
+            cluster: 'ap1'
+        });
+
+        var channel = pusher.subscribe('my-channel');
+        channel.bind('my-event', function(data) {
+            // alert(JSON.stringify(data));
+            $.ajax({
+                url: "walkinCount.php",
+                success: function(result) {
+
+                    if (result == "0") {
+                        result = "";
+                        $("#walkin-count").html(result);
+                        result = "0";
+                        $("#walkin-count-dashboard").html(result);
+                    } else {
+                        $("#walkin-count").html(result);
+                        $("#walkin-count-dashboard").html(result);
+                    }
+                }
+            });
+
+            $.ajax({
+                url: "upcomingCount.php",
+                success: function(result) {
+
+                    if (result == "0") {
+                        result = "";
+                        $("#upcoming-count").html(result);
+                        result = "0";
+                        $("#upcoming-count-dashboard").html(result);
+                    } else {
+                        $("#upcoming-count").html(result);
+                        $("#upcoming-count-dashboard").html(result);
+                    }
+
+                }
+            });
+
+        });
+    </script>
+
 </body>
 
 </html>
