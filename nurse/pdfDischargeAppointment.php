@@ -37,18 +37,18 @@ if (isset($_GET['printBillings']) && $_GET['printBillings'] == "true") {
 
     $pdf->SetFont('Arial', '', 12);
 
-    $pdf->Cell(130, 5, '[Address]', 0, 0);
+    $pdf->Cell(130, 5, 'Dumaguete, Negros Oriental', 0, 0);
     $pdf->Cell(59, 5, '', 0, 1);
 
-    $pdf->Cell(130, 5, '[Zip Code]', 0, 0);
+    $pdf->Cell(130, 5, 'Tel. 420 2000', 0, 0);
     $pdf->Cell(25, 5, 'Date', 0, 0);
     $pdf->Cell(34, 5, date("M d, Y"), 0, 1);
 
-    $pdf->Cell(130, 5, '[Contact Number]', 0, 0);
+    $pdf->Cell(130, 5, 'Zip 6200', 0, 0);
     $pdf->Cell(25, 5, 'Patient ID', 0, 0);
     $pdf->Cell(34, 5, $dischargePatientAppointment['pId'], 0, 1);
 
-    $pdf->Cell(130, 5, '[Fax #]', 0, 1);
+    $pdf->Cell(130, 5, '', 0, 1);
 
     // empty cell as a vertical spacer
     $pdf->Cell('189', 10, '', 0, 1);

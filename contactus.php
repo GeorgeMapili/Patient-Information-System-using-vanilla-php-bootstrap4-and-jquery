@@ -115,7 +115,7 @@ if (!isset($_SESSION['id'])) {
             }
             ?>
 
-            <form action="contactus.php" method="post">
+            <form action="contactus.php" method="post" class="shadow p-3 mb-5 bg-white rounded">
                 <div class="row">
                     <input type="hidden" name="id" value="<?= $_SESSION['id']; ?>">
                     <div class="col">

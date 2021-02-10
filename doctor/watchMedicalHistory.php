@@ -100,7 +100,7 @@ if (!isset($_SESSION['dId'])) {
                 <h1 class="Display-4 my-4" id="primaryColor">Watch Medical History</h1>
             </div>
 
-            <table class="table table-hover">
+            <table class="table table-hover shadow p-3 mb-5 bg-white rounded">
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col">Patient Name</th>

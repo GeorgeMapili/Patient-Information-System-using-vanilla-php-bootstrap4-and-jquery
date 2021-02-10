@@ -128,7 +128,7 @@ if (!isset($_SESSION['dId'])) {
 
             ?>
 
-            <form action="action.php" method="post">
+            <form action="action.php" method="post" class="shadow p-3 mb-5 bg-white rounded">
                 <input type="hidden" name="id" value="<?= $watchMedInfo['pId'] ?>">
 
                 <div class="row">

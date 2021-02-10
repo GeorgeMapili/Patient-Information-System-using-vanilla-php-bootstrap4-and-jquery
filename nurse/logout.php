@@ -41,5 +41,8 @@ unset($_SESSION['Pa_totalPay']);
 unset($_SESSION['Pa_dFee']);
 unset($_SESSION['Pa_Disease']);
 
+// Patient Walkin Doctor Prescription Real Time
+unset($_SESSION['doctorUpdatePrescription']);
+
 header("location:index.php");
 exit(0);

@@ -196,7 +196,7 @@ if (!isset($_SESSION['dId'])) {
             }
             ?>
 
-            <form action="doctorProfile.php" method="post" enctype="multipart/form-data">
+            <form action="doctorProfile.php" method="post" enctype="multipart/form-data" class="shadow p-3 mb-5 bg-white rounded">
                 <div class="row my-4">
                     <input type="hidden" name="dId" value="<?= $_SESSION['dId'] ?>">
                     <div class="col">
@@ -240,7 +240,7 @@ if (!isset($_SESSION['dId'])) {
                 </div>
 
                 <div class="text-center my-3">
-                    <input type="submit" class="btn btn-primary" value="Update Doctor Information" name="updateDoctor">
+                    <input type="submit" class="btn btn-info" value="Update Doctor Information" name="updateDoctor">
                 </div>
             </form>
 
@@ -357,7 +357,7 @@ if (!isset($_SESSION['dId'])) {
 
             ?>
 
-            <form action="doctorProfile.php" method="post">
+            <form action="doctorProfile.php" method="post" class="shadow p-3 mb-5 bg-white rounded">
                 <div>
                     <label for="exampleInputEmail1">Current Password</label>
                     <?= (isset($_GET['errCurrPass']) && $_GET['errCurrPass'] == "incorrect_current_password") ? '<input type="password" name="currentPass" minlength="6" class="form-control is-invalid" required>' : '<input type="password" name="currentPass" minlength="6" class="form-control" required>'; ?>
@@ -377,7 +377,7 @@ if (!isset($_SESSION['dId'])) {
 
                 <div class="text-center my-3">
                     <input type="hidden" name="dId" value="<?= $_SESSION['dId'] ?>">
-                    <input type="submit" class="btn btn-primary" value="Update Password" name="updatePassword">
+                    <input type="submit" class="btn btn-info" value="Update Password" name="updatePassword">
                 </div>
             </form>
 
@@ -391,14 +391,14 @@ if (!isset($_SESSION['dId'])) {
                 <h1 class="Display-4" id="primaryColor">Doctor Profile</h1>
             </div>
 
-            <form action="doctorProfile.php" method="post" enctype="multipart/form-data">
+            <form action="doctorProfile.php" method="post" enctype="multipart/form-data" class="shadow p-3 mb-5 bg-white rounded">
                 <label>Doctor Profile Img</label>
                 <input type="hidden" name="dId" value="<?= $_SESSION['dId'] ?>">
                 <?= (isset($_GET['errorImgExt']) && $_GET['errorImgExt'] == "image_is_not_valid") ? '<input type="file" name="doctorProfileImg" class="form-control is-invalid" required>' : '<input type="file" name="doctorProfileImg" class="form-control" required>'; ?>
                 <?= (isset($_GET['errorImgExt']) && $_GET['errorImgExt'] == "image_is_not_valid") ? '<small class="text-danger">Image is not valid only(JPEG,JPG,PNG)!</small>' : '' ?>
                 <?= (isset($_GET['errImgSize']) && $_GET['errImgSize'] == "Image_invalid_size") ? '<small class="text-danger">Image is not valid only less size(5MB)!</small>' : '' ?>
                 <div class="text-center my-3">
-                    <input type="submit" class="btn btn-primary" value="Update Profile Image" name="updateProfileImg">
+                    <input type="submit" class="btn btn-info" value="Update Profile Image" name="updateProfileImg">
                 </div>
             </form>
 

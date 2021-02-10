@@ -124,7 +124,7 @@ if (!isset($_SESSION['dId'])) {
 
 
 
-            <form action="editPrescription.php" method="post">
+            <form action="editPrescription.php" method="post" class="shadow p-3 mb-5 bg-white rounded">
                 <div class="row">
 
                     <?php

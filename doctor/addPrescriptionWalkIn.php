@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once '../connect.php';
+require_once '../vendor/autoload.php';
 
 if (!isset($_SESSION['dId'])) {
     header("location:index.php");
@@ -95,6 +96,18 @@ if (!isset($_SESSION['dId'])) {
 
         <?php
         if (isset($_POST['submitAddPrescriptionWalkIn'])) {
+
+            $options = array(
+                'cluster' => 'ap1',
+                'useTLS' => true
+            );
+            $pusher = new Pusher\Pusher(
+                '33e38cfddf441ae84e2d',
+                '9d6c92710887d31d41b4',
+                '1149333',
+                $options
+            );
+
             $id = $_POST['id'];
             $prescription = trim(htmlspecialchars($_POST['patientPrescription']));
 
@@ -104,6 +117,8 @@ if (!isset($_SESSION['dId'])) {
             $stmt->bindParam(":id", $id, PDO::PARAM_INT);
             $stmt->execute();
 
+            $data['message'] = $id;
+            $pusher->trigger('my-channel', 'my-event', $data);
             header("location:walkInPatient.php?succAddPrescription=Successfully_added_prescription");
             exit(0);
         }
@@ -117,7 +132,7 @@ if (!isset($_SESSION['dId'])) {
 
 
 
-            <form action="addPrescriptionWalkIn.php" method="post">
+            <form action="addPrescriptionWalkIn.php" method="post" class="shadow p-3 mb-5 bg-white rounded">
                 <div class="row">
 
                     <?php

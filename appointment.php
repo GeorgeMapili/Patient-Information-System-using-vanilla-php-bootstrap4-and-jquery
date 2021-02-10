@@ -224,7 +224,7 @@ if (!isset($_SESSION['id'])) {
             </div>
 
 
-            <form action="appointment.php" method="post">
+            <form action="appointment.php" method="post" class="shadow p-3 mb-5 bg-white rounded">
                 <div class="row">
                     <input type="hidden" name="id" value="<?= $_SESSION['id']; ?>">
                     <div class="col">

@@ -135,7 +135,7 @@ if (!isset($_SESSION['dId'])) {
         }
         ?>
 
-        <div class="container-fluid">
+        <div class="container">
 
             <div class="mt-4 mb-4">
                 <h1 class="Display-4 my-4" id="primaryColor">Update Disease</h1>

@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once '../connect.php';
+require_once '../vendor/autoload.php';
 
 if (!isset($_SESSION['dId'])) {
     header("location:index.php");
@@ -96,6 +97,18 @@ if (!isset($_SESSION['dId'])) {
         <?php
 
         if (isset($_POST['UpdateWalkInPrescription'])) {
+
+            $options = array(
+                'cluster' => 'ap1',
+                'useTLS' => true
+            );
+            $pusher = new Pusher\Pusher(
+                '33e38cfddf441ae84e2d',
+                '9d6c92710887d31d41b4',
+                '1149333',
+                $options
+            );
+
             $id = $_POST['id'];
             $updatePrescription = trim(htmlspecialchars($_POST['prescription']));
 
@@ -110,6 +123,8 @@ if (!isset($_SESSION['dId'])) {
             $stmt->bindParam(":id", $id, PDO::PARAM_INT);
             $stmt->execute();
 
+            $data['message'] = $id;
+            $pusher->trigger('my-channel', 'my-event', $data);
             header("location:walkInPatient.php?succUp=Successfully_updated_prescription");
             exit(0);
         }
@@ -121,7 +136,7 @@ if (!isset($_SESSION['dId'])) {
                 <h1 class="Display-4" id="primaryColor">Update Prescription</h1>
             </div>
 
-            <form action="updatePrescriptionWalkIn.php" method="post">
+            <form action="updatePrescriptionWalkIn.php" method="post" class="shadow p-3 mb-5 bg-white rounded">
 
                 <?php
                 if (isset($_POST['updatePrescriptionWalkIn'])) {

@@ -34,18 +34,18 @@ if (isset($_POST['medicalCertBtn'])) {
 
     $pdf->SetFont('Arial', '', 12);
 
-    $pdf->Cell(130, 5, '[Address]', 0, 0);
+    $pdf->Cell(130, 5, 'Dumaguete, Negros Oriental', 0, 0);
     $pdf->Cell(59, 5, '', 0, 1);
 
-    $pdf->Cell(130, 5, '[Zip Code]', 0, 0);
+    $pdf->Cell(130, 5, 'Tel. 420 2000', 0, 0);
     $pdf->Cell(25, 5, 'Date:', 0, 0);
     $pdf->Cell(34, 5, date("M d, Y"), 0, 1);
 
-    $pdf->Cell(130, 5, '[Contact Number]', 0, 0);
+    $pdf->Cell(130, 5, 'Zip 6200', 0, 0);
     $pdf->Cell(25, 5, 'Patient ID:', 0, 0);
     $pdf->Cell(34, 5, $medicalCertificate['pId'], 0, 1);
 
-    $pdf->Cell(130, 5, '[Fax #]', 0, 0);
+    $pdf->Cell(130, 5, '', 0, 0);
     $pdf->Cell(34, 5, 'Appointment ID:', 0, 0);
     $pdf->Cell(25, 5, $medicalCertificate['aId'], 0, 1);
 
@@ -72,6 +72,8 @@ if (isset($_POST['medicalCertBtn'])) {
     $pdf->Cell(10, 5, '', 0, 0);
 
     $pdf->Write(7, $body);
+
+    $pdf->Cell(10, 7, "Please contact us to verify", 0, 0);
 
     $pdf->Cell(100, 50, "Physician: $doctor");
     $pdf->Ln(10);
