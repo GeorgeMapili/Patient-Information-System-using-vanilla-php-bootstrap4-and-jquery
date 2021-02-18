@@ -20,7 +20,7 @@ if (!isset($_SESSION['adId'])) {
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/admin.css" />
-    <title>Admin | Nurse</title>
+    <title>Admin | Secretary</title>
 </head>
 
 <body>
@@ -75,7 +75,7 @@ if (!isset($_SESSION['adId'])) {
                         <li class="nav-item">
                             <a class="nav-link" href="nurse.php" id="primaryColor">
                                 <span data-feather="users"></span>
-                                View All Nurse Receptionist
+                                View All Secretary
                             </a>
                         </li>
                         <li class="nav-item">
@@ -133,7 +133,7 @@ if (!isset($_SESSION['adId'])) {
                 $stmt->bindParam(":id", $nId, PDO::PARAM_INT);
                 $stmt->execute();
 
-                header("location:nurse.php?succDeleteNurse=Successfully_deleted_nurse");
+                header("location:nurse.php?succDeleteNurse=Successfully_deleted_secretary");
                 ob_end_flush();
                 exit(0);
             }
@@ -141,34 +141,34 @@ if (!isset($_SESSION['adId'])) {
 
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2" id="primaryColor">All Nurse Receptionist</h1>
+                    <h1 class="h2" id="primaryColor">All Secretary</h1>
                 </div>
 
                 <div class="text-center">
-                    <?= (isset($_GET['succAddedNurse']) && $_GET['succAddedNurse'] == "Successfully_added_nurse") ? '<span class="text-success">Successfully added nurse!</span>' : '' ?>
+                    <?= (isset($_GET['succAddedNurse']) && $_GET['succAddedNurse'] == "Successfully_added_secretary") ? '<span class="text-success">Successfully added secretary!</span>' : '' ?>
                     <?= (isset($_GET['errUpdateNurseChanged']) && $_GET['errUpdateNurseChanged'] == "Nothing_to_changed") ? '<span class="text-danger">Nothing to changed!</span>' : '' ?>
-                    <?= (isset($_GET['succDeleteNurse']) && $_GET['succDeleteNurse'] == "Successfully_deleted_nurse") ? '<span class="text-success">Successfully deleted nurse!</span>' : '' ?>
-                    <?= (isset($_GET['succUpdateNurse']) && $_GET['succUpdateNurse'] == "Successfully_updated_nurse") ? '<span class="text-success">Successfully updated nurse!</span>' : '' ?>
+                    <?= (isset($_GET['succDeleteNurse']) && $_GET['succDeleteNurse'] == "Successfully_deleted_secretary") ? '<span class="text-success">Successfully deleted secretary!</span>' : '' ?>
+                    <?= (isset($_GET['succUpdateNurse']) && $_GET['succUpdateNurse'] == "Successfully_updated_secretary") ? '<span class="text-success">Successfully updated secretary!</span>' : '' ?>
                 </div>
 
                 <div class="d-flex justify-content-between mb-3">
                     <form class="form-inline">
-                        <input class="form-control" type="search" id="search" placeholder="Search Nurse Name" aria-label="Search">
+                        <input class="form-control" type="search" id="search" placeholder="Search Secretary Name" aria-label="Search">
                     </form>
                     <div>
-                        <a href="addNurse.php" class="btn btn-success mt-3 ">Add Nurse</a>
+                        <a href="addNurse.php" class="btn btn-success mt-3 ">Add Secretary</a>
                     </div>
                 </div>
 
                 <table class="table table-hover" id="table-data">
                     <thead class="thead-dark">
                         <tr>
-                            <th scope="col">Nurse ID</th>
-                            <th scope="col">Nurse Profile Img</th>
-                            <th scope="col">Nurse Name</th>
-                            <th scope="col">Nurse Email</th>
-                            <th scope="col">Nurse Address</th>
-                            <th scope="col">Nurse Mobile</th>
+                            <th scope="col">Secretary ID</th>
+                            <th scope="col">Secretary Profile Img</th>
+                            <th scope="col">Secretary Name</th>
+                            <th scope="col">Secretary Email</th>
+                            <th scope="col">Secretary Address</th>
+                            <th scope="col">Secretary Mobile</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>

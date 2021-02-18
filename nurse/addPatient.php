@@ -19,7 +19,7 @@ if (!isset($_SESSION['nId'])) {
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/main.css" />
-    <title>Nurse | Add Patient</title>
+    <title>Secretary | Add Patient</title>
 </head>
 
 <body>
@@ -76,7 +76,7 @@ if (!isset($_SESSION['nId'])) {
                     <img src="../upload/nurse_profile_img/<?= $_SESSION['nProfileImg']; ?>" width="50" style="border:1px solid #fff; border-radius: 50%;" alt="">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Nurse&nbsp;<?= $_SESSION['nName']; ?>
+                            &nbsp;<?= $_SESSION['nName']; ?>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item disabled" href=""><?= $_SESSION['nEmail']; ?></a>

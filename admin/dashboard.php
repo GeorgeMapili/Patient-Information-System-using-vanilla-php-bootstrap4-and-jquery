@@ -74,7 +74,7 @@ if (!isset($_SESSION['adId'])) {
                         <li class="nav-item">
                             <a class="nav-link" href="nurse.php">
                                 <span data-feather="users"></span>
-                                View All Nurse Receptionist
+                                View All Secretary
                             </a>
                         </li>
                         <li class="nav-item">
@@ -180,7 +180,7 @@ if (!isset($_SESSION['adId'])) {
                         <div class="col-sm-6 col-md-4 col-lg-3 mt-2">
                             <div class="card">
                                 <div class="card-body">
-                                    <h5 class="card-title mb-4">Nurse Receptionist</h5>
+                                    <h5 class="card-title mb-4">Secretary</h5>
                                     <h1 class="display-5 mt-1 mb-3"><?= $allNurse ?></h1>
                                 </div>
                             </div>

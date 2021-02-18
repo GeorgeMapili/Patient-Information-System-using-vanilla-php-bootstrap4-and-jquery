@@ -75,7 +75,7 @@ if (!isset($_SESSION['adId'])) {
                         <li class="nav-item">
                             <a class="nav-link" href="nurse.php">
                                 <span data-feather="users"></span>
-                                View All Nurse Receptionist
+                                View All Secretary
                             </a>
                         </li>
                         <li class="nav-item">

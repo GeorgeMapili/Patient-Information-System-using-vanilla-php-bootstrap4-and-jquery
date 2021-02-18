@@ -405,12 +405,12 @@ if (isset($_POST['searchNurse'])) {
         $nurseOutput .= '
     <thead class="thead-dark">
         <tr>
-            <th scope="col">Nurse ID</th>
-            <th scope="col">Nurse Profile Img</th>
-            <th scope="col">Nurse Name</th>
-            <th scope="col">Nurse Email</th>
-            <th scope="col">Nurse Address</th>
-            <th scope="col">Nurse Mobile</th>
+            <th scope="col">Secretary ID</th>
+            <th scope="col">Secretary Profile Img</th>
+            <th scope="col">Secretary Name</th>
+            <th scope="col">Secretary Email</th>
+            <th scope="col">Secretary Address</th>
+            <th scope="col">Secretary Mobile</th>
             <th scope="col">Action</th>
         </tr>
     </thead>

@@ -19,7 +19,7 @@ if (isset($_SESSION['nId'])) {
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/style.css" />
-    <title>Nurse | Login</title>
+    <title>Secretary | Login</title>
 </head>
 
 <body>
@@ -68,7 +68,7 @@ if (isset($_SESSION['nId'])) {
 
     ?>
 
-    <h2 class="display-4 mb-3" style="color: rgb(15, 208, 214);">Nurse Receptionist Login</h2>
+    <h2 class="display-4 mb-3" style="color: rgb(15, 208, 214);">Secretary Login</h2>
     <form action="index.php" method="post">
 
         <?= (isset($_GET['errField']) && $_GET['errField'] == "Please_input_all_field") ? '<div class="text-center my-3"><span class="text-danger text">Please input all fields</span></div>' : ''; ?>

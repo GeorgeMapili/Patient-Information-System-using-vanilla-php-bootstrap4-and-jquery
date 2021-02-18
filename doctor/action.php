@@ -410,7 +410,7 @@ if (isset($_POST['patientQuery'])) {
             <tr>
                 <th scope="col">Patient Name</th>
                 <th scope="col">Patient Address</th>
-                <th scope="col">Patient Mobile</th>
+                <th scope="col">Date</th>
                 <th scope="col">Patient Disease</th>
                 <th scope="col">Prescription</th>
                 <th scope="col">Updated Disease</th>
@@ -426,7 +426,7 @@ if (isset($_POST['patientQuery'])) {
             <tr>
             <td>' . $patientAppointment['pName'] . '</td>
             <td>' . $patientAppointment['pAddress'] . '</td>
-            <td>' . $patientAppointment['pMobile'] . '</td>
+            <td>' . date("M d, Y", strtotime($patientAppointment['aDate'])) . " at " . $patientAppointment['aTime'] . '</td>
             <td>' . $patientAppointment['aReason'] . '</td>
             <td>';
 

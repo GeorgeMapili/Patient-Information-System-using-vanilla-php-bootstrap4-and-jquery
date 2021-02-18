@@ -20,7 +20,7 @@ if (!isset($_SESSION['adId'])) {
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/admin.css" />
-    <title>Admin | Update Nurse</title>
+    <title>Admin | Update Secretary</title>
 </head>
 
 <body>
@@ -75,7 +75,7 @@ if (!isset($_SESSION['adId'])) {
                         <li class="nav-item">
                             <a class="nav-link" href="nurse.php" id="primaryColor">
                                 <span data-feather="users"></span>
-                                View All Nurse Receptionist
+                                View All Secretary
                             </a>
                         </li>
                         <li class="nav-item">
@@ -190,14 +190,14 @@ if (!isset($_SESSION['adId'])) {
                 $_SESSION['nurseAddress'] = $address;
                 $_SESSION['nurseMobile'] = $mobile;
 
-                header("location:nurse.php?succUpdateNurse=Successfully_updated_nurse");
+                header("location:nurse.php?succUpdateNurse=Successfully_updated_secretary");
                 exit(0);
             }
             ?>
 
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">Update Nurse Receptionist</h1>
+                    <h1 class="h2">Update Secretary</h1>
                 </div>
                 <div class="container">
 
@@ -223,20 +223,20 @@ if (!isset($_SESSION['adId'])) {
                     ?>
 
                     <div class="mt-4 mb-4">
-                        <h1 class="Display-4" id="primaryColor">Nurse Information</h1>
+                        <h1 class="Display-4" id="primaryColor">Secretary Information</h1>
                     </div>
 
                     <form action="updateNurse.php" method="post">
                         <div class="row my-4">
                             <input type="hidden" name="id" value="<?= $_SESSION['nurseId'] ?>">
                             <div class="col">
-                                <label>Nurse Name</label>
+                                <label>Secretary Name</label>
                                 <?= ((isset($_GET['errName']) && $_GET['errName'] == "name_is_not_valid") || ((isset($_GET['errName1']) && $_GET['errName1'] == "Name_is_already_existed"))) ? '<input type="text" name="name" class="form-control is-invalid" required>' : '<input type="text" name="name" class="form-control" value="' . $_SESSION['nurseName'] . '" required>'; ?>
                                 <?= (isset($_GET['errName']) && $_GET['errName'] == "name_is_not_valid") ? '<small class="text-danger">Name is not valid!</small>' : ''; ?>
                                 <?= (isset($_GET['errName1']) && $_GET['errName1'] == "Name_is_already_existed") ? '<small class="text-danger">Name is already taken!</small>' : ''; ?>
                             </div>
                             <div class="col">
-                                <label>Nurse Email</label>
+                                <label>Secretary Email</label>
                                 <?= ((isset($_GET['errEmail']) && $_GET['errEmail'] == "email_is_invalid") || (isset($_GET['errEmail1']) && $_GET['errEmail1'] == "Email_is_already_existed")) ? '<input type="email" name="email" class="form-control is-invalid" required>' : '<input type="email" name="email" class="form-control" value="' . $_SESSION['nurseEmail'] . '" required>'; ?>
                                 <?= (isset($_GET['errEmail']) && $_GET['errEmail'] == "email_is_invalid") ? '<small class="text-danger">Email is invalid!</small>' : ''; ?>
                                 <?= (isset($_GET['errEmail1']) && $_GET['errEmail1'] == "Email_is_already_existed") ? '<small class="text-danger">Email is already existed!</small>' : ''; ?>
@@ -244,11 +244,11 @@ if (!isset($_SESSION['adId'])) {
                         </div>
                         <div class="row my-4">
                             <div class="col">
-                                <label>Nurse Address</label>
+                                <label>Secretary Address</label>
                                 <input type="text" name="address" class="form-control" value="<?= $_SESSION['nurseAddress'] ?>" required>
                             </div>
                             <div class="col">
-                                <label>Nurse Mobile Number</label>
+                                <label>Secretary Mobile Number</label>
                                 <?= (isset($_GET['errMobile']) && $_GET['errMobile'] == "Mobile_number_is_already_existed") ? '<input type="tel" name="mobile" class="form-control is-invalid" placeholder="+639551243145 or 09123456789" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" required>' : '<input type="tel" name="mobile" class="form-control" value="' . $_SESSION['nurseMobile'] . '" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" required>'; ?>
                                 <?= (isset($_GET['errMobile']) && $_GET['errMobile'] == "Mobile_number_is_already_existed") ? '<small class="text-danger">Mobile number is already existed!</small>' : ''; ?>
                             </div>
@@ -261,7 +261,7 @@ if (!isset($_SESSION['adId'])) {
                     </form>
 
                     <div class="mt-4 mb-4">
-                        <h1 class="Display-4" id="primaryColor">Nurse Password</h1>
+                        <h1 class="Display-4" id="primaryColor">Secretary Password</h1>
                     </div>
 
                     <?php
@@ -332,7 +332,7 @@ if (!isset($_SESSION['adId'])) {
                     </form>
 
                     <div class="mt-4 mb-4">
-                        <h1 class="Display-4" id="primaryColor">Nurse Profile Image</h1>
+                        <h1 class="Display-4" id="primaryColor">Secretary Profile Image</h1>
                     </div>
 
                     <?php

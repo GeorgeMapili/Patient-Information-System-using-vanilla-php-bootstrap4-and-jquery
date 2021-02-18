@@ -20,7 +20,7 @@ if (!isset($_SESSION['adId'])) {
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/admin.css" />
-    <title>Admin | Add Nurse</title>
+    <title>Admin | Add Secretary</title>
 </head>
 
 <body>
@@ -75,7 +75,7 @@ if (!isset($_SESSION['adId'])) {
                         <li class="nav-item">
                             <a class="nav-link" href="nurse.php" id="primaryColor">
                                 <span data-feather="users"></span>
-                                View All Nurse Receptionist
+                                View All Secretary
                             </a>
                         </li>
                         <li class="nav-item">
@@ -222,7 +222,7 @@ if (!isset($_SESSION['adId'])) {
                         // upload the file
                         move_uploaded_file($tmpname, $dest);
 
-                        header("location:nurse.php?succAddedNurse=Successfully_added_nurse");
+                        header("location:nurse.php?succAddedNurse=Successfully_added_secretary");
                         exit(0);
                     }
 
@@ -231,14 +231,14 @@ if (!isset($_SESSION['adId'])) {
                     <form action="addNurse.php" method="post" enctype="multipart/form-data">
                         <div class="row my-4">
                             <div class="col">
-                                <label>Nurse Name</label>
+                                <label>Secretary Name</label>
                                 <?= ((isset($_GET['errName']) && $_GET['errName'] == "name_is_not_valid") || (isset($_GET['errName1']) && $_GET['errName1'] == "Name_is_already_existed")) ? '<input type="text" name="name" class="form-control is-invalid" required>' : '<input type="text" name="name" class="form-control" required>' ?>
                                 <?= (isset($_GET['errName']) && $_GET['errName'] == "name_is_not_valid") ? '<small class="text-danger">Name is not valid!</small>' : ''; ?>
                                 <?= (isset($_GET['errName1']) && $_GET['errName1'] == "Name_is_already_existed") ? '<small class="text-danger">Name is already existed!</small>' : ''; ?>
 
                             </div>
                             <div class="col">
-                                <label>Nurse Email</label>
+                                <label>Secretary Email</label>
                                 <?= ((isset($_GET['errEmail']) && $_GET['errEmail'] == "email_is_invalid") || (isset($_GET['errEmail1']) && $_GET['errEmail1'] == "Email_is_already_existed")) ? '<input type="email" name="email" class="form-control is-invalid" required>' : '<input type="email" name="email" class="form-control" required>'; ?>
                                 <?= (isset($_GET['errEmail']) && $_GET['errEmail'] == "email_is_invalid") ? '<small class="text-danger">Email is invalid format!</small>' : ''; ?>
                                 <?= (isset($_GET['errEmail1']) && $_GET['errEmail1'] == "Email_is_already_existed") ? '<small class="text-danger">Email is already existed!</small>' : ''; ?>
@@ -246,17 +246,17 @@ if (!isset($_SESSION['adId'])) {
                         </div>
                         <div class="row my-4">
                             <div class="col">
-                                <label>Nurse Address</label>
+                                <label>Secretary Address</label>
                                 <input type="text" name="address" class="form-control" required>
                             </div>
                             <div class="col">
-                                <label>Nurse Mobile Number</label>
+                                <label>Secretary Mobile Number</label>
                                 <?= (isset($_GET['errMobile']) && $_GET['errMobile'] == "Mobile_number_is_already_existed") ? '<input type="tel" name="mobile" class="form-control is-invalid" placeholder="+639551243145 or 09123456789" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" required>' : '<input type="tel" name="mobile" class="form-control" placeholder="+639551243145 or 09123456789" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" required>'; ?>
                                 <?= (isset($_GET['errMobile']) && $_GET['errMobile'] == "Mobile_number_is_already_existed") ? '<small class="text-danger">Mobile number is already existed!</small>' : ''; ?>
                             </div>
                         </div>
 
-                        <label>Nurse Profile Img</label>
+                        <label>Secretary Profile Img</label>
                         <?= ((isset($_GET['errorImgExt']) && $_GET['errorImgExt'] == "image_is_not_valid") || (isset($_GET['errImgSize']) && $_GET['errImgSize'] == "Image_invalid_size")) ? '<input type="file" name="profileImg" class="form-control is-invalid" name="profileImg" required>' : '<input type="file" name="profileImg" class="form-control" name="profileImg" required>'; ?>
                         <?= (isset($_GET['errorImgExt']) && $_GET['errorImgExt'] == "image_is_not_valid") ? '<small class="text-danger">Image is not valid only(JPEG,JPG,PNG)!</small>' : ''; ?>
                         <?= (isset($_GET['errImgSize']) && $_GET['errImgSize'] == "Image_invalid_size") ? '<small class="text-danger">Image is not valid only less size(5MB)!</small>' : ''; ?>
@@ -274,7 +274,7 @@ if (!isset($_SESSION['adId'])) {
                         </div>
 
                         <div class="text-center mt-3">
-                            <input type="submit" class="btn btn-info" value="Add Nurse" name="addNurseBtn">
+                            <input type="submit" class="btn btn-info" value="Add Secretary" name="addNurseBtn">
                         </div>
                     </form>
                 </div>
