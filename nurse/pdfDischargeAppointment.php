@@ -64,13 +64,19 @@ if (isset($_GET['printBillings']) && $_GET['printBillings'] == "true") {
     $pdf->Cell(90, 5, 'Name: ' . $dischargePatientAppointment['pName'], 0, 1);
 
     $pdf->Cell(10, 5, '', 0, 0);
-    $pdf->Cell(90, 5, 'Disease: ' . $dischargePatientAppointment['aReason'], 0, 1);
-
-    $pdf->Cell(10, 5, '', 0, 0);
-    $pdf->Cell(90, 5, 'Prescription: ' . $dischargePatientAppointment['pPrescription'], 0, 1);
-
-    $pdf->Cell(10, 5, '', 0, 0);
     $pdf->Cell(90, 5, 'Doctor: ' . $dischargePatientAppointment['pDoctor'], 0, 1);
+
+    $pdf->Cell(10, 5, '', 0, 1);
+    $pdf->Cell(10, 5, '', 0, 1);
+
+    $pdf->Cell(90, 5, 'Disease: ', 0, 1);
+    $pdf->Write(5, $dischargePatientAppointment['aReason']);
+
+    $pdf->Cell(10, 5, '', 0, 1);
+    $pdf->Cell(10, 5, '', 0, 1);
+
+    $pdf->Cell(90, 5, 'Prescription: ', 0, 1);
+    $pdf->Write(5, $dischargePatientAppointment['pPrescription']);
 
     // empty cell as a vertical spacer
     $pdf->Cell('189', 10, '', 0, 1);

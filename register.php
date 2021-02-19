@@ -196,12 +196,12 @@ if (isset($_POST['register'])) {
 
         <div class="form-group">
             <label>Password</label>
-            <input type="password" name="password" minlength="6" class="form-control" required>
+            <input type="password" name="password" minlength="6" class="form-control" placeholder="Minimum of 6 characters" required>
         </div>
 
         <div class="form-group">
             <label>Confirm Password</label>
-            <?= (isset($_GET['errPass'])) ? '<input type="password" name="confirmPassword" minlength="6" class="form-control is-invalid" required>' : '<input type="password" name="confirmPassword" minlength="6" class="form-control" required>'; ?>
+            <?= (isset($_GET['errPass'])) ? '<input type="password" name="confirmPassword" minlength="6" class="form-control is-invalid" placeholder="Minimum of 6 characters" required>' : '<input type="password" name="confirmPassword" placeholder="Minimum of 6 characters" minlength="6" class="form-control" required>'; ?>
             <?= (isset($_GET['errPass'])) ? '<small class="text-danger">Password do not match!</small>' : ""; ?>
         </div>
 

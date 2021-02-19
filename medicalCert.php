@@ -69,16 +69,24 @@ if (isset($_POST['medicalCertBtn'])) {
     $diagnosis = $medicalCertificate['aReason'];
     $doctor = $medicalCertificate['pDoctor'];
 
-    $body = "This is to certify that $name of $address. Was examined and treated at the SUMC Doctors Clinic on $date with the following diagnosis $diagnosis and would medical attention for $doctor days barring complication. ";
+    $body = "This is to certify that $name of $address. Was examined and treated at the SUMC Doctors Clinic on $date with the following diagnosis $diagnosis and would medical attention for $doctor days barring complication. \n\nPlease contact us to verify";
 
     $pdf->Cell(10, 5, '', 0, 0);
 
     $pdf->Write(7, $body);
 
-    $pdf->Cell(10, 7, "Please contact us to verify", 0, 0);
+    // $pdf->Cell(10, 7, "Please contact us to verify", 0, 0);
 
+    // $pdf->Cell(100, 50, "Physician: $doctor");
+    $pdf->Cell(82, 50, '', 0, 0);
     $pdf->Cell(100, 50, "Physician: $doctor");
     $pdf->Ln(10);
+
+    // $pdf->Ln(10);
+    // $pdf->Cell(50, 5, '', 0, 0);
+    // $pdf->Cell(27, 5, 'Physician: ', 0, 0);
+    // $pdf->Cell(25, 5, $doctor, 0, 1);
+
 
     $pdf->Cell(200, 30, "Patient: $name");
     $pdf->Ln(10);

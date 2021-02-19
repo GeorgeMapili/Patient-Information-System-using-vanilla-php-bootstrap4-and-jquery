@@ -46,14 +46,22 @@ if (!isset($_SESSION['id'])) {
                     <li class="nav-item">
                         <a class="nav-link " href="healthLibrary.php">Health Library</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link " href="myappointment.php">Appointments</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link " href="acceptedAppointment.php">Accepted</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link " href="finishedAppointment.php">Finished</a>
+                    <div class="btn-group dropbottom">
+                        <a href="myappointment.php" class="nav-link">
+                            Appointment
+                        </a>
+                        <button type="button" class="btn btn-dark dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="sr-only">Toggle Dropright</span>
+                        </button>
+                        <div class="dropdown-menu bg-dark text-light text-center">
+                            <li class="nav-item">
+                                <a class="nav-link" href="acceptedAppointment.php">Accepted</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="finishedAppointment.php">Finished</a>
+                            </li>
+                        </div>
+                    </div>
                     </li>
                 </ul>
                 <ul class="navbar-nav ml-auto">

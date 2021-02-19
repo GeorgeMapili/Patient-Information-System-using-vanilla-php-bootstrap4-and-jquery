@@ -63,14 +63,18 @@ if (isset($_GET['walkInDischargeReceipt']) && $_GET['walkInDischargeReceipt'] ==
     $pdf->Cell(90, 5, 'Name: ' . $dischargePatient['pName'], 0, 1);
 
     $pdf->Cell(10, 5, '', 0, 0);
-    $pdf->Cell(90, 5, 'Disease: ' . $dischargePatient['pDisease'], 0, 1);
-
-    $pdf->Cell(10, 5, '', 0, 0);
     $pdf->Cell(90, 5, 'Doctor: ' . $dischargePatient['pDoctor'], 0, 1);
 
-    $pdf->Cell(10, 5, '', 0, 0);
-    $pdf->Cell(90, 5, 'Prescription: ', 0, 1);
     $pdf->Cell(10, 5, '', 0, 1);
+    $pdf->Cell(10, 5, '', 0, 1);
+
+    $pdf->Cell(90, 5, 'Disease: ', 0, 1);
+    $pdf->Write(5, $dischargePatient['pDisease']);
+
+    $pdf->Cell(10, 5, '', 0, 1);
+    $pdf->Cell(10, 5, '', 0, 1);
+
+    $pdf->Cell(90, 5, 'Prescription: ', 0, 1);
     $pdf->Write(5, $dischargePatient['pPrescription']);
 
 
