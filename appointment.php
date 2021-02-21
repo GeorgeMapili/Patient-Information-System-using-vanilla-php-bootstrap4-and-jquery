@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 require_once 'connect.php';
 require __DIR__ . '/vendor/autoload.php';
@@ -212,6 +213,7 @@ if (!isset($_SESSION['id'])) {
                 $pusher->trigger('my-channel', 'my-event', $data);
                 header("location:appointment.php?AppointmentSuccess=Successully_request_an_appointment");
                 exit(0);
+                ob_end_flush();
             }
         }
 

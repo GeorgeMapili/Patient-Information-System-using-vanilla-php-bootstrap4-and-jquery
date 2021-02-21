@@ -47,7 +47,7 @@ if (!isset($_SESSION['id'])) {
                         <a class="nav-link " href="healthLibrary.php">Health Library</a>
                     </li>
                     <div class="btn-group dropbottom">
-                        <a href="myappointment.php" class="nav-link">
+                        <a href="myappointment.php" class="nav-link active">
                             Appointment
                         </a>
                         <button type="button" class="btn btn-dark dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

@@ -58,15 +58,20 @@ if (!isset($_SESSION['dId'])) {
                     $stmt->execute();
                     $upcomingAppointmentCount = $stmt->rowCount();
                     ?>
-                    <li class="nav-item">
+                    <div class="btn-group dropbottom">
                         <a class="nav-link" href="incomingAppointment.php">Upcoming&nbsp;<?= ($upcomingAppointmentCount > 0) ? '<span id="upcoming-count" class="badge bg-danger">' . $upcomingAppointmentCount . '</span>' : '<span id="upcoming-count" class="badge bg-danger"></span>'; ?></a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link " href="cancelledAppointment.php">Cancelled</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link " href="doneAppointment.php">Finished</a>
-                    </li>
+                        <button type="button" class="btn btn-dark dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="sr-only">Toggle Dropright</span>
+                        </button>
+                        <div class="dropdown-menu bg-dark text-light text-center">
+                            <li class="nav-item">
+                                <a class="nav-link" href="cancelledAppointment.php">Cancelled</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="doneAppointment.php">Finished</a>
+                            </li>
+                        </div>
+                    </div>
                 </ul>
                 <!-- search bar -->
                 <!-- <form class="form-inline mt-2 mt-md-0">
@@ -95,8 +100,20 @@ if (!isset($_SESSION['dId'])) {
 
         <div class="container-fluid">
 
-            <div class="mt-4 mb-4">
-                <h1 class="Display-4 my-4" id="primaryColor">My Cancelled Appointment</h1>
+            <?php
+            $status = "cancelled";
+            $sql = "SELECT * FROM appointment WHERE aStatus = :status AND pDoctor = :doctor ORDER BY aDate,aTime ASC";
+            $stmt = $con->prepare($sql);
+            $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+            $stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);
+            $stmt->execute();
+
+            $cancelledCount = $stmt->rowCount();
+            ?>
+
+            <div class="mt-4 mb-4 d-flex justify-content-between">
+                <h1 class="Display-4 my-4" id="primaryColor">Cancelled Appointment</h1>
+                <p class="mt-5"><?= $cancelledCount ?> cancelled appointment</p>
             </div>
 
             <table class="table table-hover shadow p-3 mb-5 bg-white rounded">

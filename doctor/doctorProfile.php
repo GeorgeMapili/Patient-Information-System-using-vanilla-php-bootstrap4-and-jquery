@@ -59,15 +59,20 @@ if (!isset($_SESSION['dId'])) {
                     $stmt->execute();
                     $upcomingAppointmentCount = $stmt->rowCount();
                     ?>
-                    <li class="nav-item">
+                    <div class="btn-group dropbottom">
                         <a class="nav-link" href="incomingAppointment.php">Upcoming&nbsp;<?= ($upcomingAppointmentCount > 0) ? '<span id="upcoming-count" class="badge bg-danger">' . $upcomingAppointmentCount . '</span>' : '<span id="upcoming-count" class="badge bg-danger"></span>'; ?></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link " href="cancelledAppointment.php">Cancelled</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link " href="doneAppointment.php">Finished</a>
-                    </li>
+                        <button type="button" class="btn btn-dark dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="sr-only">Toggle Dropright</span>
+                        </button>
+                        <div class="dropdown-menu bg-dark text-light text-center">
+                            <li class="nav-item">
+                                <a class="nav-link" href="cancelledAppointment.php">Cancelled</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="doneAppointment.php">Finished</a>
+                            </li>
+                        </div>
+                    </div>
                 </ul>
                 <!-- search bar -->
                 <!-- <form class="form-inline mt-2 mt-md-0">
