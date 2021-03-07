@@ -18,6 +18,7 @@ if (!isset($_SESSION['dId'])) {
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/main.css" />
+    <link rel="icon" href="../img/sumc.png">
     <title>Doctor | Home</title>
 </head>
 
@@ -112,9 +113,9 @@ if (!isset($_SESSION['dId'])) {
                 $walkInCount = $stmt->rowCount();
                 ?>
                 <div class="col-sm-6 col-md-4 col-lg-3">
-                    <div class="card text-white bg-dark mb-3">
-                        <div class="card-header h2">Walk in Patient</div>
-                        <div class="card-body">
+                    <div class="card text-white mb-3 shadow">
+                        <div class="card-header h2 bg-info text-light">Walk in Patient</div>
+                        <div class="card-body bg-light text-dark">
                             <h5 id="walkin-count-dashboard" class="card-title"><?= ($walkInCount > 0) ? '<span>' . $walkInCount . '</span>' : "0" ?></h5>
                         </div>
                     </div>
@@ -132,9 +133,9 @@ if (!isset($_SESSION['dId'])) {
 
                 ?>
                 <div class="col-sm-6 col-md-4 col-lg-3">
-                    <div class="card text-white bg-dark mb-3">
-                        <div class="card-header h2">Upcoming Appointment</div>
-                        <div class="card-body">
+                    <div class="card text-white mb-3 shadow">
+                        <div class="card-header h2 bg-info text-light">Upcoming Appointment</div>
+                        <div class="card-body bg-light text-dark">
                             <h5 id="upcoming-count-dashboard" class="card-title"><?= ($upcomingAppointment > 0) ? '<span>' . $upcomingAppointment . '</span>' : "0" ?></h5>
                         </div>
                     </div>
@@ -152,9 +153,9 @@ if (!isset($_SESSION['dId'])) {
 
                 ?>
                 <div class="col-sm-6 col-md-4 col-lg-3">
-                    <div class="card text-white bg-dark mb-3">
-                        <div class="card-header h2">Cancelled Appointment</div>
-                        <div class="card-body">
+                    <div class="card text-white mb-3 shadow">
+                        <div class="card-header h2 bg-info text-light">Cancelled Appointment</div>
+                        <div class="card-body bg-light text-dark">
                             <h5 class="card-title"><?= $cancelledAppointment ?></h5>
                         </div>
                     </div>
@@ -173,9 +174,9 @@ if (!isset($_SESSION['dId'])) {
                 ?>
 
                 <div class="col-sm-6 col-md-4 col-lg-3">
-                    <div class="card text-white bg-dark mb-3">
-                        <div class="card-header h2">Finished Appointment</div>
-                        <div class="card-body">
+                    <div class="card text-white mb-3 shadow">
+                        <div class="card-header h2 bg-info text-light">Finished Appointment</div>
+                        <div class="card-body bg-light text-dark">
                             <h5 class="card-title"><?= $dischargedAppointment ?></h5>
                         </div>
                     </div>

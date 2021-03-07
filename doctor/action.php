@@ -21,7 +21,7 @@ if (isset($_POST['sortBy'])) {
             $stmt->execute();
 
             $output .= '
-            <thead class="thead-dark">
+            <thead class="bg-info text-light">
                 <tr>
                     <th scope="col">Patient Name</th>
                     <th scope="col">Patient Address</th>
@@ -82,7 +82,7 @@ if (isset($_POST['sortBy'])) {
             $stmt->execute();
 
             $output .= '
-            <thead class="thead-dark">
+            <thead class="bg-info text-light">
                 <tr>
                     <th scope="col">Patient Name</th>
                     <th scope="col">Patient Address</th>
@@ -143,7 +143,7 @@ if (isset($_POST['sortBy'])) {
             $stmt->execute();
 
             $output .= '
-            <thead class="thead-dark">
+            <thead class="bg-info text-light">
                 <tr>
                     <th scope="col">Patient Name</th>
                     <th scope="col">Patient Address</th>
@@ -204,7 +204,7 @@ if (isset($_POST['sortBy'])) {
             $stmt->execute();
 
             $output .= '
-            <thead class="thead-dark">
+            <thead class="bg-info text-light">
                 <tr>
                     <th scope="col">Patient Name</th>
                     <th scope="col">Patient Address</th>
@@ -265,7 +265,7 @@ if (isset($_POST['sortBy'])) {
             $stmt->execute();
 
             $output .= '
-            <thead class="thead-dark">
+            <thead class="bg-info text-light">
                 <tr>
                     <th scope="col">Patient Name</th>
                     <th scope="col">Patient Address</th>
@@ -329,7 +329,7 @@ if (isset($_POST['sortBy'])) {
             $stmt->execute();
 
             $output .= '
-            <thead class="thead-dark">
+            <thead class="bg-info text-light">
                 <tr>
                     <th scope="col">Patient Name</th>
                     <th scope="col">Patient Address</th>
@@ -406,7 +406,7 @@ if (isset($_POST['patientQuery'])) {
 
     if ($patientRow > 0) {
         $patientOutput .= '
-        <thead class="thead-dark">
+        <thead class="bg-info text-light">
             <tr>
                 <th scope="col">Patient Name</th>
                 <th scope="col">Patient Address</th>
@@ -495,7 +495,7 @@ if (isset($_POST['walkInQuery'])) {
 
     if ($walkInRow > 0) {
         $walkInOutput .= '
-        <thead class="thead-dark">
+        <thead class="bg-info text-light">
             <tr>
                 <th scope="col">Patient Name</th>
                 <th scope="col">Patient Address</th>

@@ -18,6 +18,7 @@ if (isset($_SESSION['id'])) {
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css" />
+    <link rel="icon" href="img/sumc.png">
     <title>Patient | Register</title>
 </head>
 
@@ -167,24 +168,43 @@ if (isset($_POST['register'])) {
 
         <div class="form-group">
             <label>Gender</label>
-            <select name="gender" id="" class="form-control" required>
-                <option selected="selected" disabled="disabled" value="">Select a gender</option>
+            <div class="d-flex justify-content-around">
                 <?php
-                if (isset($_GET['gender']) && $_GET['gender'] == "male") {
+                if (isset($_GET['gender']) && $_GET['gender'] === "male") {
                 ?>
-                    <option value="male" selected>Male</option>
-                    <option value="female">Female</option>
+                    <div>
+                        <input type="radio" name="gender" id="male" value="male" checked required>
+                        <label for="male">Male</label>
+                    </div>
                 <?php
-                } else if (isset($_GET['gender']) && $_GET['gender'] == "female") {
+                } else {
                 ?>
-                    <option value="male">Male</option>
-                    <option value="female" selected>Female</option>
+                    <div>
+                        <input type="radio" name="gender" id="male" value="male" required>
+                        <label for="male">Male</label>
+                    </div>
                 <?php
                 }
                 ?>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-            </select>
+
+                <?php
+                if (isset($_GET['gender']) && $_GET['gender'] === "female") {
+                ?>
+                    <div>
+                        <input type="radio" name="gender" id="female" value="female" checked required>
+                        <label for="female">Female</label>
+                    </div>
+                <?php
+                } else {
+                ?>
+                    <div>
+                        <input type="radio" name="gender" id="female" value="female" required>
+                        <label for="female">Female</label>
+                    </div>
+                <?php
+                }
+                ?>
+            </div>
         </div>
         </div>
 

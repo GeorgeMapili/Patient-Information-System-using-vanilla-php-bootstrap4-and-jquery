@@ -18,6 +18,7 @@ if (!isset($_SESSION['id'])) {
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" href="css/main.css" />
+    <link rel="icon" href="img/sumc.png">
     <title>Patient | Appointment History</title>
 </head>
 
@@ -93,7 +94,7 @@ if (!isset($_SESSION['id'])) {
             </div>
 
             <table class="table table-hover shadow-lg p-3 mb-5 bg-white rounded">
-                <thead class="thead-dark">
+                <thead class="bg-info text-light">
                     <tr>
                         <th scope="col">Patient Doctor</th>
                         <th scope="col">Appointment Fee</th>
@@ -106,7 +107,7 @@ if (!isset($_SESSION['id'])) {
                     <?php
                     $status1 = "discharged";
                     $status2 = "cancelled";
-                    $sql = "SELECT * FROM appointment WHERE (aStatus = :status1 OR aStatus = :status2) AND pId = :id";
+                    $sql = "SELECT * FROM appointment WHERE (aStatus = :status1 OR aStatus = :status2) AND pId = :id ORDER BY aDate DESC";
 
                     $stmt = $con->prepare($sql);
                     $stmt->bindParam(":status1", $status1, PDO::PARAM_STR);

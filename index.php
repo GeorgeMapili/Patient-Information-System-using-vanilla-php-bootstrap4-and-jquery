@@ -18,6 +18,7 @@ if (isset($_SESSION['id'])) {
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css" />
+    <link rel="icon" href="img/sumc.png">
     <title>Patient | Login</title>
 </head>
 
@@ -84,7 +85,7 @@ if (isset($_POST['login'])) {
 ?>
 
 <body>
-    <h2 class="display-4 mb-3" style="color: rgb(15, 208, 214);">Patient Login</h2>
+    <h2 class="display-4 mb-3" style="color: rgb(15, 208, 214);">Welcome to SUMC Doctors Clinic</h2>
     <?= (isset($_GET['RegSuccess'])) ? '<span class="text-success my-4">Register Successfully</span>' : ""; ?>
     <form action="index.php" method="post">
 

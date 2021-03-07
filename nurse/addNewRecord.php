@@ -19,6 +19,7 @@ if (!isset($_SESSION['nId'])) {
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/main.css" />
+    <link rel="icon" href="../img/sumc.png">
     <title>Secretary | Add Patient Record</title>
 </head>
 
@@ -160,31 +161,46 @@ if (!isset($_SESSION['nId'])) {
 
                         <div class="row">
                             <div class="col m-1">
-                                <label>Gender</label>
-                                <select name="gender" class="form-control" required>
-                                    <option value="">select a gender</option>
+                                <div class="form-group">
+                                    <label>Gender</label>
+                                    <div class="d-flex justify-content-around">
+                                        <?php
+                                        if (isset($_GET['gender']) && $_GET['gender'] === "male") {
+                                        ?>
+                                            <div>
+                                                <input type="radio" name="gender" id="male" value="male" checked required>
+                                                <label for="male">Male</label>
+                                            </div>
+                                        <?php
+                                        } else {
+                                        ?>
+                                            <div>
+                                                <input type="radio" name="gender" id="male" value="male" required>
+                                                <label for="male">Male</label>
+                                            </div>
+                                        <?php
+                                        }
+                                        ?>
 
-                                    <?php
-                                    if (isset($_GET['gender']) == "male") {
-                                    ?>
-                                        <option value="male" selected>Male</option>
-                                        <option value="female">Female</option>
-                                    <?php
-                                    } else if (isset($_GET['gender']) == "female") {
-                                    ?>
-                                        <option value="male">Male</option>
-                                        <option value="female" selected>Female</option>
-                                    <?php
-                                    } else {
-                                    ?>
-                                        <option value="male">Male</option>
-                                        <option value="female">Female</option>
-                                    <?php
-                                    }
-                                    ?>
-
-
-                                </select>
+                                        <?php
+                                        if (isset($_GET['gender']) && $_GET['gender'] === "female") {
+                                        ?>
+                                            <div>
+                                                <input type="radio" name="gender" id="female" value="female" checked required>
+                                                <label for="female">Female</label>
+                                            </div>
+                                        <?php
+                                        } else {
+                                        ?>
+                                            <div>
+                                                <input type="radio" name="gender" id="female" value="female" required>
+                                                <label for="female">Female</label>
+                                            </div>
+                                        <?php
+                                        }
+                                        ?>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col m-1">
                                 <label>Select a Doctor</label>

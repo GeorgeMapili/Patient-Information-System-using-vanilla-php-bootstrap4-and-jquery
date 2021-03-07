@@ -28,7 +28,7 @@ if (isset($_POST['query'])) {
 
     if ($userRow > 0) {
         $output = '
-    <thead class="thead-dark">
+        <thead class="bg-info text-light">
         <tr>
             <th scope="col">Patient Name</th>
             <th scope="col">Patient Address</th>
@@ -93,7 +93,7 @@ if (isset($_POST['walkInQuery'])) {
 
     if ($walkInRow > 0) {
         $walkInOutput = '
-<thead class="thead-dark">
+<thead class="bg-info text-light">
     <tr>
         <th scope="col">Patient Name</th>
         <th scope="col">Patient Address</th>

@@ -21,7 +21,7 @@ if (isset($_POST['id'])) {
 
     $res .= '
     <table class="table table-hover shadow-lg p-3 mb-5 bg-white rounded" id="table-data">
-    <thead class="thead-dark">
+    <thead class="bg-info text-light">
         <tr>
             <th scope="col">Patient Name</th>
             <th scope="col">Patient Address</th>

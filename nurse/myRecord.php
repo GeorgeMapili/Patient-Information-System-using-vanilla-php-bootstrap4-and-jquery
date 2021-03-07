@@ -18,6 +18,7 @@ if (!isset($_SESSION['nId'])) {
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/main.css" />
+    <link rel="icon" href="../img/sumc.png">
     <title>Secretary | Patient Record</title>
 </head>
 
@@ -100,7 +101,7 @@ if (!isset($_SESSION['nId'])) {
                 </div>
 
                 <table class="table table-hover shadow-lg p-3 mb-5 bg-white rounded mt-5" id="table-data">
-                    <thead class="thead-dark">
+                    <thead class="bg-info text-light">
                         <tr>
                             <th scope="col">Patient Name</th>
                             <th scope="col">Patient Address</th>

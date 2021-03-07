@@ -18,6 +18,7 @@ if (!isset($_SESSION['dId'])) {
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/main.css" />
+    <link rel="icon" href="../img/sumc.png">
     <title>Doctor | Cancelled Appointment</title>
 </head>
 
@@ -117,7 +118,7 @@ if (!isset($_SESSION['dId'])) {
             </div>
 
             <table class="table table-hover shadow p-3 mb-5 bg-white rounded">
-                <thead class="thead-dark">
+                <thead class="bg-info text-light">
                     <tr>
                         <th scope="col">Patient name</th>
                         <th scope="col">Patient Address</th>
