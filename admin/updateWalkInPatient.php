@@ -309,22 +309,43 @@ if (!isset($_SESSION['adId'])) {
 
                             <div class="col">
                                 <label>Gender</label>
-                                <select name="gender" class="form-control" required>
-                                    <option value="">Select a gender</option>
+                                <div class="d-flex justify-content-around">
                                     <?php
-                                    if ($_SESSION['walkInPatientGender'] == "male") {
+                                    if (isset($_SESSION['walkInPatientGender']) && $_SESSION['walkInPatientGender'] === "male") {
                                     ?>
-                                        <option value="male" selected>Male</option>
-                                        <option value="female">Female</option>
+                                        <div>
+                                            <input type="radio" name="gender" id="male" value="male" checked required>
+                                            <label for="male">Male</label>
+                                        </div>
                                     <?php
                                     } else {
                                     ?>
-                                        <option value="male">Male</option>
-                                        <option value="female" selected>Female</option>
+                                        <div>
+                                            <input type="radio" name="gender" id="male" value="male" required>
+                                            <label for="male">Male</label>
+                                        </div>
                                     <?php
                                     }
                                     ?>
-                                </select>
+
+                                    <?php
+                                    if (isset($_SESSION['walkInPatientGender']) && $_SESSION['walkInPatientGender'] === "female") {
+                                    ?>
+                                        <div>
+                                            <input type="radio" name="gender" id="female" value="female" checked required>
+                                            <label for="female">Female</label>
+                                        </div>
+                                    <?php
+                                    } else {
+                                    ?>
+                                        <div>
+                                            <input type="radio" name="gender" id="female" value="female" required>
+                                            <label for="female">Female</label>
+                                        </div>
+                                    <?php
+                                    }
+                                    ?>
+                                </div>
                             </div>
                         </div>
                         <div class=" text-center mt-3">
