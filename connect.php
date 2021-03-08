@@ -9,9 +9,9 @@ date_default_timezone_set('Asia/Manila');
 
 // Remote DB Connection
 $servername = "remotemysql.com";
-$username = "CTfobJ84TI";
-$password = "IYDrpRw3nQ";
-$dbname = "CTfobJ84TI";
+$username = "QA9u2YYTw5";
+$password = "zoTCUABrxM";
+$dbname = "QA9u2YYTw5";
 
 try {
     $con = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
