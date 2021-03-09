@@ -25,8 +25,8 @@ if (isset($_SESSION['id'])) {
 <?php
 
 if (isset($_POST['login'])) {
-    $email = trim(htmlspecialchars($_POST['email']));
-    $password = trim(htmlspecialchars($_POST['password']));
+    $email = htmlspecialchars($_POST['email']);
+    $password = htmlspecialchars($_POST['password']);
 
     $sql = "SELECT * FROM patientappointment WHERE pEmail = :email";
     $stmt = $con->prepare($sql);
@@ -57,7 +57,7 @@ if (isset($_POST['login'])) {
 
             $patient = $stmt->fetch(PDO::FETCH_ASSOC);
             $patientId = $patient['pId'];
-            $time = time();
+            $time = date("H:i:s");
             $ip = isset($_SERVER['HTTP_CLIENT_IP']) ? $_SERVER['HTTP_CLIENT_IP'] : isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'];
 
 
@@ -101,7 +101,7 @@ if (isset($_POST['login'])) {
             <?php
 
             if (isset($_GET['pid'])) {
-                $time = time() - 30;
+                $time = date("H:i:s") - 30;
                 $sql = "SELECT COUNT(*) AS total_count FROM loginlog WHERE patient_id = :id AND try_time > :time";
                 $stmt = $con->prepare($sql);
                 $stmt->bindParam(":id", $_GET['pid'], PDO::PARAM_INT);
