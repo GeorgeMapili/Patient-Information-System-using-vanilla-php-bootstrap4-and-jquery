@@ -2,16 +2,16 @@
 date_default_timezone_set('Asia/Manila');
 
 // Development Connection
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "pis";
+// $servername = "localhost";
+// $username = "root";
+// $password = "";
+// $dbname = "pis";
 
 // Remote DB Connection
-// $servername = "remotemysql.com";
-// $username = "QA9u2YYTw5";
-// $password = "zoTCUABrxM";
-// $dbname = "QA9u2YYTw5";
+$servername = "remotemysql.com";
+$username = "QA9u2YYTw5";
+$password = "zoTCUABrxM";
+$dbname = "QA9u2YYTw5";
 
 // $DB_HOST = "remotemysql.com";
 // $DB_USER = "QA9u2YYTw5";
