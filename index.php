@@ -22,6 +22,49 @@ if (isset($_SESSION['id'])) {
     <title>Patient | Login</title>
 </head>
 
+<?php
+
+if (isset($_POST['login'])) {
+    $email = trim(htmlspecialchars($_POST['email']));
+    $password = trim(htmlspecialchars($_POST['password']));
+
+    $sql = "SELECT * FROM patientappointment WHERE pEmail = :email";
+    $stmt = $con->prepare($sql);
+    $stmt->bindParam(":email", $email, PDO::PARAM_STR);
+    $stmt->execute();
+
+
+    $tryCount = 0;
+
+    while ($patientUser = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        if (password_verify($password, $patientUser['pPassword'])) {
+            $_SESSION['id'] = $patientUser['pId'];
+            $_SESSION['name'] = $patientUser['pName'];
+            $_SESSION['email'] = $patientUser['pEmail'];
+            $_SESSION['address'] = $patientUser['pAddress'];
+            $_SESSION['age'] = $patientUser['pAge'];
+            $_SESSION['gender'] = $patientUser['pGender'];
+            $_SESSION['mobile'] = $patientUser['pMobile'];
+            $_SESSION['profile'] = $patientUser['pProfile'];
+            header("location:main.php");
+            exit(0);
+        } else {
+
+            header("location:index.php?errPass=Incorrect_password");
+            exit(0);
+        }
+    }
+
+    $patientCount = $stmt->rowCount();
+
+    if ($patientCount == 0) {
+        header("location:index.php?errEmail=Incorrect_email");
+        exit(0);
+    }
+}
+
+?>
+
 <body>
     <h2 class="display-4 mb-3" style="color: rgb(15, 208, 214);">Welcome to SUMC Doctors Clinic</h2>
     <?= (isset($_GET['RegSuccess'])) ? '<span class="text-success my-4">Register Successfully</span>' : ""; ?>
@@ -36,22 +79,10 @@ if (isset($_SESSION['id'])) {
             <label>Password</label>
             <?= (isset($_GET['errPass'])) ? '<input type="password" name="password" class="form-control is-invalid" required>' : '<input type="password" name="password" class="form-control" required>'; ?>
             <?= (isset($_GET['errPass'])) ? '<span class="text-danger">Incorrect Password</span>' : ''; ?><br>
-           
-            <?= (isset($_GET['pid']) && (3 - $logCount) >= 0) ? '<span class="text-danger"> tries left:  ' . $totalCount = (3 - $logCount) . '' : ''; ?><br>
+
         </div>
-        <?php
-        if (isset($_GET['pid']) && (int) (3 - $logCount) <= 0) { ?>
-            <div class="text-center">
-                <a href="#" class="btn-block btn-info mt-4 disabled">Login</a>
-                <p class="text-danger mt-3">Wait for 30 seconds</p>
-            </div>
-        <?php
-        } else {
-        ?>
+       
             <input type="submit" class="btn-block btn-info mt-4" value="Login" name="login">
-        <?php
-        }
-        ?>
 
         <div class="text-center mt-5">
             <a class="btn btn-danger" href="register.php">No account yet?</a>
