@@ -21,7 +21,7 @@ if (!isset($_SESSION['adId'])) {
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/admin.css" />
     <link rel="icon" href="../img/sumc.png">
-    <title>Admin | Appointment</title>
+    <title>Admin | Diseases & Treatment</title>
 </head>
 
 <body>
@@ -56,7 +56,7 @@ if (!isset($_SESSION['adId'])) {
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link " href="patient.php" id="primaryColor">
+                            <a class="nav-link " href="patient.php">
                                 <span data-feather="file"></span>
                                 View All Appointments
                             </a>
@@ -104,7 +104,7 @@ if (!isset($_SESSION['adId'])) {
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="diseaseTreatment.php">
+                            <a class="nav-link" href="diseaseTreatment.php" id="primaryColor">
                                 <span data-feather="users"></span>
                                 View All Diseases & Treatment
                             </a>
@@ -116,123 +116,109 @@ if (!isset($_SESSION['adId'])) {
 
             <?php
 
-            if (isset($_POST['deleteAppointment'])) {
+            if(isset($_POST['update'])){
+                $dtId = $_POST['dtId'];
 
-                $aId = $_POST['aId'];
-                $pId = $_POST['pId'];
+                var_dump($dtId);
 
-                $sql = "DELETE FROM appointment WHERE aId = :aid AND pId = :pid";
+                $dtName = trim(htmlspecialchars($_POST['dtName']));
+                $dtMeaning = trim(htmlspecialchars($_POST['dtMeaning']));
+                $dtSymptoms = trim(htmlspecialchars($_POST['dtSymptoms']));
+                $dtPrevention = trim(htmlspecialchars($_POST['dtPrevention']));
+                $dtTreatment = trim(htmlspecialchars($_POST['dtTreatment']));
+                
+                $sql = "UPDATE diseases_treatment SET dtName = :name, dtMeaning = :meaning, dtSymptoms = :symptoms, dtPrevention = :prevention, dtTreatment = :treatment WHERE dtId = :id";
                 $stmt = $con->prepare($sql);
-                $stmt->bindParam(":aid", $aId, PDO::PARAM_INT);
-                $stmt->bindParam(":pid", $pId, PDO::PARAM_INT);
-                $stmt->execute();
+                $stmt->bindParam(":name", $dtName, PDO::PARAM_STR);
+                $stmt->bindParam(":meaning", $dtMeaning, PDO::PARAM_STR);
+                $stmt->bindParam(":symptoms", $dtSymptoms, PDO::PARAM_STR);
+                $stmt->bindParam(":prevention", $dtPrevention, PDO::PARAM_STR);
+                $stmt->bindParam(":treatment", $dtTreatment, PDO::PARAM_STR);
+                $stmt->bindParam(":id", $dtId, PDO::PARAM_INT);
+                
+                if($stmt->execute()){
+                    header("location:diseaseTreatment.php?success=successfully_updated_disease&treatment");
+                    ob_end_flush();
+                    exit;
+                }
 
-                header("location:patient.php?succDeleteAppointment=Successfully_deleted_a_appointment");
-                ob_end_flush();
-                exit(0);
             }
+
             ?>
 
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">All Patients</h1>
+                    <h1 class="h2" id="primaryColor">Update Disease & Treatment</h1>
                 </div>
 
-                <div class="text-center">
-                    <?= (isset($_GET['succDeleteAppointment']) && $_GET['succDeleteAppointment'] == "Successfully_deleted_a_appointment") ? '<span class="text-success">Successfully deleted a appointment!</span>' : '' ?>
-                </div>
+                <?php
+                    if(isset($_POST['updateBtn'])){
+                        
+                        $id = $_POST['dtId'];
 
-                <div class="mt-4 mb-4">
-                    <h1 class="Display-4 my-4" id="primaryColor">Appointments</h1>
-                </div>
-                <div class="d-flex justify-content-between">
-                    <form class="form-inline">
-                        <input class="form-control mb-3" id="search" autocomplete="off" type="search" placeholder="Search Patient Name" aria-label="Search">
-                    </form>
-                </div>
-                <table class="table table-hover" id="table-data">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th scope="col">Appointment ID</th>
-                            <th scope="col">Patient Name</th>
-                            <th scope="col">Patient Address</th>
-                            <th scope="col">Patient Mobile</th>
-                            <th scope="col">Patient Disease</th>
-                            <th scope="col">Doctor Name</th>
-                            <th scope="col">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $status1 = "accepted";
-                        $status2 = "done";
-                        $sql = "SELECT * FROM appointment WHERE aStatus IN(:status1,:status2)";
+                        $sql = "SELECT * FROM diseases_treatment WHERE dtId = :id";
                         $stmt = $con->prepare($sql);
-                        $stmt->bindParam(":status1", $status1, PDO::PARAM_STR);
-                        $stmt->bindParam(":status2", $status2, PDO::PARAM_STR);
+                        $stmt->bindParam(":id",$id, PDO::PARAM_INT);
                         $stmt->execute();
 
-                        while ($patientAppointment = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                        $dt = $stmt->fetch(PDO::FETCH_ASSOC);
                         ?>
-                            <tr>
-                                <th scope="row"><?= $patientAppointment['aId'] ?></th>
-                                <td><?= $patientAppointment['pName'] ?></td>
-                                <td><?= $patientAppointment['pAddress'] ?></td>
-                                <td><?= $patientAppointment['pMobile'] ?></td>
-                                <td><?= $patientAppointment['aReason'] ?></td>
-                                <td><?= $patientAppointment['pDoctor'] ?></td>
-                                <td>
-                                    <div class="col">
-                                        <form action="patient.php" method="post">
-                                            <input type="hidden" name="aId" value="<?= $patientAppointment['aId'] ?>">
-                                            <input type="hidden" name="pId" value="<?= $patientAppointment['pId'] ?>">
-                                            <input type="submit" value="Delete" class="btn btn-danger" name="deleteAppointment" onclick="return confirm('Are you sure to delete ?')">
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
-                        <?php endwhile; ?>
-                    </tbody>
-                </table>
+                    
+                    
 
-                <hr>
+                <form action="" method="post" class="form-group">
+                    <div class="row">
+                        <input type="hidden" name="dtId" value="<?= $dt['dtId']; ?>">
+                        <div class="col">
+                            <label for="dtName">Title</label>
+                            <input type="text" name="dtName" id="dtName" class="form-control" value="<?= $dt['dtName']; ?>">
+                        </div>
+                        <div class="col">
+                            <label for="dtMeaning">Meaning</label>
+                            <textarea name="dtMeaning" id="dtMeaning" cols="30" rows="3" class="form-control"><?= $dt['dtMeaning']; ?></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label for="dtSymptoms">Symptoms</label>
+                            <textarea name="dtSymptoms" id="dtSymptoms" cols="30" rows="3" class="form-control"><?= $dt['dtSymptoms']; ?></textarea>
+                        </div>
+                        <div class="col">
+                            <label for="dtPrevention">Prevention</label>
+                            <textarea name="dtPrevention" id="dtPrevention" cols="30" rows="3" class="form-control"><?= $dt['dtPrevention']; ?></textarea>
+                        </div>
+                    </div>
+                        <div class="col">
+                            <label for="dtTreatment">Treatment</label>
+                            <textarea name="dtTreatment" id="dtTreatment" cols="30" rows="3" class="form-control"><?= $dt['dtTreatment']; ?></textarea>
+                        </div>
 
+                        <div class="text-center mt-3">
+                            <input type="submit" value="Update" name="update" class="btn btn-secondary">
+                        </div>
+                </form>
 
+                <?php
+                    }
+                ?>
 
-            </main>
         </div>
+
+
+        </main>
+    </div>
     </div>
 
 
 
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-    <script>
-        $(document).ready(function() {
-            $('#search').keyup(function() {
-                var search = $(this).val();
-
-                $.ajax({
-                    url: 'action.php',
-                    method: 'post',
-                    data: {
-                        searchPatientAppointment: search
-                    },
-                    success: function(response) {
-                        $('#table-data').html(response);
-                    }
-                });
-            });
-        });
-    </script>
 </body>
 
 </html>

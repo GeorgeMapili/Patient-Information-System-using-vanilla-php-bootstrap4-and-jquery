@@ -102,6 +102,12 @@ if (!isset($_SESSION['adId'])) {
                                 View All Messages
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="diseaseTreatment.php">
+                                <span data-feather="users"></span>
+                                View All Diseases & Treatment
+                            </a>
+                        </li>
                     </ul>
 
                 </div>

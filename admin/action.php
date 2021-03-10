@@ -737,3 +737,67 @@ if (isset($_POST['walkInDischarged'])) {
         echo '<h3 style="color:red">No Discharged Patient Found</h3>';
     }
 }
+
+// SEARCH DISEASE & TREATMENT
+if (isset($_POST['diseaseTreatment'])) {
+
+    $search = trim(htmlspecialchars($_POST['diseaseTreatment']));
+    $searchName = "%" . $search . "%";
+
+    $sql = "SELECT * FROM diseases_treatment WHERE dtName LIKE :name";
+    $stmt = $con->prepare($sql);
+    $stmt->bindParam(":name", $searchName, PDO::PARAM_STR);
+    $stmt->execute();
+
+    $numRows = $stmt->rowCount();
+
+    $diseaseTreatmentOutput = '';
+
+    if ($stmt->rowCount() > 0) {
+
+
+
+        $diseaseTreatmentOutput .= '
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Title</th>
+            <th scope="col">Meaning</th>
+            <th scope="col">Symptoms</th>
+            <th scope="col">Prevention</th>
+            <th scope="col">Treatment</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+    ';
+
+        while ($diseases_treatment = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $diseaseTreatmentOutput .= '
+            <tr>
+            <th scope="row">' . $diseases_treatment['dtName'] . '</th>
+            <td>' . $diseases_treatment['dtMeaning'] . '</td>
+            <td>' . $diseases_treatment['dtSymptoms'] . '</td>
+            <td>' . $diseases_treatment['dtPrevention'] . '</td>
+            <td>' . $diseases_treatment['dtTreatment'] . '</td>
+            <td>
+                <form action="updateDiseaseTreatment.php" method="post">
+                    <input type="hidden" name="dtId" value="'. $diseases_treatment['dtId'] .'">
+                    <input type="submit" class="btn btn-secondary" name="updateBtn" value="Update">
+                </form>
+                <form action="diseaseTreatment.php" method="post">
+                    <input type="hidden" name="dtId" value="'. $diseases_treatment['dtId'] .'">
+                    <input type="submit" class="btn btn-danger" name="deleteBtn" value="Delete">
+                </form>
+            </td>
+        ';
+        }
+        $diseaseTreatmentOutput .= '
+    </tr>
+    <tbody>
+    ';
+
+        echo $diseaseTreatmentOutput;
+    } else {
+        echo '<h3 style="color:red">No Diseases & Treatment Found</h3>';
+    }
+}
