@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 require_once 'connect.php';
 
@@ -118,6 +119,7 @@ if (!isset($_SESSION['id'])) {
 
                 if ($stmt->execute()) {
                     header("location:contactus.php?ContactSuccess=Successully_send_a_message");
+                    ob_end_flush();
                     exit(0);
                 }
             }
