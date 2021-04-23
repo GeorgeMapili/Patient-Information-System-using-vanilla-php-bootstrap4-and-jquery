@@ -147,6 +147,8 @@ if (!isset($_SESSION['nId'])) {
 
                     if ($amountInput >= $totalAmount) {
                         $changeBill = $amountInput -  $totalAmount;
+                        // var_dump($changeBill);
+                        // exit;
                         $date = date("M d, Y");
 
                         $status = "discharged";
@@ -224,7 +226,7 @@ if (!isset($_SESSION['nId'])) {
                                 </div>
                                 <div class="form-group col-md-6" id="price">
                                     <label for="">Medicine Fee</label>
-                                    <input type="number" name="medicineFee" autocomplete="off" class="form-control medPrice" min="0" value="<?= $_SESSION['Pa_mFee'] ?>">
+                                    <input type="number" name="medicineFee" id="medicineFeeAppointment" autocomplete="off" class="form-control medPrice" min="0" value="<?= $_SESSION['Pa_mFee'] ?>">
                                 </div>
                             </div>
 
@@ -237,7 +239,7 @@ if (!isset($_SESSION['nId'])) {
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="">Total Amount</label>
-                                    <input type="text" name="totalAmount" class="form-control" value="<?= $_SESSION['Pa_totalPay'] ?>" readonly>
+                                    <input type="text" name="totalAmount" id="totalAmountBillAppointment" class="form-control" value="<?= $_SESSION['Pa_totalPay'] ?>" readonly>
                                 </div>
                             </div>
 
@@ -358,7 +360,7 @@ if (!isset($_SESSION['nId'])) {
                 var aid = $el.find('.aid').val();
                 var pid = $el.find('.pid').val();
 
-                location.reload(true);
+                // location.reload(true);
 
                 $.ajax({
                     url: 'action.php',
@@ -371,7 +373,7 @@ if (!isset($_SESSION['nId'])) {
                         pid: pid
                     },
                     success: function(response) {
-                        console.log(response);
+                        $('#totalAmountBillAppointment').val(response);
                     }
                 });
 

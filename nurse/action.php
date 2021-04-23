@@ -215,12 +215,12 @@ if (isset($_POST['updateMedInfo'])) {
 if (isset($_POST['medPrice'])) {
     $medPrice = $_POST['medPrice'];
     $doctorFee = $_POST['doctorFee'];
-    $roomFee = $_POST['roomFee'];
+    // $roomFee = $_POST['roomFee'];
     $id = $_POST['id'];
 
     $totalprice = 0;
 
-    $totalprice = (int)$medPrice + (int)$doctorFee + (int)$roomFee;
+    $totalprice = (int)$medPrice + (int)$doctorFee; //Remove room fee payment here
 
     $sql = "UPDATE walkinpatient SET walkInTotalPay = :totalpay, medicineFee = :medFee WHERE walkInId =:id";
     $stmt = $con->prepare($sql);
@@ -228,6 +228,18 @@ if (isset($_POST['medPrice'])) {
     $stmt->bindParam(":medFee", $medPrice, PDO::PARAM_INT);
     $stmt->bindParam(":id", $id, PDO::PARAM_INT);
     $stmt->execute();
+
+    // Get the amount 
+    $sql = "SELECT * FROM walkinpatient WHERE walkInId =:id";
+    $stmt = $con->prepare($sql);
+    $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $totalAmount = $result['walkInTotalPay'];
+
+    echo $totalAmount;
 }
 
 if (isset($_POST['medPricePa'])) {
@@ -247,6 +259,19 @@ if (isset($_POST['medPricePa'])) {
     $stmt->bindParam(":aid", $aid, PDO::PARAM_INT);
     $stmt->bindParam(":pid", $pid, PDO::PARAM_INT);
     $stmt->execute();
+
+    // Get the amount 
+    $sql = "SELECT * FROM appointment WHERE aId =:aid AND pId = :pid";
+    $stmt = $con->prepare($sql);
+    $stmt->bindParam(":aid", $aid, PDO::PARAM_INT);
+    $stmt->bindParam(":pid", $pid, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $totalAmount = $result['pTotalPay'];
+
+    echo $totalAmount;
 }
 
 // Check for automatic notification for pending appointment

@@ -120,6 +120,15 @@ if (!isset($_SESSION['id'])) {
                 exit(0);
             }
 
+            // Check if the date is a weekend
+            $weekDay = date('w', strtotime($aDate));
+
+            if($weekDay == 0 || $weekDay == 6){
+                header("location:appointment.php?errDate1=no_weekends");
+                exit(0);
+            }
+
+
             // Check if already have an appointment with different doctor but the same time ||You have already an appointment in that time with different doctor
             $status1 = "pending";
             $status2 = "accepted";
@@ -308,8 +317,9 @@ if (!isset($_SESSION['id'])) {
                     <small>Read specialization info below</small>
                 </div>
                 <label for="">Date & Time</label>
-                <?= (isset($_GET['errDate']) && $_GET['errDate'] == "date_already_pass_by") ? '<input type="date" class="form-control is-invalid" name="dateOfAppointment" required>' : '<input type="date" class="form-control" name="dateOfAppointment" required>'; ?>
+                <?= ((isset($_GET['errDate']) && $_GET['errDate'] == "date_already_pass_by") || (isset($_GET['errDate1']) && $_GET['errDate1'] == "no_weekends")) ? '<input type="date" class="form-control is-invalid" name="dateOfAppointment" required>' : '<input type="date" class="form-control" name="dateOfAppointment" required>'; ?>
                 <?= (isset($_GET['errDate']) && $_GET['errDate'] == "date_already_pass_by") ? '<span class="text-danger">Date has already passed!</span>' : ''; ?>
+                <?= (isset($_GET['errDate1']) && $_GET['errDate1'] == "no_weekends") ? '<span class="text-danger">No weekends service!</span>' : ''; ?>
 
                 <?= ((isset($_GET['errTime']) && $_GET['errTime'] == "all_ready_taken_time") || (isset($_GET['errDup']) && $_GET['errDup'] == "you_have_already_an_appointment_in_that_time_with_different_doctor") || (isset($_GET['errDup1']) && $_GET['errDup1'] == "you_already_made_an_appointment")) ? '<select class="form-control is-invalid" name="selectTime" required>' : '<select class="form-control" name="selectTime" required>'; ?>
                 <option value="">select a time</option>

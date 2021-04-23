@@ -282,7 +282,7 @@ if (!isset($_SESSION['nId'])) {
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="">Total Amount</label>
-                                    <input type="text" name="totalAmount" class="form-control" value="<?= $_SESSION['walkInTotalPay'] ?>" readonly>
+                                    <input type="text" name="totalAmount" id="totalAmountBill" class="form-control" value="<?= $_SESSION['walkInTotalPay'] ?>" readonly>
                                 </div>
                             </div>
 
@@ -402,10 +402,10 @@ if (!isset($_SESSION['nId'])) {
 
                 var medPrice = $el.find('.medPrice').val();
                 var doctorFee = $el.find('.doctorFee').val();
-                var roomFee = $el.find('.roomFee').val();
+                // var roomFee = $el.find('.roomFee').val();
                 var id = $el.find('.id').val();
 
-                location.reload(true);
+                // location.reload(true);
 
                 $.ajax({
                     url: 'action.php',
@@ -414,11 +414,13 @@ if (!isset($_SESSION['nId'])) {
                     data: {
                         medPrice: medPrice,
                         doctorFee: doctorFee,
-                        roomFee: roomFee,
+                        // roomFee: roomFee,
                         id: id
                     },
                     success: function(response) {
-                        console.log(response);
+                        // console.log(response);
+                        $("#totalAmountBill").val(response);
+                        // window.location.reload();
                     }
                 });
 
