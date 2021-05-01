@@ -37,118 +37,115 @@ if (isset($_REQUEST["term"])) {
     }
 }
 
+use core\patient\UpdateProfile;
+require_once("vendor/autoload.php");
+
+$updateProfile = new UpdateProfile();
 
 // my profile update info
 if (isset($_POST['updateInformation'])) {
-    $id = $_POST['id'];
-    $name = trim(htmlspecialchars($_POST['name']));
-    $email = trim(htmlspecialchars($_POST['email']));
-    $address = trim(htmlspecialchars($_POST['address']));
-    $mobileNumber = trim(htmlspecialchars($_POST['mobileNumber']));
+    $updateProfile->id = $_POST['id'];
+    $updateProfile->name = trim(htmlspecialchars($_POST['name']));
+    $updateProfile->email = trim(htmlspecialchars($_POST['email']));
+    $updateProfile->address = trim(htmlspecialchars($_POST['address']));
+    $updateProfile->mobileNumber = trim(htmlspecialchars($_POST['mobileNumber']));
 
     // Check the name if valid
-    if (!preg_match("/^([a-zA-Z' ]+)$/", $name)) {
-        header("location:myaccount.php?errName=name_is_not_valid");
-        exit(0);
-    }
+    // if (!preg_match("/^([a-zA-Z' ]+)$/", $name)) {
+    //     header("location:myaccount.php?errName=name_is_not_valid");
+    //     exit(0);
+    // }
+    $updateProfile->checkNameValid();
 
     // Check if name is already existed
-    $sql = "SELECT * FROM patientappointment WHERE pId <> :id AND pName = :name";
-    $stmt = $con->prepare($sql);
-    $stmt->bindParam(":id", $_SESSION['id'], PDO::PARAM_INT);
-    $stmt->bindParam(":name", $name, PDO::PARAM_STR);
-    $stmt->execute();
+    // $sql = "SELECT * FROM patientappointment WHERE pId <> :id AND pName = :name";
+    // $stmt = $con->prepare($sql);
+    // $stmt->bindParam(":id", $_SESSION['id'], PDO::PARAM_INT);
+    // $stmt->bindParam(":name", $name, PDO::PARAM_STR);
+    // $stmt->execute();
 
-    $nameCount = $stmt->rowCount();
+    // $nameCount = $stmt->rowCount();
 
-    if ($nameCount >= 1) {
-        header("location:myaccount.php?errName1=name_is_already_taken");
-        exit(0);
-    }
+    // if ($nameCount >= 1) {
+    //     header("location:myaccount.php?errName1=name_is_already_taken");
+    //     exit(0);
+    // }
+    $updateProfile->checkNameAlreadyExisted();
 
-    // Check if the email if already existed
-    $sql = "SELECT * FROM patientappointment WHERE pId <> :id AND pEmail = :email";
-    $stmt = $con->prepare($sql);
-    $stmt->bindParam(":id", $_SESSION['id'], PDO::PARAM_INT);
-    $stmt->bindParam(":email", $email, PDO::PARAM_STR);
-    $stmt->execute();
+    // // Check if the email if already existed
+    // $sql = "SELECT * FROM patientappointment WHERE pId <> :id AND pEmail = :email";
+    // $stmt = $con->prepare($sql);
+    // $stmt->bindParam(":id", $_SESSION['id'], PDO::PARAM_INT);
+    // $stmt->bindParam(":email", $email, PDO::PARAM_STR);
+    // $stmt->execute();
 
-    $emailCount = $stmt->rowCount();
+    // $emailCount = $stmt->rowCount();
 
-    if ($emailCount >= 1) {
-        header("location:myaccount.php?errEmail=email_is_already_existed");
-        exit(0);
-    }
+    // if ($emailCount >= 1) {
+    //     header("location:myaccount.php?errEmail=email_is_already_existed");
+    //     exit(0);
+    // }
 
-    // Check the mobile number is already existed
-    $sql = "SELECT * FROM patientappointment WHERE pId <> :id AND pMobile = :mobile";
-    $stmt = $con->prepare($sql);
-    $stmt->bindParam(":id", $_SESSION['id'], PDO::PARAM_INT);
-    $stmt->bindParam(":mobile", $mobileNumber, PDO::PARAM_STR);
-    $stmt->execute();
+    $updateProfile->checkEmailAlreadyExisted();
 
-    $mobileCount = $stmt->rowCount();
+    // // Check the mobile number is already existed
+    // $sql = "SELECT * FROM patientappointment WHERE pId <> :id AND pMobile = :mobile";
+    // $stmt = $con->prepare($sql);
+    // $stmt->bindParam(":id", $_SESSION['id'], PDO::PARAM_INT);
+    // $stmt->bindParam(":mobile", $mobileNumber, PDO::PARAM_STR);
+    // $stmt->execute();
 
-    if ($mobileCount >= 1) {
-        header("location:myaccount.php?errMobile=mobile_number_is_already_existed");
-        exit(0);
-    }
+    // $mobileCount = $stmt->rowCount();
 
-    if ($_SESSION['name'] == $name && $_SESSION['email'] == $email && $_SESSION['address'] == $address && $_SESSION['mobile'] == $mobileNumber) {
+    // if ($mobileCount >= 1) {
+    //     header("location:myaccount.php?errMobile=mobile_number_is_already_existed");
+    //     exit(0);
+    // }
+
+    $updateProfile->checkMobileNumberAlreadyExisted();
+
+    if ($_SESSION['name'] == $updateProfile->name && $_SESSION['email'] == $updateProfile->email && $_SESSION['address'] == $updateProfile->address && $_SESSION['mobile'] == $updateProfile->mobileNumber) {
         header("location:myaccount.php?errInfo=Nothing_to_update");
         exit(0);
     }
 
-    $sql = "UPDATE patientappointment SET pName = :name, pEmail = :email, pAddress = :address, pMobile = :mobile WHERE pId = :id";
-    $stmt = $con->prepare($sql);
-    $stmt->bindParam(":name", $name, PDO::PARAM_STR);
-    $stmt->bindParam(":email", $email, PDO::PARAM_STR);
-    $stmt->bindParam(":address", $address, PDO::PARAM_STR);
-    $stmt->bindParam(":mobile", $mobileNumber, PDO::PARAM_STR);
-    $stmt->bindParam(":id", $_SESSION['id'], PDO::PARAM_INT);
+    // $sql = "UPDATE patientappointment SET pName = :name, pEmail = :email, pAddress = :address, pMobile = :mobile WHERE pId = :id";
+    // $stmt = $con->prepare($sql);
+    // $stmt->bindParam(":name", $name, PDO::PARAM_STR);
+    // $stmt->bindParam(":email", $email, PDO::PARAM_STR);
+    // $stmt->bindParam(":address", $address, PDO::PARAM_STR);
+    // $stmt->bindParam(":mobile", $mobileNumber, PDO::PARAM_STR);
+    // $stmt->bindParam(":id", $_SESSION['id'], PDO::PARAM_INT);
 
-    if ($stmt->execute()) {
-        $_SESSION['name'] = $name;
-        $_SESSION['email'] = $email;
-        $_SESSION['address'] = $address;
-        $_SESSION['mobile'] = $mobileNumber;
+    // if ($stmt->execute()) {
+    //     $_SESSION['name'] = $name;
+    //     $_SESSION['email'] = $email;
+    //     $_SESSION['address'] = $address;
+    //     $_SESSION['mobile'] = $mobileNumber;
+    //     header("location:myaccount.php?successInfo=Updated_successfully");
+    //     exit(0);
+    // }
+    if($updateProfile->checkUpdatePatient()){
+
         header("location:myaccount.php?successInfo=Updated_successfully");
         exit(0);
+
     }
+
 }
 
 if (isset($_POST['updatePassword'])) {
 
-    $currentPassword = trim(htmlspecialchars($_POST['currentPassword']));
-    $newPassword = trim(htmlspecialchars($_POST['newPassword']));
-    $confirmNewPassword = trim(htmlspecialchars($_POST['confirmNewPassword']));
+    $updateProfile->currentPassword = trim(htmlspecialchars($_POST['currentPassword']));
+    $updateProfile->newPassword = trim(htmlspecialchars($_POST['newPassword']));
+    $updateProfile->confirmNewPassword = trim(htmlspecialchars($_POST['confirmNewPassword']));
+    $updateProfile->id = $_SESSION['id'];
 
-    $sql = "SELECT * FROM patientappointment WHERE pId = :id";
-    $stmt = $con->prepare($sql);
-    $stmt->bindParam(":id", $_SESSION['id'], PDO::PARAM_INT);
-    $stmt->execute();
+    if($updateProfile->checkUpdatePassword() == "success_password_update"){
 
-    while ($usePass = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        if (password_verify($currentPassword, $usePass['pPassword'])) {
-            if ($newPassword === $confirmNewPassword) {
-                // hash the new password 
-                $hashPass = password_hash($newPassword, PASSWORD_DEFAULT);
+        header("location:myaccount.php?succPass=Successfully_updated_password");
+        exit(0);
 
-                $sql = "UPDATE patientappointment SET pPassword = :password WHERE pId = :id";
-                $stmt = $con->prepare($sql);
-                $stmt->bindParam(":password", $hashPass, PDO::PARAM_STR);
-                $stmt->bindParam(":id", $_SESSION['id'], PDO::PARAM_INT);
-                $stmt->execute();
-                header("location:myaccount.php?succPass=Successfully_updated_password");
-                exit(0);
-            } else {
-                header("location:myaccount.php?errCurrPass1=Confirm_Password_do_not_match");
-                exit(0);
-            }
-        } else {
-            header("location:myaccount.php?errCurrPass=Incorrect_current_password");
-            exit(0);
-        }
     }
 }
 

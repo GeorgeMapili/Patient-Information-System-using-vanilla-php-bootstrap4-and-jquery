@@ -14,6 +14,8 @@ if (isset($_SESSION['id'])) {
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="Patient Information System" name="description">
+    <meta content="sumc doctorcs clinic, patient information system" name="keywords">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -22,53 +24,10 @@ if (isset($_SESSION['id'])) {
     <title>Patient | Login</title>
 </head>
 
-<?php
-
-if (isset($_POST['login'])) {
-    $email = trim(htmlspecialchars($_POST['email']));
-    $password = trim(htmlspecialchars($_POST['password']));
-
-    $sql = "SELECT * FROM patientappointment WHERE pEmail = :email";
-    $stmt = $con->prepare($sql);
-    $stmt->bindParam(":email", $email, PDO::PARAM_STR);
-    $stmt->execute();
-
-
-    $tryCount = 0;
-
-    while ($patientUser = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        if (password_verify($password, $patientUser['pPassword'])) {
-            $_SESSION['id'] = $patientUser['pId'];
-            $_SESSION['name'] = $patientUser['pName'];
-            $_SESSION['email'] = $patientUser['pEmail'];
-            $_SESSION['address'] = $patientUser['pAddress'];
-            $_SESSION['age'] = $patientUser['pAge'];
-            $_SESSION['gender'] = $patientUser['pGender'];
-            $_SESSION['mobile'] = $patientUser['pMobile'];
-            $_SESSION['profile'] = $patientUser['pProfile'];
-            header("location:main.php");
-            exit(0);
-        } else {
-
-            header("location:index.php?errPass=Incorrect_password");
-            exit(0);
-        }
-    }
-
-    $patientCount = $stmt->rowCount();
-
-    if ($patientCount == 0) {
-        header("location:index.php?errEmail=Incorrect_email");
-        exit(0);
-    }
-}
-
-?>
-
 <body>
     <h2 class="display-4 mb-3" style="color: rgb(15, 208, 214);">Welcome to SUMC Doctors Clinic</h2>
     <?= (isset($_GET['RegSuccess'])) ? '<span class="text-success my-4">Register Successfully</span>' : ""; ?>
-    <form action="index.php" method="post">
+    <form action="./core/patient/Login.php" method="post">
 
         <div class="form-group">
             <label>Email address</label>

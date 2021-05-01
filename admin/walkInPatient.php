@@ -152,59 +152,61 @@ if (!isset($_SESSION['adId'])) {
 
                 ?>
 
-                <table class="table table-hover " id="table-data">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th scope="col">Patient ID</th>
-                            <th scope="col">Patient Name</th>
-                            <th scope="col">Patient Email</th>
-                            <th scope="col">Patient Address</th>
-                            <th scope="col">Patient Mobile</th>
-                            <th scope="col">Patient Disease</th>
-                            <th scope="col">Patient Age</th>
-                            <th scope="col">Patient Gender</th>
-                            <th scope="col">Patient Doctor</th>
-                            <th scope="col">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $sql = "SELECT * FROM walkinpatient";
-                        $stmt = $con->prepare($sql);
-                        $stmt->execute();
-
-                        while ($walkInPatient = $stmt->fetch(PDO::FETCH_ASSOC)) :
-                        ?>
+                <div class="table-responsive-xl">
+                    <table class="table table-hover " id="table-data">
+                        <thead class="thead-dark">
                             <tr>
-                                <th scope="row"><?= $walkInPatient['walkInId'] ?></th>
-                                <td><?= $walkInPatient['walkInName'] ?></td>
-                                <td><?= $walkInPatient['walkInEmail'] ?></td>
-                                <td><?= $walkInPatient['walkInAddress'] ?></td>
-                                <td><?= $walkInPatient['walkInMobile'] ?></td>
-                                <td><?= $walkInPatient['walkInDisease'] ?></td>
-                                <td><?= $walkInPatient['walkInAge'] ?></td>
-                                <td><?= ucwords($walkInPatient['walkInGender']) ?></td>
-                                <td><?= $walkInPatient['walkInDoctor'] ?></td>
-                                <td>
-                                    <div class="row">
-                                        <div class="col">
-                                            <form action="updateWalkInPatient.php" method="post">
-                                                <input type="hidden" name="walkInId" value="<?= $walkInPatient['walkInId'] ?>">
-                                                <input type="submit" value="Update" class="btn btn-secondary" name="updateWalkInBtn">
-                                            </form>
-                                        </div>
-                                        <div class="col">
-                                            <form action="walkInPatient.php" method="post">
-                                                <input type="hidden" name="walkInId" value="<?= $walkInPatient['walkInId'] ?>">
-                                                <input type="submit" value="Delete" class="btn btn-danger" name="deleteWalkInBtn" onclick="return confirm('Are you sure to delete?');">
-                                            </form>
-                                        </div>
-                                    </div>
-                                </td>
+                                <th scope="col">Patient ID</th>
+                                <th scope="col">Patient Name</th>
+                                <th scope="col">Patient Email</th>
+                                <th scope="col">Patient Address</th>
+                                <th scope="col">Patient Mobile</th>
+                                <th scope="col">Patient Disease</th>
+                                <th scope="col">Patient Age</th>
+                                <th scope="col">Patient Gender</th>
+                                <th scope="col">Patient Doctor</th>
+                                <th scope="col">Action</th>
                             </tr>
-                        <?php endwhile; ?>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $sql = "SELECT * FROM walkinpatient";
+                            $stmt = $con->prepare($sql);
+                            $stmt->execute();
+
+                            while ($walkInPatient = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                            ?>
+                                <tr>
+                                    <th scope="row"><?= $walkInPatient['walkInId'] ?></th>
+                                    <td><?= $walkInPatient['walkInName'] ?></td>
+                                    <td><?= $walkInPatient['walkInEmail'] ?></td>
+                                    <td><?= $walkInPatient['walkInAddress'] ?></td>
+                                    <td><?= $walkInPatient['walkInMobile'] ?></td>
+                                    <td><?= $walkInPatient['walkInDisease'] ?></td>
+                                    <td><?= $walkInPatient['walkInAge'] ?></td>
+                                    <td><?= ucwords($walkInPatient['walkInGender']) ?></td>
+                                    <td><?= $walkInPatient['walkInDoctor'] ?></td>
+                                    <td>
+                                        <div class="row">
+                                            <div class="col">
+                                                <form action="updateWalkInPatient.php" method="post">
+                                                    <input type="hidden" name="walkInId" value="<?= $walkInPatient['walkInId'] ?>">
+                                                    <input type="submit" value="Update" class="btn btn-secondary" name="updateWalkInBtn">
+                                                </form>
+                                            </div>
+                                            <div class="col">
+                                                <form action="walkInPatient.php" method="post">
+                                                    <input type="hidden" name="walkInId" value="<?= $walkInPatient['walkInId'] ?>">
+                                                    <input type="submit" value="Delete" class="btn btn-danger" name="deleteWalkInBtn" onclick="return confirm('Are you sure to delete?');">
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php endwhile; ?>
+                        </tbody>
+                    </table>
+                </div>
 
         </div>
 

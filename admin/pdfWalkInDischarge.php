@@ -7,7 +7,7 @@ if (!isset($_SESSION['adId'])) {
     exit(0);
 }
 
-require('../nurse/fpdf182/fpdf.php');
+require('../secretary/fpdf182/fpdf.php');
 
 $pdf = new FPDF('P', 'mm', 'A4');
 

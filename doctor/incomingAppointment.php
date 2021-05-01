@@ -170,66 +170,69 @@ require __DIR__ . '/../vendor/autoload.php';
                     <option value="this_month">This month</option>
                 </select>
             </div>
-            <table class="table table-hover shadow p-3 mb-5 bg-white rounded" id="table-data">
-                <thead class="bg-info text-light">
-                    <tr>
-                        <th scope="col">Patient Name</th>
-                        <th scope="col">Patient Address</th>
-                        <th scope="col">Patient Mobile</th>
-                        <th scope="col">Appointment Reason</th>
-                        <th scope="col">Date</th>
-                        <th scope="col">Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    $status1 = "accepted";
-                    $sql = "SELECT * FROM appointment WHERE pDoctor = :doctor AND aStatus = :status1 ORDER BY aDate,aTime ASC";
-                    $stmt = $con->prepare($sql);
-                    $stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);
-                    $stmt->bindParam(":status1", $status1, PDO::PARAM_STR);
-                    $stmt->execute();
 
-                    while ($upcomingAppointment = $stmt->fetch(PDO::FETCH_ASSOC)) :
-                    ?>
+            <div class="table-responsive-xl">
+                <table class="table table-hover shadow p-3 mb-5 bg-white rounded" id="table-data">
+                    <thead class="bg-info text-light">
                         <tr>
-                            <td><?= $upcomingAppointment['pName'] ?></td>
-                            <td><?= $upcomingAppointment['pAddress'] ?></td>
-                            <td><?= $upcomingAppointment['pMobile'] ?></td>
-                            <td><?= $upcomingAppointment['aReason'] ?></td>
-                            <td><?= date("M d, Y", strtotime($upcomingAppointment['aDate'])); ?> at <?= $upcomingAppointment['aTime']; ?></td>
-                            <td>
-                                <div class="row">
-                                    <div class="col">
-                                        <?php
-                                        if (date("M d, Y") === date("M d, Y", strtotime($upcomingAppointment['aDate']))) {
-                                        ?>
+                            <th scope="col">Patient Name</th>
+                            <th scope="col">Patient Address</th>
+                            <th scope="col">Patient Mobile</th>
+                            <th scope="col">Appointment Reason</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $status1 = "accepted";
+                        $sql = "SELECT * FROM appointment WHERE pDoctor = :doctor AND aStatus = :status1 ORDER BY aDate,aTime ASC";
+                        $stmt = $con->prepare($sql);
+                        $stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);
+                        $stmt->bindParam(":status1", $status1, PDO::PARAM_STR);
+                        $stmt->execute();
+
+                        while ($upcomingAppointment = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                        ?>
+                            <tr>
+                                <td><?= $upcomingAppointment['pName'] ?></td>
+                                <td><?= $upcomingAppointment['pAddress'] ?></td>
+                                <td><?= $upcomingAppointment['pMobile'] ?></td>
+                                <td><?= $upcomingAppointment['aReason'] ?></td>
+                                <td><?= date("M d, Y", strtotime($upcomingAppointment['aDate'])); ?> at <?= $upcomingAppointment['aTime']; ?></td>
+                                <td>
+                                    <div class="row">
+                                        <div class="col">
+                                            <?php
+                                            if (date("M d, Y") === date("M d, Y", strtotime($upcomingAppointment['aDate']))) {
+                                            ?>
+                                                <form action="incomingAppointment.php" method="post">
+                                                    <input type="hidden" name="aId" value="<?= $upcomingAppointment['aId'] ?>">
+                                                    <input type="hidden" name="pId" value="<?= $upcomingAppointment['pId'] ?>">
+                                                    <input type="submit" value="Done" class="btn btn-success" name="doneAppointment">
+                                                </form>
+                                            <?php
+                                            } else {
+                                            ?>
+                                                <p class="btn btn-success disabled">Done</p>
+                                            <?php
+                                            }
+                                            ?>
+                                        </div>
+                                        <div class="col">
                                             <form action="incomingAppointment.php" method="post">
                                                 <input type="hidden" name="aId" value="<?= $upcomingAppointment['aId'] ?>">
                                                 <input type="hidden" name="pId" value="<?= $upcomingAppointment['pId'] ?>">
-                                                <input type="submit" value="Done" class="btn btn-success" name="doneAppointment">
+                                                <input type="submit" value="Cancel" class="btn btn-danger" name="cancelAppointment" onclick="return confirm('Are you sure to delete ?')">
                                             </form>
-                                        <?php
-                                        } else {
-                                        ?>
-                                            <p class="btn btn-success disabled">Done</p>
-                                        <?php
-                                        }
-                                        ?>
+                                        </div>
                                     </div>
-                                    <div class="col">
-                                        <form action="incomingAppointment.php" method="post">
-                                            <input type="hidden" name="aId" value="<?= $upcomingAppointment['aId'] ?>">
-                                            <input type="hidden" name="pId" value="<?= $upcomingAppointment['pId'] ?>">
-                                            <input type="submit" value="Cancel" class="btn btn-danger" name="cancelAppointment" onclick="return confirm('Are you sure to delete ?')">
-                                        </form>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    <?php endwhile; ?>
-                </tbody>
-            </table>
+                                </td>
+                            </tr>
+                        <?php endwhile; ?>
+                    </tbody>
+                </table>
+            </div>
 
         </div>
 

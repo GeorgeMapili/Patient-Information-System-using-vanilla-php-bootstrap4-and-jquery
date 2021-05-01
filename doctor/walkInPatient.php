@@ -123,77 +123,80 @@ if (!isset($_SESSION['dId'])) {
                     </form>
                 </div>
             </div>
-            <table class="table table-hover shadow p-3 mb-5 bg-white rounded" id="table-data">
-                <thead class="bg-info text-light">
-                    <tr>
-                        <th scope="col">Patient Name</th>
-                        <th scope="col">Patient Address</th>
-                        <th scope="col">Patient Mobile</th>
-                        <th scope="col">Patient Disease</th>
-                        <th scope="col">Prescription</th>
-                        <th scope="col">Update</th>
-                        <th scope="col">Information</th>
-                        <th scope="col">History</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    $discharge = 0;
-                    $sql = "SELECT * FROM walkinpatient WHERE walkInDoctor = :doctor AND walkInDischarged = :discharge";
-                    $stmt = $con->prepare($sql);
-                    $stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);
-                    $stmt->bindParam(":discharge", $discharge, PDO::PARAM_INT);
-                    $stmt->execute();
 
-                    while ($walkInPatient = $stmt->fetch(PDO::FETCH_ASSOC)) :
-                    ?>
+            <div class="table-responsive-xl">
+                <table class="table table-hover shadow p-3 mb-5 bg-white rounded" id="table-data">
+                    <thead class="bg-info text-light">
                         <tr>
-                            <td><?= $walkInPatient['walkInName'] ?></td>
-                            <td><?= $walkInPatient['walkInAddress'] ?></td>
-                            <td><?= $walkInPatient['walkInMobile'] ?></td>
-                            <td><?= $walkInPatient['walkInDisease'] ?></td>
-                            <td>
-                                <?php
-                                if (empty($walkInPatient['walkInPrescription'])) {
-                                ?>
-                                    <form action="addPrescriptionWalkIn.php" method="post">
-                                        <input type="hidden" name="id" value="<?= $walkInPatient['walkInId'] ?>">
-                                        <input type="submit" value="Add Prescription" class="btn btn-primary" name="addPrescriptionWalkIn">
-                                    </form>
-                                <?php
-                                } else {
-                                ?>
-                                    <form action="updatePrescriptionWalkIn.php" method="post">
-                                        <input type="hidden" name="id" value="<?= $walkInPatient['walkInId'] ?>">
-                                        <input type="submit" value="Update Prescription" class="btn btn-secondary" name="updatePrescriptionWalkIn">
-                                    </form>
-                                <?php
-                                }
-                                ?>
-
-                            </td>
-                            <td>
-                                <form action="updateDiseaseWalkIn.php" method="post">
-                                    <input type="hidden" name="id" value="<?= $walkInPatient['walkInId'] ?>">
-                                    <input type="submit" value="Update Disease" class="btn btn-primary" name="updateDiseaseWalkIn">
-                                </form>
-                            </td>
-                            <td>
-                                <form action="watchMedicalInfo.php" method="post">
-                                    <input type="hidden" name="id" value="<?= $walkInPatient['walkInId'] ?>">
-                                    <input type="submit" value="Watch Medical Information" class="btn btn-primary" name="watchMedInfo">
-                                </form>
-                            </td>
-                            <td>
-                                <form action="watchMedicalHistory.php" method="post">
-                                    <input type="hidden" name="name" value="<?= $walkInPatient['walkInName'] ?>">
-                                    <input type="submit" value="Watch Medical History" class="btn btn-info" name="watchMedHistory">
-                                </form>
-                            </td>
+                            <th scope="col">Patient Name</th>
+                            <th scope="col">Patient Address</th>
+                            <th scope="col">Patient Mobile</th>
+                            <th scope="col">Patient Disease</th>
+                            <th scope="col">Prescription</th>
+                            <th scope="col">Update</th>
+                            <th scope="col">Information</th>
+                            <th scope="col">History</th>
                         </tr>
-                    <?php endwhile; ?>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $discharge = 0;
+                        $sql = "SELECT * FROM walkinpatient WHERE walkInDoctor = :doctor AND walkInDischarged = :discharge";
+                        $stmt = $con->prepare($sql);
+                        $stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);
+                        $stmt->bindParam(":discharge", $discharge, PDO::PARAM_INT);
+                        $stmt->execute();
+
+                        while ($walkInPatient = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                        ?>
+                            <tr>
+                                <td><?= $walkInPatient['walkInName'] ?></td>
+                                <td><?= $walkInPatient['walkInAddress'] ?></td>
+                                <td><?= $walkInPatient['walkInMobile'] ?></td>
+                                <td><?= $walkInPatient['walkInDisease'] ?></td>
+                                <td>
+                                    <?php
+                                    if (empty($walkInPatient['walkInPrescription'])) {
+                                    ?>
+                                        <form action="addPrescriptionWalkIn.php" method="post">
+                                            <input type="hidden" name="id" value="<?= $walkInPatient['walkInId'] ?>">
+                                            <input type="submit" value="Add Prescription" class="btn btn-primary" name="addPrescriptionWalkIn">
+                                        </form>
+                                    <?php
+                                    } else {
+                                    ?>
+                                        <form action="updatePrescriptionWalkIn.php" method="post">
+                                            <input type="hidden" name="id" value="<?= $walkInPatient['walkInId'] ?>">
+                                            <input type="submit" value="Update Prescription" class="btn btn-secondary" name="updatePrescriptionWalkIn">
+                                        </form>
+                                    <?php
+                                    }
+                                    ?>
+
+                                </td>
+                                <td>
+                                    <form action="updateDiseaseWalkIn.php" method="post">
+                                        <input type="hidden" name="id" value="<?= $walkInPatient['walkInId'] ?>">
+                                        <input type="submit" value="Update Disease" class="btn btn-primary" name="updateDiseaseWalkIn">
+                                    </form>
+                                </td>
+                                <td>
+                                    <form action="watchMedicalInfo.php" method="post">
+                                        <input type="hidden" name="id" value="<?= $walkInPatient['walkInId'] ?>">
+                                        <input type="submit" value="Watch Medical Information" class="btn btn-primary" name="watchMedInfo">
+                                    </form>
+                                </td>
+                                <td>
+                                    <form action="watchMedicalHistory.php" method="post">
+                                        <input type="hidden" name="name" value="<?= $walkInPatient['walkInName'] ?>">
+                                        <input type="submit" value="Watch Medical History" class="btn btn-info" name="watchMedHistory">
+                                    </form>
+                                </td>
+                            </tr>
+                        <?php endwhile; ?>
+                    </tbody>
+                </table>
+            </div>
 
         </div>
 

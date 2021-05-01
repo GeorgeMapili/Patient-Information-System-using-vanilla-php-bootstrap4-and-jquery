@@ -149,52 +149,56 @@ if (!isset($_SESSION['nId'])) {
                     </form>
                 </div>
             </div>
-            <table class="table table-hover shadow-lg p-3 mb-5 bg-white rounded" id="table-data">
-                <thead class="bg-info text-light">
-                    <tr>
-                        <th scope="col">Patient Name</th>
-                        <th scope="col">Patient Address</th>
-                        <th scope="col">Patient Mobile</th>
-                        <th scope="col">Patient Disease</th>
-                        <th scope="col">Patient Doctor</th>
-                        <th scope="col">Doctor Prescription</th>
-                        <th scope="col">Generate</th>
-                    </tr>
-                </thead>
-                <tbody>
 
-                    <?php
-                    $prev = $page - 1;
-                    $next = $page + 1;
-                    $start = ($page - 1) * $limit;
-                    $sql = "SELECT * FROM appointment WHERE aStatus = :status LIMIT :start, :limit";
-                    $stmt = $con->prepare($sql);
-                    $stmt->bindParam(":status", $status, PDO::PARAM_STR);
-                    $stmt->bindParam(":start", $start, PDO::PARAM_INT);
-                    $stmt->bindParam(":limit", $limit, PDO::PARAM_INT);
-                    $stmt->execute();
-
-                    while ($patientAppointment = $stmt->fetch(PDO::FETCH_ASSOC)) :
-                    ?>
+            <div class="table-responsive-xl">
+                <table class="table table-hover shadow-lg p-3 mb-5 bg-white rounded" id="table-data">
+                    <thead class="bg-info text-light">
                         <tr>
-                            <td><?= $patientAppointment['pName']; ?></td>
-                            <td><?= $patientAppointment['pAddress']; ?></td>
-                            <td><?= $patientAppointment['pMobile'] ?></td>
-                            <td><?= $patientAppointment['aReason']; ?></td>
-                            <td><?= $patientAppointment['pDoctor']; ?></td>
-                            <td><?= $patientAppointment['pPrescription']; ?></td>
-                            <td>
-                                <form action="generateBillAppointment.php" method="post">
-                                    <input type="hidden" name="aid" value="<?= $patientAppointment['aId']; ?>">
-                                    <input type="hidden" name="id" value="<?= $patientAppointment['pId']; ?>">
-                                    <input type="submit" value="GENERATE BILL" class="btn btn-primary" name="generateBillAppointment">
-                                </form>
-                            </td>
+                            <th scope="col">Patient Name</th>
+                            <th scope="col">Patient Address</th>
+                            <th scope="col">Patient Mobile</th>
+                            <th scope="col">Patient Disease</th>
+                            <th scope="col">Patient Doctor</th>
+                            <th scope="col">Doctor Prescription</th>
+                            <th scope="col">Generate</th>
                         </tr>
+                    </thead>
+                    <tbody>
 
-                    <?php endwhile; ?>
-                </tbody>
-            </table>
+                        <?php
+                        $prev = $page - 1;
+                        $next = $page + 1;
+                        $start = ($page - 1) * $limit;
+                        $sql = "SELECT * FROM appointment WHERE aStatus = :status LIMIT :start, :limit";
+                        $stmt = $con->prepare($sql);
+                        $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+                        $stmt->bindParam(":start", $start, PDO::PARAM_INT);
+                        $stmt->bindParam(":limit", $limit, PDO::PARAM_INT);
+                        $stmt->execute();
+
+                        while ($patientAppointment = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                        ?>
+                            <tr>
+                                <td><?= $patientAppointment['pName']; ?></td>
+                                <td><?= $patientAppointment['pAddress']; ?></td>
+                                <td><?= $patientAppointment['pMobile'] ?></td>
+                                <td><?= $patientAppointment['aReason']; ?></td>
+                                <td><?= $patientAppointment['pDoctor']; ?></td>
+                                <td><?= $patientAppointment['pPrescription']; ?></td>
+                                <td>
+                                    <form action="generateBillAppointment.php" method="post">
+                                        <input type="hidden" name="aid" value="<?= $patientAppointment['aId']; ?>">
+                                        <input type="hidden" name="id" value="<?= $patientAppointment['pId']; ?>">
+                                        <input type="submit" value="GENERATE BILL" class="btn btn-primary" name="generateBillAppointment">
+                                    </form>
+                                </td>
+                            </tr>
+
+                        <?php endwhile; ?>
+                    </tbody>
+                </table>
+            </div>
+
             <div class="mt-3 <?= ($firstPageValue == 0) ? 'd-none' : '' ?>">
                 <nav aria-label="Page navigation example ">
                     <ul class="pagination justify-content-center">

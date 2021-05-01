@@ -122,55 +122,58 @@ if (!isset($_SESSION['adId'])) {
                         <input class="form-control mb-3" type="search" id="search" placeholder="Search Patient" aria-label="Search">
                     </form>
                 </div>
-                <table class="table table-hover " id="table-data">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th scope="col">Appointment ID</th>
-                            <th scope="col">Patient ID</th>
-                            <th scope="col">Patient Name</th>
-                            <th scope="col">Patient Address</th>
-                            <th scope="col">Patient Doctor</th>
-                            <th scope="col">Appointment Reason</th>
-                            <th scope="col">Appointment Fee</th>
-                            <th scope="col">Date</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Generate Medical Certificate</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
 
-                        $discharged = "discharged";
-                        $sql = "SELECT * FROM appointment WHERE aStatus = :discharged";
-                        $stmt = $con->prepare($sql);
-                        $stmt->bindParam(":discharged", $discharged, PDO::PARAM_STR);
-                        $stmt->execute();
-
-                        while ($dischargedPatient = $stmt->fetch(PDO::FETCH_ASSOC)) :
-                        ?>
+                <div class="table-responsive-xl">
+                    <table class="table table-hover " id="table-data">
+                        <thead class="thead-dark">
                             <tr>
-                                <th scope="row"><?= $dischargedPatient['aId'] ?></th>
-                                <td><?= $dischargedPatient['pId'] ?></td>
-                                <td><?= $dischargedPatient['pName'] ?></td>
-                                <td><?= $dischargedPatient['pAddress'] ?></td>
-                                <td><?= $dischargedPatient['pDoctor'] ?></td>
-                                <td><?= $dischargedPatient['aReason'] ?></td>
-                                <td><?= $dischargedPatient['dFee'] ?></td>
-                                <td><?= date("M d, Y", strtotime($dischargedPatient['aMadeOn'])) ?> at <?= $dischargedPatient['aTime'] ?></td>
-                                <td>
-                                    <p class="btn btn-success disabled">Finished</p>
-                                </td>
-                                <td>
-                                    <form action="medicalCert.php" method="post" target="_blank">
-                                        <input type="hidden" name="aId" value="<?= $dischargedPatient['aId'] ?>">
-                                        <input type="hidden" name="pId" value="<?= $dischargedPatient['pId'] ?>">
-                                        <input type="submit" class="btn btn-info" name="medicalCertBtn" target="_blank" value="Medical Certificate">
-                                    </form>
-                                </td>
+                                <th scope="col">Appointment ID</th>
+                                <th scope="col">Patient ID</th>
+                                <th scope="col">Patient Name</th>
+                                <th scope="col">Patient Address</th>
+                                <th scope="col">Patient Doctor</th>
+                                <th scope="col">Appointment Reason</th>
+                                <th scope="col">Appointment Fee</th>
+                                <th scope="col">Date</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Generate Medical Certificate</th>
                             </tr>
-                        <?php endwhile; ?>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            <?php
+
+                            $discharged = "discharged";
+                            $sql = "SELECT * FROM appointment WHERE aStatus = :discharged ORDER BY aDate DESC";
+                            $stmt = $con->prepare($sql);
+                            $stmt->bindParam(":discharged", $discharged, PDO::PARAM_STR);
+                            $stmt->execute();
+
+                            while ($dischargedPatient = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                            ?>
+                                <tr>
+                                    <th scope="row"><?= $dischargedPatient['aId'] ?></th>
+                                    <td><?= $dischargedPatient['pId'] ?></td>
+                                    <td><?= $dischargedPatient['pName'] ?></td>
+                                    <td><?= $dischargedPatient['pAddress'] ?></td>
+                                    <td><?= $dischargedPatient['pDoctor'] ?></td>
+                                    <td><?= $dischargedPatient['aReason'] ?></td>
+                                    <td><?= $dischargedPatient['dFee'] ?></td>
+                                    <td><?= date("M d, Y", strtotime($dischargedPatient['aMadeOn'])) ?> at <?= $dischargedPatient['aTime'] ?></td>
+                                    <td>
+                                        <p class="btn btn-success disabled">Finished</p>
+                                    </td>
+                                    <td>
+                                        <form action="medicalCert.php" method="post" target="_blank">
+                                            <input type="hidden" name="aId" value="<?= $dischargedPatient['aId'] ?>">
+                                            <input type="hidden" name="pId" value="<?= $dischargedPatient['pId'] ?>">
+                                            <input type="submit" class="btn btn-info" name="medicalCertBtn" target="_blank" value="Medical Certificate">
+                                        </form>
+                                    </td>
+                                </tr>
+                            <?php endwhile; ?>
+                        </tbody>
+                    </table>
+                </div>
 
         </div>
 

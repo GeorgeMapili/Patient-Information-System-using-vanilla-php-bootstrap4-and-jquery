@@ -397,6 +397,11 @@ if (!isset($_SESSION['dId'])) {
                 <h1 class="Display-4" id="primaryColor">Doctor Profile</h1>
             </div>
 
+            <!-- Image -->
+            <div>
+                <img src="../upload/doc_profile_img/<?= $_SESSION['dProfileImg'] ?>" class="rounded-circle shadow p-3 mb-5 bg-white rounded" alt="profile" width="150" height="150">
+            </div>
+
             <form action="doctorProfile.php" method="post" enctype="multipart/form-data" class="shadow p-3 mb-5 bg-white rounded">
                 <label>Doctor Profile Img</label>
                 <input type="hidden" name="dId" value="<?= $_SESSION['dId'] ?>">

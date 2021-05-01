@@ -20,12 +20,35 @@ $stmt->execute();
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="Patient Information System" name="description">
+    <meta content="sumc doctorcs clinic, patient information system" name="keywords">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" href="css/main.css" />
     <link rel="icon" href="img/sumc.png">
     <title>Patient | Home</title>
+
+    <style>
+        .iframe-container{
+        position: relative;
+        width: 100%;
+        padding-bottom: 56.25%; /* Ratio 16:9 ( 100%/16*9 = 56.25% ) */
+        }
+        .iframe-container > *{
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+        }
+    </style>
+
 </head>
 
 <body>
@@ -149,6 +172,10 @@ $stmt->execute();
 
             <hr class="featurette-divider">
 
+            <div class="text-center m-5">
+                <h3 class="display-3"><strong>Discover</strong></h3>
+            </div>
+
             <div class="row featurette">
                 <div class="col-md-7">
                     <h2 class="featurette-heading" id="primaryColor">Pleasant atmosphere.</h2>
@@ -185,7 +212,46 @@ $stmt->execute();
 
             <hr class="featurette-divider">
 
+            <div class="text-center m-5">
+                <h3 class="display-3"><strong>Place</strong></h3>
+            </div>
             <!-- /END THE FEATURETTES -->
+
+                <div class="row d-flex justify-content-between m-2">
+                    <div class="shadow-lg p-3 mb-5 bg-white rounded col-sm-12 col-md-4 col-lg-4">
+                        <div class="address">
+                            <i class="icofont-google-map"></i>
+                            <h4>Location:</h4>
+                            <p>Aldecoa Road, Daro, Dumaguete City, Negros Oriental</p>
+                        </div>
+                        <hr>
+                        <div class="phone">
+                            <i class="icofont-phone"></i>
+                            <h4>Call:</h4>
+                            <p>(035) 420 2000</p>
+                        </div>
+                    </div>
+
+                    <div class="shadow-lg p-3 mb-5 bg-white rounded col-sm-12 col-md-6 col-lg-7">
+                        <div class="iframe-container">
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1968.5972361345994!2d123.3029181528217!3d9.316029926391757!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x884ae5eae99f2f0c!2sSilliman%20University%20Medical%20Center!5e0!3m2!1sen!2sph!4v1619842426027!5m2!1sen!2sph" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                        </div>
+                    </div>
+                </div>
+
+            <hr class="featurette-divider">
+
+            <div class="text-center m-5">
+                <h3 class="display-3"><strong>Video</strong></h3>
+            </div>
+            
+            <div class="shadow-lg p-3 mb-5 bg-white rounded">
+                <div class="embed-responsive embed-responsive-21by9">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/0icJ4GJNazU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+                </div>
+            </div>
+
+        <hr class="featurette-divider">
 
         </div><!-- /.container -->
 

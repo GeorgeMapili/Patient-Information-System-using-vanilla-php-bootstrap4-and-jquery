@@ -106,62 +106,64 @@ if (!isset($_SESSION['dId'])) {
                 <h1 class="Display-4 my-4" id="primaryColor">Watch Medical History</h1>
             </div>
 
-            <table class="table table-hover shadow p-3 mb-5 bg-white rounded">
-                <thead class="bg-info text-light">
-                    <tr>
-                        <th scope="col">Patient Name</th>
-                        <th scope="col">Patient Address</th>
-                        <th scope="col">Patient Email</th>
-                        <th scope="col">Patient Mobile</th>
-                        <th scope="col">Patient Doctor</th>
-                        <th scope="col">Doctor Prescription</th>
-                        <th scope="col">Patient Disease</th>
-                        <th scope="col">Patient Status</th>
-                        <th scope="col">Total Amount</th>
-                        <th scope="col">Patient Amount Pay</th>
-                        <th scope="col">Patient Change</th>
-                        <th scope="col">Date</th>
-                    </tr>
-                </thead>
-                <tbody>
+            <div class="table-responsive-xl">
+                <table class="table table-hover shadow p-3 mb-5 bg-white rounded">
+                    <thead class="bg-info text-light">
+                        <tr>
+                            <th scope="col">Patient Name</th>
+                            <th scope="col">Patient Address</th>
+                            <th scope="col">Patient Email</th>
+                            <th scope="col">Patient Mobile</th>
+                            <th scope="col">Patient Doctor</th>
+                            <th scope="col">Doctor Prescription</th>
+                            <th scope="col">Patient Disease</th>
+                            <th scope="col">Patient Status</th>
+                            <th scope="col">Total Amount</th>
+                            <th scope="col">Patient Amount Pay</th>
+                            <th scope="col">Patient Change</th>
+                            <th scope="col">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
 
-                    <?php
-                    if (isset($_POST['watchMedHistory'])) {
-                        $name = $_POST['name'];
+                        <?php
+                        if (isset($_POST['watchMedHistory'])) {
+                            $name = $_POST['name'];
 
-                        $sql = "SELECT * FROM discharged_patient WHERE pName = :name";
-                        $stmt = $con->prepare($sql);
-                        $stmt->bindParam(":name", $name, PDO::PARAM_STR);
-                        $stmt->execute();
+                            $sql = "SELECT * FROM discharged_patient WHERE pName = :name";
+                            $stmt = $con->prepare($sql);
+                            $stmt->bindParam(":name", $name, PDO::PARAM_STR);
+                            $stmt->execute();
 
-                        while ($history = $stmt->fetch(PDO::FETCH_ASSOC)) :
-                    ?>
+                            while ($history = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                        ?>
 
-                            <tr>
-                                <td><?= $history['pName'] ?></td>
-                                <td><?= $history['pAddress'] ?></td>
-                                <td><?= $history['pEmail'] ?></td>
-                                <td><?= $history['pMobile'] ?></td>
-                                <td><?= $history['pDoctor'] ?></td>
-                                <td><?= $history['pPrescription'] ?></td>
-                                <td><?= $history['pDisease'] ?></td>
-                                <td><?= ucwords($history['pStatus']) ?></td>
-                                <td><?= $history['pTotalAmount'] ?></td>
-                                <td><?= $history['pAmountPay'] ?></td>
-                                <td><?= $history['pChange'] ?></td>
-                                <td><?= date("M d, Y", strtotime($history['pMadeOn'])) ?></td>
-                            </tr>
+                                <tr>
+                                    <td><?= $history['pName'] ?></td>
+                                    <td><?= $history['pAddress'] ?></td>
+                                    <td><?= $history['pEmail'] ?></td>
+                                    <td><?= $history['pMobile'] ?></td>
+                                    <td><?= $history['pDoctor'] ?></td>
+                                    <td><?= $history['pPrescription'] ?></td>
+                                    <td><?= $history['pDisease'] ?></td>
+                                    <td><?= ucwords($history['pStatus']) ?></td>
+                                    <td><?= $history['pTotalAmount'] ?></td>
+                                    <td><?= $history['pAmountPay'] ?></td>
+                                    <td><?= $history['pChange'] ?></td>
+                                    <td><?= date("M d, Y", strtotime($history['pMadeOn'])) ?></td>
+                                </tr>
 
-                    <?php
-                        endwhile;
-                    } else {
-                        header("location:dashboard.php");
-                        ob_end_flush();
-                        exit(0);
-                    }
-                    ?>
-                </tbody>
-            </table>
+                        <?php
+                            endwhile;
+                        } else {
+                            header("location:dashboard.php");
+                            ob_end_flush();
+                            exit(0);
+                        }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
 
         </div>
 

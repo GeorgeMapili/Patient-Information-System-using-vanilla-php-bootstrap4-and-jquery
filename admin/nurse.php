@@ -167,53 +167,55 @@ if (!isset($_SESSION['adId'])) {
                     </div>
                 </div>
 
-                <table class="table table-hover" id="table-data">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th scope="col">Secretary ID</th>
-                            <th scope="col">Secretary Profile Img</th>
-                            <th scope="col">Secretary Name</th>
-                            <th scope="col">Secretary Email</th>
-                            <th scope="col">Secretary Address</th>
-                            <th scope="col">Secretary Mobile</th>
-                            <th scope="col">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $sql = "SELECT * FROM nurse_receptionist";
-                        $stmt = $con->prepare($sql);
-                        $stmt->execute();
-
-                        while ($nurse = $stmt->fetch(PDO::FETCH_ASSOC)) :
-                        ?>
+                <div class="table-responsive-xl">
+                    <table class="table table-hover" id="table-data">
+                        <thead class="thead-dark">
                             <tr>
-                                <th scope="row"><?= $nurse['nId'] ?></th>
-                                <td><img src="../upload/nurse_profile_img/<?= $nurse['nProfileImg'] ?>" width="50" height="50" style="border:1px solid #333; border-radius: 50%;" alt=""></td>
-                                <td><?= $nurse['nName'] ?></td>
-                                <td><?= $nurse['nEmail'] ?></td>
-                                <td><?= $nurse['nAddress'] ?></td>
-                                <td><?= $nurse['nMobile'] ?></td>
-                                <td>
-                                    <div class="row">
-                                        <div class="col">
-                                            <form action="updateNurse.php" method="post">
-                                                <input type="hidden" name="id" value="<?= $nurse['nId'] ?>">
-                                                <input type="submit" value="Update" class="btn btn-secondary" name="updateNurseBtn">
-                                            </form>
-                                        </div>
-                                        <div class="col">
-                                            <form action="nurse.php" method="post">
-                                                <input type="hidden" name="id" value="<?= $nurse['nId'] ?>">
-                                                <input type="submit" value="Delete" class="btn btn-danger" name="deleteNurse" onclick="return confirm('Are you sure to delete?');">
-                                            </form>
-                                        </div>
-                                    </div>
-                                </td>
+                                <th scope="col">Secretary ID</th>
+                                <th scope="col">Secretary Profile Img</th>
+                                <th scope="col">Secretary Name</th>
+                                <th scope="col">Secretary Email</th>
+                                <th scope="col">Secretary Address</th>
+                                <th scope="col">Secretary Mobile</th>
+                                <th scope="col">Action</th>
                             </tr>
-                        <?php endwhile; ?>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $sql = "SELECT * FROM nurse_receptionist";
+                            $stmt = $con->prepare($sql);
+                            $stmt->execute();
+
+                            while ($nurse = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                            ?>
+                                <tr>
+                                    <th scope="row"><?= $nurse['nId'] ?></th>
+                                    <td><img src="../upload/nurse_profile_img/<?= $nurse['nProfileImg'] ?>" width="50" height="50" style="border:1px solid #333; border-radius: 50%;" alt=""></td>
+                                    <td><?= $nurse['nName'] ?></td>
+                                    <td><?= $nurse['nEmail'] ?></td>
+                                    <td><?= $nurse['nAddress'] ?></td>
+                                    <td><?= $nurse['nMobile'] ?></td>
+                                    <td>
+                                        <div class="row">
+                                            <div class="col">
+                                                <form action="updateNurse.php" method="post">
+                                                    <input type="hidden" name="id" value="<?= $nurse['nId'] ?>">
+                                                    <input type="submit" value="Update" class="btn btn-secondary" name="updateNurseBtn">
+                                                </form>
+                                            </div>
+                                            <div class="col">
+                                                <form action="nurse.php" method="post">
+                                                    <input type="hidden" name="id" value="<?= $nurse['nId'] ?>">
+                                                    <input type="submit" value="Delete" class="btn btn-danger" name="deleteNurse" onclick="return confirm('Are you sure to delete?');">
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php endwhile; ?>
+                        </tbody>
+                    </table>
+                </div>
 
 
         </div>

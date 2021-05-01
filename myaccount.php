@@ -14,6 +14,8 @@ if (!isset($_SESSION['id'])) {
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="Patient Information System" name="description">
+    <meta content="sumc doctorcs clinic, patient information system" name="keywords">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
@@ -205,6 +207,11 @@ if (!isset($_SESSION['id'])) {
             <div class="shadow-lg p-3 mb-5 bg-white rounded mt-5">
                 <div class="mt-4 mb-4">
                     <h1 class="Display-4" id="primaryColor">Update Image</h1>
+                </div>
+
+                <!-- Image -->
+                <div>
+                    <img src="upload/user_profile_img/<?= $_SESSION['profile']; ?>" class="rounded-circle shadow p-3 mb-5 bg-white rounded" alt="profile" width="150" height="150">
                 </div>
 
                 <div class="text-center">

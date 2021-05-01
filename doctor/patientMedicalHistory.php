@@ -108,51 +108,53 @@ if (!isset($_SESSION['dId'])) {
                 <h1 class="Display-4 my-4" id="primaryColor">Medical History</h1>
             </div>
 
-            <table class="table table-hover shadow p-3 mb-5 bg-white rounded">
-                <thead class="bg-info text-light">
-                    <tr>
-                        <th scope="col">Patient Name</th>
-                        <th scope="col">Patient Address</th>
-                        <th scope="col">Patient Mobile</th>
-                        <th scope="col">Patient Doctor</th>
-                        <th scope="col">Patient Disease</th>
-                        <th scope="col">Prescription</th>
-                        <th scope="col">Dated On</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    if (isset($_POST['watchHistory'])) {
-                        $pId = $_POST['pId'];
-                        $status = "discharged";
+            <div class="table-responsive-xl">
+                <table class="table table-hover shadow p-3 mb-5 bg-white rounded">
+                    <thead class="bg-info text-light">
+                        <tr>
+                            <th scope="col">Patient Name</th>
+                            <th scope="col">Patient Address</th>
+                            <th scope="col">Patient Mobile</th>
+                            <th scope="col">Patient Doctor</th>
+                            <th scope="col">Patient Disease</th>
+                            <th scope="col">Prescription</th>
+                            <th scope="col">Dated On</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        if (isset($_POST['watchHistory'])) {
+                            $pId = $_POST['pId'];
+                            $status = "discharged";
 
-                        $sql = "SELECT * FROM appointment WHERE aStatus = :status AND pId = :pid";
-                        $stmt = $con->prepare($sql);
-                        $stmt->bindParam(":status", $status, PDO::PARAM_STR);
-                        $stmt->bindParam(":pid", $pId, PDO::PARAM_INT);
-                        $stmt->execute();
+                            $sql = "SELECT * FROM appointment WHERE aStatus = :status AND pId = :pid";
+                            $stmt = $con->prepare($sql);
+                            $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+                            $stmt->bindParam(":pid", $pId, PDO::PARAM_INT);
+                            $stmt->execute();
 
-                        while ($history = $stmt->fetch(PDO::FETCH_ASSOC)) :
-                    ?>
-                            <tr>
-                                <td><?= $history['pName'] ?></td>
-                                <td><?= $history['pAddress'] ?></td>
-                                <td><?= $history['pMobile'] ?></td>
-                                <td><?= $history['pDoctor'] ?></td>
-                                <td><?= $history['aReason'] ?></td>
-                                <td><?= $history['pPrescription'] ?></td>
-                                <td><?= $history['dischargedOn'] ?></td>
-                            </tr>
-                    <?php
-                        endwhile;
-                    } else {
-                        header("location:dashboard.php");
-                        ob_end_flush();
-                        exit(0);
-                    }
-                    ?>
-                </tbody>
-            </table>
+                            while ($history = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                        ?>
+                                <tr>
+                                    <td><?= $history['pName'] ?></td>
+                                    <td><?= $history['pAddress'] ?></td>
+                                    <td><?= $history['pMobile'] ?></td>
+                                    <td><?= $history['pDoctor'] ?></td>
+                                    <td><?= $history['aReason'] ?></td>
+                                    <td><?= $history['pPrescription'] ?></td>
+                                    <td><?= $history['dischargedOn'] ?></td>
+                                </tr>
+                        <?php
+                            endwhile;
+                        } else {
+                            header("location:dashboard.php");
+                            ob_end_flush();
+                            exit(0);
+                        }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
 
         </div>
 

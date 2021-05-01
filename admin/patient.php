@@ -150,50 +150,53 @@ if (!isset($_SESSION['adId'])) {
                         <input class="form-control mb-3" id="search" autocomplete="off" type="search" placeholder="Search Patient Name" aria-label="Search">
                     </form>
                 </div>
-                <table class="table table-hover" id="table-data">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th scope="col">Appointment ID</th>
-                            <th scope="col">Patient Name</th>
-                            <th scope="col">Patient Address</th>
-                            <th scope="col">Patient Mobile</th>
-                            <th scope="col">Patient Disease</th>
-                            <th scope="col">Doctor Name</th>
-                            <th scope="col">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $status1 = "accepted";
-                        $status2 = "done";
-                        $sql = "SELECT * FROM appointment WHERE aStatus IN(:status1,:status2)";
-                        $stmt = $con->prepare($sql);
-                        $stmt->bindParam(":status1", $status1, PDO::PARAM_STR);
-                        $stmt->bindParam(":status2", $status2, PDO::PARAM_STR);
-                        $stmt->execute();
 
-                        while ($patientAppointment = $stmt->fetch(PDO::FETCH_ASSOC)) :
-                        ?>
+                <div class="table-responsive-xl">
+                    <table class="table table-hover" id="table-data">
+                        <thead class="thead-dark">
                             <tr>
-                                <th scope="row"><?= $patientAppointment['aId'] ?></th>
-                                <td><?= $patientAppointment['pName'] ?></td>
-                                <td><?= $patientAppointment['pAddress'] ?></td>
-                                <td><?= $patientAppointment['pMobile'] ?></td>
-                                <td><?= $patientAppointment['aReason'] ?></td>
-                                <td><?= $patientAppointment['pDoctor'] ?></td>
-                                <td>
-                                    <div class="col">
-                                        <form action="patient.php" method="post">
-                                            <input type="hidden" name="aId" value="<?= $patientAppointment['aId'] ?>">
-                                            <input type="hidden" name="pId" value="<?= $patientAppointment['pId'] ?>">
-                                            <input type="submit" value="Delete" class="btn btn-danger" name="deleteAppointment" onclick="return confirm('Are you sure to delete ?')">
-                                        </form>
-                                    </div>
-                                </td>
+                                <th scope="col">Appointment ID</th>
+                                <th scope="col">Patient Name</th>
+                                <th scope="col">Patient Address</th>
+                                <th scope="col">Patient Mobile</th>
+                                <th scope="col">Patient Disease</th>
+                                <th scope="col">Doctor Name</th>
+                                <th scope="col">Action</th>
                             </tr>
-                        <?php endwhile; ?>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $status1 = "accepted";
+                            $status2 = "done";
+                            $sql = "SELECT * FROM appointment WHERE aStatus IN(:status1,:status2)";
+                            $stmt = $con->prepare($sql);
+                            $stmt->bindParam(":status1", $status1, PDO::PARAM_STR);
+                            $stmt->bindParam(":status2", $status2, PDO::PARAM_STR);
+                            $stmt->execute();
+
+                            while ($patientAppointment = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                            ?>
+                                <tr>
+                                    <th scope="row"><?= $patientAppointment['aId'] ?></th>
+                                    <td><?= $patientAppointment['pName'] ?></td>
+                                    <td><?= $patientAppointment['pAddress'] ?></td>
+                                    <td><?= $patientAppointment['pMobile'] ?></td>
+                                    <td><?= $patientAppointment['aReason'] ?></td>
+                                    <td><?= $patientAppointment['pDoctor'] ?></td>
+                                    <td>
+                                        <div class="col">
+                                            <form action="patient.php" method="post">
+                                                <input type="hidden" name="aId" value="<?= $patientAppointment['aId'] ?>">
+                                                <input type="hidden" name="pId" value="<?= $patientAppointment['pId'] ?>">
+                                                <input type="submit" value="Delete" class="btn btn-danger" name="deleteAppointment" onclick="return confirm('Are you sure to delete ?')">
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php endwhile; ?>
+                        </tbody>
+                    </table>
+                </div>
 
                 <hr>
 

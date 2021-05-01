@@ -159,52 +159,54 @@ if (!isset($_SESSION['adId'])) {
                     <a href="addDiseaseTreatment.php" class="btn btn-success">Add</a>
                 </div>
 
-                <table class="table table-hover " id="table-data">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th scope="col">Title</th>
-                            <th scope="col">Meaning</th>
-                            <th scope="col">Symptoms</th>
-                            <th scope="col">Prevention</th>
-                            <th scope="col">Treatment</th>
-                            <th scope="col">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-
-                        $sql = "SELECT * FROM diseases_treatment";
-                        $stmt = $con->prepare($sql);
-                        $stmt->execute();
-
-                        while ($diseases_treatment = $stmt->fetch(PDO::FETCH_ASSOC)) :
-                        ?>
+                <div class="table-responsive-xl">
+                    <table class="table table-hover " id="table-data">
+                        <thead class="thead-dark">
                             <tr>
-                                <th scope="row"><?= $diseases_treatment['dtName'] ?></th>
-                                <td><?= $diseases_treatment['dtMeaning'] ?></td>
-                                <td><?= $diseases_treatment['dtSymptoms'] ?></td>
-                                <td><?= $diseases_treatment['dtPrevention'] ?></td>
-                                <td><?= $diseases_treatment['dtTreatment'] ?></td>
-                                <td>
-                                    <div class="row">
-                                        <div class="col">
-                                            <form action="updateDiseaseTreatment.php" method="post">
-                                                <input type="hidden" name="dtId" value="<?= $diseases_treatment['dtId'] ?>">
-                                                <input type="submit" class="btn btn-secondary" name="updateBtn" target="_blank" value="Update">
-                                            </form>
-                                        </div>
-                                        <div class="col">
-                                            <form action="diseaseTreatment.php" method="post">
-                                                <input type="hidden" name="dtId" value="<?= $diseases_treatment['dtId'] ?>">
-                                                <input type="submit" class="btn btn-danger" name="deleteBtn" target="_blank" value="Delete">
-                                            </form>
-                                        </div>
-                                    </div>
-                                </td>
+                                <th scope="col">Title</th>
+                                <th scope="col">Meaning</th>
+                                <th scope="col">Symptoms</th>
+                                <th scope="col">Prevention</th>
+                                <th scope="col">Treatment</th>
+                                <th scope="col">Action</th>
                             </tr>
-                        <?php endwhile; ?>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            <?php
+
+                            $sql = "SELECT * FROM diseases_treatment";
+                            $stmt = $con->prepare($sql);
+                            $stmt->execute();
+
+                            while ($diseases_treatment = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                            ?>
+                                <tr>
+                                    <th scope="row"><?= $diseases_treatment['dtName'] ?></th>
+                                    <td><?= $diseases_treatment['dtMeaning'] ?></td>
+                                    <td><?= $diseases_treatment['dtSymptoms'] ?></td>
+                                    <td><?= $diseases_treatment['dtPrevention'] ?></td>
+                                    <td><?= $diseases_treatment['dtTreatment'] ?></td>
+                                    <td>
+                                        <div class="row">
+                                            <div class="col">
+                                                <form action="updateDiseaseTreatment.php" method="post">
+                                                    <input type="hidden" name="dtId" value="<?= $diseases_treatment['dtId'] ?>">
+                                                    <input type="submit" class="btn btn-secondary" name="updateBtn" target="_blank" value="Update">
+                                                </form>
+                                            </div>
+                                            <div class="col">
+                                                <form action="diseaseTreatment.php" method="post">
+                                                    <input type="hidden" name="dtId" value="<?= $diseases_treatment['dtId'] ?>">
+                                                    <input type="submit" class="btn btn-danger" name="deleteBtn" target="_blank" value="Delete">
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php endwhile; ?>
+                        </tbody>
+                    </table>
+                </div>
 
         </div>
 

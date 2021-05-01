@@ -144,57 +144,59 @@ if (!isset($_SESSION['adId'])) {
                     </form>
                 </div>
 
-                <table class="table table-hover" id="table-data">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th scope="col">Patient ID</th>
-                            <th scope="col">Patient Name</th>
-                            <th scope="col">Message Content</th>
-                            <th scope="col">Date</th>
-                            <th scope="col">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $sql = "SELECT * FROM message";
-                        $stmt = $con->prepare($sql);
-                        $stmt->execute();
-
-                        while ($messages = $stmt->fetch(PDO::FETCH_ASSOC)) :
-                        ?>
+                <div class="table-responsive-xl">
+                    <table class="table table-hover" id="table-data">
+                        <thead class="thead-dark">
                             <tr>
-                                <th scope="row"><?= $messages['msgPatientId'] ?></th>
-                                <td><?= $messages['msgPatientName'] ?></td>
-                                <td><?php
-                                    if (strlen($messages['msgContent']) > 10) {
-                                        echo substr($messages['msgContent'], 0, 10) . '...';
-                                    } else {
-                                        echo $messages['msgContent'];
-                                    }
-                                    ?></td>
-                                <td><?= date("M d, Y", strtotime($messages['msgMadeOn'])) ?></td>
-                                <td>
-                                    <div class="row">
-                                        <div class="col">
-                                            <form action="viewMessage.php" method="post">
-                                                <input type="hidden" name="pId" value="<?= $messages['msgPatientId'] ?>">
-                                                <input type="hidden" name="mId" value="<?= $messages['msgId'] ?>">
-                                                <input type="submit" value="View Message" class="btn btn-info" name="viewMessageBtn">
-                                            </form>
-                                        </div>
-                                        <div class="col">
-                                            <form action="messages.php" method="post">
-                                                <input type="hidden" name="pId" value="<?= $messages['msgPatientId'] ?>">
-                                                <input type="hidden" name="mId" value="<?= $messages['msgId'] ?>">
-                                                <input type="submit" value="Delete Message" class="btn btn-danger" name="viewMessageDeleteBtn" onclick="return confirm('Are you sure to delete ?')">
-                                            </form>
-                                        </div>
-                                    </div>
-                                </td>
+                                <th scope="col">Patient ID</th>
+                                <th scope="col">Patient Name</th>
+                                <th scope="col">Message Content</th>
+                                <th scope="col">Date</th>
+                                <th scope="col">Action</th>
                             </tr>
-                        <?php endwhile; ?>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $sql = "SELECT * FROM message ORDER BY msgMadeOn DESC";
+                            $stmt = $con->prepare($sql);
+                            $stmt->execute();
+
+                            while ($messages = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                            ?>
+                                <tr>
+                                    <th scope="row"><?= $messages['msgPatientId'] ?></th>
+                                    <td><?= $messages['msgPatientName'] ?></td>
+                                    <td><?php
+                                        if (strlen($messages['msgContent']) > 10) {
+                                            echo substr($messages['msgContent'], 0, 10) . '...';
+                                        } else {
+                                            echo $messages['msgContent'];
+                                        }
+                                        ?></td>
+                                    <td><?= date("M d, Y", strtotime($messages['msgMadeOn'])) ?></td>
+                                    <td>
+                                        <div class="row">
+                                            <div class="col">
+                                                <form action="viewMessage.php" method="post">
+                                                    <input type="hidden" name="pId" value="<?= $messages['msgPatientId'] ?>">
+                                                    <input type="hidden" name="mId" value="<?= $messages['msgId'] ?>">
+                                                    <input type="submit" value="View Message" class="btn btn-info" name="viewMessageBtn">
+                                                </form>
+                                            </div>
+                                            <div class="col">
+                                                <form action="messages.php" method="post">
+                                                    <input type="hidden" name="pId" value="<?= $messages['msgPatientId'] ?>">
+                                                    <input type="hidden" name="mId" value="<?= $messages['msgId'] ?>">
+                                                    <input type="submit" value="Delete Message" class="btn btn-danger" name="viewMessageDeleteBtn" onclick="return confirm('Are you sure to delete ?')">
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php endwhile; ?>
+                        </tbody>
+                    </table>
+                </div>
 
 
         </div>

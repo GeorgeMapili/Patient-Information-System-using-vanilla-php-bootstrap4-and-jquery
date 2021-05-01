@@ -100,56 +100,58 @@ if (!isset($_SESSION['nId'])) {
                     <h1 class="Display-4" id="primaryColor">Patient record</h1>
                 </div>
 
-                <table class="table table-hover shadow-lg p-3 mb-5 bg-white rounded mt-5" id="table-data">
-                    <thead class="bg-info text-light">
-                        <tr>
-                            <th scope="col">Patient Name</th>
-                            <th scope="col">Patient Address</th>
-                            <th scope="col">Patient Email</th>
-                            <th scope="col">Patient Mobile</th>
-                            <th scope="col">Patient Doctor</th>
-                            <th scope="col">Doctor Prescription</th>
-                            <th scope="col">Patient Disease</th>
-                            <th scope="col">Patient Discharged Status</th>
-                            <th scope="col">Total Amount</th>
-                            <th scope="col">Patient Amount Pay</th>
-                            <th scope="col">Patient Change</th>
-                            <th scope="col">Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                <div class="table-responsive-xl">
+                    <table class="table table-hover shadow-lg p-3 mb-5 bg-white rounded mt-5" id="table-data">
+                        <thead class="bg-info text-light">
+                            <tr>
+                                <th scope="col">Patient Name</th>
+                                <th scope="col">Patient Address</th>
+                                <th scope="col">Patient Email</th>
+                                <th scope="col">Patient Mobile</th>
+                                <th scope="col">Patient Doctor</th>
+                                <th scope="col">Doctor Prescription</th>
+                                <th scope="col">Patient Disease</th>
+                                <th scope="col">Patient Discharged Status</th>
+                                <th scope="col">Total Amount</th>
+                                <th scope="col">Patient Amount Pay</th>
+                                <th scope="col">Patient Change</th>
+                                <th scope="col">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
 
-                        <?php
-                        if (isset($_GET['pName'])) {
-                            $pName = $_GET['pName'];
+                            <?php
+                            if (isset($_GET['pName'])) {
+                                $pName = $_GET['pName'];
 
-                            $sql = "SELECT * FROM returnee_patient WHERE pName = :name";
-                            $stmt = $con->prepare($sql);
-                            $stmt->bindParam(":name", $pName, PDO::PARAM_STR);
-                            $stmt->execute();
+                                $sql = "SELECT * FROM returnee_patient WHERE pName = :name";
+                                $stmt = $con->prepare($sql);
+                                $stmt->bindParam(":name", $pName, PDO::PARAM_STR);
+                                $stmt->execute();
 
-                            while ($returneePatient = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                        ?>
-                                <tr>
-                                    <td><?= $returneePatient['pName'] ?></td>
-                                    <td><?= $returneePatient['pAddress'] ?></td>
-                                    <td><?= $returneePatient['pEmail'] ?></td>
-                                    <td><?= $returneePatient['pMobile'] ?></td>
-                                    <td><?= $returneePatient['pDoctor'] ?></td>
-                                    <td><?= $returneePatient['pPrescription'] ?></td>
-                                    <td><?= $returneePatient['pDisease'] ?></td>
-                                    <td><?= ucwords($returneePatient['pStatus']) ?></td>
-                                    <td>₱<?= number_format($returneePatient['pTotalAmount'], 2) ?></td>
-                                    <td>₱<?= number_format($returneePatient['pAmountPay'], 2) ?></td>
-                                    <td>₱<?= number_format($returneePatient['pChange'], 2) ?></td>
-                                    <td><?= date("M d, Y", strtotime($returneePatient['rpMadeOn'])) ?></td>
-                                </tr>
-                        <?php
-                            }
-                        } ?>
+                                while ($returneePatient = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                            ?>
+                                    <tr>
+                                        <td><?= $returneePatient['pName'] ?></td>
+                                        <td><?= $returneePatient['pAddress'] ?></td>
+                                        <td><?= $returneePatient['pEmail'] ?></td>
+                                        <td><?= $returneePatient['pMobile'] ?></td>
+                                        <td><?= $returneePatient['pDoctor'] ?></td>
+                                        <td><?= $returneePatient['pPrescription'] ?></td>
+                                        <td><?= $returneePatient['pDisease'] ?></td>
+                                        <td><?= ucwords($returneePatient['pStatus']) ?></td>
+                                        <td>₱<?= number_format($returneePatient['pTotalAmount'], 2) ?></td>
+                                        <td>₱<?= number_format($returneePatient['pAmountPay'], 2) ?></td>
+                                        <td>₱<?= number_format($returneePatient['pChange'], 2) ?></td>
+                                        <td><?= date("M d, Y", strtotime($returneePatient['rpMadeOn'])) ?></td>
+                                    </tr>
+                            <?php
+                                }
+                            } ?>
 
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
 
                 <div>
                     <a href="addNewRecord.php?addNewRec=true&pName=<?= $pName ?>" class="btn btn-info mb-3 margin-right-auto">Add New Record</a>

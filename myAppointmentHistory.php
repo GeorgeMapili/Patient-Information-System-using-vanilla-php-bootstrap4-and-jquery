@@ -14,6 +14,8 @@ if (!isset($_SESSION['id'])) {
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="Patient Information System" name="description">
+    <meta content="sumc doctorcs clinic, patient information system" name="keywords">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
@@ -93,52 +95,54 @@ if (!isset($_SESSION['id'])) {
                 <h1 class="Display-4" id="primaryColor">My appointments History</h1>
             </div>
 
-            <table class="table table-hover shadow-lg p-3 mb-5 bg-white rounded">
-                <thead class="bg-info text-light">
-                    <tr>
-                        <th scope="col">Patient Doctor</th>
-                        <th scope="col">Appointment Fee</th>
-                        <th scope="col">Appointment Reason</th>
-                        <th scope="col">Date</th>
-                        <th scope="col">Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    $status1 = "discharged";
-                    $status2 = "cancelled";
-                    $sql = "SELECT * FROM appointment WHERE (aStatus = :status1 OR aStatus = :status2) AND pId = :id ORDER BY aDate DESC";
-
-                    $stmt = $con->prepare($sql);
-                    $stmt->bindParam(":status1", $status1, PDO::PARAM_STR);
-                    $stmt->bindParam(":status2", $status2, PDO::PARAM_STR);
-                    $stmt->bindParam(":id", $_SESSION['id'], PDO::PARAM_INT);
-                    $stmt->execute();
-
-                    $rowCount = $stmt->rowCount();
-
-                    while ($myAppointmentHistory = $stmt->fetch(PDO::FETCH_ASSOC)) :
-                    ?>
+            <div class="table-responsive-xl">
+                <table class="table table-hover shadow-lg p-3 mb-5 bg-white rounded">
+                    <thead class="bg-info text-light">
                         <tr>
-                            <td><?= $myAppointmentHistory['pDoctor']; ?></td>
-                            <td>₱ <?= number_format($myAppointmentHistory['dFee'], 2); ?></td>
-                            <td><?= $myAppointmentHistory['aReason']; ?></td>
-                            <td><?= date("M d, Y", strtotime($myAppointmentHistory['aDate'])); ?> at <?= $myAppointmentHistory['aTime'] ?></td>
-                            <td>
-                                <?php
-                                if ($myAppointmentHistory['aStatus'] === "discharged") { ?>
-                                    <p class="btn btn-primary disabled">Discharged</p>
-                                <?php
-                                } else if ($myAppointmentHistory['aStatus'] === "cancelled") {
-                                ?>
-                                    <p class="btn btn-danger disabled">Cancelled</p>
-                                <?php } ?>
-                            </td>
+                            <th scope="col">Patient Doctor</th>
+                            <th scope="col">Appointment Fee</th>
+                            <th scope="col">Appointment Reason</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Status</th>
                         </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $status1 = "discharged";
+                        $status2 = "cancelled";
+                        $sql = "SELECT * FROM appointment WHERE (aStatus = :status1 OR aStatus = :status2) AND pId = :id ORDER BY aDate DESC";
 
-                    <?php endwhile; ?>
-                </tbody>
-            </table>
+                        $stmt = $con->prepare($sql);
+                        $stmt->bindParam(":status1", $status1, PDO::PARAM_STR);
+                        $stmt->bindParam(":status2", $status2, PDO::PARAM_STR);
+                        $stmt->bindParam(":id", $_SESSION['id'], PDO::PARAM_INT);
+                        $stmt->execute();
+
+                        $rowCount = $stmt->rowCount();
+
+                        while ($myAppointmentHistory = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                        ?>
+                            <tr>
+                                <td><?= $myAppointmentHistory['pDoctor']; ?></td>
+                                <td>₱ <?= number_format($myAppointmentHistory['dFee'], 2); ?></td>
+                                <td><?= $myAppointmentHistory['aReason']; ?></td>
+                                <td><?= date("M d, Y", strtotime($myAppointmentHistory['aDate'])); ?> at <?= $myAppointmentHistory['aTime'] ?></td>
+                                <td>
+                                    <?php
+                                    if ($myAppointmentHistory['aStatus'] === "discharged") { ?>
+                                        <p class="btn btn-primary disabled">Discharged</p>
+                                    <?php
+                                    } else if ($myAppointmentHistory['aStatus'] === "cancelled") {
+                                    ?>
+                                        <p class="btn btn-danger disabled">Cancelled</p>
+                                    <?php } ?>
+                                </td>
+                            </tr>
+
+                        <?php endwhile; ?>
+                    </tbody>
+                </table>
+            </div>
 
         </div>
 

@@ -122,42 +122,45 @@ if (!isset($_SESSION['adId'])) {
                         <input class="form-control mb-3" type="search" id="search" placeholder="Search Patient" aria-label="Search">
                     </form>
                 </div>
-                <table class="table table-hover " id="table-data">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th scope="col">Appointment ID</th>
-                            <th scope="col">Patient Name</th>
-                            <th scope="col">Patient Address</th>
-                            <th scope="col">Patient Doctor</th>
-                            <th scope="col">Appointment Reason</th>
-                            <th scope="col">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
 
-                        $status = "cancelled";
-                        $sql = "SELECT * FROM appointment WHERE aStatus = :status";
-                        $stmt = $con->prepare($sql);
-                        $stmt->bindParam(":status", $status, PDO::PARAM_STR);
-                        $stmt->execute();
-
-                        while ($cancelledAppointment = $stmt->fetch(PDO::FETCH_ASSOC)) :
-                        ?>
+                <div class="table-responsive-xl">
+                    <table class="table table-hover " id="table-data">
+                        <thead class="thead-dark">
                             <tr>
-                                <th scope="row"><?= $cancelledAppointment['aId'] ?></th>
-                                <td><?= $cancelledAppointment['pName'] ?></td>
-                                <td><?= $cancelledAppointment['pAddress'] ?></td>
-                                <td><?= $cancelledAppointment['pDoctor'] ?></td>
-                                <td><?= $cancelledAppointment['aReason'] ?></td>
-                                <td>
-                                    <p class="btn btn-danger disabled">Cancelled</p>
-                                </td>
+                                <th scope="col">Appointment ID</th>
+                                <th scope="col">Patient Name</th>
+                                <th scope="col">Patient Address</th>
+                                <th scope="col">Patient Doctor</th>
+                                <th scope="col">Appointment Reason</th>
+                                <th scope="col">Status</th>
                             </tr>
-                        <?php endwhile; ?>
+                        </thead>
+                        <tbody>
+                            <?php
 
-                    </tbody>
-                </table>
+                            $status = "cancelled";
+                            $sql = "SELECT * FROM appointment WHERE aStatus = :status";
+                            $stmt = $con->prepare($sql);
+                            $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+                            $stmt->execute();
+
+                            while ($cancelledAppointment = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                            ?>
+                                <tr>
+                                    <th scope="row"><?= $cancelledAppointment['aId'] ?></th>
+                                    <td><?= $cancelledAppointment['pName'] ?></td>
+                                    <td><?= $cancelledAppointment['pAddress'] ?></td>
+                                    <td><?= $cancelledAppointment['pDoctor'] ?></td>
+                                    <td><?= $cancelledAppointment['aReason'] ?></td>
+                                    <td>
+                                        <p class="btn btn-danger disabled">Cancelled</p>
+                                    </td>
+                                </tr>
+                            <?php endwhile; ?>
+
+                        </tbody>
+                    </table>
+                </div>
 
         </div>
 

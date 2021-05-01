@@ -15,6 +15,8 @@ if (!isset($_SESSION['id'])) {
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="Patient Information System" name="description">
+    <meta content="sumc doctorcs clinic, patient information system" name="keywords">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
@@ -102,26 +104,28 @@ if (!isset($_SESSION['id'])) {
             </div>
 
             <?php
+            use core\patient\Contact;
+            require_once("vendor/autoload.php");
+
+            $contact =new Contact();
 
             if (isset($_POST['submitMessage'])) {
-                $id = $_POST['id'];
-                $name = $_POST['name'];
-                $email = $_POST['email'];
-                $address = $_POST['address'];
-                $mobileNumber = $_POST['mobileNumber'];
-                $message = trim(htmlspecialchars($_POST['message']));
+                
+                $contact->id = $_POST['id'];
+                $contact->name = $_POST['name'];
+                $contact->email = $_POST['email'];
+                $contact->address = $_POST['address'];
+                $contact->mobileNumber = $_POST['mobileNumber'];
+                $contact->message = trim(htmlspecialchars($_POST['message']));
 
-                $sql = "INSERT INTO message(msgPatientId,msgPatientName,msgContent)VALUES(:id,:name,:content)";
-                $stmt = $con->prepare($sql);
-                $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-                $stmt->bindParam(":name", $name, PDO::PARAM_STR);
-                $stmt->bindParam(":content", $message, PDO::PARAM_STR);
+                if($contact->insertMessage() == "success_message"){
 
-                if ($stmt->execute()) {
                     header("location:contactus.php?ContactSuccess=Successully_send_a_message");
                     ob_end_flush();
                     exit(0);
+
                 }
+
             }
             ?>
 

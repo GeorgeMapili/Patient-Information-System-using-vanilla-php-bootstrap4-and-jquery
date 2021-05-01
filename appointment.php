@@ -16,6 +16,8 @@ if (!isset($_SESSION['id'])) {
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="Patient Information System" name="description">
+    <meta content="sumc doctorcs clinic, patient information system" name="keywords">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
@@ -89,7 +91,11 @@ if (!isset($_SESSION['id'])) {
 
     <main role="main">
 
-        <?php
+    <?php
+        use core\patient\Appointment;
+        require_once("vendor/autoload.php");
+
+        $appointment = new Appointment();
 
         if (isset($_POST['submitAppointment'])) {
 
@@ -104,118 +110,46 @@ if (!isset($_SESSION['id'])) {
                 $options
             );
 
-            $pId = $_POST['id'];
-            $pName = $_POST['name'];
-            $pEmail = $_POST['email'];
-            $pAddress = $_POST['address'];
-            $pMobile = $_POST['mobileNumber'];
-            $pDoctor = $_POST['selectDoctor'];
-            $aDate = $_POST['dateOfAppointment'];
-            $aTime = $_POST['selectTime'];
-            $aReason = trim(htmlspecialchars($_POST['reasonAppointment']));
+            $appointment->pId = $_POST['id'];
+            $appointment->pName = $_POST['name'];
+            $appointment->pEmail = $_POST['email'];
+            $appointment->pAddress = $_POST['address'];
+            $appointment->pMobile = $_POST['mobileNumber'];
+            $appointment->pDoctor = $_POST['selectDoctor'];
+            $appointment->aDate = $_POST['dateOfAppointment'];
+            $appointment->aTime = $_POST['selectTime'];
+            $appointment->aReason = trim(htmlspecialchars($_POST['reasonAppointment']));
 
-            // Check if the Date is already pass by
-            if (date("M d, Y", strtotime($aDate)) < date("M d, Y", strtotime('now'))) {
-                header("location:appointment.php?errDate=date_already_pass_by");
-                exit(0);
-            }
+            $appointment->datePassByCheck();
 
-            // Check if the date is a weekend
-            $weekDay = date('w', strtotime($aDate));
+            // $appointment->noWeekEndServiceCheck();
 
-            if($weekDay == 0 || $weekDay == 6){
-                header("location:appointment.php?errDate1=no_weekends");
-                exit(0);
-            }
+            $appointment->alreadyHaveAnAppointDiffDoctor();
 
+            $appointment->duplicateAppointmentCheck();
 
-            // Check if already have an appointment with different doctor but the same time ||You have already an appointment in that time with different doctor
-            $status1 = "pending";
-            $status2 = "accepted";
-            $status3 = "done";
-            $sql = "SELECT * FROM appointment WHERE pName = :name AND aDate=:date AND aTime = :time AND pDoctor <> :doctor AND aStatus IN(:status1,:status2,:status3)";
-            $stmt = $con->prepare($sql);
-            $stmt->bindParam(":name", $_SESSION['name'], PDO::PARAM_STR);
-            $stmt->bindParam(":date", $aDate, PDO::PARAM_STR);
-            $stmt->bindParam(":time", $aTime, PDO::PARAM_STR);
-            $stmt->bindParam(":doctor", $pDoctor, PDO::PARAM_STR);
-            $stmt->bindParam(":status1", $status1, PDO::PARAM_STR);
-            $stmt->bindParam(":status2", $status2, PDO::PARAM_STR);
-            $stmt->bindParam(":status3", $status3, PDO::PARAM_STR);
-            $stmt->execute();
-
-            $sameTimeWithDiffentDoctor = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            if ($sameTimeWithDiffentDoctor > 0) {
-                header("location:appointment.php?errDup=you_have_already_an_appointment_in_that_time_with_different_doctor");
-                exit(0);
-            }
-
-            // Check if it is a dubplicate appointment with the same user patient
-            $status1 = "pending";
-            $status2 = "accepted";
-            $status3 = "done";
-            $sql = "SELECT * FROM appointment WHERE pId = :id AND pDoctor = :doctor AND aDate =:date AND aTime = :time AND aStatus IN(:status1,:status2,:status3)";
-            $stmt = $con->prepare($sql);
-            $stmt->bindParam(":id", $pId, PDO::PARAM_INT);
-            $stmt->bindParam(":doctor", $pDoctor, PDO::PARAM_STR);
-            $stmt->bindParam(":date", $aDate, PDO::PARAM_STR);
-            $stmt->bindParam(":time", $aTime, PDO::PARAM_STR);
-            $stmt->bindParam(":status1", $status1, PDO::PARAM_STR);
-            $stmt->bindParam(":status2", $status2, PDO::PARAM_STR);
-            $stmt->bindParam(":status3", $status3, PDO::PARAM_STR);
-            $stmt->execute();
-
-            $duplicateRow = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            if ($duplicateRow > 0) {
-                header("location:appointment.php?errDup1=you_already_made_an_appointment");
-                exit(0);
-            }
-
-
-            // Check if it is already requested an appointment with the same date and time
-            $status1 = "pending";
-            $status2 = "accepted";
-            $status3 = "done";
-            $sql = "SELECT * FROM appointment WHERE pId <> :id AND pDoctor = :doctor AND aDate =:date AND aTime = :time AND aStatus IN(:status1,:status2,:status3)";
-            $stmt = $con->prepare($sql);
-            $stmt->bindParam(":id", $pId, PDO::PARAM_INT);
-            $stmt->bindParam(":doctor", $pDoctor, PDO::PARAM_STR);
-            $stmt->bindParam(":date", $aDate, PDO::PARAM_STR);
-            $stmt->bindParam(":time", $aTime, PDO::PARAM_STR);
-            $stmt->bindParam(":status1", $status1, PDO::PARAM_STR);
-            $stmt->bindParam(":status2", $status2, PDO::PARAM_STR);
-            $stmt->bindParam(":status3", $status3, PDO::PARAM_STR);
-            $stmt->execute();
-
-            $duplicateRow = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            if ($duplicateRow > 0) {
-                header("location:appointment.php?errTime=all_ready_taken_time");
-                exit(0);
-            }
+            $appointment->sameDateAppointCheck();
 
             // Get the Doctor Fee
             $sql = "SELECT * FROM doctor WHERE dName = :name";
             $stmt = $con->prepare($sql);
-            $stmt->bindParam(":name", $pDoctor, PDO::PARAM_STR);
+            $stmt->bindParam(":name", $appointment->pDoctor, PDO::PARAM_STR);
             $stmt->execute();
             $doctor = $stmt->fetch(PDO::FETCH_ASSOC);
             $dFee = $doctor['dFee'];
 
             $sql = "INSERT INTO appointment (pId,pName,pEmail,pAddress,pMobile,pDoctor,dFee,aReason,aDate,aTime,pTotalPay)VALUES(:id,:name,:email,:address,:mobile,:doctor,:fee,:reason,:date,:time,:totalPay)";
             $stmt = $con->prepare($sql);
-            $stmt->bindParam(":id", $pId, PDO::PARAM_INT);
-            $stmt->bindParam(":name", $pName, PDO::PARAM_STR);
-            $stmt->bindParam(":email", $pEmail, PDO::PARAM_STR);
-            $stmt->bindParam(":address", $pAddress, PDO::PARAM_STR);
-            $stmt->bindParam(":mobile", $pMobile, PDO::PARAM_STR);
-            $stmt->bindParam(":doctor", $pDoctor, PDO::PARAM_STR);
+            $stmt->bindParam(":id", $appointment->pId, PDO::PARAM_INT);
+            $stmt->bindParam(":name", $appointment->pName, PDO::PARAM_STR);
+            $stmt->bindParam(":email", $appointment->pEmail, PDO::PARAM_STR);
+            $stmt->bindParam(":address", $appointment->pAddress, PDO::PARAM_STR);
+            $stmt->bindParam(":mobile", $appointment->pMobile, PDO::PARAM_STR);
+            $stmt->bindParam(":doctor", $appointment->pDoctor, PDO::PARAM_STR);
             $stmt->bindParam(":fee", $dFee, PDO::PARAM_STR);
-            $stmt->bindParam(":reason", $aReason, PDO::PARAM_STR);
-            $stmt->bindParam(":date", $aDate, PDO::PARAM_STR);
-            $stmt->bindParam(":time", $aTime, PDO::PARAM_STR);
+            $stmt->bindParam(":reason", $appointment->aReason, PDO::PARAM_STR);
+            $stmt->bindParam(":date", $appointment->aDate, PDO::PARAM_STR);
+            $stmt->bindParam(":time", $appointment->aTime, PDO::PARAM_STR);
             $stmt->bindParam(":totalPay", $dFee, PDO::PARAM_STR);
 
             if ($stmt->execute()) {

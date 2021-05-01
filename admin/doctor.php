@@ -181,58 +181,60 @@ if (!isset($_SESSION['adId'])) {
 
                 ?>
 
-                <table class="table table-hover " id="table-data">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th scope="col">Doctor ID</th>
-                            <th scope="col">Doctor Profile Img</th>
-                            <th scope="col">Doctor Name</th>
-                            <th scope="col">Doctor Email</th>
-                            <th scope="col">Doctor Address</th>
-                            <th scope="col">Doctor Mobile</th>
-                            <th scope="col">Doctor Specialization</th>
-                            <th scope="col">Doctor Fee</th>
-                            <th scope="col">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-
-                        $sql = "SELECT * FROM doctor";
-                        $stmt = $con->prepare($sql);
-                        $stmt->execute();
-
-                        while ($doctor = $stmt->fetch(PDO::FETCH_ASSOC)) :
-                        ?>
+                <div class="table-responsive-xl">
+                    <table class="table table-hover " id="table-data">
+                        <thead class="thead-dark">
                             <tr>
-                                <th scope="row"><?= $doctor['dId'] ?></th>
-                                <td><img src="../upload/doc_profile_img/<?= $doctor['dProfileImg'] ?>" width="50" height="50" style="border:1px solid #333; border-radius: 100%;" alt=""></td>
-                                <td><?= $doctor['dName'] ?></td>
-                                <td><?= $doctor['dEmail'] ?></td>
-                                <td><?= $doctor['dAddress'] ?></td>
-                                <td><?= $doctor['dMobile'] ?></td>
-                                <td><?= $doctor['dSpecialization'] ?></td>
-                                <td>₱<?= number_format($doctor['dFee'], 2) ?></td>
-                                <td>
-                                    <div class="row">
-                                        <div class="col">
-                                            <form action="updateDoctor.php" method="post">
-                                                <input type="hidden" name="dId" value="<?= $doctor['dId'] ?>">
-                                                <input type="submit" value="Update" class="btn btn-secondary" name="updateDoctorBtn">
-                                            </form>
-                                        </div>
-                                        <div class="col">
-                                            <form action="doctor.php" method="post">
-                                                <input type="hidden" name="dId" value="<?= $doctor['dId'] ?>">
-                                                <input type="submit" value="Delete" class="btn btn-danger" name="deleteDoctorBtn" onclick="return confirm('Are you sure to delete?');">
-                                            </form>
-                                        </div>
-                                    </div>
-                                </td>
+                                <th scope="col">Doctor ID</th>
+                                <th scope="col">Doctor Profile Img</th>
+                                <th scope="col">Doctor Name</th>
+                                <th scope="col">Doctor Email</th>
+                                <th scope="col">Doctor Address</th>
+                                <th scope="col">Doctor Mobile</th>
+                                <th scope="col">Doctor Specialization</th>
+                                <th scope="col">Doctor Fee</th>
+                                <th scope="col">Action</th>
                             </tr>
-                        <?php endwhile; ?>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            <?php
+
+                            $sql = "SELECT * FROM doctor";
+                            $stmt = $con->prepare($sql);
+                            $stmt->execute();
+
+                            while ($doctor = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                            ?>
+                                <tr>
+                                    <th scope="row"><?= $doctor['dId'] ?></th>
+                                    <td><img src="../upload/doc_profile_img/<?= $doctor['dProfileImg'] ?>" width="50" height="50" style="border:1px solid #333; border-radius: 100%;" alt=""></td>
+                                    <td><?= $doctor['dName'] ?></td>
+                                    <td><?= $doctor['dEmail'] ?></td>
+                                    <td><?= $doctor['dAddress'] ?></td>
+                                    <td><?= $doctor['dMobile'] ?></td>
+                                    <td><?= $doctor['dSpecialization'] ?></td>
+                                    <td>₱<?= number_format($doctor['dFee'], 2) ?></td>
+                                    <td>
+                                        <div class="row">
+                                            <div class="col">
+                                                <form action="updateDoctor.php" method="post">
+                                                    <input type="hidden" name="dId" value="<?= $doctor['dId'] ?>">
+                                                    <input type="submit" value="Update" class="btn btn-secondary" name="updateDoctorBtn">
+                                                </form>
+                                            </div>
+                                            <div class="col">
+                                                <form action="doctor.php" method="post">
+                                                    <input type="hidden" name="dId" value="<?= $doctor['dId'] ?>">
+                                                    <input type="submit" value="Delete" class="btn btn-danger" name="deleteDoctorBtn" onclick="return confirm('Are you sure to delete?');">
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php endwhile; ?>
+                        </tbody>
+                    </table>
+                </div>
 
         </div>
 

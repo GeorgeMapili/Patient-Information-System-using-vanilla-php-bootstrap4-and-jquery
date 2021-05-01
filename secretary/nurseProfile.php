@@ -305,6 +305,11 @@ if (!isset($_SESSION['nId'])) {
                     <h1 class="Display-4" id="primaryColor">Profile Image</h1>
                 </div>
 
+                <!-- Image -->
+                <div>
+                    <img src="../upload/nurse_profile_img/<?= $_SESSION['nProfileImg']; ?>" class="rounded-circle shadow p-3 mb-5 bg-white rounded" alt="profile" width="150" height="150">
+                </div>
+
                 <?php
                 if (isset($_POST['updateImageBtn'])) {
                     $nId = $_POST['nId'];

@@ -117,41 +117,43 @@ if (!isset($_SESSION['dId'])) {
                 <p class="mt-5"><?= $finishedCount ?> finished appointment</p>
             </div>
 
-            <table class="table table-hover shadow p-3 mb-5 bg-white rounded">
-                <thead class="bg-info text-light">
-                    <tr>
-                        <th scope="col">Patient Name</th>
-                        <th scope="col">Patient Address</th>
-                        <th scope="col">Patient Mobile</th>
-                        <th scope="col">Appointment Reason</th>
-                        <th scope="col">Date</th>
-                        <th scope="col">Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    $status = "discharged";
-                    $sql = "SELECT * FROM appointment WHERE aStatus = :status AND pDoctor = :doctor";
-                    $stmt = $con->prepare($sql);
-                    $stmt->bindParam(":status", $status, PDO::PARAM_STR);
-                    $stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);
-                    $stmt->execute();
-
-                    while ($dischargeAppointment = $stmt->fetch(PDO::FETCH_ASSOC)) :
-                    ?>
+            <div class="table-responsive-xl">
+                <table class="table table-hover shadow p-3 mb-5 bg-white rounded">
+                    <thead class="bg-info text-light">
                         <tr>
-                            <td><?= $dischargeAppointment['pName'] ?></td>
-                            <td><?= $dischargeAppointment['pAddress'] ?></td>
-                            <td><?= $dischargeAppointment['pMobile'] ?></td>
-                            <td><?= $dischargeAppointment['aReason'] ?></td>
-                            <td><?= date("M d, Y", strtotime($dischargeAppointment['dischargedOn'])) ?></td>
-                            <td>
-                                <p class="btn btn-primary disabled">Discharged</p>
-                            </td>
+                            <th scope="col">Patient Name</th>
+                            <th scope="col">Patient Address</th>
+                            <th scope="col">Patient Mobile</th>
+                            <th scope="col">Appointment Reason</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Status</th>
                         </tr>
-                    <?php endwhile; ?>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $status = "discharged";
+                        $sql = "SELECT * FROM appointment WHERE aStatus = :status AND pDoctor = :doctor";
+                        $stmt = $con->prepare($sql);
+                        $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+                        $stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);
+                        $stmt->execute();
+
+                        while ($dischargeAppointment = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                        ?>
+                            <tr>
+                                <td><?= $dischargeAppointment['pName'] ?></td>
+                                <td><?= $dischargeAppointment['pAddress'] ?></td>
+                                <td><?= $dischargeAppointment['pMobile'] ?></td>
+                                <td><?= $dischargeAppointment['aReason'] ?></td>
+                                <td><?= date("M d, Y", strtotime($dischargeAppointment['dischargedOn'])) ?></td>
+                                <td>
+                                    <p class="btn btn-primary disabled">Discharged</p>
+                                </td>
+                            </tr>
+                        <?php endwhile; ?>
+                    </tbody>
+                </table>
+            </div>
 
         </div>
 

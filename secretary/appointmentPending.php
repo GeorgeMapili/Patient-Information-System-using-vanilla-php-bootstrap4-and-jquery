@@ -145,63 +145,65 @@ if (!isset($_SESSION['nId'])) {
 
             <h3 class="display-4 mt-5 my-4" id="primaryColor">All Patient Appointment</h3>
 
-            <table class="table table-hover shadow p-3 mb-5 bg-white rounded">
-                <thead class="bg-info text-light">
-                    <tr>
-                        <th scope="col">Patient Name</th>
-                        <th scope="col">Patient Address</th>
-                        <th scope="col">Patient Mobile</th>
-                        <th scope="col">Doctor</th>
-                        <th scope="col">Appointment Reason</th>
-                        <th scope="col">Date of Appointment</th>
-                        <th scope="col">Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    $status = "pending";
-                    $sql = "SELECT * FROM appointment WHERE aStatus = :status";
-                    $stmt = $con->prepare($sql);
-                    $stmt->bindParam(":status", $status, PDO::PARAM_STR);
-                    $stmt->execute();
-
-                    while ($appointmentPending = $stmt->fetch(PDO::FETCH_ASSOC)) :
-                    ?>
+            <div class="table-responsive-xl">
+                <table class="table table-hover shadow p-3 mb-5 bg-white rounded">
+                    <thead class="bg-info text-light">
                         <tr>
-                            <td><?= $appointmentPending['pName'] ?></td>
-                            <td><?= $appointmentPending['pAddress'] ?></td>
-                            <td><?= $appointmentPending['pMobile'] ?></td>
-                            <td><?= $appointmentPending['pDoctor'] ?></td>
-                            <td><?= $appointmentPending['aReason'] ?></td>
-                            <td>
-                                <?= date("M d, Y", strtotime($appointmentPending['aDate'])); ?>
-                                at
-                                <?= $appointmentPending['aTime']; ?>
-                            </td>
-                            <td>
-                                <div class="row">
-
-
-                                    <div class="col">
-                                        <form action="appointmentPending.php" method="post">
-                                            <input type="hidden" name="aId" value="<?= $appointmentPending['aId'] ?>">
-                                            <input type="hidden" name="pId" value="<?= $appointmentPending['pId'] ?>">
-                                            <input type="submit" value="Accept" class="btn btn-info" name="acceptStatus">
-                                        </form>
-                                    </div>
-                                    <div class="col">
-                                        <form action="appointmentPending.php" method="post">
-                                            <input type="hidden" name="aId" value="<?= $appointmentPending['aId'] ?>">
-                                            <input type="hidden" name="pId" value="<?= $appointmentPending['pId'] ?>">
-                                            <input type="submit" value="Cancel" class="btn btn-danger" name="cancelStatus" onclick="return confirm('Are you sure?')">
-                                        </form>
-                                    </div>
-                                </div>
-                            </td>
+                            <th scope="col">Patient Name</th>
+                            <th scope="col">Patient Address</th>
+                            <th scope="col">Patient Mobile</th>
+                            <th scope="col">Doctor</th>
+                            <th scope="col">Appointment Reason</th>
+                            <th scope="col">Date of Appointment</th>
+                            <th scope="col">Status</th>
                         </tr>
-                    <?php endwhile; ?>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $status = "pending";
+                        $sql = "SELECT * FROM appointment WHERE aStatus = :status";
+                        $stmt = $con->prepare($sql);
+                        $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+                        $stmt->execute();
+
+                        while ($appointmentPending = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                        ?>
+                            <tr>
+                                <td><?= $appointmentPending['pName'] ?></td>
+                                <td><?= $appointmentPending['pAddress'] ?></td>
+                                <td><?= $appointmentPending['pMobile'] ?></td>
+                                <td><?= $appointmentPending['pDoctor'] ?></td>
+                                <td><?= $appointmentPending['aReason'] ?></td>
+                                <td>
+                                    <?= date("M d, Y", strtotime($appointmentPending['aDate'])); ?>
+                                    at
+                                    <?= $appointmentPending['aTime']; ?>
+                                </td>
+                                <td>
+                                    <div class="row">
+
+
+                                        <div class="col">
+                                            <form action="appointmentPending.php" method="post">
+                                                <input type="hidden" name="aId" value="<?= $appointmentPending['aId'] ?>">
+                                                <input type="hidden" name="pId" value="<?= $appointmentPending['pId'] ?>">
+                                                <input type="submit" value="Accept" class="btn btn-info" name="acceptStatus">
+                                            </form>
+                                        </div>
+                                        <div class="col">
+                                            <form action="appointmentPending.php" method="post">
+                                                <input type="hidden" name="aId" value="<?= $appointmentPending['aId'] ?>">
+                                                <input type="hidden" name="pId" value="<?= $appointmentPending['pId'] ?>">
+                                                <input type="submit" value="Cancel" class="btn btn-danger" name="cancelStatus" onclick="return confirm('Are you sure?')">
+                                            </form>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endwhile; ?>
+                    </tbody>
+                </table>
+            </div>
 
             <hr class="featurette-divider">
 

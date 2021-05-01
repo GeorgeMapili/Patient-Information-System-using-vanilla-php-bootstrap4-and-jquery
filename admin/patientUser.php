@@ -135,87 +135,90 @@ if (!isset($_SESSION['adId'])) {
                         <a href="addPatientAppointment.php" class="btn btn-success mb-3 ">Add Users</a>
                     </div>
                 </div>
-                <table class="table table-hover" id="table-data">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th scope="col">Patient ID</th>
-                            <th scope="col">Patient Profile</th>
-                            <th scope="col">Patient Name</th>
-                            <th scope="col">Patient Email</th>
-                            <th scope="col">Patient Address</th>
-                            <th scope="col">Patient Mobile</th>
-                            <th scope="col">Patient Age</th>
-                            <th scope="col">Patient Gender</th>
-                            <th scope="col">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
 
-                        if (isset($_POST['deletePatient'])) {
-                            $id = $_POST['pId'];
-                            $pProfile = $_POST['pProfile'];
-
-                            $sql = "DELETE FROM patientappointment WHERE pId = :id";
-                            $stmt = $con->prepare($sql);
-                            $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-                            $stmt->execute();
-
-                            $image = "../upload/user_profile_img/$pProfile";
-                            unlink($image);
-
-                            // Delete all the existed appointments
-                            $sql = "DELETE FROM appointment WHERE pId = :id";
-                            $stmt = $con->prepare($sql);
-                            $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-                            $stmt->execute();
-
-                            header("location:patientUser.php?succDelete=Successfully_deleted_user");
-                            ob_end_flush();
-                            exit(0);
-                        }
-
-                        ?>
-
-                        <?php
-
-                        $sql = "SELECT * FROM patientappointment";
-                        $stmt = $con->prepare($sql);
-                        $stmt->execute();
-
-                        while ($patientAppointment = $stmt->fetch(PDO::FETCH_ASSOC)) :
-                        ?>
-
+                <div class="table-responsive-xl">
+                    <table class="table table-hover" id="table-data">
+                        <thead class="thead-dark">
                             <tr>
-                                <th scope="row"><?= $patientAppointment['pId'] ?></th>
-                                <td><img src="../upload/user_profile_img/<?= $patientAppointment['pProfile'] ?>" width="50" height="50" style="border:1px solid #333; border-radius: 50%;" alt=""></td>
-                                <td><?= $patientAppointment['pName'] ?></td>
-                                <td><?= $patientAppointment['pEmail'] ?></td>
-                                <td><?= $patientAppointment['pAddress'] ?></td>
-                                <td><?= $patientAppointment['pMobile'] ?></td>
-                                <td><?= $patientAppointment['pAge'] ?></td>
-                                <td><?= ucwords($patientAppointment['pGender']) ?></td>
-                                <td>
-                                    <div class="row">
-                                        <div class="col">
-                                            <form action="updatePatient.php" method="post">
-                                                <input type="hidden" name="pId" value="<?= $patientAppointment['pId'] ?>">
-                                                <input type="submit" value="Update" class="btn btn-secondary" name="updatePatient">
-                                            </form>
-                                        </div>
-                                        <div class="col">
-                                            <form action="patientUser.php" method="post">
-                                                <input type="hidden" name="pId" value="<?= $patientAppointment['pId'] ?>">
-                                                <input type="hidden" name="pProfile" value="<?= $patientAppointment['pProfile'] ?>">
-                                                <input type="submit" value="Delete" class="btn btn-danger" name="deletePatient" onclick="return confirm('Are you sure to delete ?')">
-                                            </form>
-                                        </div>
-                                    </div>
-                                </td>
+                                <th scope="col">Patient ID</th>
+                                <th scope="col">Patient Profile</th>
+                                <th scope="col">Patient Name</th>
+                                <th scope="col">Patient Email</th>
+                                <th scope="col">Patient Address</th>
+                                <th scope="col">Patient Mobile</th>
+                                <th scope="col">Patient Age</th>
+                                <th scope="col">Patient Gender</th>
+                                <th scope="col">Action</th>
                             </tr>
-                        <?php endwhile; ?>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            <?php
+
+                            if (isset($_POST['deletePatient'])) {
+                                $id = $_POST['pId'];
+                                $pProfile = $_POST['pProfile'];
+
+                                $sql = "DELETE FROM patientappointment WHERE pId = :id";
+                                $stmt = $con->prepare($sql);
+                                $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+                                $stmt->execute();
+
+                                $image = "../upload/user_profile_img/$pProfile";
+                                unlink($image);
+
+                                // Delete all the existed appointments
+                                $sql = "DELETE FROM appointment WHERE pId = :id";
+                                $stmt = $con->prepare($sql);
+                                $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+                                $stmt->execute();
+
+                                header("location:patientUser.php?succDelete=Successfully_deleted_user");
+                                ob_end_flush();
+                                exit(0);
+                            }
+
+                            ?>
+
+                            <?php
+
+                            $sql = "SELECT * FROM patientappointment";
+                            $stmt = $con->prepare($sql);
+                            $stmt->execute();
+
+                            while ($patientAppointment = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                            ?>
+
+                                <tr>
+                                    <th scope="row"><?= $patientAppointment['pId'] ?></th>
+                                    <td><img src="../upload/user_profile_img/<?= $patientAppointment['pProfile'] ?>" width="50" height="50" style="border:1px solid #333; border-radius: 50%;" alt=""></td>
+                                    <td><?= $patientAppointment['pName'] ?></td>
+                                    <td><?= $patientAppointment['pEmail'] ?></td>
+                                    <td><?= $patientAppointment['pAddress'] ?></td>
+                                    <td><?= $patientAppointment['pMobile'] ?></td>
+                                    <td><?= $patientAppointment['pAge'] ?></td>
+                                    <td><?= ucwords($patientAppointment['pGender']) ?></td>
+                                    <td>
+                                        <div class="row">
+                                            <div class="col">
+                                                <form action="updatePatient.php" method="post">
+                                                    <input type="hidden" name="pId" value="<?= $patientAppointment['pId'] ?>">
+                                                    <input type="submit" value="Update" class="btn btn-secondary" name="updatePatient">
+                                                </form>
+                                            </div>
+                                            <div class="col">
+                                                <form action="patientUser.php" method="post">
+                                                    <input type="hidden" name="pId" value="<?= $patientAppointment['pId'] ?>">
+                                                    <input type="hidden" name="pProfile" value="<?= $patientAppointment['pProfile'] ?>">
+                                                    <input type="submit" value="Delete" class="btn btn-danger" name="deletePatient" onclick="return confirm('Are you sure to delete ?')">
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php endwhile; ?>
+                        </tbody>
+                    </table>
+                </div>
 
                 <hr>
 

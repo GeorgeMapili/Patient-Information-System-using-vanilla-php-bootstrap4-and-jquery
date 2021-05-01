@@ -14,6 +14,8 @@ if (!isset($_SESSION['id'])) {
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="Patient Information System" name="description">
+    <meta content="sumc doctorcs clinic, patient information system" name="keywords">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
@@ -93,44 +95,46 @@ if (!isset($_SESSION['id'])) {
                 <h1 class="Display-4" id="primaryColor">Finished appointments</h1>
             </div>
 
-            <table class="table table-hover shadow p-3 mb-5 bg-white rounded">
-                <thead class="bg-info text-light">
-                    <tr>
-                        <th scope="col">Patient Doctor</th>
-                        <th scope="col">Appointment Fee</th>
-                        <th scope="col">Appointment Reason</th>
-                        <th scope="col">Date</th>
-                        <th scope="col">Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    $status = "discharged";
-                    $sql = "SELECT * FROM appointment WHERE pId = :id and aStatus = :status ORDER BY aDate DESC";
-                    $stmt = $con->prepare($sql);
-                    $stmt->bindParam(":id", $_SESSION['id'], PDO::PARAM_INT);
-                    $stmt->bindParam(":status", $status, PDO::PARAM_STR);
-                    $stmt->execute();
-
-                    while ($appointment = $stmt->fetch(PDO::FETCH_ASSOC)) :
-                    ?>
+            <div class="table-responsive-xl">
+                <table class="table table-hover shadow p-3 mb-5 bg-white rounded">
+                    <thead class="bg-info text-light">
                         <tr>
-                            <td><?= $appointment['pDoctor']; ?></td>
-                            <td>₱ <?= number_format($appointment['dFee'], 2); ?></td>
-                            <td><?= $appointment['aReason']; ?></td>
-                            <td><?= date("M d, Y", strtotime($appointment['aDate'])); ?> at <?= $appointment['aTime']; ?></td>
-                            <td>
-                                <form action="medicalCert.php" method="post" target="_blank">
-                                    <input type="hidden" name="aId" value="<?= $appointment['aId'] ?>">
-                                    <input type="hidden" name="pId" value="<?= $appointment['pId'] ?>">
-                                    <input type="submit" value="Generate a Medical Certificate" class="btn btn-primary" name="medicalCertBtn">
-                                </form>
-                            </td>
+                            <th scope="col">Patient Doctor</th>
+                            <th scope="col">Appointment Fee</th>
+                            <th scope="col">Appointment Reason</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Status</th>
                         </tr>
-                    <?php endwhile; ?>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $status = "discharged";
+                        $sql = "SELECT * FROM appointment WHERE pId = :id and aStatus = :status ORDER BY aDate DESC";
+                        $stmt = $con->prepare($sql);
+                        $stmt->bindParam(":id", $_SESSION['id'], PDO::PARAM_INT);
+                        $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+                        $stmt->execute();
 
+                        while ($appointment = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                        ?>
+                            <tr>
+                                <td><?= $appointment['pDoctor']; ?></td>
+                                <td>₱ <?= number_format($appointment['dFee'], 2); ?></td>
+                                <td><?= $appointment['aReason']; ?></td>
+                                <td><?= date("M d, Y", strtotime($appointment['aDate'])); ?> at <?= $appointment['aTime']; ?></td>
+                                <td>
+                                    <form action="medicalCert.php" method="post" target="_blank">
+                                        <input type="hidden" name="aId" value="<?= $appointment['aId'] ?>">
+                                        <input type="hidden" name="pId" value="<?= $appointment['pId'] ?>">
+                                        <input type="submit" value="Generate a Medical Certificate" class="btn btn-primary" name="medicalCertBtn">
+                                    </form>
+                                </td>
+                            </tr>
+                        <?php endwhile; ?>
+                    </tbody>
+                </table>
+            </div>
+            
         </div>
 
 

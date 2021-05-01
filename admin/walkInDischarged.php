@@ -122,54 +122,57 @@ if (!isset($_SESSION['adId'])) {
                         <input class="form-control mb-3" type="search" id="search" placeholder="Search Patient" aria-label="Search">
                     </form>
                 </div>
-                <table class="table table-hover " id="table-data">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th scope="col">Discharged Patient ID</th>
-                            <th scope="col">Patient ID</th>
-                            <th scope="col">Patient Name</th>
-                            <th scope="col">Patient Address</th>
-                            <th scope="col">Patient Doctor</th>
-                            <th scope="col">Patient Disease</th>
-                            <th scope="col">Doctor Prescription</th>
-                            <th scope="col">Discharged Date</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Generate Certificate</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
 
-                        $discharged = "discharged";
-                        $sql = "SELECT * FROM discharged_patient";
-                        $stmt = $con->prepare($sql);
-                        $stmt->execute();
-
-                        while ($dischargedPatient = $stmt->fetch(PDO::FETCH_ASSOC)) :
-                        ?>
+                <div class="table-responsive-xl">
+                    <table class="table table-hover " id="table-data">
+                        <thead class="thead-dark">
                             <tr>
-                                <th scope="row"><?= $dischargedPatient['dpId'] ?></th>
-                                <td><?= $dischargedPatient['pId'] ?></td>
-                                <td><?= $dischargedPatient['pName'] ?></td>
-                                <td><?= $dischargedPatient['pAddress'] ?></td>
-                                <td><?= $dischargedPatient['pDoctor'] ?></td>
-                                <td><?= $dischargedPatient['pDisease'] ?></td>
-                                <td><?= $dischargedPatient['pPrescription'] ?></td>
-                                <td><?= date("M d, Y", strtotime($dischargedPatient['pMadeOn'])) ?></td>
-                                <td>
-                                    <p class="btn btn-success disabled">Discharged</p>
-                                </td>
-                                <td>
-                                    <form action="pdfWalkInDischarge.php?walkInDischargeReceipt=true" method="post" target="_blank">
-                                        <input type="hidden" name="dpId" value="<?= $dischargedPatient['dpId'] ?>">
-                                        <input type="hidden" name="pId" value="<?= $dischargedPatient['pId'] ?>">
-                                        <input type="submit" class="btn btn-info" name="receiptBtn" target="_blank" value="Medical Certificate">
-                                    </form>
-                                </td>
+                                <th scope="col">Discharged Patient ID</th>
+                                <th scope="col">Patient ID</th>
+                                <th scope="col">Patient Name</th>
+                                <th scope="col">Patient Address</th>
+                                <th scope="col">Patient Doctor</th>
+                                <th scope="col">Patient Disease</th>
+                                <th scope="col">Doctor Prescription</th>
+                                <th scope="col">Discharged Date</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Generate Certificate</th>
                             </tr>
-                        <?php endwhile; ?>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            <?php
+
+                            $discharged = "discharged";
+                            $sql = "SELECT * FROM discharged_patient ORDER BY pMadeOn DESC";
+                            $stmt = $con->prepare($sql);
+                            $stmt->execute();
+
+                            while ($dischargedPatient = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                            ?>
+                                <tr>
+                                    <th scope="row"><?= $dischargedPatient['dpId'] ?></th>
+                                    <td><?= $dischargedPatient['pId'] ?></td>
+                                    <td><?= $dischargedPatient['pName'] ?></td>
+                                    <td><?= $dischargedPatient['pAddress'] ?></td>
+                                    <td><?= $dischargedPatient['pDoctor'] ?></td>
+                                    <td><?= $dischargedPatient['pDisease'] ?></td>
+                                    <td><?= $dischargedPatient['pPrescription'] ?></td>
+                                    <td><?= date("M d, Y", strtotime($dischargedPatient['pMadeOn'])) ?></td>
+                                    <td>
+                                        <p class="btn btn-success disabled">Discharged</p>
+                                    </td>
+                                    <td>
+                                        <form action="pdfWalkInDischarge.php?walkInDischargeReceipt=true" method="post" target="_blank">
+                                            <input type="hidden" name="dpId" value="<?= $dischargedPatient['dpId'] ?>">
+                                            <input type="hidden" name="pId" value="<?= $dischargedPatient['pId'] ?>">
+                                            <input type="submit" class="btn btn-info" name="receiptBtn" target="_blank" value="Medical Certificate">
+                                        </form>
+                                    </td>
+                                </tr>
+                            <?php endwhile; ?>
+                        </tbody>
+                    </table>
+                </div>
 
         </div>
 

@@ -121,79 +121,82 @@ if (!isset($_SESSION['dId'])) {
                     </form>
                 </div>
             </div>
-            <table class="table table-hover shadow p-3 mb-5 bg-white rounded" id="table-data">
-                <thead class="bg-info text-light">
-                    <tr>
-                        <th scope="col">Patient Name</th>
-                        <th scope="col">Patient Address</th>
-                        <th scope="col">Date</th>
-                        <th scope="col">Patient Disease</th>
-                        <th scope="col">Prescription</th>
-                        <th scope="col">Updated Disease</th>
-                        <th scope="col">History</th>
-                    </tr>
-                </thead>
-                <tbody>
 
-
-                    <?php
-                    $doctor = $_SESSION['dName'];
-                    $status = "accepted";
-                    $sql = "SELECT * FROM appointment WHERE pDoctor = :doctor AND aStatus = :status";
-                    $stmt = $con->prepare($sql);
-                    $stmt->bindParam(":doctor", $doctor, PDO::PARAM_STR);
-                    $stmt->bindParam(":status", $status, PDO::PARAM_STR);
-                    $stmt->execute();
-
-                    while ($patientAppointment = $stmt->fetch(PDO::FETCH_ASSOC)) :
-                    ?>
+            <div class="table-responsive-xl">
+                <table class="table table-hover shadow p-3 mb-5 bg-white rounded" id="table-data">
+                    <thead class="bg-info text-light">
                         <tr>
-                            <td><?= $patientAppointment['pName']; ?></td>
-                            <td><?= $patientAppointment['pAddress']; ?></td>
-                            <td><?= date("M d, Y", strtotime($patientAppointment['aDate'])); ?> at <?= $patientAppointment['aTime']; ?></td>
-                            <td><?= $patientAppointment['aReason']; ?></td>
-                            <td>
-                                <?php
-                                if (empty($patientAppointment['pPrescription'])) {
-                                ?>
-                                    <form action="addPrescription.php" method="post">
-                                        <input type="hidden" name="aid" value="<?= $patientAppointment['aId']; ?>">
-                                        <input type="hidden" name="pid" value="<?= $patientAppointment['pId']; ?>">
-                                        <input type="submit" value="Add Prescription" class="btn btn-info" name="addPrescriptionBtn">
-                                    </form>
-                                <?php
-                                } else {
-                                ?>
-                                    <form action="editPrescription.php" method="post">
-                                        <input type="hidden" name="aid" value="<?= $patientAppointment['aId']; ?>">
-                                        <input type="hidden" name="pid" value="<?= $patientAppointment['pId']; ?>">
-                                        <input type="submit" value="Update Prescription" class="btn btn-secondary" name="updatePrescriptionBtn">
-                                    </form>
-                                <?php
-                                }
-                                ?>
-
-                            </td>
-                            <td>
-                                <form action="updateDisease.php" method="post">
-                                    <input type="hidden" name="aId" value="<?= $patientAppointment['aId'] ?>">
-                                    <input type="hidden" name="pId" value="<?= $patientAppointment['pId'] ?>">
-                                    <input type="submit" value="Update Disease" class="btn btn-info" name="updateDisease">
-                                </form>
-                            </td>
-                            <td>
-                                <form action="patientMedicalHistory.php" method="post">
-                                    <input type="hidden" name="aId" value="<?= $patientAppointment['aId']; ?>">
-                                    <input type="hidden" name="pId" value="<?= $patientAppointment['pId']; ?>">
-                                    <input type="submit" value="Watch appointment history" class="btn btn-primary" name="watchHistory">
-                                </form>
-                            </td>
+                            <th scope="col">Patient Name</th>
+                            <th scope="col">Patient Address</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Patient Disease</th>
+                            <th scope="col">Prescription</th>
+                            <th scope="col">Updated Disease</th>
+                            <th scope="col">History</th>
                         </tr>
+                    </thead>
+                    <tbody>
 
-                    <?php endwhile; ?>
 
-                </tbody>
-            </table>
+                        <?php
+                        $doctor = $_SESSION['dName'];
+                        $status = "accepted";
+                        $sql = "SELECT * FROM appointment WHERE pDoctor = :doctor AND aStatus = :status";
+                        $stmt = $con->prepare($sql);
+                        $stmt->bindParam(":doctor", $doctor, PDO::PARAM_STR);
+                        $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+                        $stmt->execute();
+
+                        while ($patientAppointment = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                        ?>
+                            <tr>
+                                <td><?= $patientAppointment['pName']; ?></td>
+                                <td><?= $patientAppointment['pAddress']; ?></td>
+                                <td><?= date("M d, Y", strtotime($patientAppointment['aDate'])); ?> at <?= $patientAppointment['aTime']; ?></td>
+                                <td><?= $patientAppointment['aReason']; ?></td>
+                                <td>
+                                    <?php
+                                    if (empty($patientAppointment['pPrescription'])) {
+                                    ?>
+                                        <form action="addPrescription.php" method="post">
+                                            <input type="hidden" name="aid" value="<?= $patientAppointment['aId']; ?>">
+                                            <input type="hidden" name="pid" value="<?= $patientAppointment['pId']; ?>">
+                                            <input type="submit" value="Add Prescription" class="btn btn-info" name="addPrescriptionBtn">
+                                        </form>
+                                    <?php
+                                    } else {
+                                    ?>
+                                        <form action="editPrescription.php" method="post">
+                                            <input type="hidden" name="aid" value="<?= $patientAppointment['aId']; ?>">
+                                            <input type="hidden" name="pid" value="<?= $patientAppointment['pId']; ?>">
+                                            <input type="submit" value="Update Prescription" class="btn btn-secondary" name="updatePrescriptionBtn">
+                                        </form>
+                                    <?php
+                                    }
+                                    ?>
+
+                                </td>
+                                <td>
+                                    <form action="updateDisease.php" method="post">
+                                        <input type="hidden" name="aId" value="<?= $patientAppointment['aId'] ?>">
+                                        <input type="hidden" name="pId" value="<?= $patientAppointment['pId'] ?>">
+                                        <input type="submit" value="Update Disease" class="btn btn-info" name="updateDisease">
+                                    </form>
+                                </td>
+                                <td>
+                                    <form action="patientMedicalHistory.php" method="post">
+                                        <input type="hidden" name="aId" value="<?= $patientAppointment['aId']; ?>">
+                                        <input type="hidden" name="pId" value="<?= $patientAppointment['pId']; ?>">
+                                        <input type="submit" value="Watch appointment history" class="btn btn-primary" name="watchHistory">
+                                    </form>
+                                </td>
+                            </tr>
+
+                        <?php endwhile; ?>
+
+                    </tbody>
+                </table>
+            </div>
 
 
 
