@@ -29,7 +29,7 @@ if (!isset($_SESSION['id'])) {
 <body>
 
     <header>
-        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark">
             <a class="navbar-brand " i id="primaryColor" href="main.php">SUMC Doctors Clinic</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -250,7 +250,8 @@ if (!isset($_SESSION['id'])) {
                 <div>
                     <small>Read specialization info below</small>
                 </div>
-                <label for="">Date & Time</label>
+                <label for="">Date & Time</label><br>
+                <small><span class="text-danger h6 font-weight-bold">*</span>No sunday service</small>
                 <?= ((isset($_GET['errDate']) && $_GET['errDate'] == "date_already_pass_by") || (isset($_GET['errDate1']) && $_GET['errDate1'] == "no_weekends")) ? '<input type="date" class="form-control is-invalid" name="dateOfAppointment" required>' : '<input type="date" class="form-control" name="dateOfAppointment" required>'; ?>
                 <?= (isset($_GET['errDate']) && $_GET['errDate'] == "date_already_pass_by") ? '<span class="text-danger">Date has already passed!</span>' : ''; ?>
                 <?= (isset($_GET['errDate1']) && $_GET['errDate1'] == "no_weekends") ? '<span class="text-danger">No weekends service!</span>' : ''; ?>

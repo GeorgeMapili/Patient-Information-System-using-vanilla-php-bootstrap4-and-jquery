@@ -662,7 +662,7 @@ if (isset($_POST['searchMessage'])) {
 
         echo $messageOutput;
     } else {
-        echo '<h3 style="color:red">No Cancelled Appointment</h3>';
+        echo '<h3 style="color:red">No Messages</h3>';
     }
 }
 

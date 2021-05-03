@@ -104,8 +104,8 @@ if (isset($_GET['walkInDischargeReceipt']) && $_GET['walkInDischargeReceipt'] ==
     $pdf->Cell(34, 5, $doctor['dFee'], 1, 1, 'R');
 
     $pdf->Cell(130, 5, 'Medicine Fee: ', 1, 0);
-    $pdf->Cell(25, 5, $_SESSION['medicineFee'], 1, 0);
-    $pdf->Cell(34, 5, $_SESSION['medicineFee'], 1, 1, 'R');
+    $pdf->Cell(25, 5, $dischargePatient['pTotalAmount'], 1, 0);
+    $pdf->Cell(34, 5, $dischargePatient['pTotalAmount'], 1, 1, 'R');
 
     // Summary
     $pdf->Cell(130, 5, '', 1, 0);
