@@ -1,5 +1,4 @@
 <?php
-ob_start();
 session_start();
 require_once '../connect.php';
 
@@ -20,7 +19,7 @@ if (!isset($_SESSION['dId'])) {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/main.css" />
     <link rel="icon" href="../img/sumc.png">
-    <title>Doctor | Update Disease</title>
+    <title>Doctor | Patient Appointment</title>
 </head>
 
 <body>
@@ -48,7 +47,7 @@ if (!isset($_SESSION['dId'])) {
                     <li class="nav-item">
                         <a class="nav-link" href="walkInPatient.php">Walk in Patient&nbsp;<?= ($walkinCount > 0) ? '<span id="walkin-count" class="badge bg-danger">' . $walkinCount . '</span>' : '<span id="walkin-count" class="badge bg-danger"></span>'; ?></a>
                     </li>
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="patient.php">Patient Appointment</a>
                     </li>
                     <?php
@@ -74,7 +73,7 @@ if (!isset($_SESSION['dId'])) {
                             </li>
                         </div>
                     </div>
-                    <div class="dropdown nav-item">
+                    <div class="dropdown nav-item active">
                         <span class="nav-link" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Laboratory
                         </span>
@@ -108,77 +107,137 @@ if (!isset($_SESSION['dId'])) {
         </nav>
     </header>
 
-    <?php
-    if (isset($_POST['update'])) {
-        $aId = $_POST['aId'];
-        $pId = $_POST['pId'];
-        $updateDisease = trim(htmlspecialchars($_POST['disease']));
-
-        if ($updateDisease == $_SESSION['updateAppointmentDisease']) {
-            header("location:patient.php?errUpdateDisease=nothing_to_update");
-            exit(0);
-        }
-
-        $sql = "UPDATE appointment SET aReason = :reason WHERE aId = :aid AND pId = :pid";
-        $stmt = $con->prepare($sql);
-        $stmt->bindParam(":reason", $updateDisease, PDO::PARAM_STR);
-        $stmt->bindParam(":aid", $aId, PDO::PARAM_INT);
-        $stmt->bindParam(":pid", $pId, PDO::PARAM_INT);
-        $stmt->execute();
-
-        header("location:patient.php?succUpdate=disease_updated_successfully");
-        exit(0);
-        ob_end_flush();
-    }
-    ?>
-
     <main role="main">
 
-        <?php
-        if (isset($_POST['updateDisease'])) {
-            $aId = $_POST['aId'];
-            $pId = $_POST['pId'];
-
-            $sql = "SELECT * FROM appointment WHERE aId = :aid AND pId = :pid";
-            $stmt = $con->prepare($sql);
-            $stmt->bindParam(":aid", $aId, PDO::PARAM_INT);
-            $stmt->bindParam(":pid", $pId, PDO::PARAM_INT);
-            $stmt->execute();
-
-            $updateDisease = $stmt->fetch(PDO::FETCH_ASSOC);
-            $_SESSION['updateAppointmentDisease'] = $updateDisease['aReason'];
-        } else {
-            header("location:dashboard.php");
-            exit(0);
-        }
-        ?>
-
-        <div class="container">
+        <div class="container-fluid">
 
             <div class="mt-4 mb-4">
-                <h1 class="Display-4 my-4" id="primaryColor">Update Disease</h1>
+                <h1 class="Display-4 my-4" id="primaryColor">Laboratory Appointment</h1>
             </div>
 
-            <form action="updateDisease.php" method="post">
-                <input type="hidden" name="aId" value="<?= $updateDisease['aId'] ?>">
-                <input type="hidden" name="pId" value="<?= $updateDisease['pId'] ?>">
-                <input type="text" name="disease" value="<?= $updateDisease['aReason'] ?>" class="form-control" autocomplete="off">
-                <div class="text-center mt-3">
-                    <input type="submit" value="Update Disease" name="update" class="btn btn-secondary">
+            <div class="text-center">
+                <?= (isset($_GET['success']) && $_GET['success'] == "successfully_added_labtest") ? '<span class="text-success">Successfully added test!</span>' : ''; ?>
+                <?= (isset($_GET['success']) && $_GET['success'] == "successfully_updated_labtest") ? '<span class="text-success">Successfully updated test!</span>' : ''; ?>
+                <?= (isset($_GET['success']) && $_GET['success'] == "successfully_added_labresult") ? '<span class="text-success">Successfully added result!</span>' : ''; ?>
+                <?= (isset($_GET['success']) && $_GET['success'] == "successfully_updated_result") ? '<span class="text-success">Successfully updated result!</span>' : ''; ?>
+                <?= (isset($_GET['error']) && $_GET['error'] == "lab_result_is_not_empty") ? '<span class="text-danger">Result isn\'t empty!</span>' : ''; ?>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <form class="form-inline">
+                        <input class="form-control mb-3" id="search" autocomplete="off" type="search" placeholder="Search Patient" aria-label="Search">
+                        <input type="hidden" name="doctorName" class="doctorName" value="<?= $_SESSION['dName']; ?>">
+                    </form>
                 </div>
-            </form>
+            </div>
 
+            <div class="table-responsive-xl">
+                <table class="table table-hover shadow p-3 mb-5 bg-white rounded" id="table-data">
+                    <thead class="bg-info text-light">
+                        <tr>
+                            <th scope="col">Patient Name</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Patient Disease</th>
+                            <th scope="col">Laboratory Test</th>
+                            <th scope="col">Result</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+
+                        <?php
+                        $doctor = $_SESSION['dName'];
+                        $status = "accepted";
+                        $sql = "SELECT * FROM appointment WHERE pDoctor = :doctor AND aStatus = :status";
+                        $stmt = $con->prepare($sql);
+                        $stmt->bindParam(":doctor", $doctor, PDO::PARAM_STR);
+                        $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+                        $stmt->execute();
+
+                        while ($patientAppointment = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                        ?>
+                            <tr>
+                                <td><?= $patientAppointment['pName']; ?></td>
+                                <td><?= date("M d, Y", strtotime($patientAppointment['aDate'])); ?> at <?= $patientAppointment['aTime']; ?></td>
+                                <td><?= $patientAppointment['aReason']; ?></td>
+                                <td>
+                                    <?php
+                                    if(empty($patientAppointment['labTest'])){
+                                    ?>
+
+                                    <form action="addTestLab.php" method="post">
+                                        <input type="hidden" name="aId" value="<?= $patientAppointment['aId']; ?>">
+                                        <input type="hidden" name="pId" value="<?= $patientAppointment['pId']; ?>">
+                                        <input type="submit" value="Add Test" class="btn btn-primary" name="addTestLab">
+                                    </form>
+
+                                    <?php
+                                    }else{
+                                    ?>
+
+                                    <form action="updateTestLab.php" method="post">
+                                        <input type="hidden" name="aId" value="<?= $patientAppointment['aId']; ?>">
+                                        <input type="hidden" name="pId" value="<?= $patientAppointment['pId']; ?>">
+                                        <input type="submit" value="Update Test" class="btn btn-secondary" name="updateTestLab">
+                                    </form>
+
+                                    <?php    
+                                    }
+                                    ?>
+
+                                </td>
+                                <td>
+                                    <?php
+                                    if(empty($patientAppointment['labTest'])){
+                                    ?>
+                                    <p class="btn btn-primary disabled">Add Result</p>
+                                    <?php
+                                    }else{
+                                    ?>
+
+                                        <?php
+                                        if(empty($patientAppointment['labResult'])){
+                                        ?>
+                                        <form action="addResultLab.php" method="post">
+                                            <input type="hidden" name="aId" value="<?= $patientAppointment['aId']; ?>">
+                                            <input type="hidden" name="pId" value="<?= $patientAppointment['pId']; ?>">
+                                            <input type="submit" value="Add Result" class="btn btn-primary" name="addResultLab">
+                                        </form>
+                                        <?php
+                                        }else{
+                                        ?>
+                                        <form action="updateResultLab.php" method="post">
+                                            <input type="hidden" name="aId" value="<?= $patientAppointment['aId']; ?>">
+                                            <input type="hidden" name="pId" value="<?= $patientAppointment['pId']; ?>">
+                                            <input type="submit" value="Update Result" class="btn btn-secondary" name="updateResultLab">
+                                        </form>
+                                        <?php
+                                        }
+                                        ?>
+
+
+                                    <?php    
+                                    }
+                                    ?>
+                                </td>
+                            </tr>
+
+                        <?php endwhile; ?>
+
+                    </tbody>
+                </table>
+            </div>
+
+
+
+            <hr class="featurette-divider">
+
+            <!-- FOOTER -->
+            <footer class="container text-center">
+                <p>&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
+            </footer>
         </div>
-
-
-        <hr class="featurette-divider">
-
-
-
-        <!-- FOOTER -->
-        <footer class="container text-center">
-            <p>&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
-        </footer>
     </main>
 
 
@@ -237,6 +296,26 @@ if (!isset($_SESSION['dId'])) {
         });
     </script>
 
+    <script>
+        $(document).ready(function() {
+            $('#search').keyup(function() {
+                var search = $(this).val();
+                var doctorName = $('.doctorName').val();
+
+                $.ajax({
+                    url: 'action.php',
+                    method: 'post',
+                    data: {
+                        labPatientName: search,
+                        doctorName: doctorName
+                    },
+                    success: function(response) {
+                        $('#table-data').html(response);
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>

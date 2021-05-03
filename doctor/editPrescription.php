@@ -74,6 +74,16 @@ if (!isset($_SESSION['dId'])) {
                             </li>
                         </div>
                     </div>
+                    <div class="dropdown nav-item">
+                        <span class="nav-link" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Laboratory
+                        </span>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="labPatientAppointment.php">Patient Appointment</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="labPatientWalkin.php">Walk in Patient</a>
+                        </div>
+                    </div>
                 </ul>
                 <!-- search bar -->
                 <!-- <form class="form-inline mt-2 mt-md-0">

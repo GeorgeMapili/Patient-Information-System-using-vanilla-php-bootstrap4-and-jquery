@@ -558,3 +558,192 @@ if (isset($_POST['walkInQuery'])) {
         echo '<h3 style="color:red">No Patient Found</h3>';
     }
 }
+
+// LABORATORY PATIENT APPOINTMENT
+
+if (isset($_POST['labPatientName'])) {
+    $labAppointmentInput = '';
+    $labPatientName =  '%'.trim(htmlspecialchars($_POST['labPatientName'])).'%';
+    $doctorName = $_POST['doctorName'];
+    $status = "accepted";
+
+    $sql = "SELECT * FROM appointment WHERE pDoctor = :doctor AND aStatus = :status AND pName LIKE :name";
+    $stmt = $con->prepare($sql);
+    $stmt->bindParam(":doctor", $doctorName, PDO::PARAM_STR);
+    $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+    $stmt->bindParam(":name", $labPatientName, PDO::PARAM_STR);
+    $stmt->execute();
+
+    $labPatientAppointmentInRow = $stmt->rowCount();
+
+    if ($labPatientAppointmentInRow > 0) {
+        $labAppointmentInput .= '
+        <thead class="bg-info text-light">
+            <tr>
+                <th scope="col">Patient Name</th>
+                <th scope="col">Date</th>
+                <th scope="col">Patient Disease</th>
+                <th scope="col">Laboratory Test</th>
+                <th scope="col">Result</th>
+            </tr>
+        </thead>
+        <tbody>
+        ';
+
+        while ($labPatientAppointment = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $labAppointmentInput .= '
+                <tr>
+                    <td>' . $labPatientAppointment['pName'] . '</td>
+                    <td>' . date("M d, Y", strtotime($labPatientAppointment['aDate'])). ' at ' .$labPatientAppointment['aTime'] . '</td>
+                    <td>' . $labPatientAppointment['aReason'] . '</td>
+                    <td>';
+                if(empty($labPatientAppointment['labTest'])){
+                $labAppointmentInput .= '    <form action="addTestLab.php" method="post">
+                                            <input type="hidden" name="aId" value=' . $labPatientAppointment['aId'] . '>
+                                            <input type="hidden" name="pId" value=' . $labPatientAppointment['pId'] . '>
+                                            <input type="submit" value="Add Test" class="btn btn-primary" name="addTestLab">
+                                        </form>
+                                        </td>';
+                } else {
+                    $labAppointmentInput .= '
+                                        <form action="updateTestLab.php" method="post">
+                                            <input type="hidden" name="aId" value=' . $labPatientAppointment['aId'] . '>
+                                            <input type="hidden" name="pId" value=' . $labPatientAppointment['pId'] . '>
+                                                <input type="submit" value="Update Test" class="btn btn-secondary" name="updateTestLab">
+                                        </form>
+                                        </td>';
+                }
+
+                $labAppointmentInput .= '<td>';
+
+                if(empty($labPatientAppointment['labTest'])){
+
+                    $labAppointmentInput .= '<p class="btn btn-primary disabled">Add Result</p>
+                    </td>';
+
+                } else {
+
+                        if(empty($labPatientAppointment['labResult'])){
+
+                            $labAppointmentInput .= '
+                            <form action="addResultLab.php" method="post">
+                                <input type="hidden" name="aId" value=' . $labPatientAppointment['aId'] . '>
+                                <input type="hidden" name="pId" value=' . $labPatientAppointment['pId'] . '>
+                                <input type="submit" value="Add Result" class="btn btn-primary" name="addResultLab">
+                            </form>
+                            </td>';
+
+                        }else{
+
+                            $labAppointmentInput .= '
+                            <form action="updateResultLab.php" method="post">
+                                <input type="hidden" name="aId" value=' . $labPatientAppointment['aId'] . '>
+                                <input type="hidden" name="pId" value=' . $labPatientAppointment['pId'] . '>
+                                <input type="submit" value="Update Result" class="btn btn-secondary" name="updateResultLab">
+                            </form>
+                            </td>';
+                        }
+                        
+
+                }
+
+                $labAppointmentInput .= '</tr></tbody>';
+
+        }
+        echo $labAppointmentInput;
+    } else {
+        echo '<h3 style="color:red">No Patient Found</h3>';
+    }
+
+}
+
+// LABORATORY WALKIN PATIENT
+if (isset($_POST['labWalkin'])) {
+    $labWalkInInput = '';
+    $labWalkin =  '%'.trim(htmlspecialchars($_POST['labWalkin'])).'%';
+    $doctorName = $_POST['doctorName'];
+
+    $sql = "SELECT * FROM walkinpatient WHERE walkInDoctor = :doctor AND walkInName LIKE :name";
+    $stmt = $con->prepare($sql);
+    $stmt->bindParam(":doctor", $doctorName, PDO::PARAM_STR);
+    $stmt->bindParam(":name", $labWalkin, PDO::PARAM_STR);
+    $stmt->execute();
+
+    $labWalkInRow = $stmt->rowCount();
+
+    if ($labWalkInRow > 0) {
+        $labWalkInInput .= '
+        <thead class="bg-info text-light">
+            <tr>
+                <th scope="col">Patient Name</th>
+                <th scope="col">Patient Address</th>
+                <th scope="col">Patient Disease</th>
+                <th scope="col">Laboratory Test</th>
+                <th scope="col">Result</th>
+            </tr>
+        </thead>
+        <tbody>
+        ';
+
+        while ($labWalkIn = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $labWalkInInput .= '
+                <tr>
+                    <td>' . $labWalkIn['walkInName'] . '</td>
+                    <td>' . $labWalkIn['walkInAddress'] . '</td>
+                    <td>' . $labWalkIn['walkInDisease'] . '</td>
+                    <td>';
+                if(empty($labWalkIn['labTest'])){
+                $labWalkInInput .= '    <form action="addTestLabWalkin.php" method="post">
+                                            <input type="hidden" name="walkInId" value=' . $labWalkIn['walkInId'] . '>
+                                            <input type="submit" value="Add Test" class="btn btn-primary" name="addTestLab">
+                                        </form>
+                                        </td>';
+                } else {
+                    $labWalkInInput .= '
+                                        <form action="updateTestLabWalkin.php" method="post">
+                                            <input type="hidden" name="walkInId" value=' . $labWalkIn['walkInId'] . '>
+                                                <input type="submit" value="Update Test" class="btn btn-secondary" name="updateTestLab">
+                                        </form>
+                                        </td>';
+                }
+
+                $labWalkInInput .= '<td>';
+
+                if(empty($labWalkIn['labTest'])){
+
+                    $labWalkInInput .= '<p class="btn btn-primary disabled">Add Result</p>
+                    </td>';
+
+                } else {
+
+                        if(empty($labWalkIn['labResult'])){
+
+                            $labWalkInInput .= '
+                            <form action="addResultLabWalkin.php" method="post">
+                                <input type="hidden" name="walkInId" value=' . $labWalkIn['walkInId'] . '>
+                                <input type="submit" value="Add Result" class="btn btn-primary" name="addResultLab">
+                            </form>
+                            </td>';
+
+                        }else{
+
+                            $labWalkInInput .= '
+                            <form action="updateResultLabWalkin.php" method="post">
+                                <input type="hidden" name="walkInId" value=' . $labWalkIn['walkInId'] . '>
+                                <input type="submit" value="Update Result" class="btn btn-secondary" name="updateResultLab">
+                            </form>
+                            </td>';
+                        }
+                        
+
+                }
+
+                $labWalkInInput .= '</tr></tbody>';
+
+        }
+        echo $labWalkInInput;
+    } else {
+        echo '<h3 style="color:red">No Patient Found</h3>';
+    }
+
+}
