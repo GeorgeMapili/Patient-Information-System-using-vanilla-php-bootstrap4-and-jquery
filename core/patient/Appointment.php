@@ -59,8 +59,8 @@ class Appointment
         // Check if the date is a weekend
         $weekDay = date('w', strtotime($this->aDate));
 
-        if($weekDay == 0 || $weekDay == 6){
-            header("location:appointment.php?errDate1=no_weekends");
+        if($weekDay == 0){
+            header("location:appointment.php?errDate1=no_sundays");
             exit(0);
         }
         return "valid_date";

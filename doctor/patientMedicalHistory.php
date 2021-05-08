@@ -128,6 +128,8 @@ if (!isset($_SESSION['dId'])) {
                             <th scope="col">Patient Doctor</th>
                             <th scope="col">Patient Disease</th>
                             <th scope="col">Prescription</th>
+                            <th scope="col">Lab Test</th>
+                            <th scope="col">Lab Result</th>
                             <th scope="col">Dated On</th>
                         </tr>
                     </thead>
@@ -152,6 +154,8 @@ if (!isset($_SESSION['dId'])) {
                                     <td><?= $history['pDoctor'] ?></td>
                                     <td><?= $history['aReason'] ?></td>
                                     <td><?= $history['pPrescription'] ?></td>
+                                    <td><?= empty($history['labTest']) ? 'N/A': $history['labTest'] ?></td>
+                                    <td><?= empty($history['labResult']) ? 'N/A': $history['labResult'] ?></td>
                                     <td><?= $history['dischargedOn'] ?></td>
                                 </tr>
                         <?php

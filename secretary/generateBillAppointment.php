@@ -121,6 +121,8 @@ if (!isset($_SESSION['nId'])) {
                 $_SESSION['Pa_totalPay'] = $patientAppointmentBill['pTotalPay'];
                 $_SESSION['Pa_dFee'] = $patientAppointmentBill['dFee'];
                 $_SESSION['Pa_Disease'] = $patientAppointmentBill['aReason'];
+                $_SESSION['Pa_labTest'] = $patientAppointmentBill['labTest'];
+                $_SESSION['Pa_labResult'] = $patientAppointmentBill['labResult'];
             } else {
 
                 if (isset($_POST['dischargeAppointment'])) {
@@ -217,6 +219,16 @@ if (!isset($_SESSION['nId'])) {
                                 <div class="form-group col-md-6">
                                     <label for="">Doctor Fee</label>
                                     <input type="text" name="doctorFee" class="form-control doctorFee" value="<?= $_SESSION['Pa_dFee'] ?>" readonly>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="">Lab Test</label>
+                                    <input type="text" name="labTest" value="<?= empty($_SESSION['Pa_labTest']) ? 'N/A': $_SESSION['Pa_labTest'] ?>" class="form-control" readonly>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="">Lab Result</label>
+                                    <input type="text" name="labResult" class="form-control doctorFee" value="<?= empty($_SESSION['Pa_labResult']) ? 'N/A': $_SESSION['Pa_labResult'] ?>" readonly>
                                 </div>
                             </div>
                             <div class="form-row">

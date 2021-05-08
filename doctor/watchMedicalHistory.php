@@ -131,6 +131,8 @@ if (!isset($_SESSION['dId'])) {
                             <th scope="col">Total Amount</th>
                             <th scope="col">Patient Amount Pay</th>
                             <th scope="col">Patient Change</th>
+                            <th scope="col">Lab Test</th>
+                            <th scope="col">Lab Result</th>
                             <th scope="col">Date</th>
                         </tr>
                     </thead>
@@ -160,6 +162,8 @@ if (!isset($_SESSION['dId'])) {
                                     <td><?= $history['pTotalAmount'] ?></td>
                                     <td><?= $history['pAmountPay'] ?></td>
                                     <td><?= $history['pChange'] ?></td>
+                                    <td><?= empty($history['labTest']) ? 'N/A': $history['labTest'] ?></td>
+                                    <td><?= empty($history['labResult']) ? 'N/A': $history['labResult'] ?></td>
                                     <td><?= date("M d, Y", strtotime($history['pMadeOn'])) ?></td>
                                 </tr>
 

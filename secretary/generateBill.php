@@ -119,6 +119,8 @@ if (!isset($_SESSION['nId'])) {
                 $_SESSION['walkInTotalPay'] = $patientBill['walkInTotalPay'];
                 $_SESSION['dFee'] = $patientBill['doctorFee'];
                 $_SESSION['walkInDisease'] = $patientBill['walkInDisease'];
+                $_SESSION['walkInLabTest'] = $patientBill['labTest'];
+                $_SESSION['walkInLabResult'] = $patientBill['labResult'];
             } else {
 
                 if (isset($_POST['discharge'])) {
@@ -147,6 +149,8 @@ if (!isset($_SESSION['nId'])) {
                     $medicineFee = $_POST['medicineFee'];
                     $amountInput = $_POST['amountInput'];
                     $totalAmount = $_POST['totalAmount'];
+                    $walkInLabTest = $_POST['walkInLabTest'];
+                    $walkInLabResult = $_POST['walkInLabResult'];
 
                     // Change of the bill
                     $changeBill = 0;
@@ -166,7 +170,7 @@ if (!isset($_SESSION['nId'])) {
                         $stmt->execute();
 
                         // INSERT INTO DISCHARGED PATIENT TABLE
-                        $sql = "INSERT INTO discharged_patient(pId,pName,pEmail,pAddress, pMobile, pDoctor, pPrescription, pDisease, pTotalAmount,pStatus,pAmountPay,pChange)VALUES(:id,:name,:email,:address,:mobile,:doctor,:prescription,:disease,:totalAmount,:status,:amountPay,:change)";
+                        $sql = "INSERT INTO discharged_patient(pId,pName,pEmail,pAddress, pMobile, pDoctor, pPrescription, pDisease, pTotalAmount,pStatus,pAmountPay,pChange,labTest,labResult)VALUES(:id,:name,:email,:address,:mobile,:doctor,:prescription,:disease,:totalAmount,:status,:amountPay,:change,:labTest,:labResult)";
                         $stmt = $con->prepare($sql);
                         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
                         $stmt->bindParam(":name", $name, PDO::PARAM_STR);
@@ -180,6 +184,8 @@ if (!isset($_SESSION['nId'])) {
                         $stmt->bindParam(":status", $patientStatus, PDO::PARAM_STR);
                         $stmt->bindParam(":amountPay", $_SESSION['amountInput'], PDO::PARAM_INT);
                         $stmt->bindParam(":change", $_SESSION['change'], PDO::PARAM_INT);
+                        $stmt->bindParam(":labTest", $walkInLabTest, PDO::PARAM_STR);
+                        $stmt->bindParam(":labResult", $walkInLabResult, PDO::PARAM_STR);
                         $stmt->execute();
 
                         // DELETE IT FROM PATIENTWALKIN TABLE || JUST COMMENT IF SOMETHING MAKE WRONG
@@ -192,7 +198,7 @@ if (!isset($_SESSION['nId'])) {
                         $pusher->trigger('my-channel', 'my-event', $data);
 
                         // INSERT INTO RETURNEE PATIENT TABLE FOR DOCTOR MEDICAL HISTORY
-                        $sql = "INSERT INTO returnee_patient(pId,pName,pEmail,pAddress, pMobile, pDoctor, pPrescription, pDisease, pTotalAmount,pStatus,pAmountPay,pChange)VALUES(:id,:name,:email,:address,:mobile,:doctor,:prescription,:disease,:totalAmount,:status,:amountPay,:change)";
+                        $sql = "INSERT INTO returnee_patient(pId,pName,pEmail,pAddress, pMobile, pDoctor, pPrescription, pDisease, pTotalAmount,pStatus,pAmountPay,pChange,labTest,labResult)VALUES(:id,:name,:email,:address,:mobile,:doctor,:prescription,:disease,:totalAmount,:status,:amountPay,:change,:labTest,:labResult)";
                         $stmt = $con->prepare($sql);
                         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
                         $stmt->bindParam(":name", $name, PDO::PARAM_STR);
@@ -206,6 +212,8 @@ if (!isset($_SESSION['nId'])) {
                         $stmt->bindParam(":status", $patientStatus, PDO::PARAM_STR);
                         $stmt->bindParam(":amountPay", $_SESSION['amountInput'], PDO::PARAM_INT);
                         $stmt->bindParam(":change", $_SESSION['change'], PDO::PARAM_INT);
+                        $stmt->bindParam(":labTest", $walkInLabTest, PDO::PARAM_STR);
+                        $stmt->bindParam(":labResult", $walkInLabResult, PDO::PARAM_STR);
                         $stmt->execute();
 
                         header("location:discharge.php?dischargeWalkInPatient=true");
@@ -260,6 +268,16 @@ if (!isset($_SESSION['nId'])) {
                                 <div class="form-group col-md-6">
                                     <label for="">Doctor Fee</label>
                                     <input type="text" name="doctorFee" class="form-control doctorFee" value="<?= $_SESSION['dFee'] ?>" readonly>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="">Lab Test</label>
+                                    <input type="text" name="walkInLabTest" value="<?= empty($_SESSION['walkInLabTest']) ? 'N/A': $_SESSION['walkInLabTest'] ?>" class="form-control" readonly>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="">Lab Result</label>
+                                    <input type="text" name="walkInLabResult" class="form-control doctorFee" value="<?= empty($_SESSION['walkInLabResult']) ? 'N/A': $_SESSION['walkInLabResult'] ?>" readonly>
                                 </div>
                             </div>
                             <div class="form-row">

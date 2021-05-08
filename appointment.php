@@ -122,7 +122,7 @@ if (!isset($_SESSION['id'])) {
 
             $appointment->datePassByCheck();
 
-            // $appointment->noWeekEndServiceCheck();
+            $appointment->noWeekEndServiceCheck();
 
             $appointment->alreadyHaveAnAppointDiffDoctor();
 
@@ -252,9 +252,9 @@ if (!isset($_SESSION['id'])) {
                 </div>
                 <label for="">Date & Time</label><br>
                 <small><span class="text-danger h6 font-weight-bold">*</span>No sunday service</small>
-                <?= ((isset($_GET['errDate']) && $_GET['errDate'] == "date_already_pass_by") || (isset($_GET['errDate1']) && $_GET['errDate1'] == "no_weekends")) ? '<input type="date" class="form-control is-invalid" name="dateOfAppointment" required>' : '<input type="date" class="form-control" name="dateOfAppointment" required>'; ?>
+                <?= ((isset($_GET['errDate']) && $_GET['errDate'] == "date_already_pass_by") || (isset($_GET['errDate1']) && $_GET['errDate1'] == "no_sundays")) ? '<input type="date" class="form-control is-invalid" name="dateOfAppointment" required>' : '<input type="date" class="form-control" name="dateOfAppointment" required>'; ?>
                 <?= (isset($_GET['errDate']) && $_GET['errDate'] == "date_already_pass_by") ? '<span class="text-danger">Date has already passed!</span>' : ''; ?>
-                <?= (isset($_GET['errDate1']) && $_GET['errDate1'] == "no_weekends") ? '<span class="text-danger">No weekends service!</span>' : ''; ?>
+                <?= (isset($_GET['errDate1']) && $_GET['errDate1'] == "no_sundays") ? '<span class="text-danger">No sunday service!</span>' : ''; ?>
 
                 <?= ((isset($_GET['errTime']) && $_GET['errTime'] == "all_ready_taken_time") || (isset($_GET['errDup']) && $_GET['errDup'] == "you_have_already_an_appointment_in_that_time_with_different_doctor") || (isset($_GET['errDup1']) && $_GET['errDup1'] == "you_already_made_an_appointment")) ? '<select class="form-control is-invalid" name="selectTime" required>' : '<select class="form-control" name="selectTime" required>'; ?>
                 <option value="">select a time</option>

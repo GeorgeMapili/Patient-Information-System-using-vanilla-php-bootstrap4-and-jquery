@@ -26,6 +26,8 @@ unset($_SESSION['change']);
 unset($_SESSION['walkInDisease']);
 unset($_SESSION['amountInput']);
 unset($_SESSION['change']);
+unset($_SESSION['walkInLabTest']);
+unset($_SESSION['walkInLabResult']);
 
 // Patient information SESSION
 unset($_SESSION['Pa_aId']);
