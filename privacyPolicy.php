@@ -100,7 +100,7 @@ if (!isset($_SESSION['id'])) {
 
             <div class="my-5">
                 <div class="text-center">
-                    <h1 class="display-3" id="primaryColor">Privacy Policy</h1>
+                    <h1 class="display-3 text-white">Privacy Policy</h1>
                 </div>
             </div>
 
@@ -113,7 +113,7 @@ if (!isset($_SESSION['id'])) {
                 </p>
             </div>
 
-            <h4 class="text-center my-5" id="primaryColor">Information Collection and Use</h4>
+            <h4 class="text-center my-5 text-white">Information Collection and Use</h4>
             <div class="px-5 text-white">
                 <p class="lead">
                     While using our website, we may ask you to provide us with certain personally identifiable information that can be used to contact or identify you. Personally identifiable information may include, but is not limited to your name or personal information.

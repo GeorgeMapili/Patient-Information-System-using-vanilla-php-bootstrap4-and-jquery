@@ -246,7 +246,7 @@ $stmt->execute();
             <hr class="featurette-divider">
 
             <div class="text-center m-5">
-                <h3 class="display-3 text-white"><strong>Video</strong></h3>
+                <h3 class="display-3 text-white text-center"><strong>Objective</strong></h3>
             </div>
             
             <div class="shadow-lg p-3 mb-5 bg-white rounded">

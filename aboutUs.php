@@ -99,7 +99,7 @@ if (!isset($_SESSION['id'])) {
 
             <div class="my-5">
                 <div class="text-center">
-                    <h1 id="primaryColor" class="display-3">About us</h1>
+                    <h1 class="display-3 text-white">About us</h1>
                 </div>
             </div>
 
