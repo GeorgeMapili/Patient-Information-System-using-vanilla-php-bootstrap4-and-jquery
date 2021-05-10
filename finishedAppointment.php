@@ -100,6 +100,17 @@ if (!isset($_SESSION['id'])) {
                 <h1 class="Display-4" id="primaryColor">Finished appointments</h1>
             </div>
 
+            <?php
+            $status = "discharged";
+            $sql = "SELECT * FROM appointment WHERE pId = :id and aStatus = :status ORDER BY aDate DESC";
+            $stmt = $con->prepare($sql);
+            $stmt->bindParam(":id", $_SESSION['id'], PDO::PARAM_INT);
+            $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+            $stmt->execute();
+
+            if($stmt->rowCount() > 0){
+            ?>
+
             <div class="table-responsive-xl">
                 <table class="table table-hover shadow p-3 mb-5 bg-white rounded">
                     <thead class="bg-info text-light">
@@ -113,12 +124,6 @@ if (!isset($_SESSION['id'])) {
                     </thead>
                     <tbody>
                         <?php
-                        $status = "discharged";
-                        $sql = "SELECT * FROM appointment WHERE pId = :id and aStatus = :status ORDER BY aDate DESC";
-                        $stmt = $con->prepare($sql);
-                        $stmt->bindParam(":id", $_SESSION['id'], PDO::PARAM_INT);
-                        $stmt->bindParam(":status", $status, PDO::PARAM_STR);
-                        $stmt->execute();
 
                         while ($appointment = $stmt->fetch(PDO::FETCH_ASSOC)) :
                         ?>
@@ -139,6 +144,13 @@ if (!isset($_SESSION['id'])) {
                     </tbody>
                 </table>
             </div>
+            <?php
+            }else{
+            ?>
+            <p class="lead text-center text-white display-4">No finished appointments yet</p>
+            <?php    
+            }
+            ?>
             
         </div>
 

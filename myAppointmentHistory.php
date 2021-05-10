@@ -100,6 +100,20 @@ if (!isset($_SESSION['id'])) {
                 <h1 class="Display-4" id="primaryColor">My appointments History</h1>
             </div>
 
+            <?php
+            $status1 = "discharged";
+            $status2 = "cancelled";
+            $sql = "SELECT * FROM appointment WHERE (aStatus = :status1 OR aStatus = :status2) AND pId = :id ORDER BY aDate DESC";
+
+            $stmt = $con->prepare($sql);
+            $stmt->bindParam(":status1", $status1, PDO::PARAM_STR);
+            $stmt->bindParam(":status2", $status2, PDO::PARAM_STR);
+            $stmt->bindParam(":id", $_SESSION['id'], PDO::PARAM_INT);
+            $stmt->execute();
+
+            if($stmt->rowCount() > 0){
+            ?>
+
             <div class="table-responsive-xl">
                 <table class="table table-hover shadow-lg p-3 mb-5 bg-white rounded">
                     <thead class="bg-info text-light">
@@ -113,16 +127,6 @@ if (!isset($_SESSION['id'])) {
                     </thead>
                     <tbody>
                         <?php
-                        $status1 = "discharged";
-                        $status2 = "cancelled";
-                        $sql = "SELECT * FROM appointment WHERE (aStatus = :status1 OR aStatus = :status2) AND pId = :id ORDER BY aDate DESC";
-
-                        $stmt = $con->prepare($sql);
-                        $stmt->bindParam(":status1", $status1, PDO::PARAM_STR);
-                        $stmt->bindParam(":status2", $status2, PDO::PARAM_STR);
-                        $stmt->bindParam(":id", $_SESSION['id'], PDO::PARAM_INT);
-                        $stmt->execute();
-
                         $rowCount = $stmt->rowCount();
 
                         while ($myAppointmentHistory = $stmt->fetch(PDO::FETCH_ASSOC)) :
@@ -148,6 +152,13 @@ if (!isset($_SESSION['id'])) {
                     </tbody>
                 </table>
             </div>
+            <?php
+            }else{
+            ?>
+            <p class="lead text-center text-white display-4">No appointments history yet</p>
+            <?php                
+            }
+            ?>
 
         </div>
 

@@ -112,6 +112,17 @@ if (!isset($_SESSION['id'])) {
                 <h1 class="Display-4" id="primaryColor">My appointments</h1>
             </div>
 
+            <?php
+            $status = "pending";
+            $sql = "SELECT * FROM appointment WHERE pId = :id and aStatus = :status";
+            $stmt = $con->prepare($sql);
+            $stmt->bindParam(":id", $_SESSION['id'], PDO::PARAM_INT);
+            $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+            $stmt->execute();
+
+            if($stmt->rowCount() > 0){
+            ?>
+
             <div class="table-responsive-xl">
                 <table class="table table-hover shadow p-3 mb-5 bg-white rounded">
                     <thead class="bg-info text-light">
@@ -124,16 +135,7 @@ if (!isset($_SESSION['id'])) {
                         </tr>
                     </thead>
                     <tbody>
-                        <?php
-                        $status = "pending";
-                        $sql = "SELECT * FROM appointment WHERE pId = :id and aStatus = :status";
-                        $stmt = $con->prepare($sql);
-                        $stmt->bindParam(":id", $_SESSION['id'], PDO::PARAM_INT);
-                        $stmt->bindParam(":status", $status, PDO::PARAM_STR);
-                        $stmt->execute();
-
-                        while ($appointment = $stmt->fetch(PDO::FETCH_ASSOC)) :
-                        ?>
+                        <?php while ($appointment = $stmt->fetch(PDO::FETCH_ASSOC)) : ?>
                             <tr>
                                 <td><?= $appointment['pDoctor']; ?></td>
                                 <td>₱ <?= number_format($appointment['dFee'], 2); ?></td>
@@ -150,6 +152,13 @@ if (!isset($_SESSION['id'])) {
                     </tbody>
                 </table>
             </div>
+            <?php 
+            }else{
+            ?>
+            <p class="lead text-center text-white display-4">No appointments yet</p>
+            <?php
+            } 
+            ?>
 
         </div>
 
