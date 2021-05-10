@@ -111,13 +111,13 @@ if (!isset($_SESSION['id'])) {
 
         <?php
 
-        $activeTotalCases = "";
-        $country = "";
-        $newCases = "";
-        $newDeath = "";
-        $totalCases = "";
-        $totalDeaths = "";
-        $totalRecovered = "";
+        $activeTotalCases = " ";
+        $country = " ";
+        $newCases = " ";
+        $newDeath = " ";
+        $totalCases = " ";
+        $totalDeaths = " ";
+        $totalRecovered = " ";
 
         $curl = curl_init();
 
@@ -229,12 +229,12 @@ if (!isset($_SESSION['id'])) {
                         </div>
                     </div>
                 </div>
-
+                
                 <div class="col-lg-3 col-md-4 col-sm-12">
                     <div class="text-white bg-dark m-3" style="box-shadow: 3px 5px #fff;">
                         <div class="card-body">
                             <h5 class="card-title">New Cases</h5>
-                            <p class="card-text"><?php echo $newCases; ?></p>
+                            <p class="card-text"><?= empty($newCases) ? 'No New Cases': $newCases ?></p>
                         </div>
                     </div>
                 </div>
@@ -242,8 +242,8 @@ if (!isset($_SESSION['id'])) {
                 <div class="col-lg-3 col-md-4 col-sm-12">
                     <div class="text-white bg-dark m-3" style="box-shadow: 3px 5px #fff;">
                         <div class="card-body">
-                            <h5 class="card-title">Death</h5>
-                            <p class="card-text"><?php echo $newDeath; ?></p>
+                            <h5 class="card-title">New Death</h5>
+                            <p class="card-text"><?= empty($newDeath) ? 'No New Deaths': $newDeath ?></p>
                         </div>
                     </div>
                 </div>
