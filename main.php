@@ -47,6 +47,10 @@ $stmt->execute();
         height: 100%;
         width: 100%;
         }
+
+        body{
+            background-image: linear-gradient(to right, #343A40 , #86fde8);
+        }
     </style>
 
 </head>
@@ -54,7 +58,7 @@ $stmt->execute();
 <body>
 
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark">
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark" style="border-bottom: 2px solid rgb(15, 208, 214);">
             <a class="navbar-brand " id="primaryColor" href="main.php">SUMC Doctors Clinic</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -116,7 +120,7 @@ $stmt->execute();
 
     <main role="main">
 
-        <div id="myCarousel" class="carousel slide" data-ride="carousel">
+        <div id="myCarousel" class="carousel slide" data-ride="carousel" style="border-bottom: 2px solid rgb(15, 208, 214);">
             <ol class="carousel-indicators">
                 <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
                 <li data-target="#myCarousel" data-slide-to="1"></li>
@@ -172,14 +176,14 @@ $stmt->execute();
 
             <hr class="featurette-divider">
 
-            <div class="text-center m-5">
+            <div class="text-center m-5 text-white">
                 <h3 class="display-3"><strong>Discover</strong></h3>
             </div>
 
             <div class="row featurette">
                 <div class="col-md-7">
-                    <h2 class="featurette-heading" id="primaryColor">Pleasant atmosphere.</h2>
-                    <p class="lead">These beds have special features both for the comfort and well-being of the patient and for the convenience of health care workers.</p>
+                    <h2 class="featurette-heading text-white">Pleasant atmosphere.</h2>
+                    <p class="lead text-white">These beds have special features both for the comfort and well-being of the patient and for the convenience of health care workers.</p>
                 </div>
                 <div class="col-md-5">
                     <img class="featurette-image img-fluid mx-auto shadow-lg p-3 mb-5 bg-white rounded" src="img/clinic.jpg" alt="Generic placeholder image">
@@ -190,8 +194,8 @@ $stmt->execute();
 
             <div class="row featurette">
                 <div class="col-md-7 order-md-2">
-                    <h2 class="featurette-heading" id="primaryColor">Top of the line equipments.</h2>
-                    <p class="lead">With the latest technology and medical equipment in patient care that helps the doctors diagnose diseases and treat patients effectively and efficiently.</p>
+                    <h2 class="featurette-heading text-white">Top of the line equipments.</h2>
+                    <p class="lead text-white">With the latest technology and medical equipment in patient care that helps the doctors diagnose diseases and treat patients effectively and efficiently.</p>
                 </div>
                 <div class="col-md-5 order-md-1">
                     <img class="featurette-image img-fluid mx-auto shadow-lg p-3 mb-5 bg-white rounded" src="img/feature2.jpeg" alt="Generic placeholder image">
@@ -202,8 +206,8 @@ $stmt->execute();
 
             <div class="row featurette">
                 <div class="col-md-7">
-                    <h2 class="featurette-heading" id="primaryColor">Skilled Doctors.</h2>
-                    <p class="lead">Doctors take an oath to care for people to the best of their ability as their profession.</p>
+                    <h2 class="featurette-heading text-white">Skilled Doctors.</h2>
+                    <p class="lead text-white">Doctors take an oath to care for people to the best of their ability as their profession.</p>
                 </div>
                 <div class="col-md-5">
                     <img class="featurette-image img-fluid mx-auto shadow-lg p-3 mb-5 bg-white rounded" src="img/feature3.jpeg" alt="Generic placeholder image">
@@ -213,7 +217,7 @@ $stmt->execute();
             <hr class="featurette-divider">
 
             <div class="text-center m-5">
-                <h3 class="display-3"><strong>Place</strong></h3>
+                <h3 class="display-3 text-white"><strong>Place</strong></h3>
             </div>
             <!-- /END THE FEATURETTES -->
 
@@ -242,7 +246,7 @@ $stmt->execute();
             <hr class="featurette-divider">
 
             <div class="text-center m-5">
-                <h3 class="display-3"><strong>Video</strong></h3>
+                <h3 class="display-3 text-white"><strong>Video</strong></h3>
             </div>
             
             <div class="shadow-lg p-3 mb-5 bg-white rounded">
@@ -258,8 +262,8 @@ $stmt->execute();
 
         <!-- FOOTER -->
         <footer class="container">
-            <p class="float-right"><a href="#">Back to top</a></p>
-            <p>&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
+            <p class="float-right"><a href="#" class="text-dark">Back to top</a></p>
+            <p class="text-white">&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php" id="primaryColor">Privacy Policy</a> &middot; <a href="aboutUs.php" id="primaryColor">About Us</a></p>
         </footer>
     </main>
 

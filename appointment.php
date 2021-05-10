@@ -24,12 +24,17 @@ if (!isset($_SESSION['id'])) {
     <link rel="stylesheet" href="css/main.css" />
     <link rel="icon" href="img/sumc.png">
     <title>Patient | Set Appointment</title>
+    <style>
+        body{
+            background-image: linear-gradient(to right, #343A40 , #86fde8);
+        }
+    </style>
 </head>
 
 <body>
 
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark">
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark" style="border-bottom: 2px solid rgb(15, 208, 214);">
             <a class="navbar-brand " i id="primaryColor" href="main.php">SUMC Doctors Clinic</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -281,7 +286,7 @@ if (!isset($_SESSION['id'])) {
 
 
         <div class="container">
-            <h4 class="lead my-5">Doctor Specialization</h4>
+            <h4 class="lead my-5 text-white">Doctor Specialization</h4>
 
             <?php
             $sql = "SELECT * FROM doctor";
@@ -290,7 +295,7 @@ if (!isset($_SESSION['id'])) {
 
             while ($doctorSpec = $stmt->fetch(PDO::FETCH_ASSOC)) :
             ?>
-                <div class="my-5">
+                <div class="my-5 text-white">
                     <h6><?= $doctorSpec['dSpecialization']; ?></h6>
                     <p><?= $doctorSpec['dSpecializationInfo']; ?></p>
                 </div>
@@ -301,8 +306,8 @@ if (!isset($_SESSION['id'])) {
         <hr class="featurette-divider">
 
         <!-- FOOTER -->
-        <footer class="container text-center">
-            <p>&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
+        <footer class="container">
+            <p class="text-white">&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php" id="primaryColor">Privacy Policy</a> &middot; <a href="aboutUs.php" id="primaryColor">About Us</a></p>
         </footer>
     </main>
 

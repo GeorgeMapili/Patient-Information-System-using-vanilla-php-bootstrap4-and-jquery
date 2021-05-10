@@ -22,12 +22,17 @@ if (!isset($_SESSION['id'])) {
     <link rel="stylesheet" href="css/main.css" />
     <link rel="icon" href="img/sumc.png">
     <title>Patient | Health Library</title>
+    <style>
+        body{
+            background-image: linear-gradient(to right, #343A40 , #86fde8);
+        }
+    </style>
 </head>
 
 <body>
 
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark">
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark" style="border-bottom: 2px solid rgb(15, 208, 214);">
             <a class="navbar-brand " i id="primaryColor" href="main.php">SUMC Doctors Clinic</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -102,7 +107,7 @@ if (!isset($_SESSION['id'])) {
             <hr class="featurette-divider">
         </div>
 
-        <h2 class="text-center my-3">COVID UPDATE</h2>
+        <h2 class="text-center my-3 text-white">COVID UPDATE</h2>
 
         <?php
 
@@ -201,19 +206,75 @@ if (!isset($_SESSION['id'])) {
         </div>
 
         <div class="container text-center">
-            <h2 class="lead">Covid 19 Information</h2>
+            <h2 class="lead text-white">Covid 19 Information</h2>
         </div>
-        <div class="container bg-dark text-light my-5 shadow p-3 mb-5 bg-dark rounded">
-            <div class="d-flex justify-content-center align-items-center">
-                <div class="text-center my-3">
-                    <h3 class="activeCasesText"><b>Country:</b> <?php echo $country; ?></h3>
-                    <h5 class="countryText"><b>Total Active Cases:</b> <?php echo $activeTotalCases; ?></h5>
-                    <p class="newCasesText"><b>New Cases:</b> <?php echo $newCases; ?></p>
-                    <p class="newDeathsText"><b>Death:</b> <?php echo $newDeath; ?></p>
-                    <p class="totalCasesText"><b>Total Cases:</b> <?php echo $totalCases; ?></p>
-                    <p class="totalDeathsText"><b>Total Deaths:</b> <?php echo $totalDeaths; ?></p>
-                    <p class="totalRecoveredText"><b>Recovered:</b> <?php echo $totalRecovered; ?></p>
+
+        <div class="container">
+            <div class="row text-center">
+
+                <div class="col-lg-3 col-md-4 col-sm-12">
+                    <div class="text-white bg-dark m-3" style="box-shadow: 3px 5px #fff;">
+                        <div class="card-body">
+                            <h5 class="card-title">Country</h5>
+                            <p class="card-text"><?php echo $country; ?></p>
+                        </div>
+                    </div>
                 </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-12">
+                    <div class="text-white bg-dark m-3" style="box-shadow: 3px 5px #fff;">
+                        <div class="card-body">
+                            <h5 class="card-title">Total Active Cases</h5>
+                            <p class="card-text"><?php echo $activeTotalCases; ?></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-12">
+                    <div class="text-white bg-dark m-3" style="box-shadow: 3px 5px #fff;">
+                        <div class="card-body">
+                            <h5 class="card-title">New Cases</h5>
+                            <p class="card-text"><?php echo $newCases; ?></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-12">
+                    <div class="text-white bg-dark m-3" style="box-shadow: 3px 5px #fff;">
+                        <div class="card-body">
+                            <h5 class="card-title">Death</h5>
+                            <p class="card-text"><?php echo $newDeath; ?></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-12">
+                    <div class="text-white bg-dark m-3" style="box-shadow: 3px 5px #fff;">
+                        <div class="card-body">
+                            <h5 class="card-title">Total Cases</h5>
+                            <p class="card-text"><?php echo $totalCases; ?></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-12">
+                    <div class="text-white bg-dark m-3" style="box-shadow: 3px 5px #fff;">
+                        <div class="card-body">
+                            <h5 class="card-title">Total Deaths</h5>
+                            <p class="card-text"><?php echo $totalDeaths; ?></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-12">
+                    <div class="text-white bg-dark m-3" style="box-shadow: 3px 5px #fff;">
+                        <div class="card-body">
+                            <h5 class="card-title">Recovered</h5>
+                            <p class="card-text"><?php echo $totalRecovered; ?></p>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -222,8 +283,8 @@ if (!isset($_SESSION['id'])) {
 
 
         <!-- FOOTER -->
-        <footer class="container text-center">
-            <p>&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
+        <footer class="container">
+            <p class="text-white">&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php" id="primaryColor">Privacy Policy</a> &middot; <a href="aboutUs.php" id="primaryColor">About Us</a></p>
         </footer>
     </main>
 

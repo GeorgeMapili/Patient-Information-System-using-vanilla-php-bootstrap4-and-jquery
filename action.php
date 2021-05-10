@@ -29,7 +29,7 @@ if (isset($_REQUEST["term"])) {
                     ';
                 }
             } else {
-                echo "<p>No matches found</p>";
+                echo "<p class='text-white'>No matches found</p>";
             }
         } else {
             echo "ERROR: Could not able to execute $sql";

@@ -22,6 +22,11 @@ if (!isset($_SESSION['id'])) {
     <link rel="stylesheet" href="css/main.css" />
     <link rel="icon" href="img/sumc.png">
     <title>Patient | Diseases and Treatment</title>
+    <style>
+        body{
+            background-image: linear-gradient(to right, #343A40 , #86fde8);
+        }
+    </style>
 </head>
 
 <body>
@@ -32,7 +37,7 @@ if (!isset($_SESSION['id'])) {
     ?>
 
         <header>
-            <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark">
+            <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark" style="border-bottom: 2px solid rgb(15, 208, 214);">
                 <a class="navbar-brand " i id="primaryColor" href="main.php">SUMC Doctors Clinic</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -117,10 +122,10 @@ if (!isset($_SESSION['id'])) {
                     <hr class="featurette-divider">
                     <!-- Title -->
                     <div>
-                        <h2 class="display-3 my-3">What is <?= $diseaseTreatment['dtName']; ?> ?</h2>
+                        <h2 class="display-3 my-3 text-white">What is <?= $diseaseTreatment['dtName']; ?> ?</h2>
                     </div>
                     <!-- Meaning -->
-                    <div class="text-left">
+                    <div class="text-left text-white">
                         <p><?= $diseaseTreatment['dtMeaning']; ?></p>
                     </div>
 
@@ -128,10 +133,10 @@ if (!isset($_SESSION['id'])) {
                     <hr class="featurette-divider">
 
                     <div>
-                        <h2 class="display-4 my-3">Symptoms</h2>
+                        <h2 class="display-4 my-3 text-white">Symptoms</h2>
                     </div>
 
-                    <div class="text-left">
+                    <div class="text-left text-white">
                         <p><?= $diseaseTreatment['dtSymptoms']; ?></p>
                     </div>
 
@@ -139,20 +144,20 @@ if (!isset($_SESSION['id'])) {
                     <hr class="featurette-divider">
 
                     <div>
-                        <h2 class="display-4 my-3">Prevention</h2>
+                        <h2 class="display-4 my-3 text-white">Prevention</h2>
                     </div>
 
-                    <div class="text-left">
+                    <div class="text-left text-white">
                         <p><?= $diseaseTreatment['dtPrevention']; ?></p>
                     </div>
 
                     <hr class="featurette-divider">
 
                     <div>
-                        <h2 class="display-4 my-3">Treatment</h2>
+                        <h2 class="display-4 my-3 text-white">Treatment</h2>
                     </div>
 
-                    <div class="text-left">
+                    <div class="text-left text-white">
                         <p><?= $diseaseTreatment['dtTreatment']; ?></p>
                     </div>
 
@@ -171,8 +176,9 @@ if (!isset($_SESSION['id'])) {
 
 
         <!-- FOOTER -->
-        <footer class="container text-center">
-            <p>&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
+        <footer class="container">
+            <p class="float-right"><a href="#" class="text-dark">Back to top</a></p>
+            <p class="text-white">&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php" id="primaryColor">Privacy Policy</a> &middot; <a href="aboutUs.php" id="primaryColor">About Us</a></p>
         </footer>
         </main>
 
