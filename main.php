@@ -49,7 +49,7 @@ $stmt->execute();
         }
 
         body{
-            background-image: linear-gradient(to right, #343A40 , #86fde8);
+            background-image: linear-gradient(to right, #476868 , #86fde8);
         }
     </style>
 

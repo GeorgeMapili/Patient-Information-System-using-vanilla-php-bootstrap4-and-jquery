@@ -25,7 +25,7 @@ if (!isset($_SESSION['id'])) {
     <title>Patient | Contact Us</title>
     <style>
         body{
-            background-image: linear-gradient(to right, #343A40 , #86fde8);
+            background-image: linear-gradient(to right, #476868 , #86fde8);
         }
     </style>
 </head>
