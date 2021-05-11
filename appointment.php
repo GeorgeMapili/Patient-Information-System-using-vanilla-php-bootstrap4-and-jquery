@@ -26,7 +26,7 @@ if (!isset($_SESSION['id'])) {
     <title>Patient | Set Appointment</title>
     <style>
         body{
-            background-image: linear-gradient(to right, #476868 , #86fde8);
+            background-image: linear-gradient(to right, #205072 , #329D9C);
         }
     </style>
 </head>
@@ -182,7 +182,7 @@ if (!isset($_SESSION['id'])) {
             </div>
 
 
-            <form action="appointment.php" method="post" class="shadow p-3 mb-5 bg-white rounded">
+            <form action="appointment.php" method="post" class="shadow p-3 mb-5 rounded text-white" style="background-image: transparent;">
                 <div class="row">
                     <input type="hidden" name="id" value="<?= $_SESSION['id']; ?>">
                     <div class="col">
@@ -276,10 +276,10 @@ if (!isset($_SESSION['id'])) {
                 <?= (isset($_GET['errDup']) && $_GET['errDup'] == "you_have_already_an_appointment_in_that_time_with_different_doctor") ? '<span class="text-danger text-center">Already have an appointment in that time with different doctor!</span> <br>' : ''; ?>
                 <?= (isset($_GET['errDup1']) && $_GET['errDup1'] == "you_already_made_an_appointment") ? '<span class="text-danger text-center">You can\'t duplicate a appointment!</span> <br>' : ''; ?>
 
-                <label for="">Reason for Appointment or Diagnosis</label>
+                <label for="">Reason for Appointment or Self Diagnosis</label>
                 <textarea name="reasonAppointment" class="form-control resize-0" cols="30" rows="10" required></textarea>
                 <div class="text-center mt-3">
-                    <input type="submit" class="btn" id="docBtnApt" value="Submit" name="submitAppointment">
+                    <input type="submit" class="btn btn-secondary rounded" value="Submit" name="submitAppointment">
                 </div>
             </form>
         </div>

@@ -24,7 +24,7 @@ if (!isset($_SESSION['id'])) {
     <title>Patient | Account</title>
     <style>
         body{
-            background-image: linear-gradient(to right, #476868 , #86fde8);
+            background-image: linear-gradient(to right, #205072 , #329D9C);
         }
     </style>
 </head>
@@ -102,7 +102,7 @@ if (!isset($_SESSION['id'])) {
                 </div>
                 <div class="text-center">
                     <?= (isset($_GET['errInfo'])) ? '<span class="text-danger">Nothing to update!</span>' : ''; ?>
-                    <?= (isset($_GET['successInfo'])) ? '<span class="text-success">Update successfully!</span>' : ''; ?>
+                    <?= (isset($_GET['successInfo'])) ? '<span class="text-success">Updated successfully!</span>' : ''; ?>
                 </div>
                 <form action="action.php" method="post">
                     <div class="row">
@@ -169,7 +169,7 @@ if (!isset($_SESSION['id'])) {
                 </div>
 
                 <div class="text-center">
-                    <?= (isset($_GET['succPass']) && isset($_GET['succPass']) == 'Successfully_updated_password') ? '<span class="text-success">Successfully update password!</span>' : ''; ?>
+                    <?= (isset($_GET['succPass']) && isset($_GET['succPass']) == 'Successfully_updated_password') ? '<span class="text-success">Successfully updated password!</span>' : ''; ?>
                 </div>
 
                 <form action="action.php" method="post">
@@ -220,7 +220,7 @@ if (!isset($_SESSION['id'])) {
                 </div>
 
                 <div class="text-center">
-                    <?= (isset($_GET['succUpdateImg']) && isset($_GET['succUpdateImg']) == 'Successfully_update_the_img') ? '<span class="text-success">Successfully update profile image!</span>' : ''; ?>
+                    <?= (isset($_GET['succUpdateImg']) && isset($_GET['succUpdateImg']) == 'Successfully_update_the_img') ? '<span class="text-success">Successfully updated profile image!</span>' : ''; ?>
                 </div>
 
                 <form action="action.php" method="post" enctype="multipart/form-data">

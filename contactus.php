@@ -25,7 +25,7 @@ if (!isset($_SESSION['id'])) {
     <title>Patient | Contact Us</title>
     <style>
         body{
-            background-image: linear-gradient(to right, #476868 , #86fde8);
+            background-image: linear-gradient(to right, #205072 , #329D9C);
         }
     </style>
 </head>
@@ -134,7 +134,7 @@ if (!isset($_SESSION['id'])) {
             }
             ?>
 
-            <form action="contactus.php" method="post" class="shadow p-3 mb-5 bg-white rounded">
+            <form action="contactus.php" method="post" class="shadow p-3 mb-5 rounded text-white" style="background-image: transparent;">
                 <div class="row">
                     <input type="hidden" name="id" value="<?= $_SESSION['id']; ?>">
                     <div class="col">
@@ -160,7 +160,7 @@ if (!isset($_SESSION['id'])) {
                 <label for="">Message or Report an Issue</label>
                 <textarea name="message" class="form-control resize-0" cols="30" rows="10" required></textarea>
                 <div class="text-center mt-3">
-                    <input type="submit" class="btn mt-5" id="docBtnApt" value="Submit" name="submitMessage">
+                    <input type="submit" class="btn btn-secondary mt-5" value="Submit" name="submitMessage">
                 </div>
             </form>
         </div>
