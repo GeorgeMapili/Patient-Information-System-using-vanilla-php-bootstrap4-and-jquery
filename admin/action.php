@@ -595,7 +595,7 @@ if (isset($_POST['searchMessage'])) {
     $search = trim(htmlspecialchars($_POST['searchMessage']));
     $searchName = "%" . $search . "%";
 
-    $sql = "SELECT * FROM message WHERE msgPatientName LIKE :name ";
+    $sql = "SELECT * FROM message WHERE msgPatientName LIKE :name ORDER BY msgMadeOn DESC";
     $stmt = $con->prepare($sql);
     $stmt->bindParam(":name", $searchName, PDO::PARAM_STR);
     $stmt->execute();

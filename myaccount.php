@@ -147,10 +147,10 @@ if (!isset($_SESSION['id'])) {
                             <?php
                             if (isset($_GET['errMobile']) && isset($_GET['errMobile']) == 'mobile_number_is_already_existed') {
                             ?>
-                                <input type="tel" name="mobileNumber" class="form-control is-invalid">
+                                <input type="tel" placeholder="+639876543210 or 09876543210" name="mobileNumber" class="form-control is-invalid" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" required>
                             <?php
                             } else { ?>
-                                <input type="tel" name="mobileNumber" class="form-control" value="<?= $_SESSION['mobile'] ?>">
+                                <input type="tel" placeholder="+639876543210 or 09876543210" name="mobileNumber" class="form-control" value="<?= $_SESSION['mobile'] ?>" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" required>
                             <?php
                             }
                             ?>

@@ -108,17 +108,20 @@ if (!isset($_SESSION['id'])) {
 
                 while ($doctors = $stmt->fetch(PDO::FETCH_ASSOC)) :
                 ?>
-                    <div class="card col-lg-3 col-md-4 col-sm-6 my-3 mb-3" style="width: 18rem;">
-                        <img class="card-img-top" src="upload/doc_profile_img/<?= $doctors['dProfileImg']; ?>" alt="Card image cap">
-                        <div class="card-body ">
-                            <h5 class="card-title"><?= $doctors['dName']; ?></h5>
-                            <p class="card-text lead"><?= $doctors['dSpecialization']; ?></p>
-                            <p class="card-text"><?= $doctors['dSpecializationInfo']; ?></p>
-                            <p class="card-text font-weight-bold">₱&nbsp;<?= number_format($doctors['dFee'], 2); ?></p>
-                            <a href="appointment.php?docId=<?= $doctors['dId']; ?>" class="btn " id="docBtnApt">Set an Appointment</a>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 my-1">
+                        <div class="bg-white p-3 rounded shadow-lg">
+                            <img class="card-img-top" src="upload/doc_profile_img/<?= $doctors['dProfileImg']; ?>" alt="Card image cap">
+                            <div class="card-body ">
+                                <h5 class="card-title"><?= $doctors['dName']; ?></h5>
+                                <p class="card-text lead"><?= $doctors['dSpecialization']; ?></p>
+                                <p class="card-text"><?= $doctors['dSpecializationInfo']; ?></p>
+                                <p class="card-text font-weight-bold">₱&nbsp;<?= number_format($doctors['dFee'], 2); ?></p>
+                                <a href="appointment.php?docId=<?= $doctors['dId']; ?>" class="btn " id="docBtnApt">Set an Appointment</a>
+                            </div>
                         </div>
                     </div>
                 <?php endwhile; ?>
+
             </div>
 
             <hr class="featurette-divider">
