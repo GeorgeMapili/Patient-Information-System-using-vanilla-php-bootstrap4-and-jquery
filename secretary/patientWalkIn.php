@@ -20,12 +20,17 @@ if (!isset($_SESSION['nId'])) {
     <link rel="stylesheet" href="../css/main.css" />
     <link rel="icon" href="../img/sumc.png">
     <title>Secretary | Walk In Patient</title>
+    <style>
+        body{
+            background-image: linear-gradient(to right, #205072 , #329D9C);
+        }
+    </style>
 </head>
 
 <body>
 
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark">
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark" style="border-bottom: 2px solid rgb(15, 208, 214);">
             <a class="navbar-brand " i id="primaryColor" href="dashboard.php">SUMC Doctors Clinic</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -169,133 +174,146 @@ if (!isset($_SESSION['nId'])) {
                 <?= (isset($_GET['succUp']) && $_GET['succUp'] == "Updated_successfully") ? '<span class="text-success">Successfully updated!</span>' : ''; ?>
                 <?= (isset($_GET['succDeleteWalkInPatient']) && $_GET['succDeleteWalkInPatient'] == "successfully_deleted_walk_in_patient") ? '<span class="text-success">Successfully deleted walk in patient!</span>' : ''; ?>
             </div>
-            <div class="row">
-                <div class="col">
-                    <form class="form-inline">
-                        <input class="form-control mb-3" id="search" autocomplete="off" type="search" placeholder="Search Patient" aria-label="Search">
-                    </form>
+
+            <?php
+            $prev = $page - 1;
+            $next = $page + 1;
+            $discharged = 0;
+            $start = ($page - 1) * $limit;
+            $sql = "SELECT * FROM walkinpatient WHERE walkInDischarged = :discharged LIMIT :start, :limit ";
+            $stmt = $con->prepare($sql);
+            $stmt->bindParam(":discharged", $discharged, PDO::PARAM_INT);
+            $stmt->bindParam(":start", $start, PDO::PARAM_INT);
+            $stmt->bindParam(":limit", $limit, PDO::PARAM_INT);
+            $stmt->execute();
+
+            if($stmt->rowCount() > 0){
+            ?>
+                <div class="row">
+                    <div class="col">
+                        <form class="form-inline">
+                            <input class="form-control mb-3" id="search" autocomplete="off" type="search" placeholder="Search Patient" aria-label="Search">
+                        </form>
+                    </div>
                 </div>
-            </div>
 
-            <div class="table-responsive-xl">
-                <div id="prescription">
-                    <table class="table table-hover shadow-lg p-3 mb-5 bg-white rounded" id="table-data">
-                        <thead class="bg-info text-light">
-                            <tr>
-                                <th scope="col">Patient Name</th>
-                                <th scope="col">Patient Address</th>
-                                <th scope="col">Patient Mobile</th>
-                                <th scope="col">Patient Disease</th>
-                                <th scope="col">Patient Doctor</th>
-                                <th scope="col">Doctor Prescription</th>
-                                <th scope="col">Add</th>
-                                <th scope="col">Generate</th>
-                                <th scope="col">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-
-
-
-
-                            <?php
-                            $prev = $page - 1;
-                            $next = $page + 1;
-                            $discharged = 0;
-                            $start = ($page - 1) * $limit;
-                            $sql = "SELECT * FROM walkinpatient WHERE walkInDischarged = :discharged LIMIT :start, :limit ";
-                            $stmt = $con->prepare($sql);
-                            $stmt->bindParam(":discharged", $discharged, PDO::PARAM_INT);
-                            $stmt->bindParam(":start", $start, PDO::PARAM_INT);
-                            $stmt->bindParam(":limit", $limit, PDO::PARAM_INT);
-                            $stmt->execute();
-
-                            while ($walkInPatient = $stmt->fetch(PDO::FETCH_ASSOC)) :
-                                $sql1 = "SELECT * FROM medicalinformation WHERE pId = :id";
-                                $stmt1 = $con->prepare($sql1);
-                                $stmt1->bindParam(":id", $walkInPatient['walkInId'], PDO::PARAM_INT);
-                                $stmt1->execute();
-
-                                $medInfoExst = $stmt1->fetch(PDO::FETCH_ASSOC);
-                            ?>
+                <div class="table-responsive-xl">
+                    <div id="prescription">
+                        <table class="table table-hover shadow-lg p-3 mb-5 bg-white rounded" id="table-data">
+                            <thead class="bg-info text-light">
                                 <tr>
-                                    <td><?= $walkInPatient['walkInName']; ?></td>
-                                    <td><?= $walkInPatient['walkInAddress']; ?></td>
-                                    <td><?= $walkInPatient['walkInMobile'] ?></td>
-                                    <td><?= $walkInPatient['walkInDisease']; ?></td>
-                                    <td><?= $walkInPatient['walkInDoctor']; ?></td>
-                                    <td><?= $walkInPatient['walkInPrescription']; ?></td>
-                                    <td>
-                                        <?php
-                                        $medInfoExst = $medInfoExst['pId'] ?? 0;
-                                        ?>
-
-                                        <?php
-                                        if ($medInfoExst == $walkInPatient['walkInId']) {
-                                        ?>
-                                            <form action="updateMedicalInformation.php" method="get">
-                                                <input type="hidden" name="id" value="<?= $walkInPatient['walkInId']; ?>">
-                                                <input type="submit" value="UPDATE MEDICAL INFORMATION" class="btn btn-secondary" name="medicalInformation">
-                                            </form>
-                                        <?php
-                                        } else {
-                                        ?>
-                                            <form action="addMedicalInformation.php" method="post">
-                                                <input type="hidden" name="id" value="<?= $walkInPatient['walkInId']; ?>">
-                                                <input type="submit" value="ADD MEDICAL INFORMATION" class="btn btn-info" name="medicalInformation">
-                                            </form>
-                                        <?php
-                                        }
-                                        ?>
-                                    </td>
-                                    <td>
-                                        <?php
-                                        if (empty($walkInPatient['walkInPrescription'])) {
-                                        ?>
-                                            <p class="btn btn-primary disabled" title="Can't generate bill without prescription">GENERATE BILL</p>
-                                        <?php
-                                        } else {
-                                        ?>
-                                            <form action="generateBill.php" method="post">
-                                                <input type="hidden" name="id" value="<?= $walkInPatient['walkInId']; ?>">
-                                                <input type="submit" value="GENERATE BILL" class="btn btn-primary" name="generateBill">
-                                            </form>
-                                        <?php
-                                        }
-                                        ?>
-
-                                    </td>
-                                    <td>
-                                        <form action="patientWalkIn.php" method="post">
-                                            <input type="hidden" name="walkInId" value="<?= $walkInPatient['walkInId']; ?>">
-                                            <input type="submit" name="deleteWalkInPatientBtn" class="btn btn-danger" value="DELETE" onclick="return confirm('Are you sure to delete ?')">
-                                        </form>
-                                    </td>
+                                    <th scope="col">Patient Name</th>
+                                    <th scope="col">Patient Address</th>
+                                    <th scope="col">Patient Mobile</th>
+                                    <th scope="col">Patient Disease</th>
+                                    <th scope="col">Patient Doctor</th>
+                                    <th scope="col">Doctor Prescription</th>
+                                    <th scope="col">Add</th>
+                                    <th scope="col">Generate</th>
+                                    <th scope="col">Action</th>
                                 </tr>
+                            </thead>
+                            <tbody>
 
-                            <?php endwhile; ?>
 
-                        </tbody>
-                    </table>
+
+
+                                <?php
+
+                                while ($walkInPatient = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                                    $sql1 = "SELECT * FROM medicalinformation WHERE pId = :id";
+                                    $stmt1 = $con->prepare($sql1);
+                                    $stmt1->bindParam(":id", $walkInPatient['walkInId'], PDO::PARAM_INT);
+                                    $stmt1->execute();
+
+                                    $medInfoExst = $stmt1->fetch(PDO::FETCH_ASSOC);
+                                ?>
+                                    <tr>
+                                        <td><?= $walkInPatient['walkInName']; ?></td>
+                                        <td><?= $walkInPatient['walkInAddress']; ?></td>
+                                        <td><?= $walkInPatient['walkInMobile'] ?></td>
+                                        <td><?= $walkInPatient['walkInDisease']; ?></td>
+                                        <td><?= $walkInPatient['walkInDoctor']; ?></td>
+                                        <td><?= $walkInPatient['walkInPrescription']; ?></td>
+                                        <td>
+                                            <?php
+                                            $medInfoExst = $medInfoExst['pId'] ?? 0;
+                                            ?>
+
+                                            <?php
+                                            if ($medInfoExst == $walkInPatient['walkInId']) {
+                                            ?>
+                                                <form action="updateMedicalInformation.php" method="get">
+                                                    <input type="hidden" name="id" value="<?= $walkInPatient['walkInId']; ?>">
+                                                    <input type="submit" value="UPDATE MEDICAL INFORMATION" class="btn btn-secondary" name="medicalInformation">
+                                                </form>
+                                            <?php
+                                            } else {
+                                            ?>
+                                                <form action="addMedicalInformation.php" method="post">
+                                                    <input type="hidden" name="id" value="<?= $walkInPatient['walkInId']; ?>">
+                                                    <input type="submit" value="ADD MEDICAL INFORMATION" class="btn btn-info" name="medicalInformation">
+                                                </form>
+                                            <?php
+                                            }
+                                            ?>
+                                        </td>
+                                        <td>
+                                            <?php
+                                            if (empty($walkInPatient['walkInPrescription'])) {
+                                            ?>
+                                                <p class="btn btn-primary disabled" title="Can't generate bill without prescription">GENERATE BILL</p>
+                                            <?php
+                                            } else {
+                                            ?>
+                                                <form action="generateBill.php" method="post">
+                                                    <input type="hidden" name="id" value="<?= $walkInPatient['walkInId']; ?>">
+                                                    <input type="submit" value="GENERATE BILL" class="btn btn-primary" name="generateBill">
+                                                </form>
+                                            <?php
+                                            }
+                                            ?>
+
+                                        </td>
+                                        <td>
+                                            <form action="patientWalkIn.php" method="post">
+                                                <input type="hidden" name="walkInId" value="<?= $walkInPatient['walkInId']; ?>">
+                                                <input type="submit" name="deleteWalkInPatientBtn" class="btn btn-danger" value="DELETE" onclick="return confirm('Are you sure to delete ?')">
+                                            </form>
+                                        </td>
+                                    </tr>
+
+                                <?php endwhile; ?>
+
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
 
-            <div class="mt-3 <?= ($firstPageValue == 0) ? 'd-none' : '' ?>">
-                <nav aria-label="Page navigation example ">
-                    <ul class="pagination justify-content-center">
-                        <li class="page-item <?= ($prev <= 0) ? 'disabled' : ''; ?>">
-                            <a class="page-link" href="patientWalkIn.php?page=<?= $prev; ?>" tabindex="-1">Previous</a>
-                        </li>
-                        <?php $pageWalkIn = isset($_GET['page']) ? $_GET['page'] : 1; ?>
-                        <?php for ($i = 1; $i <= $pages; $i++) : ?>
-                            <li class="page-item <?= ($i == $pageWalkIn) ? 'active' : ''; ?>"><a class="page-link" href="patientWalkIn.php?page=<?= $i; ?>"><?= $i; ?></a></li>
-                        <?php endfor; ?>
-                        <li class="page-item <?= ($next > $pages) ? 'disabled' : ''; ?>">
-                            <a class="page-link" href="patientWalkIn.php?page=<?= $next; ?>">Next</a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
+                <div class="mt-3 <?= ($firstPageValue == 0) ? 'd-none' : '' ?>">
+                    <nav aria-label="Page navigation example ">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item <?= ($prev <= 0) ? 'disabled' : ''; ?>">
+                                <a class="page-link" href="patientWalkIn.php?page=<?= $prev; ?>" tabindex="-1">Previous</a>
+                            </li>
+                            <?php $pageWalkIn = isset($_GET['page']) ? $_GET['page'] : 1; ?>
+                            <?php for ($i = 1; $i <= $pages; $i++) : ?>
+                                <li class="page-item <?= ($i == $pageWalkIn) ? 'active' : ''; ?>"><a class="page-link" href="patientWalkIn.php?page=<?= $i; ?>"><?= $i; ?></a></li>
+                            <?php endfor; ?>
+                            <li class="page-item <?= ($next > $pages) ? 'disabled' : ''; ?>">
+                                <a class="page-link" href="patientWalkIn.php?page=<?= $next; ?>">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+
+            <?php
+            }else{
+            ?>
+                <p class="lead text-center text-white display-4">No walk in patient yet</p>
+            <?php
+            }
+            ?>
 
             <h3 class=" mt-5 my-4" id="primaryColor">Add Patients</h3>
 
@@ -312,9 +330,9 @@ if (!isset($_SESSION['nId'])) {
             <hr class="featurette-divider">
 
             <!-- FOOTER -->
-            <footer class="text-center">
-                <p>&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
-            </footer>
+            <footer class="container">
+            <p class="text-white">&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php" id="primaryColor">Privacy Policy</a> &middot; <a href="aboutUs.php" id="primaryColor">About Us</a></p>
+        </footer>
         </div>
     </main>
 

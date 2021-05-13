@@ -21,12 +21,17 @@ if (!isset($_SESSION['nId'])) {
     <link rel="stylesheet" href="../css/main.css" />
     <link rel="icon" href="../img/sumc.png">
     <title>Secretary | Pending Appointment</title>
+    <style>
+        body{
+            background-image: linear-gradient(to right, #205072 , #329D9C);
+        }
+    </style>
 </head>
 
 <body>
 
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark">
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark" style="border-bottom: 2px solid rgb(15, 208, 214);">
             <a class="navbar-brand " i id="primaryColor" href="dashboard.php">SUMC Doctors Clinic</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -143,7 +148,17 @@ if (!isset($_SESSION['nId'])) {
             }
             ?>
 
-            <h3 class="display-4 mt-5 my-4" id="primaryColor">All Patient Appointment</h3>
+            <h3 class="display-4 mt-5 my-4" id="primaryColor">Appointment</h3>
+
+            <?php
+            $status = "pending";
+            $sql = "SELECT * FROM appointment WHERE aStatus = :status";
+            $stmt = $con->prepare($sql);
+            $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+            $stmt->execute();
+
+            if($stmt->rowCount() > 0){
+            ?>
 
             <div class="table-responsive-xl">
                 <table class="table table-hover shadow p-3 mb-5 bg-white rounded">
@@ -160,11 +175,6 @@ if (!isset($_SESSION['nId'])) {
                     </thead>
                     <tbody>
                         <?php
-                        $status = "pending";
-                        $sql = "SELECT * FROM appointment WHERE aStatus = :status";
-                        $stmt = $con->prepare($sql);
-                        $stmt->bindParam(":status", $status, PDO::PARAM_STR);
-                        $stmt->execute();
 
                         while ($appointmentPending = $stmt->fetch(PDO::FETCH_ASSOC)) :
                         ?>
@@ -204,13 +214,20 @@ if (!isset($_SESSION['nId'])) {
                     </tbody>
                 </table>
             </div>
+            <?php
+            }else{
+            ?>
+            <p class="lead text-center text-white display-4">No request appointments yet</p>
+            <?php    
+            }
+            ?>
 
             <hr class="featurette-divider">
 
             <!-- FOOTER -->
-            <footer class="text-center">
-                <p>&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
-            </footer>
+            <footer class="container">
+            <p class="text-white">&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php" id="primaryColor">Privacy Policy</a> &middot; <a href="aboutUs.php" id="primaryColor">About Us</a></p>
+        </footer>
     </main>
 
 

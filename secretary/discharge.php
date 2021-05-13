@@ -20,12 +20,17 @@ if (!isset($_SESSION['nId'])) {
     <link rel="stylesheet" href="../css/main.css" />
     <link rel="icon" href="../img/sumc.png">
     <title>Secretary | Patient Discharged</title>
+    <style>
+        body{
+            background-image: linear-gradient(to right, #205072 , #329D9C);
+        }
+    </style>
 </head>
 
 <body>
 
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark">
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark" style="border-bottom: 2px solid rgb(15, 208, 214);">
             <a class="navbar-brand " i id="primaryColor" href="dashboard.php">SUMC Doctors Clinic</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -101,7 +106,7 @@ if (!isset($_SESSION['nId'])) {
                 <h3 class="display-4 mt-5 my-4" id="primaryColor">Patient Bill</h3>
 
                 <div class="container">
-                    <div class="row justify-content-center bg-light">
+                    <div class="row justify-content-center bg-light shadow-lg p-3 mb-5 bg-white rounded mt-5">
                         <div class="col-lg-6 px-4 pb-4" id="order">
                             <form action="checkout.php" method="post" id="placeOrder">
                                 <input type="hidden" name="orderedfood" value="123">
@@ -155,8 +160,9 @@ if (!isset($_SESSION['nId'])) {
             <!-- /END THE FEATURETTES -->
 
             <!-- FOOTER -->
-            <footer class="text-center">
-                <p>&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
+            <footer class="container">
+                <p class="float-right"><a href="#" class="text-dark">Back to top</a></p>
+                <p class="text-white">&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php" id="primaryColor">Privacy Policy</a> &middot; <a href="aboutUs.php" id="primaryColor">About Us</a></p>
             </footer>
             </div>
     </main>

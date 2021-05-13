@@ -20,6 +20,12 @@ if (!isset($_SESSION['nId'])) {
     <link rel="stylesheet" href="../css/main.css" />
     <link rel="icon" href="../img/sumc.png">
     <title>Secretary | Medical Information</title>
+    <style>
+        body{
+            background-image: linear-gradient(to right, #205072 , #329D9C);
+        }
+    </style>
+
 </head>
 
 <body>
@@ -29,7 +35,7 @@ if (!isset($_SESSION['nId'])) {
     ?>
 
         <header>
-            <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark">
+            <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark" style="border-bottom: 2px solid rgb(15, 208, 214);">
                 <a class="navbar-brand " i id="primaryColor" href="dashboard.php">SUMC Doctors Clinic</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -106,17 +112,17 @@ if (!isset($_SESSION['nId'])) {
 
                     <div class="row">
                         <div class="col m-1">
-                            <label>Height</label>
+                            <label class="text-white">Height</label>
                             <input type="number" name="height" min="0" class="form-control" required>
                         </div>
                         <div class="col m-1">
-                            <label>Weight</label>
+                            <label class="text-white">Weight</label>
                             <input type="number" name="weight" min="0" class="form-control" required>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col m-1">
-                            <label>Blood Type</label>
+                            <label class="text-white">Blood Type</label>
                             <select name="bloodType" class="form-control" required>
                                 <option value="">select a blood type</option>
                                 <?php
@@ -131,34 +137,34 @@ if (!isset($_SESSION['nId'])) {
                             </select>
                         </div>
                         <div class="col m-1">
-                            <label>Allergy</label>
+                            <label class="text-white">Allergy</label>
                             <input type="text" name="allergy" class="form-control" required>
                         </div>
                     </div>
 
                     <h6 class=" mt-5 my-4" id="primaryColor">Have you ever the following ?</h6>
 
-                    <label for="">Diabetes</label>
+                    <label for="" class="text-white">Diabetes</label>
                     <input type="checkbox" name="followingMed[]" value="diabetes"><br>
-                    <label for="">Hypertension</label>
+                    <label for="" class="text-white">Hypertension</label>
                     <input type="checkbox" name="followingMed[]" value="hypertension"><br>
-                    <label for="">Cancer</label>
+                    <label for="" class="text-white">Cancer</label>
                     <input type="checkbox" name="followingMed[]" value="cancer"><br>
-                    <label for="">Stroke</label>
+                    <label for="" class="text-white">Stroke</label>
                     <input type="checkbox" name="followingMed[]" value="stroke"><br>
-                    <label for="">Heart Trouble</label>
+                    <label for="" class="text-white">Heart Trouble</label>
                     <input type="checkbox" name="followingMed[]" value="heartTrouble"><br>
-                    <label for="">Arthritis</label>
+                    <label for="" class="text-white">Arthritis</label>
                     <input type="checkbox" name="followingMed[]" value="arthritis"><br>
-                    <label for="">Convulsion</label>
+                    <label for="" class="text-white">Convulsion</label>
                     <input type="checkbox" name="followingMed[]" value="convulsion"><br>
-                    <label for="">Bleeding</label>
+                    <label for="" class="text-white">Bleeding</label>
                     <input type="checkbox" name="followingMed[]" value="bleeding"><br>
-                    <label for="">Acute Infections</label>
+                    <label for="" class="text-white">Acute Infections</label>
                     <input type="checkbox" name="followingMed[]" value="acuteInfections"><br>
-                    <label for="">Venereal Disease</label>
+                    <label for="" class="text-white">Venereal Disease</label>
                     <input type="checkbox" name="followingMed[]" value="venereal"><br>
-                    <label for="">Hereditary Defects</label>
+                    <label for="" class="text-white">Hereditary Defects</label>
                     <input type="checkbox" name="followingMed[]" value="hereditary"><br>
 
                     <div class="text-center">
@@ -172,8 +178,8 @@ if (!isset($_SESSION['nId'])) {
                 <!-- /END THE FEATURETTES -->
 
                 <!-- FOOTER -->
-                <footer class="text-center">
-                    <p>&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
+                <footer class="container">
+                    <p class="text-white">&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php" id="primaryColor">Privacy Policy</a> &middot; <a href="aboutUs.php" id="primaryColor">About Us</a></p>
                 </footer>
             </div>
         </main>

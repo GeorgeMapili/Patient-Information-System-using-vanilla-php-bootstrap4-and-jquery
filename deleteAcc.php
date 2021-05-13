@@ -1,7 +1,12 @@
 <?php
 ob_start();
 session_start();
-require_once 'connect.php';
+require_once("vendor/autoload.php");
+use core\db\Database;
+
+$database = new Database();
+
+$con = $database->connect();
 
 if (!isset($_SESSION['id'])) {
     header("location:index.php");

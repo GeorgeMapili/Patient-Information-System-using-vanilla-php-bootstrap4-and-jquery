@@ -20,12 +20,17 @@ if (!isset($_SESSION['nId'])) {
     <link rel="stylesheet" href="../css/main.css" />
     <link rel="icon" href="../img/sumc.png">
     <title>Secretary | Medical Information</title>
+    <style>
+        body{
+            background-image: linear-gradient(to right, #205072 , #329D9C);
+        }
+    </style>
 </head>
 
 <body>
 
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark">
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark" style="border-bottom: 2px solid rgb(15, 208, 214);">
             <a class="navbar-brand " i id="primaryColor" href="dashboard.php">SUMC Doctors Clinic</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -125,17 +130,17 @@ if (!isset($_SESSION['nId'])) {
 
                     <div class="row">
                         <div class="col m-1">
-                            <label>Height</label>
+                            <label class="text-white">Height</label>
                             <input type="number" name="height" value="<?= $updateMedicalInfo['pHeight'] ?>" min="0" class="form-control" required>
                         </div>
                         <div class="col m-1">
-                            <label>Weight</label>
+                            <label class="text-white">Weight</label>
                             <input type="number" name="weight" min="0" value="<?= $updateMedicalInfo['pWeight'] ?>" class="form-control" required>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col m-1">
-                            <label>Blood Type</label>
+                            <label class="text-white">Blood Type</label>
                             <select name="bloodType" class="form-control" required>
                                 <option value="">select a blood type</option>
                                 <?php
@@ -150,7 +155,7 @@ if (!isset($_SESSION['nId'])) {
                             </select>
                         </div>
                         <div class="col m-1">
-                            <label>Allergy</label>
+                            <label class="text-white">Allergy</label>
                             <input type="text" name="allergy" class="form-control" value="<?= $updateMedicalInfo['pAllergy'] ?>" required>
                         </div>
                     </div>
@@ -165,7 +170,7 @@ if (!isset($_SESSION['nId'])) {
                     while ($md = $stmt->fetch(PDO::FETCH_ASSOC)) :
 
                     ?>
-                        <label for=""><?= ucwords($md['md_name']); ?></label>
+                        <label for="" class="text-white"><?= ucwords($md['md_name']); ?></label>
                         <input type="checkbox" name="followingMed[]" value="<?= $md['md_name'] ?>" <?php
                                                                                                     for ($i = 0; $i < $arrsLen; $i++) {
                                                                                                         if ($md['md_name'] == $arrayInfo[$i]) {
@@ -185,8 +190,9 @@ if (!isset($_SESSION['nId'])) {
                 <!-- /END THE FEATURETTES -->
 
                 <!-- FOOTER -->
-                <footer class="text-center">
-                    <p>&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
+                <footer class="container">
+                    <p class="float-right"><a href="#" class="text-dark">Back to top</a></p>
+                    <p class="text-white">&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php" id="primaryColor">Privacy Policy</a> &middot; <a href="aboutUs.php" id="primaryColor">About Us</a></p>
                 </footer>
             </div>
         </main>

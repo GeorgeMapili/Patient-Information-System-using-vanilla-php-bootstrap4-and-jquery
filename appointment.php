@@ -1,8 +1,12 @@
 <?php
 ob_start();
 session_start();
-require_once 'connect.php';
-require __DIR__ . '/vendor/autoload.php';
+require_once("vendor/autoload.php");
+use core\db\Database;
+
+$database = new Database();
+
+$con = $database->connect();
 
 if (!isset($_SESSION['id'])) {
     header("location:index.php");
@@ -272,7 +276,7 @@ if (!isset($_SESSION['id'])) {
                 <option value="3:00-4:00 P.M.">3:00-4:00 P.M.</option>
                 <option value="4:00-5:00 P.M.">4:00-5:00 P.M.</option>
                 </select>
-                <?= (isset($_GET['errTime']) && $_GET['errTime'] == "all_ready_taken_time") ? '<span class="text-danger">Someone already have an appointment that time!</span> <br>' : ''; ?>
+                <?= (isset($_GET['errTime']) && $_GET['errTime'] == "all_ready_taken_time") ? '<span class="text-danger">Someone already have an request appointment that time!</span> <br>' : ''; ?>
                 <?= (isset($_GET['errDup']) && $_GET['errDup'] == "you_have_already_an_appointment_in_that_time_with_different_doctor") ? '<span class="text-danger text-center">Already have an appointment in that time with different doctor!</span> <br>' : ''; ?>
                 <?= (isset($_GET['errDup1']) && $_GET['errDup1'] == "you_already_made_an_appointment") ? '<span class="text-danger text-center">You can\'t duplicate a appointment!</span> <br>' : ''; ?>
 

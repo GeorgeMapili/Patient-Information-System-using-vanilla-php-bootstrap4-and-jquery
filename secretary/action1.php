@@ -33,7 +33,7 @@ if (isset($_REQUEST["patientBefore"])) {
                     ';
                 }
             } else {
-                echo "<p>No matches found</p>";
+                echo "<p class='text-danger'>No matches found</p>";
             }
         } else {
             echo "ERROR: Could not able to execute $sql";
