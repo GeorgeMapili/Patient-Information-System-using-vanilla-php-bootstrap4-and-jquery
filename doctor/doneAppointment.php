@@ -20,12 +20,17 @@ if (!isset($_SESSION['dId'])) {
     <link rel="stylesheet" href="../css/main.css" />
     <link rel="icon" href="../img/sumc.png">
     <title>Doctor | Finished Appointment</title>
+    <style>
+        body{
+            background-image: linear-gradient(to right, #205072 , #329D9C);
+        }
+    </style>
 </head>
 
 <body>
 
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark">
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark" style="border-bottom: 2px solid rgb(15, 208, 214);">
             <a class="navbar-brand " i id="primaryColor" href="dashboard.php">SUMC Doctors Clinic</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -124,8 +129,12 @@ if (!isset($_SESSION['dId'])) {
 
             <div class="mt-4 mb-4 d-flex justify-content-between">
                 <h1 class="Display-4 my-4" id="primaryColor">Finished Appointment</h1>
-                <p class="mt-5"><?= $finishedCount ?> finished appointment</p>
+                <p class="mt-5 text-white"><?= $finishedCount ?> finished appointment</p>
             </div>
+
+            <?php
+            if($finishedCount > 0){
+            ?>
 
             <div class="table-responsive-xl">
                 <table class="table table-hover shadow p-3 mb-5 bg-white rounded">
@@ -165,16 +174,25 @@ if (!isset($_SESSION['dId'])) {
                 </table>
             </div>
 
+            <?php
+            }else{
+            ?>
+            <p class="lead text-center text-white display-4">No finished appointment yet</p>
+            <?php                
+            }
+            ?>
+
         </div>
 
-
-        <hr class="featurette-divider">
+        <div class="container">
+            <hr class="featurette-divider">
+        </div>
 
 
 
         <!-- FOOTER -->
-        <footer class="container text-center">
-            <p>&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
+        <footer class="container">
+            <p class="text-white">&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php" id="primaryColor">Privacy Policy</a> &middot; <a href="aboutUs.php" id="primaryColor">About Us</a></p>
         </footer>
     </main>
 

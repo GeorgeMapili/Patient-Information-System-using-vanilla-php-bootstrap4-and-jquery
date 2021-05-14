@@ -21,12 +21,17 @@ if (!isset($_SESSION['dId'])) {
     <link rel="stylesheet" href="../css/main.css" />
     <link rel="icon" href="../img/sumc.png">
     <title>Doctor | Profile</title>
+    <style>
+        body{
+            background-image: linear-gradient(to right, #205072 , #329D9C);
+        }
+    </style>
 </head>
 
 <body>
 
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark">
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark" style="border-bottom: 2px solid rgb(15, 208, 214);">
             <a class="navbar-brand " i id="primaryColor" href="dashboard.php">SUMC Doctors Clinic</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -399,6 +404,7 @@ if (!isset($_SESSION['dId'])) {
 
             <hr>
 
+            <form action="doctorProfile.php" method="post" enctype="multipart/form-data" class="shadow p-3 mb-5 bg-white rounded">
             <div class="text-center">
                 <?= (isset($_GET['succUpdateImg']) && $_GET['succUpdateImg'] == "Successfully_update_the_img") ? '<span class="text-success">Successfully updated image!</span>' : ''; ?>
             </div>
@@ -411,8 +417,6 @@ if (!isset($_SESSION['dId'])) {
             <div>
                 <img src="../upload/doc_profile_img/<?= $_SESSION['dProfileImg'] ?>" class="rounded-circle shadow p-3 mb-5 bg-white rounded" alt="profile" width="150" height="150">
             </div>
-
-            <form action="doctorProfile.php" method="post" enctype="multipart/form-data" class="shadow p-3 mb-5 bg-white rounded">
                 <label>Doctor Profile Img</label>
                 <input type="hidden" name="dId" value="<?= $_SESSION['dId'] ?>">
                 <?= (isset($_GET['errorImgExt']) && $_GET['errorImgExt'] == "image_is_not_valid") ? '<input type="file" name="doctorProfileImg" class="form-control is-invalid" required>' : '<input type="file" name="doctorProfileImg" class="form-control" required>'; ?>
@@ -429,16 +433,15 @@ if (!isset($_SESSION['dId'])) {
         </div>
         <div>
         </div>
-
-        <hr class="featurette-divider">
         </div>
     </main>
 
 
 
     <!-- FOOTER -->
-    <footer class="container text-center">
-        <p>&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
+    <footer class="container">
+        <p class="float-right"><a href="#" class="text-dark">Back to top</a></p>
+        <p class="text-white">&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php" id="primaryColor">Privacy Policy</a> &middot; <a href="aboutUs.php" id="primaryColor">About Us</a></p>
     </footer>
 
 

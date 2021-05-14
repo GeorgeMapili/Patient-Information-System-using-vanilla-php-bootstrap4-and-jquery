@@ -21,12 +21,17 @@ if (!isset($_SESSION['dId'])) {
     <link rel="stylesheet" href="../css/main.css" />
     <link rel="icon" href="../img/sumc.png">
     <title>Doctor | Patient Appointment</title>
+    <style>
+        body{
+            background-image: linear-gradient(to right, #205072 , #329D9C);
+        }
+    </style>
 </head>
 
 <body>
 
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark">
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark" style="border-bottom: 2px solid rgb(15, 208, 214);">
             <a class="navbar-brand " i id="primaryColor" href="dashboard.php">SUMC Doctors Clinic</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -138,7 +143,7 @@ if (!isset($_SESSION['dId'])) {
                     <input type="hidden" name="aid" value="<?= $aId ?>">
                     <input type="hidden" name="pid" value="<?= $pId ?>">
                     <div class="form-group">
-                        <label for="addTest">Update Test Conducted</label>
+                        <label for="addTest" class="text-white">Update Test Conducted</label>
                         <input type="text" class="form-control" name="updateResultValue" value="<?= $labResult ?>" id="updateResult">
                     </div>
 
@@ -172,11 +177,13 @@ if (!isset($_SESSION['dId'])) {
 
             ?>
 
+            <div class="container">
             <hr class="featurette-divider">
+            </div>
 
             <!-- FOOTER -->
-            <footer class="text-center">
-                <p>&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
+            <footer class="container">
+                <p class="text-white">&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php" id="primaryColor">Privacy Policy</a> &middot; <a href="aboutUs.php" id="primaryColor">About Us</a></p>
             </footer>
         </div>
     </main>

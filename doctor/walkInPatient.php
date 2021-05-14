@@ -20,12 +20,17 @@ if (!isset($_SESSION['dId'])) {
     <link rel="stylesheet" href="../css/main.css" />
     <link rel="icon" href="../img/sumc.png">
     <title>Doctor | Walk in Patient</title>
+    <style>
+        body{
+            background-image: linear-gradient(to right, #205072 , #329D9C);
+        }
+    </style>
 </head>
 
 <body>
 
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark">
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark" style="border-bottom: 2px solid rgb(15, 208, 214);">
             <a class="navbar-brand " i id="primaryColor" href="dashboard.php">SUMC Doctors Clinic</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -125,6 +130,17 @@ if (!isset($_SESSION['dId'])) {
                 <?= (isset($_GET['errWalkInMedHistory']) && $_GET['errWalkInMedHistory'] == "No_medical_history") ? '<span class="text-danger">No medical history!</span>' : ''; ?>
             </div>
 
+            <?php
+            $discharge = 0;
+            $sql = "SELECT * FROM walkinpatient WHERE walkInDoctor = :doctor AND walkInDischarged = :discharge";
+            $stmt = $con->prepare($sql);
+            $stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);
+            $stmt->bindParam(":discharge", $discharge, PDO::PARAM_INT);
+            $stmt->execute();
+
+            if($stmt->rowCount() > 0){
+            ?>
+
             <div class="row">
                 <div class="col">
                     <form class="form-inline">
@@ -150,12 +166,6 @@ if (!isset($_SESSION['dId'])) {
                     </thead>
                     <tbody>
                         <?php
-                        $discharge = 0;
-                        $sql = "SELECT * FROM walkinpatient WHERE walkInDoctor = :doctor AND walkInDischarged = :discharge";
-                        $stmt = $con->prepare($sql);
-                        $stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);
-                        $stmt->bindParam(":discharge", $discharge, PDO::PARAM_INT);
-                        $stmt->execute();
 
                         while ($walkInPatient = $stmt->fetch(PDO::FETCH_ASSOC)) :
                         ?>
@@ -207,14 +217,23 @@ if (!isset($_SESSION['dId'])) {
                     </tbody>
                 </table>
             </div>
+            <?php
+            }else{
+            ?>
+            <p class="lead text-center text-white display-4">No walk in patient yet</p>
+            <?php    
+            }
+            ?>
 
         </div>
 
-        <hr class="featurette-divider">
-
+        <div class="container">
+            <hr class="featurette-divider">
+        </div>
+        
         <!-- FOOTER -->
-        <footer class="container text-center">
-            <p>&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php">Privacy Policy</a> &middot; <a href="aboutUs.php">About Us</a></p>
+        <footer class="container">
+            <p class="text-white">&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php" id="primaryColor">Privacy Policy</a> &middot; <a href="aboutUs.php" id="primaryColor">About Us</a></p>
         </footer>
     </main>
 
