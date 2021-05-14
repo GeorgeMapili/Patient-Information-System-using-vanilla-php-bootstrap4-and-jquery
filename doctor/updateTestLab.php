@@ -7,8 +7,6 @@ if (!isset($_SESSION['dId'])) {
     header("location:index.php");
     exit(0);
 }
-
-if(isset($_POST['updateTestLab']) && isset($_POST['aId']) && isset($_POST['pId'])){
 ?>
 <!doctype html>
 <html lang="en">
@@ -116,8 +114,44 @@ if(isset($_POST['updateTestLab']) && isset($_POST['aId']) && isset($_POST['pId']
     </header>
 
     <?php
+    if(isset($_POST['updateTest'])){
 
-    if(isset($_POST['updateTestLab'])){
+        $aid = $_POST['aid'];
+        $pid = $_POST['pid'];
+        $updateTestsConducted = $_POST['updateTestsConducted'];
+
+        // Validate that u cant empty the test with having an a result
+        $sql = "SELECT * FROM appointment WHERE aId = :aid AND pId = :pid";
+        $stmt = $con->prepare($sql);
+        $stmt->bindParam(":aid", $aid, PDO::PARAM_INT);
+        $stmt->bindParam(":pid", $pid, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        $labResult = $result['labResult'];
+
+        if(empty($updateTestsConducted) && !empty($labResult)){
+            header("location:labPatientAppointment.php?error=lab_result_is_not_empty");
+            exit;
+        }
+
+        $sql = "UPDATE appointment set labTest = :labTest WHERE aId = :aid AND pId = :pid";
+        $stmt = $con->prepare($sql);
+        $stmt->bindParam(":labTest", $updateTestsConducted, PDO::PARAM_STR);
+        $stmt->bindParam(":aid", $aid, PDO::PARAM_INT);
+        $stmt->bindParam(":pid", $pid, PDO::PARAM_INT);
+        
+        if($stmt->execute()){
+            header("location:labPatientAppointment.php?success=successfully_updated_labtest");
+            ob_end_flush();
+            exit;
+        }
+
+    }
+
+
+    if(isset($_POST['updateTestLab']) && isset($_POST['aId']) && isset($_POST['pId'])){
         $aId = $_POST['aId'];
         $pId = $_POST['pId'];
 
@@ -130,9 +164,10 @@ if(isset($_POST['updateTestLab']) && isset($_POST['aId']) && isset($_POST['pId']
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         $labTest = $result['labTest'];
-
+    }else{
+        header("location:dashboard.php");
+        exit;
     }
-
     ?>
 
     <main role="main">
@@ -154,46 +189,6 @@ if(isset($_POST['updateTestLab']) && isset($_POST['aId']) && isset($_POST['pId']
                     </div>
                 </form>
             </div>
-
-            <?php
-
-            if(isset($_POST['updateTest'])){
-
-                $aid = $_POST['aid'];
-                $pid = $_POST['pid'];
-                $updateTestsConducted = $_POST['updateTestsConducted'];
-
-                // Validate that u cant empty the test with having an a result
-                $sql = "SELECT * FROM appointment WHERE aId = :aid AND pId = :pid";
-                $stmt = $con->prepare($sql);
-                $stmt->bindParam(":aid", $aid, PDO::PARAM_INT);
-                $stmt->bindParam(":pid", $pid, PDO::PARAM_INT);
-                $stmt->execute();
-
-                $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-                $labResult = $result['labResult'];
-
-                if(empty($updateTestsConducted) && !empty($labResult)){
-                    header("location:labPatientAppointment.php?error=lab_result_is_not_empty");
-                    exit;
-                }
-
-                $sql = "UPDATE appointment set labTest = :labTest WHERE aId = :aid AND pId = :pid";
-                $stmt = $con->prepare($sql);
-                $stmt->bindParam(":labTest", $updateTestsConducted, PDO::PARAM_STR);
-                $stmt->bindParam(":aid", $aid, PDO::PARAM_INT);
-                $stmt->bindParam(":pid", $pid, PDO::PARAM_INT);
-                
-                if($stmt->execute()){
-                    header("location:labPatientAppointment.php?success=successfully_updated_labtest");
-                    ob_end_flush();
-                    exit;
-                }
-
-            }
-
-            ?>
 
             <div class="container">
             <hr class="featurette-divider">
@@ -285,10 +280,3 @@ if(isset($_POST['updateTestLab']) && isset($_POST['aId']) && isset($_POST['pId']
 </body>
 
 </html>
-
-<?php
-}else{
-    header("location:dashboard.php");
-    exit;
-}
-?>

@@ -114,6 +114,38 @@ if (!isset($_SESSION['dId'])) {
     </header>
 
     <?php
+    if(isset($_POST['updateTest'])){
+
+        $walkInId = $_POST['walkInId'];
+        $updateTestsConducted = $_POST['updateTestsConducted'];
+
+        // Validate that u cant empty the test with having an a result
+        $sql = "SELECT * FROM walkinpatient WHERE walkInId = :walkInId";
+        $stmt = $con->prepare($sql);
+        $stmt->bindParam(":walkInId", $walkInId, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        $labResult = $result['labResult'];
+
+        if(empty($updateTestsConducted) && !empty($labResult)){
+            header("location:labPatientWalkin.php?error=lab_result_is_not_empty");
+            exit;
+        }
+
+        $sql = "UPDATE walkinpatient set labTest = :labTest WHERE walkInId = :walkInId";
+        $stmt = $con->prepare($sql);
+        $stmt->bindParam(":labTest", $updateTestsConducted, PDO::PARAM_STR);
+        $stmt->bindParam(":walkInId", $walkInId, PDO::PARAM_INT);
+
+        if($stmt->execute()){
+            header("location:labPatientWalkin.php?success=successfully_updated_labtest");
+            ob_end_flush();
+            exit;
+        }
+
+    }
 
     if(isset($_POST['updateTestLab'])){
         $walkInId = $_POST['walkInId'];
@@ -127,6 +159,9 @@ if (!isset($_SESSION['dId'])) {
 
         $labTest = $result['labTest'];
 
+    }else{
+        header("location:dashboard.php");
+        exit;
     }
 
     ?>
@@ -149,43 +184,6 @@ if (!isset($_SESSION['dId'])) {
                     </div>
                 </form>
             </div>
-
-            <?php
-
-            if(isset($_POST['updateTest'])){
-
-                $walkInId = $_POST['walkInId'];
-                $updateTestsConducted = $_POST['updateTestsConducted'];
-
-                // Validate that u cant empty the test with having an a result
-                $sql = "SELECT * FROM walkinpatient WHERE walkInId = :walkInId";
-                $stmt = $con->prepare($sql);
-                $stmt->bindParam(":walkInId", $walkInId, PDO::PARAM_INT);
-                $stmt->execute();
-
-                $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-                $labResult = $result['labResult'];
-
-                if(empty($updateTestsConducted) && !empty($labResult)){
-                    header("location:labPatientWalkin.php?error=lab_result_is_not_empty");
-                    exit;
-                }
-
-                $sql = "UPDATE walkinpatient set labTest = :labTest WHERE walkInId = :walkInId";
-                $stmt = $con->prepare($sql);
-                $stmt->bindParam(":labTest", $updateTestsConducted, PDO::PARAM_STR);
-                $stmt->bindParam(":walkInId", $walkInId, PDO::PARAM_INT);
-
-                if($stmt->execute()){
-                    header("location:labPatientWalkin.php?success=successfully_updated_labtest");
-                    ob_end_flush();
-                    exit;
-                }
-
-            }
-
-            ?>
 
             <div class="container">
             <hr class="featurette-divider">

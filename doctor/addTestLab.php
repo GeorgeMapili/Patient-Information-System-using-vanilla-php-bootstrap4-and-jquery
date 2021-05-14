@@ -114,16 +114,35 @@ if (!isset($_SESSION['dId'])) {
     </header>
 
     <?php
+    if(isset($_POST['addTest'])){
 
+        $aid = $_POST['aId'];
+        $pid = $_POST['pId'];
+        $addTestsConducted = $_POST['addTestsConducted'];
+
+        $sql = "UPDATE appointment set labTest = :labTest WHERE aId = :aid AND pId = :pid";
+        $stmt = $con->prepare($sql);
+        $stmt->bindParam(":labTest", $addTestsConducted, PDO::PARAM_STR);
+        $stmt->bindParam(":aid", $aid, PDO::PARAM_INT);
+        $stmt->bindParam(":pid", $pid, PDO::PARAM_INT);
+        
+        if($stmt->execute()){
+            header("location:labPatientAppointment.php?success=successfully_added_labtest");
+            ob_end_flush();
+            exit;
+        }
+
+    }
+    ?>
+
+    <?php
     if(isset($_POST['addTestLab'])){
         $aId = $_POST['aId'];
         $pId = $_POST['pId'];
-
     }else{
         header("location:dashboard.php");
         exit;
     }
-
     ?>
 
     <main role="main">
@@ -133,8 +152,8 @@ if (!isset($_SESSION['dId'])) {
 
             <div class="container">
                 <form action="addTestLab.php" method="POST">
-                    <input type="hidden" name="aid" value="<?= $aId ?>">
-                    <input type="hidden" name="pid" value="<?= $pId ?>">
+                    <input type="hidden" name="aId" value="<?= $aId ?>">
+                    <input type="hidden" name="pId" value="<?= $pId ?>">
                     <div class="form-group">
                         <label for="addTest" class="text-white">Add Test Conducted</label>
                         <input type="text" class="form-control" name="addTestsConducted" id="addTest" required>
@@ -145,30 +164,6 @@ if (!isset($_SESSION['dId'])) {
                     </div>
                 </form>
             </div>
-
-            <?php
-
-            if(isset($_POST['addTest'])){
-
-                $aid = $_POST['aid'];
-                $pid = $_POST['pid'];
-                $addTestsConducted = $_POST['addTestsConducted'];
-
-                $sql = "UPDATE appointment set labTest = :labTest WHERE aId = :aid AND pId = :pid";
-                $stmt = $con->prepare($sql);
-                $stmt->bindParam(":labTest", $addTestsConducted, PDO::PARAM_STR);
-                $stmt->bindParam(":aid", $aid, PDO::PARAM_INT);
-                $stmt->bindParam(":pid", $pid, PDO::PARAM_INT);
-                
-                if($stmt->execute()){
-                    header("location:labPatientAppointment.php?success=successfully_added_labtest");
-                    ob_end_flush();
-                    exit;
-                }
-
-            }
-
-            ?>
 
             <div class="container">
             <hr class="featurette-divider">

@@ -115,6 +115,26 @@ if (!isset($_SESSION['dId'])) {
 
     <?php
 
+    if(isset($_POST['updateResult'])){
+
+        $aid = $_POST['aid'];
+        $pid = $_POST['pid'];
+        $updateResultValue = $_POST['updateResultValue'];
+
+        $sql = "UPDATE appointment set labResult = :labResult WHERE aId = :aid AND pId = :pid";
+        $stmt = $con->prepare($sql);
+        $stmt->bindParam(":labResult", $updateResultValue, PDO::PARAM_STR);
+        $stmt->bindParam(":aid", $aid, PDO::PARAM_INT);
+        $stmt->bindParam(":pid", $pid, PDO::PARAM_INT);
+        
+        if($stmt->execute()){
+            header("location:labPatientAppointment.php?success=successfully_updated_result");
+            ob_end_flush();
+            exit;
+        }
+
+    }
+
     if(isset($_POST['updateResultLab'])){
         $aId = $_POST['aId'];
         $pId = $_POST['pId'];
@@ -129,6 +149,9 @@ if (!isset($_SESSION['dId'])) {
 
         $labResult = $result['labResult'];
 
+    }else{
+        header("location:dashboard.php");
+        exit;
     }
 
     ?>
@@ -152,30 +175,6 @@ if (!isset($_SESSION['dId'])) {
                     </div>
                 </form>
             </div>
-
-            <?php
-
-            if(isset($_POST['updateResult'])){
-
-                $aid = $_POST['aid'];
-                $pid = $_POST['pid'];
-                $updateResultValue = $_POST['updateResultValue'];
-
-                $sql = "UPDATE appointment set labResult = :labResult WHERE aId = :aid AND pId = :pid";
-                $stmt = $con->prepare($sql);
-                $stmt->bindParam(":labResult", $updateResultValue, PDO::PARAM_STR);
-                $stmt->bindParam(":aid", $aid, PDO::PARAM_INT);
-                $stmt->bindParam(":pid", $pid, PDO::PARAM_INT);
-                
-                if($stmt->execute()){
-                    header("location:labPatientAppointment.php?success=successfully_updated_result");
-                    ob_end_flush();
-                    exit;
-                }
-
-            }
-
-            ?>
 
             <div class="container">
             <hr class="featurette-divider">

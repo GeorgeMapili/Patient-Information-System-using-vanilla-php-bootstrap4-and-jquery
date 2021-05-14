@@ -115,9 +115,30 @@ if (!isset($_SESSION['dId'])) {
 
     <?php
 
+    if(isset($_POST['addTest'])){
+
+        $walkInId = $_POST['walkInId'];
+        $addTestsConducted = $_POST['addTestsConducted'];
+
+        $sql = "UPDATE walkinpatient set labTest = :labTest WHERE walkInId = :walkInId";
+        $stmt = $con->prepare($sql);
+        $stmt->bindParam(":labTest", $addTestsConducted, PDO::PARAM_STR);
+        $stmt->bindParam(":walkInId", $walkInId, PDO::PARAM_INT);
+        
+        if($stmt->execute()){
+            header("location:labPatientWalkin.php?success=successfully_added_labtest");
+            ob_end_flush();
+            exit;
+        }
+
+    }
+
     if(isset($_POST['walkInId'])){
         $walkInId = $_POST['walkInId'];
 
+    }else{
+        header("location:dashboard.php");
+        exit;
     }
 
     ?>
@@ -140,28 +161,6 @@ if (!isset($_SESSION['dId'])) {
                     </div>
                 </form>
             </div>
-
-            <?php
-
-            if(isset($_POST['addTest'])){
-
-                $walkInId = $_POST['walkInId'];
-                $addTestsConducted = $_POST['addTestsConducted'];
-
-                $sql = "UPDATE walkinpatient set labTest = :labTest WHERE walkInId = :walkInId";
-                $stmt = $con->prepare($sql);
-                $stmt->bindParam(":labTest", $addTestsConducted, PDO::PARAM_STR);
-                $stmt->bindParam(":walkInId", $walkInId, PDO::PARAM_INT);
-                
-                if($stmt->execute()){
-                    header("location:labPatientWalkin.php?success=successfully_added_labtest");
-                    ob_end_flush();
-                    exit;
-                }
-
-            }
-
-            ?>
 
             <div class="container">
             <hr class="featurette-divider">

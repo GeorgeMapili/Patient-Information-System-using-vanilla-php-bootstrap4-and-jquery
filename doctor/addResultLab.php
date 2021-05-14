@@ -115,11 +115,33 @@ if (!isset($_SESSION['dId'])) {
     </header>
 
     <?php
+    if(isset($_POST['addResult'])){
+
+        $aid = $_POST['aid'];
+        $pid = $_POST['pid'];
+        $addResult = $_POST['addResultValue'];
+
+        $sql = "UPDATE appointment set labResult = :labResult WHERE aId = :aid AND pId = :pid";
+        $stmt = $con->prepare($sql);
+        $stmt->bindParam(":labResult", $addResult, PDO::PARAM_STR);
+        $stmt->bindParam(":aid", $aid, PDO::PARAM_INT);
+        $stmt->bindParam(":pid", $pid, PDO::PARAM_INT);
+        
+        if($stmt->execute()){
+            header("location:labPatientAppointment.php?success=successfully_added_labresult");
+            ob_end_flush();
+            exit;
+        }
+
+    }
 
     if(isset($_POST['addResultLab'])){
         $aId = $_POST['aId'];
         $pId = $_POST['pId'];
 
+    }else{
+        header("location:dashboard.php");
+        exit;
     }
 
     ?>
@@ -143,30 +165,6 @@ if (!isset($_SESSION['dId'])) {
                     </div>
                 </form>
             </div>
-
-            <?php
-
-            if(isset($_POST['addResult'])){
-
-                $aid = $_POST['aid'];
-                $pid = $_POST['pid'];
-                $addResult = $_POST['addResultValue'];
-
-                $sql = "UPDATE appointment set labResult = :labResult WHERE aId = :aid AND pId = :pid";
-                $stmt = $con->prepare($sql);
-                $stmt->bindParam(":labResult", $addResult, PDO::PARAM_STR);
-                $stmt->bindParam(":aid", $aid, PDO::PARAM_INT);
-                $stmt->bindParam(":pid", $pid, PDO::PARAM_INT);
-                
-                if($stmt->execute()){
-                    header("location:labPatientAppointment.php?success=successfully_added_labresult");
-                    ob_end_flush();
-                    exit;
-                }
-
-            }
-
-            ?>
 
             <div class="container">
             <hr class="featurette-divider">
