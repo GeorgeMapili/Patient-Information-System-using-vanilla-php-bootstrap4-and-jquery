@@ -30,7 +30,7 @@ if (!isset($_SESSION['nId'])) {
 <body>
 
     <?php
-    if (isset($_GET['pName'])) {
+    if (isset($_POST['pName'])) {
     ?>
         <header>
             <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark" style="border-bottom: 2px solid rgb(15, 208, 214);">
@@ -126,8 +126,8 @@ if (!isset($_SESSION['nId'])) {
                         <tbody>
 
                             <?php
-                            if (isset($_GET['pName'])) {
-                                $pName = $_GET['pName'];
+                            if (isset($_POST['pName'])) {
+                                $pName = $_POST['pName'];
 
                                 $sql = "SELECT * FROM returnee_patient WHERE pName = :name";
                                 $stmt = $con->prepare($sql);
@@ -159,7 +159,10 @@ if (!isset($_SESSION['nId'])) {
                 </div>
 
                 <div>
-                    <a href="addNewRecord.php?addNewRec=true&pName=<?= $pName ?>" class="btn btn-info mb-3 margin-right-auto">Add New Record</a>
+                    <form action="addNewRecord.php" method="post">
+                        <input type="hidden" name="pName" value="<?= $pName ?>">
+                        <input type="submit" name="addNewRecordBtn" class="btn btn-info mb-3 margin-right-auto" value="Add New Record">
+                    </form>
                 </div>
 
             </div>

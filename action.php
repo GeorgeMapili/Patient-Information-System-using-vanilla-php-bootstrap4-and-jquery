@@ -24,7 +24,10 @@ if (isset($_REQUEST["term"])) {
                 while ($diseaseTreatment = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     echo '
                     <div class="list-group" id="data">
-                        <a href="singlePage.php?id=' . $diseaseTreatment['dtId'] . '" class="list-group-item list-group-item-action">' . $diseaseTreatment['dtName'] . '</a>
+                        <form action="singlePage.php" method="post">
+                            <input type="hidden" name="id" value="'. $diseaseTreatment['dtId'] .'">
+                            <input type="submit" class="list-group-item list-group-item-action" name="healthLibraryBtn" value="'. $diseaseTreatment['dtName'] .'">
+                        </form>
                     </div>
                     ';
                 }

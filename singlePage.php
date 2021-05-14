@@ -37,7 +37,7 @@ if (!isset($_SESSION['id'])) {
 <body>
 
     <?php
-    if (isset($_GET['id'])) {
+    if (isset($_POST['healthLibraryBtn'])) {
 
     ?>
 
@@ -114,7 +114,7 @@ if (!isset($_SESSION['id'])) {
 
                 <?php
 
-                $id = $_GET['id'];
+                $id = $_POST['id'];
 
                 $sql = "SELECT * FROM `diseases_treatment` WHERE dtId = :id";
                 $stmt = $con->prepare($sql);

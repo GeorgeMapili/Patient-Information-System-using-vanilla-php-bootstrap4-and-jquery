@@ -9,7 +9,7 @@ if (!isset($_SESSION['nId'])) {
 }
 
 
-if (isset($_GET['printBillings']) && $_GET['printBillings'] == "true") {
+if (isset($_POST['pId']) && isset($_POST['aId'])) {
 
     $discharge = 1;
     $sql = "SELECT * FROM appointment WHERE aId = :aid AND pId = :pid AND pDischarge = :discharge";

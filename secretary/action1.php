@@ -9,6 +9,9 @@ if (!isset($_SESSION['nId'])) {
 
 // Health Library live search
 if (isset($_REQUEST["patientBefore"])) {
+
+    $_REQUEST["patientBefore"] = htmlspecialchars($_REQUEST["patientBefore"]);
+
     // Prepare a select statement
     $sql = "SELECT DISTINCT pName FROM returnee_patient WHERE pName LIKE :name";
 
@@ -28,7 +31,10 @@ if (isset($_REQUEST["patientBefore"])) {
                 while ($returneePatient = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     echo '
                     <div class="list-group" id="data">
-                        <a href="myRecord.php?pName=' . $returneePatient['pName'] . '" class="list-group-item list-group-item-action">' . $returneePatient['pName'] . '</a>
+                        <form action="myRecord.php" method="post">
+                            <input type="hidden" name="pName" value="'. $returneePatient['pName'] .'">
+                            <input type="submit" class="list-group-item list-group-item-action" value="'. $returneePatient['pName'] .'" name="healthLibraryBtn">
+                        </form>
                     </div>
                     ';
                 }

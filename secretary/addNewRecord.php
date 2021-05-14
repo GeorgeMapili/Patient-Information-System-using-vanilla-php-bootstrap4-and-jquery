@@ -104,7 +104,7 @@ if (!isset($_SESSION['nId'])) {
             <div class="shadow-lg p-3 mb-5 bg-white rounded mt-5">
                 <?php
 
-                if (isset($_GET['addNewRec']) && $_GET['addNewRec'] == "true") {
+                if (isset($_POST['addNewRecordBtn']) || isset($_GET['addNewRec'])) {
                 ?>
 
                     <?= (isset($_GET['addSucc']) && $_GET['addSucc'] == "Successfully_added_new_walkin_patient") ? '<div class="text-center"><h3 class="text-success">Successfully added new walk in patient!</h3></div>' : '';  ?>
@@ -117,8 +117,8 @@ if (!isset($_SESSION['nId'])) {
                         <div class="row">
                             <?php
 
-                            if (isset($_GET['pName'])) {
-                                $pName = $_GET['pName'];
+                            if (isset($_POST['pName']) || isset($_GET['pName'])) {
+                                $pName = $_POST['pName']?? $_GET['pName'];
 
                                 $sql = "SELECT * FROM returnee_patient WHERE pName = :name";
                                 $stmt = $con->prepare($sql);
@@ -345,13 +345,11 @@ if (!isset($_SESSION['nId'])) {
                         $pusher->trigger('my-channel', 'my-event', $data);
                         header("location:addNewRecord.php?addNewRec=true&pName=$name&addSucc=Successfully_added_new_walkin_patient");
                         exit(0);
-                    } else {
+                    }else {
                         header("location:dashboard.php");
                         exit(0);
                     }
 
-                    header("location:dashboard.php");
-                    exit(0);
                 }
         ?>
 

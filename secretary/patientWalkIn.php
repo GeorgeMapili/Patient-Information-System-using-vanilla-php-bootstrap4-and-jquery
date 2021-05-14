@@ -149,6 +149,7 @@ if (!isset($_SESSION['nId'])) {
 
             // $page = isset($_GET['page']) ? $_GET['page'] : 1;
             $page = $_GET['page'] ?? 1;
+            $page = htmlspecialchars($page);
             ?>
 
             <?php
@@ -166,6 +167,13 @@ if (!isset($_SESSION['nId'])) {
                 </div>
             <?php
                 exit(0);
+            } elseif(!ctype_digit($page)){
+            ?>
+                <div class="text-center">
+                    <h3 class="lead text-danger">PAGE NOT FOUND!</h3>
+                </div>
+            <?php         
+            exit;   
             }
             ?>
             <div class="text-center">

@@ -8,7 +8,7 @@ if (!isset($_SESSION['nId'])) {
     exit(0);
 }
 
-if (isset($_GET['walkInDischargeReceipt']) && $_GET['walkInDischargeReceipt'] == "true") {
+if (isset($_POST['walkInDischargeReceipt'])) {
 
 
     $sql = "SELECT * FROM discharged_patient WHERE pId = :id";

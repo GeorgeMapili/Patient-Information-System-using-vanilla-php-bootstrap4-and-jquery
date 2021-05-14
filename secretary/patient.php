@@ -117,6 +117,9 @@ if (!isset($_SESSION['nId'])) {
             }
 
             $page = isset($_GET['page']) ? $_GET['page'] : 1;
+            $page = htmlspecialchars($page);
+            // var_dump(htmlspecialchars($page));
+            // exit;
             ?>
 
             <?php
@@ -134,6 +137,13 @@ if (!isset($_SESSION['nId'])) {
                 </div>
             <?php
                 exit(0);
+            } elseif (!ctype_digit($page)){
+            ?>
+                <div class="text-center">
+                    <h3 class="lead text-danger">PAGE NOT FOUND!</h3>
+                </div>
+            <?php
+            exit;
             }
             ?>
 
@@ -198,7 +208,7 @@ if (!isset($_SESSION['nId'])) {
                                     <form action="generateBillAppointment.php" method="post">
                                         <input type="hidden" name="aid" value="<?= $patientAppointment['aId']; ?>">
                                         <input type="hidden" name="id" value="<?= $patientAppointment['pId']; ?>">
-                                        <input type="submit" value="GENERATE BILL" class="btn btn-primary" name="generateBillAppointment">
+                                        <input type="submit" value="GENERATE BILL!" class="btn btn-primary" name="generateBillAppointment">
                                     </form>
                                 </td>
                             </tr>

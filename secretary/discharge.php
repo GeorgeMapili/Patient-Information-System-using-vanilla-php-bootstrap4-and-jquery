@@ -99,7 +99,94 @@ if (!isset($_SESSION['nId'])) {
 
         <?php
 
-        if (isset($_GET['dischargeWalkInPatient']) && $_GET['dischargeWalkInPatient'] == "true") {
+        if (isset($_POST['discharge'])) {
+
+            // Data in field
+            $id = $_POST['id'];
+            $name = $_POST['name'];
+            $email = $_POST['email'];
+            $address = $_POST['address'];
+            $mobilenumber = $_POST['mobilenumber'];
+            $patientStatus = $_POST['patientStatus'];
+            $doctorName = $_POST['doctorName'];
+            $doctorFee = $_POST['doctorFee'];
+            $prescribeMed = $_POST['prescribeMed'];
+            $medicineFee = $_POST['medicineFee'];
+            $amountInput = $_POST['amountInput'];
+            $totalAmount = $_POST['totalAmount'];
+            $walkInLabTest = $_POST['walkInLabTest'];
+            $walkInLabResult = $_POST['walkInLabResult'];
+
+            // Change of the bill
+            $changeBill = 0;
+
+            // SESSION ------------------------------------------------------
+            $_SESSION['amountInput'] = $amountInput;
+
+            if ($amountInput >= $totalAmount) {
+                $_SESSION['change'] = $amountInput -  $totalAmount;
+
+                $discharge = 1;
+                // CHANGE STATUS
+                $sql = "UPDATE walkinpatient SET walkInDischarged = :discharged WHERE walkInId = :id";
+                $stmt = $con->prepare($sql);
+                $stmt->bindParam(":discharged", $discharge, PDO::PARAM_INT);
+                $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+                $stmt->execute();
+
+                // INSERT INTO DISCHARGED PATIENT TABLE
+                $sql = "INSERT INTO discharged_patient(pId,pName,pEmail,pAddress, pMobile, pDoctor, pPrescription, pDisease, pTotalAmount,pStatus,pAmountPay,pChange,labTest,labResult)VALUES(:id,:name,:email,:address,:mobile,:doctor,:prescription,:disease,:totalAmount,:status,:amountPay,:change,:labTest,:labResult)";
+                $stmt = $con->prepare($sql);
+                $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+                $stmt->bindParam(":name", $name, PDO::PARAM_STR);
+                $stmt->bindParam(":email", $email, PDO::PARAM_STR);
+                $stmt->bindParam(":address", $address, PDO::PARAM_STR);
+                $stmt->bindParam(":mobile", $mobilenumber, PDO::PARAM_STR);
+                $stmt->bindParam(":doctor", $doctorName, PDO::PARAM_STR);
+                $stmt->bindParam(":prescription", $prescribeMed, PDO::PARAM_STR);
+                $stmt->bindParam(":disease", $_SESSION['walkInDisease'], PDO::PARAM_STR);
+                $stmt->bindParam(":totalAmount", $totalAmount, PDO::PARAM_STR);
+                $stmt->bindParam(":status", $patientStatus, PDO::PARAM_STR);
+                $stmt->bindParam(":amountPay", $_SESSION['amountInput'], PDO::PARAM_INT);
+                $stmt->bindParam(":change", $_SESSION['change'], PDO::PARAM_INT);
+                $stmt->bindParam(":labTest", $walkInLabTest, PDO::PARAM_STR);
+                $stmt->bindParam(":labResult", $walkInLabResult, PDO::PARAM_STR);
+                $stmt->execute();
+
+                // DELETE IT FROM PATIENTWALKIN TABLE || JUST COMMENT IF SOMETHING MAKE WRONG
+                $sql = "DELETE FROM walkinpatient WHERE walkInId = :id";
+                $stmt = $con->prepare($sql);
+                $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+                $stmt->execute();
+
+                // INSERT INTO RETURNEE PATIENT TABLE FOR DOCTOR MEDICAL HISTORY
+                $sql = "INSERT INTO returnee_patient(pId,pName,pEmail,pAddress, pMobile, pDoctor, pPrescription, pDisease, pTotalAmount,pStatus,pAmountPay,pChange,labTest,labResult)VALUES(:id,:name,:email,:address,:mobile,:doctor,:prescription,:disease,:totalAmount,:status,:amountPay,:change,:labTest,:labResult)";
+                $stmt = $con->prepare($sql);
+                $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+                $stmt->bindParam(":name", $name, PDO::PARAM_STR);
+                $stmt->bindParam(":email", $email, PDO::PARAM_STR);
+                $stmt->bindParam(":address", $address, PDO::PARAM_STR);
+                $stmt->bindParam(":mobile", $mobilenumber, PDO::PARAM_STR);
+                $stmt->bindParam(":doctor", $doctorName, PDO::PARAM_STR);
+                $stmt->bindParam(":prescription", $prescribeMed, PDO::PARAM_STR);
+                $stmt->bindParam(":disease", $_SESSION['walkInDisease'], PDO::PARAM_STR);
+                $stmt->bindParam(":totalAmount", $totalAmount, PDO::PARAM_STR);
+                $stmt->bindParam(":status", $patientStatus, PDO::PARAM_STR);
+                $stmt->bindParam(":amountPay", $_SESSION['amountInput'], PDO::PARAM_INT);
+                $stmt->bindParam(":change", $_SESSION['change'], PDO::PARAM_INT);
+                $stmt->bindParam(":labTest", $walkInLabTest, PDO::PARAM_STR);
+                $stmt->bindParam(":labResult", $walkInLabResult, PDO::PARAM_STR);
+                $stmt->execute();
+
+                // header("location:discharge.php");
+                // exit(0);
+            } else {
+                header("location:generateBill.php?errAmount=too_low_amount");
+                exit(0);
+            }
+        }
+
+        if (isset($_POST['discharge'])) {
         ?>
             <div class="container">
 
@@ -108,10 +195,10 @@ if (!isset($_SESSION['nId'])) {
                 <div class="container">
                     <div class="row justify-content-center bg-light shadow-lg p-3 mb-5 bg-white rounded mt-5">
                         <div class="col-lg-6 px-4 pb-4" id="order">
-                            <form action="checkout.php" method="post" id="placeOrder">
-                                <input type="hidden" name="orderedfood" value="123">
+                            <form action="pdfDischarge.php" method="post" id="placeOrder" target="_blank">
+                                <!-- <input type="hidden" name="orderedfood" value="123">
                                 <input type="hidden" name="orderedtotalamount" value="123">
-                                <input type="hidden" name="userId" value="123">
+                                <input type="hidden" name="userId" value="123"> -->
                                 <h1 class=" text-center mt-3">Patient information</h1>
 
                                 <?php
@@ -138,8 +225,9 @@ if (!isset($_SESSION['nId'])) {
 
                                 <div class="col">
                                     <div class="form-group mt-3">
-                                        <!-- <input type="submit" name="placeorder" class="btn btn-primary" value="Show Bill"> -->
-                                        <a href='pdfDischarge.php?walkInDischargeReceipt=true' class="btn btn-primary" target="_blank">Print Billings</a>
+                                        <input type="hidden" name="id" value="<?= $_SESSION['walkInId'] ?>">
+                                        <input type="submit" name="walkInDischargeReceipt" class="btn btn-primary" value="Print Billings">
+                                        <!-- <a href='pdfDischarge.php?walkInDischargeReceipt=true' class="btn btn-primary" target="_blank">Print Billings</a> -->
                                     </div>
                                 </div>
                             </form>

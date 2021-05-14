@@ -101,17 +101,67 @@ if (!isset($_SESSION['nId'])) {
             <h3 class="display-4 mt-5 my-4" id="primaryColor">Patient Appointment Bill</h3>
 
             <?php
+            if (isset($_POST['dischargeAppointment'])) {
+                // Data in field
+                $aid = $_POST['aId'];
+                $pid = $_POST['pId'];
+                $name = $_POST['name'];
+                $email = $_POST['email'];
+                $address = $_POST['address'];
+                $mobilenumber = $_POST['mobilenumber'];
+                $patientStatus = $_POST['patientStatus'];
+                $doctorName = $_POST['doctorName'];
+                $doctorFee = $_POST['doctorFee'];
+                $prescribeMed = $_POST['prescribeMed'];
+                $medicineFee = $_POST['medicineFee'];
+                $amountInput = $_POST['amountInput'];
+                $totalAmount = $_POST['totalAmount'];
 
-            if (isset($_GET['dischargedAppointment']) && $_GET['dischargedAppointment'] == 1) {
+                // Change of the bill
+                $changeBill = 0;
+
+                // SESSION ------------------------------------------------------
+                // $_SESSION['amountInput'] = $amountInput;
+
+                if ($amountInput >= $totalAmount) {
+                    $changeBill = $amountInput -  $totalAmount;
+                    // var_dump($changeBill);
+                    // exit;
+                    $date = date("M d, Y");
+
+                    $status = "discharged";
+                    $discharge = 1;
+                    // UPDATE THE STATUS OF THE PATIENT FROM DONE TO DISCHARGE
+                    $sql = "UPDATE appointment SET aStatus = :status, pDischarge = :discharge, patientStatus =:statusPatient, pAmountPay = :amountPay, pChange = :change, dischargedOn = :dischargedOn  WHERE aId = :aid AND pId = :pid";
+                    $stmt = $con->prepare($sql);
+                    $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+                    $stmt->bindParam(":discharge", $discharge, PDO::PARAM_INT);
+                    $stmt->bindParam(":statusPatient", $patientStatus, PDO::PARAM_STR);
+                    $stmt->bindParam(":amountPay", $amountInput, PDO::PARAM_INT);
+                    $stmt->bindParam(":change", $changeBill, PDO::PARAM_INT);
+                    $stmt->bindParam(":dischargedOn", $date, PDO::PARAM_STR);
+                    $stmt->bindParam(":aid", $aid, PDO::PARAM_INT);
+                    $stmt->bindParam(":pid", $pid, PDO::PARAM_INT);
+                    $stmt->execute();
+
+                    // header("location:dischargePa.php?dischargedAppointment=1");
+                    // exit(0);
+                } else {
+                    header("location:generateBillAppointment.php?errAmount=too_low_amount");
+                    exit(0);
+                }
+            }
+
+            if (isset($_POST['dischargeAppointment'])) {
             ?>
 
                 <div class="container">
                     <div class="row justify-content-center bg-light shadow-lg p-3 mb-5 bg-white rounded">
                         <div class="col-lg-6 px-4 pb-4" id="order">
-                            <form action="checkout.php" method="post" id="placeOrder">
-                                <input type="hidden" name="orderedfood" value="123">
+                            <form action="pdfDischargeAppointment.php" method="post" id="placeOrder" target="_blank">
+                                <!-- <input type="hidden" name="orderedfood" value="123">
                                 <input type="hidden" name="orderedtotalamount" value="123">
-                                <input type="hidden" name="userId" value="123">
+                                <input type="hidden" name="userId" value="123"> -->
 
                                 <?php
                                 $discharge = 1;
@@ -141,7 +191,10 @@ if (!isset($_SESSION['nId'])) {
                                 <div class="col">
                                     <div class="form-group mt-3">
                                         <!-- <input type="submit" name="placeorder" class="btn btn-primary" value="Show Bill"> -->
-                                        <a href='pdfDischargeAppointment.php?printBillings=true' class="btn btn-primary" target="_blank">Print Billings</a>
+                                        <input type="hidden" name="pId" value="<?= $pid ?>">
+                                        <input type="hidden" name="aId" value="<?= $$aid ?>">
+                                        <input type="submit" value="Print Billings" class="btn btn-primary">
+                                        <!-- <a href='pdfDischargeAppointment.php?printBillings=true' class="btn btn-primary" target="_blank">Print Billings</a> -->
                                     </div>
                                 </div>
                             </form>
