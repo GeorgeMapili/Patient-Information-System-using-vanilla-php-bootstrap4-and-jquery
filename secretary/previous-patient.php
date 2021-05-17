@@ -19,7 +19,7 @@ if (!isset($_SESSION['nId'])) {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/main.css" />
     <link rel="icon" href="../img/sumc.png">
-    <title>Secretary | Home</title>
+    <title>Secretary | Patient Before</title>
     <style>
         body{
             background-image: linear-gradient(to right, #205072 , #329D9C);
@@ -49,7 +49,7 @@ if (!isset($_SESSION['nId'])) {
                     $pendingCount = $stmt->rowCount();
                     ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="appointmentPending.php">Pending Appointments&nbsp;<?= ($pendingCount > 0) ? '<span id="pending-appointment" class="badge bg-danger">' . $pendingCount . '</span>' : '<span id="pending-appointment" class="badge bg-danger"></span>'; ?></a>
+                        <a class="nav-link" href="pendings.php">Pending Appointments&nbsp;<?= ($pendingCount > 0) ? '<span id="pending-appointment" class="badge bg-danger">' . $pendingCount . '</span>' : '<span id="pending-appointment" class="badge bg-danger"></span>'; ?></a>
                     </li>
                     <?php
                     $status = "done";
@@ -60,7 +60,7 @@ if (!isset($_SESSION['nId'])) {
                     $patientAppointment = $stmt->rowCount();
                     ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="patient.php">Patient from appointments&nbsp;<?= ($patientAppointment > 0) ? '<span id="patient-appointment" class="badge bg-danger">' . $patientAppointment . '</span>' : '<span id="patient-appointment" class="badge bg-danger"></span>'; ?></a>
+                        <a class="nav-link" href="patient-appointments.php">Patient from appointments&nbsp;<?= ($patientAppointment > 0) ? '<span id="patient-appointment" class="badge bg-danger">' . $patientAppointment . '</span>' : '<span id="patient-appointment" class="badge bg-danger"></span>'; ?></a>
                     </li>
                     <?php
                     $sql = "SELECT * FROM walkinpatient";
@@ -68,8 +68,8 @@ if (!isset($_SESSION['nId'])) {
                     $stmt->execute();
                     $walkinpatient = $stmt->rowCount();
                     ?>
-                    <li class="nav-item">
-                        <a class="nav-link" href="patientWalkIn.php">Patient Walk in&nbsp;<?= ($walkinpatient > 0) ? '<span id="walkinpatient" class="badge bg-danger">' . $walkinpatient . '</span>' : '<span id="walkinpatient" class="badge bg-danger"></span>'; ?></a>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="patient-walkin.php">Patient Walk in&nbsp;<?= ($walkinpatient > 0) ? '<span id="walkinpatient" class="badge bg-danger">' . $walkinpatient . '</span>' : '<span id="walkinpatient" class="badge bg-danger"></span>'; ?></a>
                     </li>
                 </ul>
                 <!-- search bar -->
@@ -85,7 +85,7 @@ if (!isset($_SESSION['nId'])) {
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item disabled" href=""><?= $_SESSION['nEmail']; ?></a>
-                            <a class="dropdown-item" href="nurseProfile.php">My account</a>
+                            <a class="dropdown-item" href="account.php">My account</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="logout.php">Logout</a>
                         </div>
@@ -97,44 +97,31 @@ if (!isset($_SESSION['nId'])) {
 
     <main role="main">
 
-<div class="container">
+        <div class="container">
+            <div class="mt-4 mb-4">
+                <h1 class="Display-4" id="primaryColor">Patient Before</h1>
+            </div>
+            <input class="form-control mr-sm-2" type="search" name="search" id="search" placeholder="Search Patient Name" autocomplete="off" aria-label="Search">
+            <div class="list-group" id="data">
+            </div>
 
-
-    <div class="my-5">
-        <div class="text-center">
-            <h1 class="display-3 text-white">Privacy Policy</h1>
         </div>
-    </div>
 
-    <div class="px-5 text-white">
-        <p class="lead">
-            SUMC Doctors Clinic we operate https://sumc-doctors-clinic.herokuapp.com. This page informs you of our policies regarding the collection, use and disclosure of Personal Information we receive from users of the website.
-        </p>
-        <p class="lead">
-            We use your Personal Information only for providing and improving the website. By using the website, you agree to the collection and use of information in accordance with this policy.
-        </p>
-    </div>
 
-    <h4 class="text-center my-5 text-white">Information Collection and Use</h4>
-    <div class="px-5 text-white">
-        <p class="lead">
-            While using our website, we may ask you to provide us with certain personally identifiable information that can be used to contact or identify you. Personally identifiable information may include, but is not limited to your name or personal information.
-        </p>
-    </div>
+        <hr class="featurette-divider">
 
-    <hr class="featurette-divider">
 
-    <!-- FOOTER -->
-    <footer class="container">
-    <p class="text-white">&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php" id="primaryColor">Privacy Policy</a> &middot; <a href="aboutUs.php" id="primaryColor">About Us</a></p>
-    </footer>
-</main>
+
+        <!-- FOOTER -->
+        <footer class="container">
+            <p class="text-white">&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacy-policy.php" id="primaryColor">Privacy Policy</a> &middot; <a href="about.php" id="primaryColor">About Us</a></p>
+        </footer>
+    </main>
 
 
     <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
-
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
@@ -203,6 +190,26 @@ if (!isset($_SESSION['nId'])) {
         });
     </script>
 
+    <script>
+        $(document).ready(function() {
+            $('#search').keyup(function() {
+                // Get input value on change
+                var patientBefore = $(this).val();
+                var resultDropdown = $(this).siblings("#data");
+
+                if (patientBefore.length) {
+                    $.get("action1.php", {
+                        patientBefore: patientBefore
+                    }).done(function(data) {
+                        // Display the returned data in browser
+                        resultDropdown.html(data);
+                    });
+                } else {
+                    resultDropdown.empty();
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

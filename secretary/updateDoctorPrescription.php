@@ -82,13 +82,13 @@ if (isset($_POST['id'])) {
         $medInfoExst = $medInfoExst['pId'] ?? 0;
         if ($medInfoExst == $walkInPatient['walkInId']) {
             $res .= '
-                                    <form action="updateMedicalInformation.php" method="get">
+                                    <form action="update-information.php" method="get">
                                         <input type="hidden" name="id" value="' . $walkInPatient['walkInId'] . '">
                                         <input type="submit" value="UPDATE MEDICAL INFORMATION" class="btn btn-secondary" name="medicalInformation">
                                     </form>';
         } else {
             $res .= '
-                                    <form action="addMedicalInformation.php" method="post">
+                                    <form action="medical-information.php" method="post">
                                         <input type="hidden" name="id" value="' . $walkInPatient['walkInId'] . '">
                                         <input type="submit" value="ADD MEDICAL INFORMATION" class="btn btn-info" name="medicalInformation">
                                     </form>';
@@ -101,7 +101,7 @@ if (isset($_POST['id'])) {
                                     <p class="btn btn-primary disabled" title="Can\'t generate bill without prescription">GENERATE BILL</p> ';
         } else {
             $res .= '
-                                    <form action="generateBill.php" method="post">
+                                    <form action="bill-walkin.php" method="post">
                                         <input type="hidden" name="id" value="' . $walkInPatient['walkInId'] . '">
                                         <input type="submit" value="GENERATE BILL" class="btn btn-primary" name="generateBill">
                                     </form>';
@@ -109,7 +109,7 @@ if (isset($_POST['id'])) {
         $res .= '
                             </td>
                             <td>
-                                <form action="patientWalkIn.php" method="post">
+                                <form action="patient-walkin.php" method="post">
                                     <input type="hidden" name="walkInId" value="' . $walkInPatient['walkInId'] . '">
                                     <input type="submit" name="deleteWalkInPatientBtn" class="btn btn-danger" value="DELETE" onclick="return confirm(\'Are you sure to delete ?\')">
                                 </form>

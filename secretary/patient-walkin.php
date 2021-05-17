@@ -49,7 +49,7 @@ if (!isset($_SESSION['nId'])) {
                     $pendingCount = $stmt->rowCount();
                     ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="appointmentPending.php">Pending Appointments&nbsp;<?= ($pendingCount > 0) ? '<span id="pending-appointment" class="badge bg-danger">' . $pendingCount . '</span>' : '<span id="pending-appointment" class="badge bg-danger"></span>'; ?></a>
+                        <a class="nav-link" href="pendings.php">Pending Appointments&nbsp;<?= ($pendingCount > 0) ? '<span id="pending-appointment" class="badge bg-danger">' . $pendingCount . '</span>' : '<span id="pending-appointment" class="badge bg-danger"></span>'; ?></a>
                     </li>
                     <?php
                     $status = "done";
@@ -60,7 +60,7 @@ if (!isset($_SESSION['nId'])) {
                     $patientAppointment = $stmt->rowCount();
                     ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="patient.php">Patient from appointments&nbsp;<?= ($patientAppointment > 0) ? '<span id="patient-appointment" class="badge bg-danger">' . $patientAppointment . '</span>' : '<span id="patient-appointment" class="badge bg-danger"></span>'; ?></a>
+                        <a class="nav-link" href="patient-appointments.php">Patient from appointments&nbsp;<?= ($patientAppointment > 0) ? '<span id="patient-appointment" class="badge bg-danger">' . $patientAppointment . '</span>' : '<span id="patient-appointment" class="badge bg-danger"></span>'; ?></a>
                     </li>
                     <?php
                     $sql = "SELECT * FROM walkinpatient";
@@ -69,7 +69,7 @@ if (!isset($_SESSION['nId'])) {
                     $walkinpatient = $stmt->rowCount();
                     ?>
                     <li class="nav-item active">
-                        <a class="nav-link" href="patientWalkIn.php">Patient Walk in&nbsp;<?= ($walkinpatient > 0) ? '<span id="walkinpatient" class="badge bg-danger">' . $walkinpatient . '</span>' : '<span id="walkinpatient" class="badge bg-danger"></span>'; ?></a>
+                        <a class="nav-link" href="patient-walkin.php">Patient Walk in&nbsp;<?= ($walkinpatient > 0) ? '<span id="walkinpatient" class="badge bg-danger">' . $walkinpatient . '</span>' : '<span id="walkinpatient" class="badge bg-danger"></span>'; ?></a>
                     </li>
                 </ul>
                 <!-- search bar -->
@@ -85,7 +85,7 @@ if (!isset($_SESSION['nId'])) {
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item disabled" href=""><?= $_SESSION['nEmail']; ?></a>
-                            <a class="dropdown-item" href="nurseProfile.php">My account</a>
+                            <a class="dropdown-item" href="account.php">My account</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="logout.php">Logout</a>
                         </div>
@@ -127,7 +127,7 @@ if (!isset($_SESSION['nId'])) {
                 $stmt->bindParam(":id", $walkInId, PDO::PARAM_INT);
                 $stmt->execute();
 
-                header("location:patientWalkIn.php?succDeleteWalkInPatient=successfully_deleted_walk_in_patient");
+                header("location:patient-walkin.php?succDeleteWalkInPatient=successfully_deleted_walk_in_patient");
                 exit(0);
             }
             ?>
@@ -251,14 +251,14 @@ if (!isset($_SESSION['nId'])) {
                                             <?php
                                             if ($medInfoExst == $walkInPatient['walkInId']) {
                                             ?>
-                                                <form action="updateMedicalInformation.php" method="get">
+                                                <form action="update-information.php" method="get">
                                                     <input type="hidden" name="id" value="<?= $walkInPatient['walkInId']; ?>">
                                                     <input type="submit" value="UPDATE MEDICAL INFORMATION" class="btn btn-secondary" name="medicalInformation">
                                                 </form>
                                             <?php
                                             } else {
                                             ?>
-                                                <form action="addMedicalInformation.php" method="post">
+                                                <form action="medical-information.php" method="post">
                                                     <input type="hidden" name="id" value="<?= $walkInPatient['walkInId']; ?>">
                                                     <input type="submit" value="ADD MEDICAL INFORMATION" class="btn btn-info" name="medicalInformation">
                                                 </form>
@@ -274,7 +274,7 @@ if (!isset($_SESSION['nId'])) {
                                             <?php
                                             } else {
                                             ?>
-                                                <form action="generateBill.php" method="post">
+                                                <form action="bill-walkin.php" method="post">
                                                     <input type="hidden" name="id" value="<?= $walkInPatient['walkInId']; ?>">
                                                     <input type="submit" value="GENERATE BILL" class="btn btn-primary" name="generateBill">
                                                 </form>
@@ -284,7 +284,7 @@ if (!isset($_SESSION['nId'])) {
 
                                         </td>
                                         <td>
-                                            <form action="patientWalkIn.php" method="post">
+                                            <form action="patient-walkin.php" method="post">
                                                 <input type="hidden" name="walkInId" value="<?= $walkInPatient['walkInId']; ?>">
                                                 <input type="submit" name="deleteWalkInPatientBtn" class="btn btn-danger" value="DELETE" onclick="return confirm('Are you sure to delete ?')">
                                             </form>
@@ -302,14 +302,14 @@ if (!isset($_SESSION['nId'])) {
                     <nav aria-label="Page navigation example ">
                         <ul class="pagination justify-content-center">
                             <li class="page-item <?= ($prev <= 0) ? 'disabled' : ''; ?>">
-                                <a class="page-link" href="patientWalkIn.php?page=<?= $prev; ?>" tabindex="-1">Previous</a>
+                                <a class="page-link" href="patient-walkin.php?page=<?= $prev; ?>" tabindex="-1">Previous</a>
                             </li>
                             <?php $pageWalkIn = isset($_GET['page']) ? $_GET['page'] : 1; ?>
                             <?php for ($i = 1; $i <= $pages; $i++) : ?>
-                                <li class="page-item <?= ($i == $pageWalkIn) ? 'active' : ''; ?>"><a class="page-link" href="patientWalkIn.php?page=<?= $i; ?>"><?= $i; ?></a></li>
+                                <li class="page-item <?= ($i == $pageWalkIn) ? 'active' : ''; ?>"><a class="page-link" href="patient-walkin.php?page=<?= $i; ?>"><?= $i; ?></a></li>
                             <?php endfor; ?>
                             <li class="page-item <?= ($next > $pages) ? 'disabled' : ''; ?>">
-                                <a class="page-link" href="patientWalkIn.php?page=<?= $next; ?>">Next</a>
+                                <a class="page-link" href="patient-walkin.php?page=<?= $next; ?>">Next</a>
                             </li>
                         </ul>
                     </nav>
@@ -326,11 +326,11 @@ if (!isset($_SESSION['nId'])) {
             <h3 class=" mt-5 my-4" id="primaryColor">Add Patients</h3>
 
             <div>
-                <a href="addPatient.php" class="btn btn-success mb-3 margin-right-auto">New Patient</a>
+                <a href="add-patient.php" class="btn btn-success mb-3 margin-right-auto">New Patient</a>
             </div>
 
             <div>
-                <a href="patientBefore.php" class="btn btn-success mb-3 margin-right-auto">Patient Before</a>
+                <a href="previous-patient.php" class="btn btn-success mb-3 margin-right-auto">Patient Before</a>
             </div>
 
 
@@ -339,7 +339,7 @@ if (!isset($_SESSION['nId'])) {
 
             <!-- FOOTER -->
             <footer class="container">
-            <p class="text-white">&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php" id="primaryColor">Privacy Policy</a> &middot; <a href="aboutUs.php" id="primaryColor">About Us</a></p>
+            <p class="text-white">&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacy-policy.php" id="primaryColor">Privacy Policy</a> &middot; <a href="about.php" id="primaryColor">About Us</a></p>
         </footer>
         </div>
     </main>

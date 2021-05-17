@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once '../connect.php';
+require_once '../vendor/autoload.php';
 
 if (!isset($_SESSION['nId'])) {
     header("location:index.php");
@@ -19,7 +20,7 @@ if (!isset($_SESSION['nId'])) {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/main.css" />
     <link rel="icon" href="../img/sumc.png">
-    <title>Secretary | Home</title>
+    <title>Secretary | Pending Appointment</title>
     <style>
         body{
             background-image: linear-gradient(to right, #205072 , #329D9C);
@@ -37,7 +38,7 @@ if (!isset($_SESSION['nId'])) {
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="dashboard.php">Home <span class="sr-only">(current)</span></a>
                     </li>
                     <?php
@@ -48,7 +49,7 @@ if (!isset($_SESSION['nId'])) {
                     $stmt->execute();
                     $pendingCount = $stmt->rowCount();
                     ?>
-                    <li class="nav-item">
+                    <li class="nav-item active">
                         <a class="nav-link" href="pendings.php">Pending Appointments&nbsp;<?= ($pendingCount > 0) ? '<span id="pending-appointment" class="badge bg-danger">' . $pendingCount . '</span>' : '<span id="pending-appointment" class="badge bg-danger"></span>'; ?></a>
                     </li>
                     <?php
@@ -87,10 +88,7 @@ if (!isset($_SESSION['nId'])) {
                             <a class="dropdown-item disabled" href=""><?= $_SESSION['nEmail']; ?></a>
                             <a class="dropdown-item" href="account.php">My account</a>
                             <div class="dropdown-divider"></div>
-                            <form action="logout.php" method="post">
-                                <input type="hidden" name="logout" value="true">
-                                <input type="submit" value="Logout" class="dropdown-item">
-                            </form>
+                            <a class="dropdown-item" href="logout.php">Logout</a>
                         </div>
                     </li>
                 </ul>
@@ -99,85 +97,137 @@ if (!isset($_SESSION['nId'])) {
     </header>
 
     <main role="main">
-        <div class="container">
 
-            <h3 class="display-4 mt-5 my-4" id="primaryColor">Dashboard</h3>
+        <div class="container-fluid">
 
-            <div class="row mt-3">
-                <div class="col-sm-6 col-md-4 col-lg-3">
-                    <div class="card text-white mb-3 shadow">
-                        <div class="card-header h2 bg-info text-light"> Pending Appointments</div>
-                        <div class="card-body bg-light text-dark">
-                            <h5 id="pending-appointment-dashboard" class="card-title"><?= ($pendingCount > 0) ? '<span>' . $pendingCount . '</span>' : "0" ?></h5>
-                        </div>
-                    </div>
-                </div>
+            <?php
+            if (isset($_POST['acceptStatus'])) {
 
-                <div class="col-sm-6 col-md-4 col-lg-3">
-                    <div class="card text-white mb-3 shadow">
-                        <div class="card-header h2 bg-info text-light"> Patient Appointments</div>
-                        <div class="card-body bg-light text-dark">
-                            <h5 id="patient-appointment-dashboard" class="card-title"><?= ($patientAppointment > 0) ? '<span>' . $patientAppointment . '</span>' : "0" ?></h5>
-                        </div>
-                    </div>
-                </div>
+                $options = array(
+                    'cluster' => 'ap1',
+                    'useTLS' => true
+                );
+                $pusher = new Pusher\Pusher(
+                    '33e38cfddf441ae84e2d',
+                    '9d6c92710887d31d41b4',
+                    '1149333',
+                    $options
+                );
 
-                <div class="col-sm-6 col-md-4 col-lg-3">
-                    <div class="card text-white mb-3 shadow">
-                        <div class="card-header h2 bg-info text-light"> Walk in Patients</div>
-                        <div class="card-body bg-light text-dark">
-                            <h5 id="walkinpatient-dashboard" class="card-title"><?= ($walkinpatient > 0) ? '<span>' . $walkinpatient . '</span>' : "0" ?></h5>
-                        </div>
-                    </div>
-                </div>
+                $aId = $_POST['aId'];
+                $pId = $_POST['pId'];
+                $status = "accepted";
 
-                <?php
-                $sql = "SELECT * FROM discharged_patient";
+                $sql = "UPDATE appointment SET aStatus = :status WHERE aId = :aid AND pId = :pid";
                 $stmt = $con->prepare($sql);
+                $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+                $stmt->bindParam(":aid", $aId, PDO::PARAM_INT);
+                $stmt->bindParam(":pid", $pId, PDO::PARAM_INT);
                 $stmt->execute();
 
-                $dischargedPatient = $stmt->rowCount();
+                $data['message'] = 'hello world';
+                $pusher->trigger('my-channel', 'my-event', $data);
+                header("location:pendings.php");
+                exit(0);
+            }
 
-                ?>
-                <div class="col-sm-6 col-md-4 col-lg-3">
-                    <div class="card text-white mb-3 shadow">
-                        <div class="card-header h2 bg-info text-light">Discharged Walkin Patient</div>
-                        <div class="card-body bg-light text-dark">
-                            <h5 class="card-title"><?= $dischargedPatient ?></h5>
-                        </div>
-                    </div>
-                </div>
+            if (isset($_POST['cancelStatus'])) {
+                $aId = $_POST['aId'];
+                $pId = $_POST['pId'];
+                $status = "cancelled";
 
-                <?php
-                $discharge = 1;
-                $dischargeStatus = "discharged";
-                $sql = "SELECT * FROM appointment WHERE pDischarge = :discharge AND aStatus = :status";
+                $sql = "UPDATE appointment SET aStatus = :status WHERE aId = :aid AND pId = :pid";
                 $stmt = $con->prepare($sql);
-                $stmt->bindParam(":discharge", $discharge, PDO::PARAM_INT);
-                $stmt->bindParam(":status", $dischargeStatus, PDO::PARAM_STR);
+                $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+                $stmt->bindParam(":aid", $aId, PDO::PARAM_INT);
+                $stmt->bindParam(":pid", $pId, PDO::PARAM_INT);
                 $stmt->execute();
 
-                $doneAppointment = $stmt->rowCount();
-                ?>
-                <div class="col-sm-6 col-md-4 col-lg-3">
-                    <div class="card text-white mb-3 shadow">
-                        <div class="card-header bg-info text-light h2">Finished Appointments</div>
-                        <div class="card-body bg-light text-dark">
-                            <h5 class="card-title"><?= $doneAppointment; ?></h5>
-                        </div>
-                    </div>
-                </div>
+                header("location:pendings.php");
+                exit(0);
+            }
+            ?>
+
+            <h3 class="display-4 mt-5 my-4" id="primaryColor">Appointment</h3>
+
+            <?php
+            $status = "pending";
+            $sql = "SELECT * FROM appointment WHERE aStatus = :status";
+            $stmt = $con->prepare($sql);
+            $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+            $stmt->execute();
+
+            if($stmt->rowCount() > 0){
+            ?>
+
+            <div class="table-responsive-xl">
+                <table class="table table-hover shadow p-3 mb-5 bg-white rounded">
+                    <thead class="bg-info text-light">
+                        <tr>
+                            <th scope="col">Patient Name</th>
+                            <th scope="col">Patient Address</th>
+                            <th scope="col">Patient Mobile</th>
+                            <th scope="col">Doctor</th>
+                            <th scope="col">Appointment Reason</th>
+                            <th scope="col">Date of Appointment</th>
+                            <th scope="col">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+
+                        while ($appointmentPending = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                        ?>
+                            <tr>
+                                <td><?= $appointmentPending['pName'] ?></td>
+                                <td><?= $appointmentPending['pAddress'] ?></td>
+                                <td><?= $appointmentPending['pMobile'] ?></td>
+                                <td><?= $appointmentPending['pDoctor'] ?></td>
+                                <td><?= $appointmentPending['aReason'] ?></td>
+                                <td>
+                                    <?= date("M d, Y", strtotime($appointmentPending['aDate'])); ?>
+                                    at
+                                    <?= $appointmentPending['aTime']; ?>
+                                </td>
+                                <td>
+                                    <div class="row">
+
+
+                                        <div class="col">
+                                            <form action="pendings.php" method="post">
+                                                <input type="hidden" name="aId" value="<?= $appointmentPending['aId'] ?>">
+                                                <input type="hidden" name="pId" value="<?= $appointmentPending['pId'] ?>">
+                                                <input type="submit" value="Accept" class="btn btn-info" name="acceptStatus">
+                                            </form>
+                                        </div>
+                                        <div class="col">
+                                            <form action="pendings.php" method="post">
+                                                <input type="hidden" name="aId" value="<?= $appointmentPending['aId'] ?>">
+                                                <input type="hidden" name="pId" value="<?= $appointmentPending['pId'] ?>">
+                                                <input type="submit" value="Cancel" class="btn btn-danger" name="cancelStatus" onclick="return confirm('Are you sure?')">
+                                            </form>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endwhile; ?>
+                    </tbody>
+                </table>
             </div>
+            <?php
+            }else{
+            ?>
+            <p class="lead text-center text-white display-4">No request appointments yet</p>
+            <?php    
+            }
+            ?>
 
             <hr class="featurette-divider">
-
-            <!-- /END THE FEATURETTES -->
 
             <!-- FOOTER -->
             <footer class="container">
             <p class="text-white">&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacy-policy.php" id="primaryColor">Privacy Policy</a> &middot; <a href="about.php" id="primaryColor">About Us</a></p>
         </footer>
-        </div>
     </main>
 
 
@@ -252,7 +302,6 @@ if (!isset($_SESSION['nId'])) {
 
         });
     </script>
-
 </body>
 
 </html>

@@ -49,7 +49,7 @@ if (!isset($_SESSION['nId'])) {
                     $pendingCount = $stmt->rowCount();
                     ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="appointmentPending.php">Pending Appointments&nbsp;<?= ($pendingCount > 0) ? '<span id="pending-appointment" class="badge bg-danger">' . $pendingCount . '</span>' : '<span id="pending-appointment" class="badge bg-danger"></span>'; ?></a>
+                        <a class="nav-link" href="pendings.php">Pending Appointments&nbsp;<?= ($pendingCount > 0) ? '<span id="pending-appointment" class="badge bg-danger">' . $pendingCount . '</span>' : '<span id="pending-appointment" class="badge bg-danger"></span>'; ?></a>
                     </li>
                     <?php
                     $status = "done";
@@ -60,7 +60,7 @@ if (!isset($_SESSION['nId'])) {
                     $patientAppointment = $stmt->rowCount();
                     ?>
                     <li class="nav-item active">
-                        <a class="nav-link" href="patient.php">Patient from appointments&nbsp;<?= ($patientAppointment > 0) ? '<span id="patient-appointment" class="badge bg-danger">' . $patientAppointment . '</span>' : '<span id="patient-appointment" class="badge bg-danger"></span>'; ?></a>
+                        <a class="nav-link" href="patient-appointments.php">Patient from appointments&nbsp;<?= ($patientAppointment > 0) ? '<span id="patient-appointment" class="badge bg-danger">' . $patientAppointment . '</span>' : '<span id="patient-appointment" class="badge bg-danger"></span>'; ?></a>
                     </li>
                     <?php
                     $sql = "SELECT * FROM walkinpatient";
@@ -69,7 +69,7 @@ if (!isset($_SESSION['nId'])) {
                     $walkinpatient = $stmt->rowCount();
                     ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="patientWalkIn.php">Patient Walk in&nbsp;<?= ($walkinpatient > 0) ? '<span id="walkinpatient" class="badge bg-danger">' . $walkinpatient . '</span>' : '<span id="walkinpatient" class="badge bg-danger"></span>'; ?></a>
+                        <a class="nav-link" href="patient-walkin.php">Patient Walk in&nbsp;<?= ($walkinpatient > 0) ? '<span id="walkinpatient" class="badge bg-danger">' . $walkinpatient . '</span>' : '<span id="walkinpatient" class="badge bg-danger"></span>'; ?></a>
                     </li>
                 </ul>
                 <!-- search bar -->
@@ -85,7 +85,7 @@ if (!isset($_SESSION['nId'])) {
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item disabled" href=""><?= $_SESSION['nEmail']; ?></a>
-                            <a class="dropdown-item" href="nurseProfile.php">My account</a>
+                            <a class="dropdown-item" href="account.php">My account</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="logout.php">Logout</a>
                         </div>
@@ -147,7 +147,7 @@ if (!isset($_SESSION['nId'])) {
                     // header("location:dischargePa.php?dischargedAppointment=1");
                     // exit(0);
                 } else {
-                    header("location:generateBillAppointment.php?errAmount=too_low_amount");
+                    header("location:bill-appointments.php?errAmount=too_low_amount");
                     exit(0);
                 }
             }
@@ -158,7 +158,7 @@ if (!isset($_SESSION['nId'])) {
                 <div class="container">
                     <div class="row justify-content-center bg-light shadow-lg p-3 mb-5 bg-white rounded">
                         <div class="col-lg-6 px-4 pb-4" id="order">
-                            <form action="pdfDischargeAppointment.php" method="post" id="placeOrder" target="_blank">
+                            <form action="pdf-appointments.php" method="post" id="placeOrder" target="_blank">
                                 <!-- <input type="hidden" name="orderedfood" value="123">
                                 <input type="hidden" name="orderedtotalamount" value="123">
                                 <input type="hidden" name="userId" value="123"> -->
@@ -216,7 +216,7 @@ if (!isset($_SESSION['nId'])) {
 
             <!-- FOOTER -->
             <footer class="container">
-            <p class="text-white">&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php" id="primaryColor">Privacy Policy</a> &middot; <a href="aboutUs.php" id="primaryColor">About Us</a></p>
+            <p class="text-white">&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacy-policy.php" id="primaryColor">Privacy Policy</a> &middot; <a href="about.php" id="primaryColor">About Us</a></p>
         </footer>
         </div>
     </main>

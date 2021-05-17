@@ -31,7 +31,7 @@ if (isset($_REQUEST["patientBefore"])) {
                 while ($returneePatient = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     echo '
                     <div class="list-group" id="data">
-                        <form action="myRecord.php" method="post">
+                        <form action="record.php" method="post">
                             <input type="hidden" name="pName" value="'. $returneePatient['pName'] .'">
                             <input type="submit" class="list-group-item list-group-item-action" value="'. $returneePatient['pName'] .'" name="healthLibraryBtn">
                         </form>

@@ -50,7 +50,7 @@ if (!isset($_SESSION['nId'])) {
                     $pendingCount = $stmt->rowCount();
                     ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="appointmentPending.php">Pending Appointments&nbsp;<?= ($pendingCount > 0) ? '<span id="pending-appointment" class="badge bg-danger">' . $pendingCount . '</span>' : '<span id="pending-appointment" class="badge bg-danger"></span>'; ?></a>
+                        <a class="nav-link" href="pendings.php">Pending Appointments&nbsp;<?= ($pendingCount > 0) ? '<span id="pending-appointment" class="badge bg-danger">' . $pendingCount . '</span>' : '<span id="pending-appointment" class="badge bg-danger"></span>'; ?></a>
                     </li>
                     <?php
                     $status = "done";
@@ -61,7 +61,7 @@ if (!isset($_SESSION['nId'])) {
                     $patientAppointment = $stmt->rowCount();
                     ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="patient.php">Patient from appointments&nbsp;<?= ($patientAppointment > 0) ? '<span id="patient-appointment" class="badge bg-danger">' . $patientAppointment . '</span>' : '<span id="patient-appointment" class="badge bg-danger"></span>'; ?></a>
+                        <a class="nav-link" href="patient-appointments.php">Patient from appointments&nbsp;<?= ($patientAppointment > 0) ? '<span id="patient-appointment" class="badge bg-danger">' . $patientAppointment . '</span>' : '<span id="patient-appointment" class="badge bg-danger"></span>'; ?></a>
                     </li>
                     <?php
                     $sql = "SELECT * FROM walkinpatient";
@@ -70,7 +70,7 @@ if (!isset($_SESSION['nId'])) {
                     $walkinpatient = $stmt->rowCount();
                     ?>
                     <li class="nav-item active">
-                        <a class="nav-link" href="patientWalkIn.php">Patient Walk in&nbsp;<?= ($walkinpatient > 0) ? '<span id="walkinpatient" class="badge bg-danger">' . $walkinpatient . '</span>' : '<span id="walkinpatient" class="badge bg-danger"></span>'; ?></a>
+                        <a class="nav-link" href="patient-walkin.php">Patient Walk in&nbsp;<?= ($walkinpatient > 0) ? '<span id="walkinpatient" class="badge bg-danger">' . $walkinpatient . '</span>' : '<span id="walkinpatient" class="badge bg-danger"></span>'; ?></a>
                     </li>
                 </ul>
                 <!-- search bar -->
@@ -86,7 +86,7 @@ if (!isset($_SESSION['nId'])) {
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item disabled" href=""><?= $_SESSION['nEmail']; ?></a>
-                            <a class="dropdown-item" href="nurseProfile.php">My account</a>
+                            <a class="dropdown-item" href="account.php">My account</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="logout.php">Logout</a>
                         </div>
@@ -113,7 +113,7 @@ if (!isset($_SESSION['nId'])) {
                     <?php
 
                     ?>
-                    <form action="addNewRecord.php" method="post">
+                    <form action="add-record.php" method="post">
                         <div class="row">
                             <?php
 
@@ -261,13 +261,13 @@ if (!isset($_SESSION['nId'])) {
 
                         // Check if to fill all fields
                         if (empty($name) || empty($address) || empty($email) || empty($mobileNumber) || empty($disease) || empty($age) || empty($gender) || empty($doctor)) {
-                            header("location:addNewRecord.php?addNewRec=true&pName=$name&errField=please_input_all_fields");
+                            header("location:add-record.php?addNewRec=true&pName=$name&errField=please_input_all_fields");
                             exit(0);
                         }
 
                         // Check if the name is valid
                         if (!preg_match("/^([a-zA-Z' ]+)$/", $name)) {
-                            header("location:addNewRecord.php?addNewRec=true&pName=$name&errName=name_is_not_valid");
+                            header("location:add-record.php?addNewRec=true&pName=$name&errName=name_is_not_valid");
                             exit(0);
                         }
 
@@ -280,13 +280,13 @@ if (!isset($_SESSION['nId'])) {
                         $nameCount = $stmt->rowCount();
 
                         if ($nameCount > 0) {
-                            header("location:addNewRecord.php?addNewRec=true&pName=$name&errName1=name_is_already_taken");
+                            header("location:add-record.php?addNewRec=true&pName=$name&errName1=name_is_already_taken");
                             exit(0);
                         }
 
                         // Check if the email is valid
                         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                            header("location:addNewRecord.php?addNewRec=true&pName=$name&errEmail1=email_is_not_valid&name=$name&address=$address&mobile=$mobileNumber&disease=$disease&age=$age&gender=$gender&doctor=$doctor");
+                            header("location:add-record.php?addNewRec=true&pName=$name&errEmail1=email_is_not_valid&name=$name&address=$address&mobile=$mobileNumber&disease=$disease&age=$age&gender=$gender&doctor=$doctor");
                             exit(0);
                         }
 
@@ -299,7 +299,7 @@ if (!isset($_SESSION['nId'])) {
                         $emailCount = $stmt->rowCount();
 
                         if ($emailCount > 0) {
-                            header("location:addNewRecord.php?addNewRec=true&pName=$name&errEmail2=email_is_already_taken&name=$name&address=$address&mobile=$mobileNumber&disease=$disease&age=$age&gender=$gender&doctor=$doctor");
+                            header("location:add-record.php?addNewRec=true&pName=$name&errEmail2=email_is_already_taken&name=$name&address=$address&mobile=$mobileNumber&disease=$disease&age=$age&gender=$gender&doctor=$doctor");
                             exit(0);
                         }
 
@@ -312,7 +312,7 @@ if (!isset($_SESSION['nId'])) {
                         $mobileCount = $stmt->rowCount();
 
                         if ($mobileCount > 0) {
-                            header("location:addNewRecord.php?addNewRec=true&pName=$name&errMobile=mobile_number_is_already_taken&name=$name&address=$address&email=$email&disease=$disease&age=$age&gender=$gender&doctor=$doctor");
+                            header("location:add-record.php?addNewRec=true&pName=$name&errMobile=mobile_number_is_already_taken&name=$name&address=$address&email=$email&disease=$disease&age=$age&gender=$gender&doctor=$doctor");
                             exit(0);
                         }
 
@@ -343,7 +343,7 @@ if (!isset($_SESSION['nId'])) {
 
                         $data['message'] = 'hello world';
                         $pusher->trigger('my-channel', 'my-event', $data);
-                        header("location:addNewRecord.php?addNewRec=true&pName=$name&addSucc=Successfully_added_new_walkin_patient");
+                        header("location:add-record.php?addNewRec=true&pName=$name&addSucc=Successfully_added_new_walkin_patient");
                         exit(0);
                     }else {
                         header("location:dashboard.php");
@@ -360,7 +360,7 @@ if (!isset($_SESSION['nId'])) {
 
         <!-- FOOTER -->
         <footer class="container">
-            <p class="text-white">&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php" id="primaryColor">Privacy Policy</a> &middot; <a href="aboutUs.php" id="primaryColor">About Us</a></p>
+            <p class="text-white">&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacy-policy.php" id="primaryColor">Privacy Policy</a> &middot; <a href="about.php" id="primaryColor">About Us</a></p>
         </footer>
         </div>
     </main>

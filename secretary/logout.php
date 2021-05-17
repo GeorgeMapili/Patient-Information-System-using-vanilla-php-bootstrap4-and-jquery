@@ -2,6 +2,8 @@
 
 session_start();
 
+if(isset($_POST['logout'])){
+
 // nurse receptionist session
 unset($_SESSION['nId']);
 unset($_SESSION['nName']);
@@ -48,3 +50,9 @@ unset($_SESSION['doctorUpdatePrescription']);
 
 header("location:index.php");
 exit(0);
+
+}else{
+    header("location:dashboard.php");
+    exit;
+}
+

@@ -50,7 +50,7 @@ if (!isset($_SESSION['nId'])) {
                     $pendingCount = $stmt->rowCount();
                     ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="appointmentPending.php">Pending Appointments&nbsp;<?= ($pendingCount > 0) ? '<span id="pending-appointment" class="badge bg-danger">' . $pendingCount . '</span>' : '<span id="pending-appointment" class="badge bg-danger"></span>'; ?></a>
+                        <a class="nav-link" href="pendings.php">Pending Appointments&nbsp;<?= ($pendingCount > 0) ? '<span id="pending-appointment" class="badge bg-danger">' . $pendingCount . '</span>' : '<span id="pending-appointment" class="badge bg-danger"></span>'; ?></a>
                     </li>
                     <?php
                     $status = "done";
@@ -61,7 +61,7 @@ if (!isset($_SESSION['nId'])) {
                     $patientAppointment = $stmt->rowCount();
                     ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="patient.php">Patient from appointments&nbsp;<?= ($patientAppointment > 0) ? '<span id="patient-appointment" class="badge bg-danger">' . $patientAppointment . '</span>' : '<span id="patient-appointment" class="badge bg-danger"></span>'; ?></a>
+                        <a class="nav-link" href="patient-appointments.php">Patient from appointments&nbsp;<?= ($patientAppointment > 0) ? '<span id="patient-appointment" class="badge bg-danger">' . $patientAppointment . '</span>' : '<span id="patient-appointment" class="badge bg-danger"></span>'; ?></a>
                     </li>
                     <?php
                     $sql = "SELECT * FROM walkinpatient";
@@ -70,7 +70,7 @@ if (!isset($_SESSION['nId'])) {
                     $walkinpatient = $stmt->rowCount();
                     ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="patientWalkIn.php">Patient Walk in&nbsp;<?= ($walkinpatient > 0) ? '<span id="walkinpatient" class="badge bg-danger">' . $walkinpatient . '</span>' : '<span id="walkinpatient" class="badge bg-danger"></span>'; ?></a>
+                        <a class="nav-link" href="patient-walkin.php">Patient Walk in&nbsp;<?= ($walkinpatient > 0) ? '<span id="walkinpatient" class="badge bg-danger">' . $walkinpatient . '</span>' : '<span id="walkinpatient" class="badge bg-danger"></span>'; ?></a>
                     </li>
                 </ul>
                 <!-- search bar -->
@@ -86,7 +86,7 @@ if (!isset($_SESSION['nId'])) {
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item disabled" href=""><?= $_SESSION['nEmail']; ?></a>
-                            <a class="dropdown-item" href="nurseProfile.php">My account</a>
+                            <a class="dropdown-item" href="account.php">My account</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="logout.php">Logout</a>
                         </div>
@@ -108,13 +108,13 @@ if (!isset($_SESSION['nId'])) {
 
             // Check if nothing changed
             if ($_SESSION['nName'] == $nurseName && $_SESSION['nEmail'] == $nurseEmail && $_SESSION['nAddress'] == $nurseAddress && $_SESSION['nMobile'] == $nurseMobile) {
-                header("location:nurseProfile.php?errNurseInfoUpdate=Nothing_to_update");
+                header("location:account.php?errNurseInfoUpdate=Nothing_to_update");
                 exit(0);
             }
 
             // Check the name if valid
             if (!preg_match("/^([a-zA-Z' ]+)$/", $nurseName)) {
-                header("location:nurseProfile.php?errNurseName=nurse_name_is_not_valid");
+                header("location:account.php?errNurseName=nurse_name_is_not_valid");
                 exit(0);
             }
 
@@ -128,13 +128,13 @@ if (!isset($_SESSION['nId'])) {
             $nameCount = $stmt->rowCount();
 
             if ($nameCount > 0) {
-                header("location:nurseProfile.php?errNurseName1=Nurse_name_is_already_taken");
+                header("location:account.php?errNurseName1=Nurse_name_is_already_taken");
                 exit(0);
             }
 
             // check if the email is valid
             if (!filter_var($nurseEmail, FILTER_VALIDATE_EMAIL)) {
-                header("location:nurseProfile.php?errEmail=email_is_invalid");
+                header("location:account.php?errEmail=email_is_invalid");
                 exit(0);
             }
 
@@ -148,7 +148,7 @@ if (!isset($_SESSION['nId'])) {
             $emailCount = $stmt->rowCount();
 
             if ($emailCount > 0) {
-                header("location:nurseProfile.php?errEmail1=Email_is_already_existed");
+                header("location:account.php?errEmail1=Email_is_already_existed");
                 exit(0);
             }
 
@@ -162,7 +162,7 @@ if (!isset($_SESSION['nId'])) {
             $mobileCount = $stmt->rowCount();
 
             if ($mobileCount > 0) {
-                header("location:nurseProfile.php?errMobile=Mobile_number_is_already_existed");
+                header("location:account.php?errMobile=Mobile_number_is_already_existed");
                 exit(0);
             }
 
@@ -180,7 +180,7 @@ if (!isset($_SESSION['nId'])) {
             $_SESSION['nAddress'] = $nurseAddress;
             $_SESSION['nMobile'] = $nurseMobile;
 
-            header("location:nurseProfile.php?succUpdateNurse=Successfully_updated_information");
+            header("location:account.php?succUpdateNurse=Successfully_updated_information");
             exit(0);
         }
         ?>
@@ -198,7 +198,7 @@ if (!isset($_SESSION['nId'])) {
                     <?= (isset($_GET['succUpdateNurse']) && $_GET['succUpdateNurse'] == "Successfully_updated_information") ? '<span class="text-success">Successfully updated information!</span>' : '' ?>
                 </div>
 
-                <form action="nurseProfile.php" method="post">
+                <form action="account.php" method="post">
                     <div class="row">
                         <input type="hidden" name="nId" value="<?= $_SESSION['nId'] ?>">
                         <div class="col">
@@ -251,7 +251,7 @@ if (!isset($_SESSION['nId'])) {
                 if (password_verify($currentPassword, $nurseAcc['nPassword'])) {
 
                     if ($newPassword !== $confirmNewPassword) {
-                        header("location:nurseProfile.php?errConfirmPass=password_did_not_match");
+                        header("location:account.php?errConfirmPass=password_did_not_match");
                         exit(0);
                     } else {
                         $hashPass = password_hash($newPassword, PASSWORD_DEFAULT);
@@ -261,11 +261,11 @@ if (!isset($_SESSION['nId'])) {
                         $stmt->bindParam(":id", $nId, PDO::PARAM_INT);
                         $stmt->execute();
 
-                        header("location:nurseProfile.php?succUpdatePass=Successfully_updated_password");
+                        header("location:account.php?succUpdatePass=Successfully_updated_password");
                         exit(0);
                     }
                 } else {
-                    header("location:nurseProfile.php?errCurrPass=incorrect_current_password");
+                    header("location:account.php?errCurrPass=incorrect_current_password");
                     ob_end_flush();
                     exit(0);
                 }
@@ -281,7 +281,7 @@ if (!isset($_SESSION['nId'])) {
                     <h1 class="Display-4" id="primaryColor">Password</h1>
                 </div>
 
-                <form action="nurseProfile.php" method="post">
+                <form action="account.php" method="post">
                     <input type="hidden" name="nId" value="<?= $_SESSION['nId'] ?>">
                     <label>Current Password</label>
                     <?= (isset($_GET['errCurrPass']) && $_GET['errCurrPass'] == "incorrect_current_password") ? '<input type="password" name="currentPassword" class="form-control is-invalid" required>' : '<input type="password" name="currentPassword" class="form-control" required>' ?>
@@ -335,13 +335,13 @@ if (!isset($_SESSION['nId'])) {
                     $allowed = array('jpg', 'jpeg', 'png');
 
                     if (!in_array(strtolower($extF[1]), $allowed)) {
-                        header("location:nurseProfile.php?errorImgExt=image_is_not_valid");
+                        header("location:account.php?errorImgExt=image_is_not_valid");
                         exit(0);
                     }
 
                     // Check if the image size is valid
                     if ($profileImg['size'] > 5000000) {
-                        header("location:nurseProfile.php?errImgSize=Image_invalid_size");
+                        header("location:account.php?errImgSize=Image_invalid_size");
                         exit(0);
                     }
 
@@ -369,7 +369,7 @@ if (!isset($_SESSION['nId'])) {
                     $stmt->bindParam(":id", $nId, PDO::PARAM_INT);
                     $stmt->execute();
 
-                    header("location:nurseProfile.php?succUpdateImg=Successfully_update_the_img");
+                    header("location:account.php?succUpdateImg=Successfully_update_the_img");
                     exit(0);
                 }
                 ?>
@@ -378,7 +378,7 @@ if (!isset($_SESSION['nId'])) {
                     <?= (isset($_GET['succUpdateImg']) && $_GET['succUpdateImg'] == "Successfully_update_the_img") ? '<span class="text-success">Successfully update the image!</span>' : '' ?>
                 </div>
 
-                <form action="nurseProfile.php" class="my-4 mx-3" method="post" enctype="multipart/form-data">
+                <form action="account.php" class="my-4 mx-3" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="nId" value="<?= $_SESSION['nId'] ?>">
                     <div class="row">
                         <label>Nurse Profile Image</label>
@@ -401,7 +401,7 @@ if (!isset($_SESSION['nId'])) {
     <!-- FOOTER -->
     <footer class="container">
         <p class="float-right"><a href="#" class="text-dark">Back to top</a></p>
-        <p class="text-white">&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php" id="primaryColor">Privacy Policy</a> &middot; <a href="aboutUs.php" id="primaryColor">About Us</a></p>
+        <p class="text-white">&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacy-policy.php" id="primaryColor">Privacy Policy</a> &middot; <a href="about.php" id="primaryColor">About Us</a></p>
     </footer>
 
 

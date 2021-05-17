@@ -25,7 +25,6 @@ if (!isset($_SESSION['nId'])) {
             background-image: linear-gradient(to right, #205072 , #329D9C);
         }
     </style>
-
 </head>
 
 <body>
@@ -50,7 +49,7 @@ if (!isset($_SESSION['nId'])) {
                     $pendingCount = $stmt->rowCount();
                     ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="appointmentPending.php">Pending Appointments&nbsp;<?= ($pendingCount > 0) ? '<span id="pending-appointment" class="badge bg-danger">' . $pendingCount . '</span>' : '<span id="pending-appointment" class="badge bg-danger"></span>'; ?></a>
+                        <a class="nav-link" href="pendings.php">Pending Appointments&nbsp;<?= ($pendingCount > 0) ? '<span id="pending-appointment" class="badge bg-danger">' . $pendingCount . '</span>' : '<span id="pending-appointment" class="badge bg-danger"></span>'; ?></a>
                     </li>
                     <?php
                     $status = "done";
@@ -61,7 +60,7 @@ if (!isset($_SESSION['nId'])) {
                     $patientAppointment = $stmt->rowCount();
                     ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="patient.php">Patient from appointments&nbsp;<?= ($patientAppointment > 0) ? '<span id="patient-appointment" class="badge bg-danger">' . $patientAppointment . '</span>' : '<span id="patient-appointment" class="badge bg-danger"></span>'; ?></a>
+                        <a class="nav-link" href="patient-appointments.php">Patient from appointments&nbsp;<?= ($patientAppointment > 0) ? '<span id="patient-appointment" class="badge bg-danger">' . $patientAppointment . '</span>' : '<span id="patient-appointment" class="badge bg-danger"></span>'; ?></a>
                     </li>
                     <?php
                     $sql = "SELECT * FROM walkinpatient";
@@ -70,7 +69,7 @@ if (!isset($_SESSION['nId'])) {
                     $walkinpatient = $stmt->rowCount();
                     ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="patientWalkIn.php">Patient Walk in&nbsp;<?= ($walkinpatient > 0) ? '<span id="walkinpatient" class="badge bg-danger">' . $walkinpatient . '</span>' : '<span id="walkinpatient" class="badge bg-danger"></span>'; ?></a>
+                        <a class="nav-link" href="patient-walkin.php">Patient Walk in&nbsp;<?= ($walkinpatient > 0) ? '<span id="walkinpatient" class="badge bg-danger">' . $walkinpatient . '</span>' : '<span id="walkinpatient" class="badge bg-danger"></span>'; ?></a>
                     </li>
                 </ul>
                 <!-- search bar -->
@@ -86,7 +85,7 @@ if (!isset($_SESSION['nId'])) {
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item disabled" href=""><?= $_SESSION['nEmail']; ?></a>
-                            <a class="dropdown-item" href="nurseProfile.php">My account</a>
+                            <a class="dropdown-item" href="account.php">My account</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="logout.php">Logout</a>
                         </div>
@@ -98,28 +97,38 @@ if (!isset($_SESSION['nId'])) {
 
     <main role="main">
 
-        <div class="container">
+<div class="container">
 
 
-            <div class="my-5">
-                <div class="text-center">
-                    <h1 class="display-3 text-white">About us</h1>
-                </div>
-            </div>
+    <div class="my-5">
+        <div class="text-center">
+            <h1 class="display-3 text-white">Privacy Policy</h1>
+        </div>
+    </div>
 
-            <div class="px-5 text-white">
-                <p class="lead">
-                    SUMC Doctors Clinic is open to all patients every day and provides fundamental medical care and cutting-edge medicine in a central location in the area. We use our superior academic knowledge to treat a wide range of health issues, taking a personal touch and utilizing highly specialized and up-to-date research and is known for providing quality healthcare and valuable experience to all local and international patients. Our healthcare offerings are supported by a team of compassionate and dedicated medical professionals who have rich knowledge and experience in their respective domains.
-                </p>
-            </div>
+    <div class="px-5 text-white">
+        <p class="lead">
+            SUMC Doctors Clinic we operate https://sumc-doctors-clinic.herokuapp.com. This page informs you of our policies regarding the collection, use and disclosure of Personal Information we receive from users of the website.
+        </p>
+        <p class="lead">
+            We use your Personal Information only for providing and improving the website. By using the website, you agree to the collection and use of information in accordance with this policy.
+        </p>
+    </div>
 
-            <hr class="featurette-divider">
+    <h4 class="text-center my-5 text-white">Information Collection and Use</h4>
+    <div class="px-5 text-white">
+        <p class="lead">
+            While using our website, we may ask you to provide us with certain personally identifiable information that can be used to contact or identify you. Personally identifiable information may include, but is not limited to your name or personal information.
+        </p>
+    </div>
 
-            <!-- FOOTER -->
-            <footer class="container">
-            <p class="text-white">&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php" id="primaryColor">Privacy Policy</a> &middot; <a href="aboutUs.php" id="primaryColor">About Us</a></p>
-        </footer>
-    </main>
+    <hr class="featurette-divider">
+
+    <!-- FOOTER -->
+    <footer class="container">
+    <p class="text-white">&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacy-policy.php" id="primaryColor">Privacy Policy</a> &middot; <a href="about.php" id="primaryColor">About Us</a></p>
+    </footer>
+</main>
 
 
     <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->

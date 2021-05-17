@@ -55,7 +55,7 @@ if (isset($_POST['query'])) {
 
             $output .= '
             <td>
-            <form action="generateBillAppointment.php" method="post">
+            <form action="bill-appointments.php" method="post">
                 <input type="hidden" name="id" value=' . $patientAppointment['pId'] . '>
                 <input type="hidden" name="aid" value=' . $patientAppointment['aId'] . '>
                 <input type="submit" value="GENERATE BILL" class="btn btn-primary" name="generateBillAppointment">
@@ -131,7 +131,7 @@ if (isset($_POST['walkInQuery'])) {
             $medInfoExst = $medInfoExst['pId'] ?? 0;
             if ($medInfoExst == $walkInPatient['walkInId']) {
                 $walkInOutput .= '
-        <form action="updateMedicalInformation.php" method="get">
+        <form action="update-information.php" method="get">
             <input type="hidden" name="id" value=' . $walkInPatient['walkInId'] . '>
             <input type="submit" value="UPDATE MEDICAL INFORMATION" class="btn btn-secondary" name="medicalInformation">
         </form>
@@ -152,7 +152,7 @@ if (isset($_POST['walkInQuery'])) {
                 <p class="btn btn-primary disabled" title="Can\'t generate bill without prescription">GENERATE BILL</p> ';
             } else {
                 $walkInOutput .= '
-                    <form action="generateBill.php" method="post">
+                    <form action="bill-walkin.php" method="post">
                     <input type="hidden" name="id" value=' . $walkInPatient['walkInId'] . '>
                     <input type="submit" value="GENERATE BILL" class="btn btn-primary" name="generateBill">
                 </form>
@@ -162,7 +162,7 @@ if (isset($_POST['walkInQuery'])) {
             }
             $walkInOutput .= '
             <td>
-                <form action="patientWalkIn.php" method="post">
+                <form action="patient-walkin.php" method="post">
                     <input type="hidden" name="walkInId" value=' . $walkInPatient['walkInId'] . '>
                     <input type="submit" name="deleteWalkInPatientBtn" class="btn btn-danger" value="DELETE" onclick="return confirm(\'Are you sure to delete ?\')">
                 </form>
@@ -194,7 +194,7 @@ if (isset($_POST['updateMedInfo'])) {
     $updateMed = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($updateMed['pId'] == $id && $updateMed['pHeight'] == $height && $updateMed['pWeight'] == $weight && $updateMed['pBloodType'] == $bloodType && $updateMed['pAllergy'] == $allergy && $updateMed['pMedicalInfo'] == $medInfoStr) {
-        header("location:patientWalkIn.php?errUp=Nothing_to_update");
+        header("location:patient-walkin.php?errUp=Nothing_to_update");
         exit(0);
     }
 
@@ -208,7 +208,7 @@ if (isset($_POST['updateMedInfo'])) {
     $stmt->bindParam(":id", $id, PDO::PARAM_INT);
     $stmt->execute();
 
-    header("location:patientWalkIn.php?succUp=Updated_successfully");
+    header("location:patient-walkin.php?succUp=Updated_successfully");
     exit(0);
 }
 

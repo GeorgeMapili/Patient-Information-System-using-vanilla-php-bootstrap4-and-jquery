@@ -51,7 +51,7 @@ if((isset($_POST['aid']) && isset($_POST['id'])) || isset($_POST['aId']) && isse
                     $pendingCount = $stmt->rowCount();
                     ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="appointmentPending.php">Pending Appointments&nbsp;<?= ($pendingCount > 0) ? '<span id="pending-appointment" class="badge bg-danger">' . $pendingCount . '</span>' : '<span id="pending-appointment" class="badge bg-danger"></span>'; ?></a>
+                        <a class="nav-link" href="pendings.php">Pending Appointments&nbsp;<?= ($pendingCount > 0) ? '<span id="pending-appointment" class="badge bg-danger">' . $pendingCount . '</span>' : '<span id="pending-appointment" class="badge bg-danger"></span>'; ?></a>
                     </li>
                     <?php
                     $status = "done";
@@ -62,7 +62,7 @@ if((isset($_POST['aid']) && isset($_POST['id'])) || isset($_POST['aId']) && isse
                     $patientAppointment = $stmt->rowCount();
                     ?>
                     <li class="nav-item active">
-                        <a class="nav-link" href="patient.php">Patient from appointments&nbsp;<?= ($patientAppointment > 0) ? '<span id="patient-appointment" class="badge bg-danger">' . $patientAppointment . '</span>' : '<span id="patient-appointment" class="badge bg-danger"></span>'; ?></a>
+                        <a class="nav-link" href="patient-appointments.php">Patient from appointments&nbsp;<?= ($patientAppointment > 0) ? '<span id="patient-appointment" class="badge bg-danger">' . $patientAppointment . '</span>' : '<span id="patient-appointment" class="badge bg-danger"></span>'; ?></a>
                     </li>
                     <?php
                     $sql = "SELECT * FROM walkinpatient";
@@ -71,7 +71,7 @@ if((isset($_POST['aid']) && isset($_POST['id'])) || isset($_POST['aId']) && isse
                     $walkinpatient = $stmt->rowCount();
                     ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="patientWalkIn.php">Patient Walk in&nbsp;<?= ($walkinpatient > 0) ? '<span id="walkinpatient" class="badge bg-danger">' . $walkinpatient . '</span>' : '<span id="walkinpatient" class="badge bg-danger"></span>'; ?></a>
+                        <a class="nav-link" href="patient-walkin.php">Patient Walk in&nbsp;<?= ($walkinpatient > 0) ? '<span id="walkinpatient" class="badge bg-danger">' . $walkinpatient . '</span>' : '<span id="walkinpatient" class="badge bg-danger"></span>'; ?></a>
                     </li>
                 </ul>
                 <!-- search bar -->
@@ -87,7 +87,7 @@ if((isset($_POST['aid']) && isset($_POST['id'])) || isset($_POST['aId']) && isse
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item disabled" href=""><?= $_SESSION['nEmail']; ?></a>
-                            <a class="dropdown-item" href="nurseProfile.php">My account</a>
+                            <a class="dropdown-item" href="account.php">My account</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="logout.php">Logout</a>
                         </div>
@@ -192,7 +192,7 @@ if((isset($_POST['aid']) && isset($_POST['id'])) || isset($_POST['aId']) && isse
                         <div class="text-center my-3">
                             <?= (isset($_GET['errAmount']) && $_GET['errAmount'] == "too_low_amount" ? '<span class="text-danger">Amount is too low!</span>' : '') ?>
                         </div>
-                        <form action="dischargePa.php" method="post" id="placeOrder">
+                        <form action="discharge-appointments.php" method="post" id="placeOrder">
                             <h1 class=" text-center mt-3">Patient information</h1>
 
                             <input type="hidden" name="aId" class="aid" value="<?= $_SESSION['Pa_aId'] ?>">
@@ -290,7 +290,7 @@ if((isset($_POST['aid']) && isset($_POST['id'])) || isset($_POST['aId']) && isse
 
             <!-- FOOTER -->
             <footer class="container">
-            <p class="text-white">&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php" id="primaryColor">Privacy Policy</a> &middot; <a href="aboutUs.php" id="primaryColor">About Us</a></p>
+            <p class="text-white">&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacy-policy.php" id="primaryColor">Privacy Policy</a> &middot; <a href="about.php" id="primaryColor">About Us</a></p>
         </footer>
         </div>
     </main>
