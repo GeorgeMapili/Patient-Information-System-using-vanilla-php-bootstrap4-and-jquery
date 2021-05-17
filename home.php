@@ -115,7 +115,10 @@ $stmt->execute();
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="delete.php" onclick="return confirm('Are you sure?')">Delete Account</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="logout.php">Logout</a>
+                            <form action="logout.php" method="post">
+                                <input type="hidden" name="logout" value="true">
+                                <input type="submit" value="Logout" class="dropdown-item">
+                            </form>
                         </div>
                     </li>
                 </ul>
