@@ -23,7 +23,7 @@ class UpdateProfile extends Database
 
         // Check the name if valid
         if (!preg_match("/^([a-zA-Z' ]+)$/", $this->name)) {
-            header("location:myaccount.php?errName=name_is_not_valid");
+            header("location:account.php?errName=name_is_not_valid");
             exit(0);
         }
         return "name_valid";
@@ -43,7 +43,7 @@ class UpdateProfile extends Database
         $nameCount = $stmt->rowCount();
 
         if ($nameCount >= 1) {
-            header("location:myaccount.php?errName1=name_is_already_taken");
+            header("location:account.php?errName1=name_is_already_taken");
             exit(0);
         }
         return "name_valid";
@@ -63,7 +63,7 @@ class UpdateProfile extends Database
         $emailCount = $stmt->rowCount();
 
         if ($emailCount >= 1) {
-            header("location:myaccount.php?errEmail=email_is_already_existed");
+            header("location:account.php?errEmail=email_is_already_existed");
             exit(0);
         }
         return "email_valid";
@@ -83,7 +83,7 @@ class UpdateProfile extends Database
         $mobileCount = $stmt->rowCount();
 
         if ($mobileCount >= 1) {
-            header("location:myaccount.php?errMobile=mobile_number_is_already_existed");
+            header("location:account.php?errMobile=mobile_number_is_already_existed");
             exit(0);
         }
         return "mobile_valid";
@@ -131,11 +131,11 @@ class UpdateProfile extends Database
                     $stmt->execute();
                     return "success_password_update";
                 } else {
-                    header("location:myaccount.php?errCurrPass1=Confirm_Password_do_not_match");
+                    header("location:account.php?errCurrPass1=Confirm_Password_do_not_match");
                     exit(0);
                 }
             } else {
-                header("location:myaccount.php?errCurrPass=Incorrect_current_password");
+                header("location:account.php?errCurrPass=Incorrect_current_password");
                 exit(0);
             }
         }
