@@ -90,7 +90,10 @@ if (!isset($_SESSION['nId'])) {
                                 <a class="dropdown-item disabled" href=""><?= $_SESSION['nEmail']; ?></a>
                                 <a class="dropdown-item" href="account.php">My account</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="logout.php">Logout</a>
+                                <form action="logout.php" method="post">
+                                    <input type="hidden" name="logout" value="true">
+                                    <input type="submit" value="Logout" class="dropdown-item">
+                                </form>
                             </div>
                         </li>
                     </ul>
