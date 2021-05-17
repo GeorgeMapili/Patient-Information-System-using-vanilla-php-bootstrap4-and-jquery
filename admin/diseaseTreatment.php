@@ -197,7 +197,7 @@ if (!isset($_SESSION['adId'])) {
                                             <div class="col">
                                                 <form action="diseaseTreatment.php" method="post">
                                                     <input type="hidden" name="dtId" value="<?= $diseases_treatment['dtId'] ?>">
-                                                    <input type="submit" class="btn btn-danger" name="deleteBtn" target="_blank" value="Delete">
+                                                    <input type="submit" class="btn btn-danger" name="deleteBtn" target="_blank" value="Delete" onclick="return confirm('Are you sure to delete ?')">
                                                 </form>
                                             </div>
                                         </div>

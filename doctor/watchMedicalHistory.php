@@ -121,6 +121,17 @@ if (!isset($_SESSION['dId'])) {
                 <h1 class="Display-4 my-4" id="primaryColor">Watch Medical History</h1>
             </div>
 
+            <?php
+            $name = $_POST['name'];
+
+            $sql = "SELECT * FROM discharged_patient WHERE pName = :name";
+            $stmt = $con->prepare($sql);
+            $stmt->bindParam(":name", $name, PDO::PARAM_STR);
+            $stmt->execute();
+
+            if($stmt->rowCount() > 0){
+            ?>
+
             <div class="table-responsive-xl">
                 <table class="table table-hover shadow p-3 mb-5 bg-white rounded">
                     <thead class="bg-info text-light">
@@ -145,12 +156,6 @@ if (!isset($_SESSION['dId'])) {
 
                         <?php
                         if (isset($_POST['watchMedHistory'])) {
-                            $name = $_POST['name'];
-
-                            $sql = "SELECT * FROM discharged_patient WHERE pName = :name";
-                            $stmt = $con->prepare($sql);
-                            $stmt->bindParam(":name", $name, PDO::PARAM_STR);
-                            $stmt->execute();
 
                             while ($history = $stmt->fetch(PDO::FETCH_ASSOC)) :
                         ?>
@@ -183,6 +188,13 @@ if (!isset($_SESSION['dId'])) {
                     </tbody>
                 </table>
             </div>
+            <?php
+            }else{
+            ?>
+            <p class="lead text-center text-white display-4">No medical history yet</p>
+            <?php    
+            }
+            ?>
 
         </div>
 

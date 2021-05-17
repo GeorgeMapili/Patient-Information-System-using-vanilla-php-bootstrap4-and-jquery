@@ -190,7 +190,7 @@ if (!isset($_SESSION['adId'])) {
                                         <div class="row">
                                             <div class="col">
                                                 <form action="updateWalkInPatient.php" method="post">
-                                                    <input type="hidden" name="walkInId" value="<?= $walkInPatient['walkInId'] ?>">
+                                                    <input type="hidden" name="id" value="<?= $walkInPatient['walkInId'] ?>">
                                                     <input type="submit" value="Update" class="btn btn-secondary" name="updateWalkInBtn">
                                                 </form>
                                             </div>

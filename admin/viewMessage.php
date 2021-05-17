@@ -8,6 +8,7 @@ if (!isset($_SESSION['adId'])) {
     exit(0);
 }
 
+if(isset($_POST['pId']) && isset($_POST['mId'])){
 ?>
 <!doctype html>
 <html lang="en">
@@ -174,3 +175,9 @@ if (!isset($_SESSION['adId'])) {
 </body>
 
 </html>
+<?php
+}else{
+    header("location:dashboard.php");
+    exit;
+}
+?>

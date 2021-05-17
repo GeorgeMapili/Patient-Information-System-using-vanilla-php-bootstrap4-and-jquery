@@ -162,7 +162,7 @@ if (!isset($_SESSION['adId'])) {
                                         <p class="btn btn-success disabled">Discharged</p>
                                     </td>
                                     <td>
-                                        <form action="pdfWalkInDischarge.php?walkInDischargeReceipt=true" method="post" target="_blank">
+                                        <form action="pdfWalkInDischarge.php" method="post" target="_blank">
                                             <input type="hidden" name="dpId" value="<?= $dischargedPatient['dpId'] ?>">
                                             <input type="hidden" name="pId" value="<?= $dischargedPatient['pId'] ?>">
                                             <input type="submit" class="btn btn-info" name="receiptBtn" target="_blank" value="Medical Certificate">

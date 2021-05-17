@@ -7,6 +7,8 @@ if (!isset($_SESSION['adId'])) {
     exit(0);
 }
 
+if(isset($_POST['aId']) && isset($_POST['pId'])){
+
 require('../secretary/fpdf182/fpdf.php');
 
 $pdf = new FPDF('P', 'mm', 'A4');
@@ -85,4 +87,9 @@ if (isset($_POST['medicalCertBtn'])) {
     $pdf->Ln(10);
 
     $pdf->Output();
+}
+
+}else{
+    header("location:dashboard.php");
+    exit;
 }
