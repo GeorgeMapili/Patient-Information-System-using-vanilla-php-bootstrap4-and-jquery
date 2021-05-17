@@ -64,7 +64,7 @@ if (isset($_POST['login'])) {
 
     if($login->loginUser() == "login_success"){
 
-        header("location:../../main.php");
+        header("location:../../home.php");
         exit(0);
 
     }else{

@@ -98,6 +98,6 @@ if (isset($_POST['medicalCertBtn'])) {
 
     $pdf->Output();
 } else {
-    header("location:main.php");
+    header("location:home.php");
     exit(0);
 }

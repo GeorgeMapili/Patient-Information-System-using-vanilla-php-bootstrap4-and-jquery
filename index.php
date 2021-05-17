@@ -2,7 +2,7 @@
 session_start();
 
 if (isset($_SESSION['id'])) {
-    header("location:main.php");
+    header("location:home.php");
     exit(0);
 }
 ?>

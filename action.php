@@ -24,7 +24,7 @@ if (isset($_REQUEST["term"])) {
                 while ($diseaseTreatment = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     echo '
                     <div class="list-group" id="data">
-                        <form action="singlePage.php" method="post">
+                        <form action="health-information.php" method="post">
                             <input type="hidden" name="id" value="'. $diseaseTreatment['dtId'] .'">
                             <input type="submit" class="list-group-item list-group-item-action" name="healthLibraryBtn" value="'. $diseaseTreatment['dtName'] .'">
                         </form>
@@ -108,7 +108,7 @@ if (isset($_POST['updateInformation'])) {
     $updateProfile->checkMobileNumberAlreadyExisted();
 
     if ($_SESSION['name'] == $updateProfile->name && $_SESSION['email'] == $updateProfile->email && $_SESSION['address'] == $updateProfile->address && $_SESSION['mobile'] == $updateProfile->mobileNumber) {
-        header("location:myaccount.php?errInfo=Nothing_to_update");
+        header("location:account.php?errInfo=Nothing_to_update");
         exit(0);
     }
 
@@ -130,7 +130,7 @@ if (isset($_POST['updateInformation'])) {
     // }
     if($updateProfile->checkUpdatePatient()){
 
-        header("location:myaccount.php?successInfo=Updated_successfully");
+        header("location:account.php?successInfo=Updated_successfully");
         exit(0);
 
     }
@@ -146,7 +146,7 @@ if (isset($_POST['updatePassword'])) {
 
     if($updateProfile->checkUpdatePassword() == "success_password_update"){
 
-        header("location:myaccount.php?succPass=Successfully_updated_password");
+        header("location:account.php?succPass=Successfully_updated_password");
         exit(0);
 
     }
@@ -170,13 +170,13 @@ if (isset($_POST['updateImg'])) {
     $allowed = array('jpg', 'jpeg', 'png');
     $filesize = $img['size'];
     if (!in_array($extF[1], $allowed)) {
-        header("location:myaccount.php?errInvalidImg=Invalid_image_only(jpg,jpeg,png)");
+        header("location:account.php?errInvalidImg=Invalid_image_only(jpg,jpeg,png)");
         exit(0);
     }
 
     // Check the file size is valid
     if ($img['size'] > 5000000) {
-        header("location:myaccount.php?errImgSize=Invalid_image_size_ONLY_less_than_5MB");
+        header("location:account.php?errImgSize=Invalid_image_size_ONLY_less_than_5MB");
         exit(0);
     }
 
@@ -205,6 +205,6 @@ if (isset($_POST['updateImg'])) {
     $stmt->bindParam(":id", $_SESSION['id'], PDO::PARAM_INT);
     $stmt->execute();
 
-    header("location:myaccount.php?succUpdateImg=Successfully_update_the_img");
+    header("location:account.php?succUpdateImg=Successfully_update_the_img");
     exit(0);
 }

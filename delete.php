@@ -40,14 +40,14 @@ if (!isset($_SESSION['id'])) {
 
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark" style="border-bottom: 2px solid rgb(15, 208, 214);">
-            <a class="navbar-brand " i id="primaryColor" href="main.php">SUMC Doctors Clinic</a>
+            <a class="navbar-brand " i id="primaryColor" href="home.php">SUMC Doctors Clinic</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="main.php">Home <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="home.php">Home <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="appointment.php">Set Appointment</a>
@@ -56,13 +56,13 @@ if (!isset($_SESSION['id'])) {
                         <a class="nav-link " href="doctors.php">Doctors</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " href="contactus.php">Contact Us</a>
+                        <a class="nav-link " href="contact.php">Contact Us</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " href="healthLibrary.php">Health Library</a>
+                        <a class="nav-link " href="library.php">Health Library</a>
                     </li>
                     <div class="btn-group dropbottom">
-                        <a href="myappointment.php" class="nav-link">
+                        <a href="current-appointment.php" class="nav-link">
                             Appointment
                         </a>
                         <button type="button" class="btn btn-dark dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -70,10 +70,10 @@ if (!isset($_SESSION['id'])) {
                         </button>
                         <div class="dropdown-menu bg-dark text-light text-center">
                             <li class="nav-item">
-                                <a class="nav-link" href="acceptedAppointment.php">Accepted</a>
+                                <a class="nav-link" href="accepted-appointment.php">Accepted</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="finishedAppointment.php">Finished</a>
+                                <a class="nav-link" href="finished-appointment.php">Finished</a>
                             </li>
                         </div>
                     </div>
@@ -86,10 +86,10 @@ if (!isset($_SESSION['id'])) {
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item disabled" href=""><?= $_SESSION['email'] ?></a>
-                            <a class="dropdown-item" href="myaccount.php">My account</a>
-                            <a class="dropdown-item" href="myAppointmentHistory.php">My Appointment History</a>
+                            <a class="dropdown-item" href="account.php">My account</a>
+                            <a class="dropdown-item" href="appointment-history.php">My Appointment History</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="deleteAcc.php" onclick="return confirm('Are you sure?')">Delete Account</a>
+                            <a class="dropdown-item" href="delete.php" onclick="return confirm('Are you sure?')">Delete Account</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="logout.php">Logout</a>
                         </div>
@@ -151,7 +151,7 @@ if (!isset($_SESSION['id'])) {
                         header("location:index.php");
                         exit(0);
                     } else {
-                        header("location:deleteAcc.php?errPass=Incorrect_password");
+                        header("location:delete.php?errPass=Incorrect_password");
                         ob_end_flush();
                         exit(0);
                     }
@@ -160,7 +160,7 @@ if (!isset($_SESSION['id'])) {
 
 
             ?>
-            <form action="deleteAcc.php" method="post">
+            <form action="delete.php" method="post">
 
                 <input type="hidden" name="id" value="<?= $_SESSION['id']; ?>">
                 <div class="col">
@@ -177,7 +177,7 @@ if (!isset($_SESSION['id'])) {
         </div>
 
         <footer class="container">
-            <p class="text-white">&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php" id="primaryColor">Privacy Policy</a> &middot; <a href="aboutUs.php" id="primaryColor">About Us</a></p>
+            <p class="text-white">&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacy-policy.php" id="primaryColor">Privacy Policy</a> &middot; <a href="about.php" id="primaryColor">About Us</a></p>
         </footer>
 
 
