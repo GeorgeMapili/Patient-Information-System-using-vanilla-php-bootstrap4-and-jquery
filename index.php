@@ -3,7 +3,7 @@ session_start();
 require_once 'connect.php';
 
 if (isset($_SESSION['id'])) {
-    header("location:main.php");
+    header("location:home.php");
     exit(0);
 }
 ?>
@@ -46,7 +46,7 @@ if (isset($_POST['login'])) {
             $_SESSION['gender'] = $patientUser['pGender'];
             $_SESSION['mobile'] = $patientUser['pMobile'];
             $_SESSION['profile'] = $patientUser['pProfile'];
-            header("location:main.php");
+            header("location:home.php");
             exit(0);
         } else {
 

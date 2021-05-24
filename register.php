@@ -3,7 +3,7 @@ session_start();
 require_once 'connect.php';
 
 if (isset($_SESSION['id'])) {
-    header("location:main.php");
+    header("location:home.php");
     exit(0);
 }
 ?>
