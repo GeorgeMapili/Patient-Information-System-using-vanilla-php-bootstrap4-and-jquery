@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 require_once '../connect.php';
 require __DIR__ . '/../vendor/autoload.php';
@@ -225,6 +226,7 @@ if (!isset($_SESSION['nId'])) {
                 $data['message'] = 'hello world';
                 $pusher->trigger('my-channel', 'my-event', $data);
                 header("location:add-patient.php?addSucc=Successfully_added_new_walkin_patient");
+                ob_end_flush();
                 exit(0);
             }
 

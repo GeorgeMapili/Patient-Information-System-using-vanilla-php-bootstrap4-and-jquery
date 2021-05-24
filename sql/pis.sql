@@ -327,19 +327,6 @@ CREATE TABLE `returnee_patient` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `rooms`
---
-
-CREATE TABLE `rooms` (
-  `room_id` int(11) NOT NULL,
-  `room_number` int(11) NOT NULL,
-  `room_fee` int(11) NOT NULL,
-  `room_status` varchar(100) NOT NULL DEFAULT 'available'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `walkinpatient`
 --
 

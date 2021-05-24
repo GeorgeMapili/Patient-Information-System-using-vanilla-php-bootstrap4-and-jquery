@@ -201,7 +201,7 @@ if (!isset($_SESSION['id'])) {
                         ?>
                     </select>
                     <div class="text-center my-3">
-                        <input class="btn btn-secondary" type="submit" value="Search" name="search">
+                        <input class="btn btn-info" type="submit" value="Search" name="search">
                     </div>
                 </form>
             </div>

@@ -153,6 +153,8 @@ if (!isset($_SESSION['nId'])) {
 
             <h3 class="display-4 mt-5 my-4" id="primaryColor">Appointment</h3>
 
+            <div id="table-data">
+
             <?php
             $status = "pending";
             $sql = "SELECT * FROM appointment WHERE aStatus = :status";
@@ -224,6 +226,7 @@ if (!isset($_SESSION['nId'])) {
             <?php    
             }
             ?>
+            </div>
 
             <hr class="featurette-divider">
 
@@ -300,6 +303,19 @@ if (!isset($_SESSION['nId'])) {
                         $("#walkinpatient-dashboard").html(result);
                     }
 
+                }
+            });
+
+            // Update realtime appointment
+            $.ajax({
+                url: "update-pendings.php",
+                method: "POST",
+                data: {
+                    data_set: "true"
+                },
+                success: function(resultss) {
+                    console.log(resultss);
+                    $("#table-data").html(resultss);
                 }
             });
 

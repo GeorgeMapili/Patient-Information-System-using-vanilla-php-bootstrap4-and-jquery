@@ -189,7 +189,7 @@ if (!isset($_SESSION['id'])) {
             </div>
 
 
-            <form action="appointment.php" method="post" class="shadow p-3 mb-5 rounded text-white" style="background-image: transparent;">
+            <form action="appointment.php" method="post" class="shadow p-3 mb-5 rounded bg-light text-dark">
                 <div class="row">
                     <input type="hidden" name="id" value="<?= $_SESSION['id']; ?>">
                     <div class="col">
@@ -286,7 +286,7 @@ if (!isset($_SESSION['id'])) {
                 <label for="">Reason for Appointment or Self Diagnosis</label>
                 <textarea name="reasonAppointment" class="form-control resize-0" cols="30" rows="10" required></textarea>
                 <div class="text-center mt-3">
-                    <input type="submit" class="btn btn-secondary rounded" value="Submit" name="submitAppointment">
+                    <input type="submit" class="btn btn-info rounded" value="Submit" name="submitAppointment">
                 </div>
             </form>
         </div>
@@ -310,7 +310,7 @@ if (!isset($_SESSION['id'])) {
         </div>
 
 
-        <hr class="featurette-divider">
+        <hr class="container">
 
         <!-- FOOTER -->
         <footer class="container">

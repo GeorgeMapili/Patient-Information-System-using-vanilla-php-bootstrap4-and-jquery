@@ -138,7 +138,7 @@ if (isset($_POST['walkInQuery'])) {
         ';
             } else {
                 $walkInOutput .= '
-        <form action="addMedicalInformation.php" method="post">
+        <form action="medical-information.php" method="post">
             <input type="hidden" name="id" value=' . $walkInPatient['walkInId'] . '>
             <input type="submit" value="ADD MEDICAL INFORMATION" class="btn btn-info" name="medicalInformation">
         </form>

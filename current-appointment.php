@@ -104,6 +104,17 @@ if (!isset($_SESSION['id'])) {
 
         <?php
         if (isset($_POST['appointmentStatus'])) {
+            $options = array(
+                'cluster' => 'ap1',
+                'useTLS' => true
+            );
+            $pusher = new Pusher\Pusher(
+                '33e38cfddf441ae84e2d',
+                '9d6c92710887d31d41b4',
+                '1149333',
+                $options
+            );
+
             $id = $_POST['id'];
             $status = "cancelled";
             $sql = "UPDATE appointment set aStatus = :status WHERE aId = :id";
@@ -111,6 +122,8 @@ if (!isset($_SESSION['id'])) {
             $stmt->bindParam(":status", $status, PDO::PARAM_STR);
             $stmt->bindParam(":id", $id, PDO::PARAM_INT);
             $stmt->execute();
+            $data['message'] = 'hello world';
+            $pusher->trigger('my-channel', 'my-event', $data);
         }
         ?>
 

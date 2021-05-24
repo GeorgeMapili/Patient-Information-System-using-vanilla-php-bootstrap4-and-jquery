@@ -1,6 +1,8 @@
 <?php
+ob_start();
 session_start();
 require_once '../connect.php';
+require __DIR__ . '/../vendor/autoload.php';
 
 if (!isset($_SESSION['nId'])) {
     header("location:index.php");
@@ -104,25 +106,19 @@ if (!isset($_SESSION['nId'])) {
             <?php
 
             if (isset($_POST['deleteWalkInPatientBtn'])) {
+
+                $options = array(
+                    'cluster' => 'ap1',
+                    'useTLS' => true
+                );
+                $pusher = new Pusher\Pusher(
+                    '33e38cfddf441ae84e2d',
+                    '9d6c92710887d31d41b4',
+                    '1149333',
+                    $options
+                );
+
                 $walkInId = $_POST['walkInId'];
-
-                // Get the roomNumber of the walkin patient
-                $sql = "SELECT * FROM walkinpatient WHERE walkInId = :id";
-                $stmt = $con->prepare($sql);
-                $stmt->bindParam(":id", $walkInId, PDO::PARAM_INT);
-                $stmt->execute();
-
-                $room = $stmt->fetch(PDO::FETCH_ASSOC);
-
-                $roomNumber = $room['walkInRoomNumber'];
-
-                // Update the room FROM occupied to available
-                $status = "available";
-                $sql = "UPDATE rooms SET room_status = :status WHERE room_number = :roomNumber";
-                $stmt = $con->prepare($sql);
-                $stmt->bindParam(":status", $status, PDO::PARAM_STR);
-                $stmt->bindParam(":roomNumber", $roomNumber, PDO::PARAM_INT);
-                $stmt->execute();
 
                 // Delete the walkin patient
                 $sql = "DELETE FROM walkinpatient WHERE walkInId = :id";
@@ -130,7 +126,10 @@ if (!isset($_SESSION['nId'])) {
                 $stmt->bindParam(":id", $walkInId, PDO::PARAM_INT);
                 $stmt->execute();
 
+                $data['message'] = 'hello world';
+                $pusher->trigger('my-channel', 'my-event', $data);
                 header("location:patient-walkin.php?succDeleteWalkInPatient=successfully_deleted_walk_in_patient");
+                ob_end_flush();
                 exit(0);
             }
             ?>
