@@ -16,10 +16,14 @@ class Database
         // $dbname = "pis";
 
         // Remote DB Connection
+        // $servername = "remotemysql.com";
+        // $username = "QA9u2YYTw5";
+        // $password = "zoTCUABrxM";
+        // $dbname = "QA9u2YYTw5";
         $servername = "remotemysql.com";
-        $username = "QA9u2YYTw5";
-        $password = "zoTCUABrxM";
-        $dbname = "QA9u2YYTw5";
+        $username = "diseJ0X2n6";
+        $password = "oQScQg8fm3";
+        $dbname = "diseJ0X2n6";
 
         try {
             $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
