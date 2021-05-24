@@ -172,7 +172,7 @@ class register extends Database
         $stmt->bindParam(":profile", $this->profileName, PDO::PARAM_STR);
 
         if ($stmt->execute()) {
-            move_uploaded_file($this->tmpname, $this->dest);
+            //move_uploaded_file($this->tmpname, $this->dest);
             return "register_success";
         }
 
