@@ -7,6 +7,9 @@ if (!isset($_SESSION['nId'])) {
     header("location:index.php");
     exit(0);
 }
+
+$_SESSION['log_secretary_information'] = true;
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -184,6 +187,7 @@ if (!isset($_SESSION['nId'])) {
             $_SESSION['nMobile'] = $nurseMobile;
 
             header("location:account.php?succUpdateNurse=Successfully_updated_information");
+            $_SESSION['log_secretary_update_info'] = true;
             exit(0);
         }
         ?>
@@ -265,6 +269,7 @@ if (!isset($_SESSION['nId'])) {
                         $stmt->execute();
 
                         header("location:account.php?succUpdatePass=Successfully_updated_password");
+                        $_SESSION['log_secretary_update_pass'] = true;
                         exit(0);
                     }
                 } else {
@@ -373,6 +378,7 @@ if (!isset($_SESSION['nId'])) {
                     $stmt->execute();
 
                     header("location:account.php?succUpdateImg=Successfully_update_the_img");
+                    $_SESSION['log_secretary_update_img'] = true;
                     exit(0);
                 }
                 ?>

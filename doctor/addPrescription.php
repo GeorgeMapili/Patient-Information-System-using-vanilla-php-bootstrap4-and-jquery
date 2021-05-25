@@ -129,6 +129,7 @@ if (!isset($_SESSION['dId'])) {
             $stmt->execute();
 
             header("location:patient.php?succAddPrescription=Successfully_added_prescription");
+            $_SESSION['log_doctor_patient_appointment_add_prescription'] = true;
             exit(0);
             ob_end_flush();
         }

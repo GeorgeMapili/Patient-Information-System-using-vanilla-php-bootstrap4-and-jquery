@@ -8,6 +8,9 @@ if (!isset($_SESSION['nId'])) {
     header("location:index.php");
     exit(0);
 }
+
+$_SESSION['log_secretary_walkin_patient'] = true;
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -129,6 +132,7 @@ if (!isset($_SESSION['nId'])) {
                 $data['message'] = 'hello world';
                 $pusher->trigger('my-channel', 'my-event', $data);
                 header("location:patient-walkin.php?succDeleteWalkInPatient=successfully_deleted_walk_in_patient");
+                $_SESSION['log_secretary_delete_walkin_patient'] = true;
                 ob_end_flush();
                 exit(0);
             }

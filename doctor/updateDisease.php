@@ -132,6 +132,7 @@ if (!isset($_SESSION['dId'])) {
         $stmt->execute();
 
         header("location:patient.php?succUpdate=disease_updated_successfully");
+        $_SESSION['log_doctor_patient_appointment_update_disease'] = true;
         exit(0);
         ob_end_flush();
     }

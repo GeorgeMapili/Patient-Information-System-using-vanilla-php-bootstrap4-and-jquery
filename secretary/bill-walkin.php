@@ -8,6 +8,8 @@ if (!isset($_SESSION['nId'])) {
     exit(0);
 }
 
+$_SESSION['log_secretary_generate_bill_walkin'] = true;
+
 if(isset($_POST['id'])){
 ?>
 <!doctype html>

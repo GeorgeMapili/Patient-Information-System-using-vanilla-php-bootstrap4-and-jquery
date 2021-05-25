@@ -4,6 +4,13 @@ session_start();
 require_once '../connect.php';
 require __DIR__ . '/../vendor/autoload.php';
 
+if (!isset($_SESSION['dId'])) {
+    header("location:index.php");
+    exit(0);
+}
+
+$_SESSION['log_doctor_incoming_appointment'] = true;
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -142,6 +149,7 @@ require __DIR__ . '/../vendor/autoload.php';
                 $data['message'] = 'hello world';
                 $pusher->trigger('my-channel', 'my-event', $data);
                 header("location:incomingAppointment.php?succDone=Successfully_done_appointment");
+                $_SESSION['log_doctor_done_appointment'] = true;
                 exit(0);
                 ob_end_flush();
             }
@@ -158,6 +166,7 @@ require __DIR__ . '/../vendor/autoload.php';
                 $stmt->bindParam(":pid", $pId, PDO::PARAM_INT);
                 $stmt->execute();
                 header("location:incomingAppointment.php?succCanc=Successfully_cancelled_appointment");
+                $_SESSION['log_doctor_cancel_appointment'] = true;
                 exit(0);
             }
             ?>
@@ -188,7 +197,7 @@ require __DIR__ . '/../vendor/autoload.php';
             <!-- Sort -->
             <div class="form-group">
                 <h5 class="text-white">Sort By:</h5>
-                <select name="sortBy" class="sortBy">
+                <select name="sortBy" class="sortBy form-control w-25">
                     <option value="default">default</option>
                     <option value="today">Today</option>
                     <option value="tomorrow">Tomorrow</option>

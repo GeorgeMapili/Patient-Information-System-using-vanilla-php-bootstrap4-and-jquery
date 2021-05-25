@@ -11,6 +11,9 @@ if (!isset($_SESSION['id'])) {
     header("location:index.php");
     exit(0);
 }
+
+$_SESSION['log_current_appointment'] = true;
+
 ?>
 <!doctype html>
 <html lang="en">

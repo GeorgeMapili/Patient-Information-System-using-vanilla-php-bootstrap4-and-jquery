@@ -135,6 +135,7 @@ if (!isset($_SESSION['dId'])) {
             }
 
             header("location:patient.php?succUpdatePrescription=Successfully_updated_prescription");
+            $_SESSION['log_doctor_patient_appointment_update_prescription'] = true;
             exit(0);
         }
         ?>

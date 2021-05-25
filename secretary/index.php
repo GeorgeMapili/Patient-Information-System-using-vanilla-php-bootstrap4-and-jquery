@@ -51,6 +51,31 @@ if (isset($_SESSION['nId'])) {
                 $_SESSION['nAddress'] = $nurseAcc['nAddress'];
                 $_SESSION['nMobile'] = $nurseAcc['nMobile'];
                 $_SESSION['nProfileImg'] = $nurseAcc['nProfileImg'];
+                $_SESSION['log_secretary_login'] = date("m/d/y h:iA", time());
+
+                $_SESSION['log_secretary_dashboard'] = null;
+                $_SESSION['log_secretary_appointment'] = null;
+                $_SESSION['log_secretary_accept'] = null;
+                $_SESSION['log_secretary_cancel'] = null;
+                $_SESSION['log_secretary_patient_appointment'] = null;
+                $_SESSION['log_secretary_generate_bill_appointment'] = null;
+                $_SESSION['log_secretary_discharge_appointment'] = null;
+                $_SESSION['log_secretary_pdf_appointment'] = null;
+                $_SESSION['log_secretary_walkin_patient'] = null;
+                $_SESSION['log_secretary_medical_information'] = null;
+                $_SESSION['log_secretary_generate_bill_walkin'] = null;
+                $_SESSION['log_secretary_discharge_walkin'] = null;
+                $_SESSION['log_secretary_pdf_walkin'] = null;
+                $_SESSION['log_secretary_add_walkin'] = null;
+                $_SESSION['log_secretary_add_walkin_patient'] = null;
+                $_SESSION['log_secretary_patient_before'] = null;
+                $_SESSION['log_secretary_patient_records'] = null;
+                $_SESSION['log_secretary_add_new_records'] = null;
+                $_SESSION['log_secretary_information'] = null;
+                $_SESSION['log_secretary_update_info'] = null;
+                $_SESSION['log_secretary_update_pass'] = null;
+                $_SESSION['log_secretary_update_img'] = null;
+                $_SESSION['log_secretary_delete_walkin_patient'] = null;
 
                 header("location:dashboard.php");
                 exit(0);

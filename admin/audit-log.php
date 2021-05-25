@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 require_once '../connect.php';
 
@@ -20,7 +21,7 @@ if (!isset($_SESSION['adId'])) {
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/admin.css" />
     <link rel="icon" href="../img/sumc.png">
-    <title>Admin | Dashboard</title>
+    <title>Admin | Diseases & Treatment</title>
 </head>
 
 <body>
@@ -55,7 +56,7 @@ if (!isset($_SESSION['adId'])) {
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link " href="patient.php" id="primaryColor">
+                            <a class="nav-link " href="patient.php">
                                 <span data-feather="file"></span>
                                 View All Appointments
                             </a>
@@ -109,7 +110,7 @@ if (!isset($_SESSION['adId'])) {
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="audit-log.php">
+                            <a class="nav-link" href="audit-log.php" id="primaryColor">
                                 <span data-feather="users"></span>
                                 View Audit Logs
                             </a>
@@ -119,80 +120,96 @@ if (!isset($_SESSION['adId'])) {
                 </div>
             </nav>
 
+            <?php
+
+            if(isset($_POST['deleteBtn'])){
+
+                $id = $_POST['dtId'];
+
+                $sql = "DELETE FROM diseases_treatment WHERE dtId = :id";
+                $stmt = $con->prepare($sql);
+                $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+                
+                if($stmt->execute()){
+                    header("location:diseaseTreatment.php?deleteSucc=deleted_successfully");
+                    ob_end_flush();
+                    exit;
+                }
+
+            }
+
+            ?>
+
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+
+                <div class="text-center">
+                    <?= (isset($_GET['success'])) ? '<p class="text-success">Updated Successfully!</p>' : ''; ?>
+                    <?= (isset($_GET['deleteSucc'])) ? '<p class="text-success">Deleted Successfully!</p>' : ''; ?>
+                    <?= (isset($_GET['addSucc'])) ? '<p class="text-success">Added Successfully!</p>' : ''; ?>
+                </div>
+
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">Dashboard</h1>
+                    <h1 class="h2" id="primaryColor">Audit Logs</h1>
                 </div>
-
-                <div class="container">
-
-                    <h3 class="display-4 mt-5 my-4" id="primaryColor">Update Medical Information</h3>
-
-                    <form action="viewMedicalInformation.php" method="post">
-                        <div class="row">
-                            <div class="col m-1">
-                                <label>Height</label>
-                                <input type="number" min="0" class="form-control">
-                            </div>
-                            <div class="col m-1">
-                                <label>Weight</label>
-                                <input type="number" min="0" class="form-control">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col m-1">
-                                <label>Blood Type</label>
-                                <input type="text" class="form-control">
-                            </div>
-                            <div class="col m-1">
-                                <label>Allergy</label>
-                                <input type="text" class="form-control">
-                            </div>
-                        </div>
-
-                        <h6 class=" mt-5 my-4" id="primaryColor">Have you ever the following ?</h6>
-
-                        <label for="">Diabetes</label>
-                        <input type="checkbox" name="followingMed" value="diabetes"><br>
-                        <label for="">Hypertension</label>
-                        <input type="checkbox" name="followingMed" value="hypertension"><br>
-                        <label for="">Cancer</label>
-                        <input type="checkbox" name="followingMed" value="cancer"><br>
-                        <label for="">Stroke</label>
-                        <input type="checkbox" name="followingMed" value="stroke"><br>
-                        <label for="">Heart Trouble</label>
-                        <input type="checkbox" name="followingMed" value="heartTrouble"><br>
-                        <label for="">Arthritis</label>
-                        <input type="checkbox" name="followingMed" value="arthritis"><br>
-                        <label for="">Convulsion</label>
-                        <input type="checkbox" name="followingMed" value="convulsion"><br>
-                        <label for="">Bleeding</label>
-                        <input type="checkbox" name="followingMed" value="bleeding"><br>
-                        <label for="">Acute Infections</label>
-                        <input type="checkbox" name="followingMed" value="acuteInfections"><br>
-                        <label for="">Venereal Disease</label>
-                        <input type="checkbox" name="followingMed" value="venereal"><br>
-                        <label for="">Hereditary Defects</label>
-                        <input type="checkbox" name="followingMed" value="hereditary"><br>
-
-                        <div class="text-center">
-                            <input type="submit" value="Update Medical Information" class="btn btn-info mt-3">
-                        </div>
+                
+                <div>
+                    <form class="form-inline">
+                        
                     </form>
-
-
-                    <hr class="featurette-divider">
-
-                    <!-- /END THE FEATURETTES -->
-
-                    <!-- FOOTER -->
-                    <!-- <footer class="text-center">
-                        <p>&copy; 2017-2018 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
-                    </footer> -->
                 </div>
 
-            </main>
+                <div class="d-flex justify-content-between mb-2">
+                    <div class="w-25">
+                        <select class="form-control" name="user_role" id="user_role">
+                            <option value="patient">Patient</option>
+                            <option value="secretary">Secretary</option>
+                            <option value="doctor">Doctor</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="table-responsive-xl">
+                    <table class="table table-hover " id="table-data">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">Login</th>
+                                <th scope="col">Logout</th>
+                                <th scope="col">IP address</th>
+                                <th scope="col">User id</th>
+                                <th scope="col">User name</th>
+                                <th scope="col">User role</th>
+                                <th scope="col">Actions & Viewed</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $role = "patient";
+                            $sql = "SELECT * FROM audit_log WHERE log_user_role = :role ORDER BY log_id DESC";
+                            $stmt = $con->prepare($sql);
+                            $stmt->bindParam(":role", $role, PDO::PARAM_STR);
+                            $stmt->execute();
+
+                            while ($log = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                            ?>
+                                <tr>
+                                    <td><?= $log['log_login'] ?></td>
+                                    <td><?= $log['log_logout'] ?></td>
+                                    <td><?= $log['log_ip'] ?></td>
+                                    <td><?= $log['log_user_id'] ?></td>
+                                    <td><?= $log['log_user_name'] ?></td>
+                                    <td><?= ucwords($log['log_user_role']) ?></td>
+                                    <td><?= $log['log_action'] ?></td>
+                                </tr>
+                            <?php endwhile; ?>
+                        </tbody>
+                    </table>
+                </div>
+
         </div>
+
+
+        </main>
+    </div>
     </div>
 
 
@@ -201,6 +218,33 @@ if (!isset($_SESSION['adId'])) {
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(function(){
+
+            $("#user_role").on( "change" ,function(){
+                
+                var user_role = $('#user_role').val();
+                
+                $.ajax({
+                    url: 'action.php',
+                    method: 'post',
+                    data: {
+                        user_role: user_role
+                    },
+                    success: function(response) {
+                        $('#table-data').html(response);
+                    }
+                });
+
+            });
+
+        });
+    </script>
+    
 </body>
 
 </html>

@@ -7,6 +7,9 @@ if (!isset($_SESSION['dId'])) {
     header("location:index.php");
     exit(0);
 }
+
+$_SESSION['log_doctor_patient_appointment_appointment_history'] = true;
+
 ?>
 <!doctype html>
 <html lang="en">

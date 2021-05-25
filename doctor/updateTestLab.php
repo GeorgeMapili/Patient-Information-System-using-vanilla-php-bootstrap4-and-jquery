@@ -144,6 +144,7 @@ if (!isset($_SESSION['dId'])) {
         
         if($stmt->execute()){
             header("location:labPatientAppointment.php?success=successfully_updated_labtest");
+            $_SESSION['log_doctor_lab_appointment_update_test'] = true;
             ob_end_flush();
             exit;
         }

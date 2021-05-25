@@ -7,6 +7,9 @@ if (!isset($_SESSION['dId'])) {
     header("location:index.php");
     exit(0);
 }
+
+$_SESSION['log_doctor_information'] = true;
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -213,6 +216,7 @@ if (!isset($_SESSION['dId'])) {
                 $_SESSION['dFee'] = $dFee;
 
                 header("location:doctorProfile.php?updateSuccInfo=Successfully_updated_information");
+                $_SESSION['log_doctor_update_info'] = true;
                 exit(0);
             }
             ?>
@@ -321,6 +325,7 @@ if (!isset($_SESSION['dId'])) {
                 $stmt->execute();
 
                 header("location:doctorProfile.php?succUpdateImg=Successfully_update_the_img");
+                $_SESSION['log_doctor_update_img'] = true;
                 exit(0);
             }
 
@@ -367,6 +372,7 @@ if (!isset($_SESSION['dId'])) {
                         $stmt->execute();
 
                         header("location:doctorProfile.php?succUpdatePass=Successfully_updated_password");
+                        $_SESSION['log_doctor_update_pass'] = true;
                         exit(0);
                     }
                 } else {

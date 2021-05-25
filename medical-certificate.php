@@ -13,6 +13,8 @@ if (!isset($_SESSION['id'])) {
     exit(0);
 }
 
+$_SESSION['log_view_certificate'] = true;
+
 require('secretary/fpdf182/fpdf.php');
 
 $pdf = new FPDF('P', 'mm', 'A4');

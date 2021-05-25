@@ -6,6 +6,9 @@ if (!isset($_SESSION['dId'])) {
     header("location:index.php");
     exit(0);
 }
+
+$_SESSION['log_doctor_lab_walkin'] = true;
+
 ?>
 <!doctype html>
 <html lang="en">

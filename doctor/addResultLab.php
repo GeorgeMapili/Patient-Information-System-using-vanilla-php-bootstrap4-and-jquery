@@ -129,6 +129,7 @@ if (!isset($_SESSION['dId'])) {
         
         if($stmt->execute()){
             header("location:labPatientAppointment.php?success=successfully_added_labresult");
+            $_SESSION['log_doctor_lab_appointment_add_result'] = true;
             ob_end_flush();
             exit;
         }

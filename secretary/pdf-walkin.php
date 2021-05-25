@@ -8,6 +8,8 @@ if (!isset($_SESSION['nId'])) {
     exit(0);
 }
 
+$_SESSION['log_secretary_pdf_walkin'] = true;
+
 if (isset($_POST['walkInDischargeReceipt'])) {
 
 

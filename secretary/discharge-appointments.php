@@ -6,6 +6,9 @@ if (!isset($_SESSION['nId'])) {
     header("location:index.php");
     exit(0);
 }
+
+$_SESSION['log_secretary_discharge_appointment'] = true;
+
 ?>
 <!doctype html>
 <html lang="en">

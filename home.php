@@ -13,6 +13,8 @@ if (!isset($_SESSION['id'])) {
     exit(0);
 }
 
+$_SESSION['log_home'] = true;
+
 $sql = "DELETE FROM loginlog WHERE patient_id = :id";
 $stmt = $con->prepare($sql);
 $stmt->bindParam(":id", $_SESSION['id'], PDO::PARAM_INT);

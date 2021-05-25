@@ -12,6 +12,9 @@ if (!isset($_SESSION['id'])) {
     header("location:index.php");
     exit(0);
 }
+
+$_SESSION['log_appointment'] = true;
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -168,6 +171,7 @@ if (!isset($_SESSION['id'])) {
                 $data['message'] = 'hello world';
                 $pusher->trigger('my-channel', 'my-event', $data);
                 header("location:appointment.php?AppointmentSuccess=Successully_request_an_appointment");
+                $_SESSION['log_send_appointment'] = true;
                 exit(0);
                 ob_end_flush();
             }

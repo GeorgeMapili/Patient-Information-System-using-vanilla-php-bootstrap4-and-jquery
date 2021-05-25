@@ -126,6 +126,7 @@ if (!isset($_SESSION['dId'])) {
         
         if($stmt->execute()){
             header("location:labPatientWalkin.php?success=successfully_updated_result");
+            $_SESSION['log_doctor_lab_walkin_update_result'] = true;
             ob_end_flush();
             exit;
         }

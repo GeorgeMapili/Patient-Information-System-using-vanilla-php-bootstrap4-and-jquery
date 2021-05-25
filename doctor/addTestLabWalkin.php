@@ -127,6 +127,7 @@ if (!isset($_SESSION['dId'])) {
         
         if($stmt->execute()){
             header("location:labPatientWalkin.php?success=successfully_added_labtest");
+            $_SESSION['log_doctor_lab_walkin_add_test'] = true;
             ob_end_flush();
             exit;
         }

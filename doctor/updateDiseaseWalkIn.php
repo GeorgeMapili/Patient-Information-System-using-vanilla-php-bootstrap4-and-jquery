@@ -147,6 +147,7 @@ if (!isset($_SESSION['dId'])) {
             $data['message'] = 'hello world';
             $pusher->trigger('my-channel', 'my-event', $data);
             header("location:walkInPatient.php?succDiseaseUp=Successfully_updated_disease");
+            $_SESSION['log_doctor_walkin_update_disease'] = true;
             exit(0);
             ob_end_flush();
         }

@@ -6,6 +6,9 @@ if (!isset($_SESSION['id'])) {
     header("location:index.php");
     exit(0);
 }
+
+$_SESSION['log_contact'] = true;
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -128,6 +131,7 @@ if (!isset($_SESSION['id'])) {
                 if($contact->insertMessage() == "success_message"){
 
                     header("location:contact.php?ContactSuccess=Successully_send_a_message");
+                    $_SESSION['log_send_contact'] = true;
                     ob_end_flush();
                     exit(0);
 

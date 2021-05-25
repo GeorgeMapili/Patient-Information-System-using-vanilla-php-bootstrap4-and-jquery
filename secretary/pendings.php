@@ -7,6 +7,9 @@ if (!isset($_SESSION['nId'])) {
     header("location:index.php");
     exit(0);
 }
+
+$_SESSION['log_secretary_appointment'] = true;
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -131,6 +134,7 @@ if (!isset($_SESSION['nId'])) {
                 $data['message'] = 'hello world';
                 $pusher->trigger('my-channel', 'my-event', $data);
                 header("location:pendings.php");
+                $_SESSION['log_secretary_accept'] = true;
                 exit(0);
             }
 
@@ -147,13 +151,12 @@ if (!isset($_SESSION['nId'])) {
                 $stmt->execute();
 
                 header("location:pendings.php");
+                $_SESSION['log_secretary_cancel'] = true;
                 exit(0);
             }
             ?>
 
             <h3 class="display-4 mt-5 my-4" id="primaryColor">Appointment</h3>
-
-            <div id="table-data">
 
             <?php
             $status = "pending";
@@ -180,7 +183,6 @@ if (!isset($_SESSION['nId'])) {
                     </thead>
                     <tbody>
                         <?php
-
                         while ($appointmentPending = $stmt->fetch(PDO::FETCH_ASSOC)) :
                         ?>
                             <tr>
@@ -226,7 +228,6 @@ if (!isset($_SESSION['nId'])) {
             <?php    
             }
             ?>
-            </div>
 
             <hr class="featurette-divider">
 
@@ -314,8 +315,7 @@ if (!isset($_SESSION['nId'])) {
                     data_set: "true"
                 },
                 success: function(resultss) {
-                    console.log(resultss);
-                    $("#table-data").html(resultss);
+                    location.reload(true);
                 }
             });
 

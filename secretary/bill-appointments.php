@@ -7,6 +7,8 @@ if (!isset($_SESSION['nId'])) {
     exit(0);
 }
 
+$_SESSION['log_secretary_generate_bill_appointment'] = true;
+
 if((isset($_POST['aid']) && isset($_POST['id'])) || isset($_POST['aId']) && isset($_POST['pId'])){
 ?>
 <!doctype html>

@@ -8,6 +8,8 @@ if (!isset($_SESSION['nId'])) {
     exit(0);
 }
 
+$_SESSION['log_secretary_pdf_appointment'] = true;
+
 
 if (isset($_POST['pId']) && isset($_POST['aId'])) {
 

@@ -801,3 +801,52 @@ if (isset($_POST['diseaseTreatment'])) {
         echo '<h3 style="color:red">No Diseases & Treatment Found</h3>';
     }
 }
+
+// Audit Change
+
+if(isset($_POST['user_role'])){
+
+    $search = $_POST['user_role'];
+
+    $sql = "SELECT * FROM audit_log WHERE log_user_role = :role ORDER BY log_id DESC";
+    $stmt = $con->prepare($sql);
+    $stmt->bindParam(":role", $search, PDO::PARAM_STR);
+    $stmt->execute();
+
+    $res = '';
+
+    $res .= '
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Login</th>
+                        <th scope="col">Logout</th>
+                        <th scope="col">IP address</th>
+                        <th scope="col">User id</th>
+                        <th scope="col">User name</th>
+                        <th scope="col">User role</th>
+                        <th scope="col">Actions & Viewed</th>
+                    </tr>
+                </thead>
+                <tbody>
+    ';
+    while($roles = $stmt->fetch(PDO::FETCH_ASSOC)){
+        $res .= '
+            <tr>
+                <td>'.$roles['log_login'].'</td>
+                <td>'.$roles['log_logout'].'</td>
+                <td>'.$roles['log_ip'].'</td>
+                <td>'.$roles['log_user_id'].'</td>
+                <td>'.$roles['log_user_name'].'</td>
+                <td>'.ucwords($roles['log_user_role']).'</td>
+                <td>'.$roles['log_action'].'</td>
+            </tr>
+        ';
+    }
+
+    $res .= '
+            </tbody>
+    ';
+
+    echo $res;
+
+}

@@ -109,6 +109,12 @@ if (!isset($_SESSION['adId'])) {
                                 View All Diseases & Treatment
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="audit-log.php">
+                                <span data-feather="users"></span>
+                                View Audit Logs
+                            </a>
+                        </li>
                     </ul>
 
                 </div>

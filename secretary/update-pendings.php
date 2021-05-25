@@ -19,23 +19,6 @@ if(isset($_POST['data_set'])){
 
     if($stmt->rowCount() > 0){
 
-    $res .= '
-        <div class="table-responsive-xl">
-            <table class="table table-hover shadow p-3 mb-5 bg-white rounded">
-                <thead class="bg-info text-light">
-                    <tr>
-                        <th scope="col">Patient Name</th>
-                        <th scope="col">Patient Address</th>
-                        <th scope="col">Patient Mobile</th>
-                        <th scope="col">Doctor</th>
-                        <th scope="col">Appointment Reason</th>
-                        <th scope="col">Date of Appointment</th>
-                        <th scope="col">Status</th>
-                    </tr>
-                </thead>
-        <tbody>
-    ';
-
         while($result = $stmt->fetch(PDO::FETCH_ASSOC)){
             $res .= '
                     <tr>
@@ -64,9 +47,6 @@ if(isset($_POST['data_set'])){
                             </div>
                         </td>
                     </tr>
-                    </tbody>
-                    </table>
-                    </div>
                     ';
         }
 

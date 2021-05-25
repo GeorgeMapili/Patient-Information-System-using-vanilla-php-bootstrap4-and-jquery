@@ -131,6 +131,7 @@ if (isset($_POST['updateInformation'])) {
     if($updateProfile->checkUpdatePatient()){
 
         header("location:account.php?successInfo=Updated_successfully");
+        $_SESSION['log_update_info'] = true;
         exit(0);
 
     }
@@ -147,6 +148,7 @@ if (isset($_POST['updatePassword'])) {
     if($updateProfile->checkUpdatePassword() == "success_password_update"){
 
         header("location:account.php?succPass=Successfully_updated_password");
+        $_SESSION['log_update_pass'] = true;
         exit(0);
 
     }
@@ -206,5 +208,6 @@ if (isset($_POST['updateImg'])) {
     $stmt->execute();
 
     header("location:account.php?succUpdateImg=Successfully_update_the_img");
+    $_SESSION['log_update_img'] = true;
     exit(0);
 }

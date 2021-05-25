@@ -224,6 +224,7 @@ if (!isset($_SESSION['nId'])) {
             $stmt->execute();
 
             header("location:patient-walkin.php?succAdd=Successfully_added_medical_information");
+            $_SESSION['log_secretary_medical_information'] = true;
             exit(0);
         } else {
             header("location:dashboard.php");

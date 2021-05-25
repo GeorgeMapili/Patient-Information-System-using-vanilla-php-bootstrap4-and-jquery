@@ -11,6 +11,9 @@ if (!isset($_SESSION['id'])) {
     header("location:index.php");
     exit(0);
 }
+
+$_SESSION['log_update_history'] = true;
+
 ?>
 <!doctype html>
 <html lang="en">

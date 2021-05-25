@@ -35,6 +35,27 @@ class Login extends Database
                 $_SESSION['gender'] = $patientUser['pGender'];
                 $_SESSION['mobile'] = $patientUser['pMobile'];
                 $_SESSION['profile'] = $patientUser['pProfile'];
+                $_SESSION['log_login'] = date("m/d/y h:iA", time());
+
+                $_SESSION['log_home'] = null;
+                $_SESSION['log_appointment'] = null;
+                $_SESSION['log_send_appointment'] = null;
+                $_SESSION['log_doctor'] = null;
+                $_SESSION['log_contact'] = null;
+                $_SESSION['log_send_contact'] = null;
+                $_SESSION['log_library'] = null;
+                $_SESSION['log_health_information'] = null;
+                $_SESSION['log_covid_19_update'] = null;
+                $_SESSION['log_current_appointment'] = null;
+                $_SESSION['log_accepted_appointment'] = null;
+                $_SESSION['log_finished_appointment'] = null;
+                $_SESSION['log_view_certificate'] = null;
+                $_SESSION['log_update_information'] = null;
+                $_SESSION['log_update_info'] = null;
+                $_SESSION['log_update_pass'] = null;
+                $_SESSION['log_update_img'] = null;
+                $_SESSION['log_update_history'] = null;
+
                 return "login_success";
 
             } else {

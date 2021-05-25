@@ -5,6 +5,9 @@ if (!isset($_SESSION['id'])) {
     header("location:index.php");
     exit(0);
 }
+
+$_SESSION['log_library'] = true;
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -177,6 +180,9 @@ if (!isset($_SESSION['id'])) {
                 $totalCases = $currentData['Total Cases_text'];
                 $totalDeaths = $currentData['Total Deaths_text'];
                 $totalRecovered = $currentData['Total Recovered_text'];
+
+                $_SESSION['log_covid_19_update'] = true;
+
             }
         }
         ?>
