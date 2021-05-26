@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '9ecaa770f7463256ee63bc7fe2cf87025be7e76c',
+    'reference' => '3c0ed19239aa5c610bff2075c6793bc7a0b6a1b8',
     'name' => '__root__',
   ),
   'versions' => 
@@ -18,7 +18,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => '9ecaa770f7463256ee63bc7fe2cf87025be7e76c',
+      'reference' => '3c0ed19239aa5c610bff2075c6793bc7a0b6a1b8',
     ),
     'doctrine/instantiator' => 
     array (
@@ -44,12 +44,12 @@
     ),
     'nikic/php-parser' => 
     array (
-      'pretty_version' => 'v4.10.4',
-      'version' => '4.10.4.0',
+      'pretty_version' => 'v4.10.5',
+      'version' => '4.10.5.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'c6d052fc58cb876152f89f532b95a8d7907e7f0e',
+      'reference' => '4432ba399e47c66624bc73c8c0f811e5c109576f',
     ),
     'paragonie/random_compat' => 
     array (
@@ -62,12 +62,12 @@
     ),
     'paragonie/sodium_compat' => 
     array (
-      'pretty_version' => 'v1.15.4',
-      'version' => '1.15.4.0',
+      'pretty_version' => 'v1.16.1',
+      'version' => '1.16.1.0',
       'aliases' => 
       array (
       ),
-      'reference' => '8a93bfe047c7f699f819459de8ddda144cd636a4',
+      'reference' => '2e856afe80bfc968b47da1f4a7e1ea8f03d06b38',
     ),
     'phar-io/manifest' => 
     array (
@@ -179,12 +179,12 @@
     ),
     'psr/log' => 
     array (
-      'pretty_version' => '1.1.3',
-      'version' => '1.1.3.0',
+      'pretty_version' => '1.1.4',
+      'version' => '1.1.4.0',
       'aliases' => 
       array (
       ),
-      'reference' => '0f73288fd15629204f9d42b7055f72dacbe811fc',
+      'reference' => 'd49695b909c3b7628b6289db5479a1c204601f11',
     ),
     'pusher/pusher-php-server' => 
     array (
