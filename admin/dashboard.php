@@ -254,6 +254,38 @@ if (!isset($_SESSION['adId'])) {
                             </div>
                         </div>
 
+                        <?php
+                        $sql = "SELECT * FROM discharged_patient";
+                        $stmt = $con->prepare($sql);
+                        $stmt->execute();
+
+                        $totalAmount = 0;
+
+                        while($total = $stmt->fetch(PDO::FETCH_ASSOC)){
+                            $totalAmount += $total['pTotalAmount'];
+                        }
+
+                        $status = "discharged";
+                        $sql = "SELECT * FROM appointment WHERE aStatus = :status";
+                        $stmt = $con->prepare($sql);
+                        $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+                        $stmt->execute();
+
+                        while($totalAppointment = $stmt->fetch(PDO::FETCH_ASSOC)){
+                            $totalAmount += $totalAppointment['pTotalPay'];
+                        }
+
+                        ?>
+
+                        <div class="col-sm-6 col-md-4 col-lg-3 mt-2">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title mb-4">Total Revenue</h5>
+                                    <h1 class="display-5 mt-1 mb-3">₱ <?= number_format($totalAmount,2) ?></h1>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
