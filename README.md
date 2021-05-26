@@ -38,9 +38,11 @@ Created by:
 - Install php 7.\* version
 - Open the htdocs folder and save this repository
 - Rename the folder "Patient-Information-System-using-vanilla-php-bootstrap4-and-jquery" to "pis"
-- Download this vendor directory: https://drive.google.com/drive/folders/1vmJZS8rszmq0Pf6RqkKDwGQEi49feBfb?usp=sharing
-- Paste the downloaded vendor inside the pis directory
 - Open localhost/phpmyadmin import the file: "pis.sql" located in the sql directory inside pis
+
+#### Testing
+
+- You can access the website here https://sumc-doctors-clinic.000webhostapp.com
 
 ---
 
