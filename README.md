@@ -40,9 +40,9 @@ Created by:
 - Rename the folder "Patient-Information-System-using-vanilla-php-bootstrap4-and-jquery" to "pis"
 - Open localhost/phpmyadmin import the file: "pis.sql" located in the sql directory inside pis
 
-#### Testing
+<!-- #### Testing
 
-- You can access the website here https://sumc-doctors-clinic.000webhostapp.com
+- You can access the website here https://sumc-doctors-clinic.000webhostapp.com -->
 
 ---
 

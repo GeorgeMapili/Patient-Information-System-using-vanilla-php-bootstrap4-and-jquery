@@ -21,6 +21,7 @@ if (isset($_SESSION['id'])) {
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css" />
     <link rel="icon" href="img/sumc.png">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <title>Patient | Register</title>
 </head>
 
@@ -116,6 +117,11 @@ if (isset($_SESSION['id'])) {
             <?= (isset($_GET['errorImg1'])) ? '<small class="text-danger">Image is not valid ONLY(JPG,JPEG,PNG)!</small>' : "";  ?>
             <?= (isset($_GET['errorImg2'])) ? '<small class="text-danger">Image file size is required less than 5MB!</small>' : "";  ?>
         </div>
+
+        <div class="form-group">
+            <div class="g-recaptcha" data-sitekey="6Lch-PgaAAAAAJ1e7bT25k9ZGKCNcKDaFcczjRQ5"></div>
+        </div>
+        <?= (isset($_GET['error']) && $_GET['error'] == "check-the-security-CAPTCHA-box") ? '<small class="text-danger">*Check the security CAPTCHA box</small>': '' ?>
 
         <input type="submit" class="btn-block btn-info mt-4" value="Register" name="register">
 

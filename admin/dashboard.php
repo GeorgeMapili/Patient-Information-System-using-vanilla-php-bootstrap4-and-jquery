@@ -290,10 +290,31 @@ if (!isset($_SESSION['adId'])) {
                 </div>
 
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 my-3 border-bottom">
+                    <h1 class="h2" id="primaryColor">Report</h1>
+                </div>
+
+
+
+                <form action="report.php" method="post" target="_blank">
+                        <div class="d-flex justify-content-start">
+                            <div class="w-25 m-2">Starting Month</div>
+                            <div class="w-25 m-2">Ending Month</div>
+                        </div>
+                        <div class="d-flex justify-content-start">
+                            <input type="date" name="starting_month" id="starting_month" class="form-control w-25 m-2" required>
+                            <input type="date" name="ending_month" id="ending_month" class="form-control w-25 m-2" required>
+                        </div>
+                        <?= (isset($_GET['error']) && $_GET['error'] == "invalid-input") ? '&nbsp;&nbsp;<small class="text-danger">*Invalid input the starting month must be lesser than ending month</small>' : '' ?><br>
+
+                        <input type="submit" name="generate_report" id="generate_report" value="Generate a report" class="btn btn-primary m-2">
+
+                </form>
+
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 my-3 border-bottom">
                     <h1 class="h2" id="primaryColor">Statistics</h1>
                 </div>
 
-                <h4 class="text-center my-3">Walk in Patient</h4>
+                <h4 class="text-center my-3 my-5">Walk in Patient</h4>
                 <div class="row my-3">
                     <div class="col-lg-6 col-md-12 col-sm-12">
                         <canvas id="mycanvas"></canvas>
@@ -303,7 +324,7 @@ if (!isset($_SESSION['adId'])) {
                     </div>
                 </div>
                 <h4 class="text-center mt-5">Patient Account</h4>
-                <div class="row my-3">
+                <div class="row my-5">
                     <div class="col-lg-6 col-md-12 col-sm-12">
                         <canvas id="mycanvasAgeAppointment"></canvas>
                     </div>
@@ -311,6 +332,14 @@ if (!isset($_SESSION['adId'])) {
                         <canvas id="mycanvasGenderAppointment"></canvas>
                     </div>
                 </div>
+
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 my-3 border-bottom">
+                    <h1 class="h2" id="primaryColor">Backup Data</h1>
+                </div>
+                
+                <form class="mb-5" action="backup-data.php" method="post">
+                    <input type="submit" name="backup_data" id="backup_data" value="Generate a backup data" class="btn btn-primary m-2">
+                </form>
 
             </main>
         </div>

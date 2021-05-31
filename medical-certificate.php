@@ -15,7 +15,7 @@ if (!isset($_SESSION['id'])) {
 
 $_SESSION['log_view_certificate'] = true;
 
-require('secretary/fpdf182/fpdf.php');
+require_once('secretary/fpdf182/fpdf.php');
 
 $pdf = new FPDF('P', 'mm', 'A4');
 
@@ -35,7 +35,8 @@ if (isset($_POST['medicalCertBtn'])) {
 
     $medicalCertificate = $stmt->fetch(PDO::FETCH_ASSOC);
 
-
+    $pdf->Image('./img/sumc.png', 10, 6, 20);
+    $pdf->Ln(20);
     $pdf->SetFont('Arial', 'B', 14);
     $pdf->SetTitle($medicalCertificate['pName'] . " Medical Certificate");
 

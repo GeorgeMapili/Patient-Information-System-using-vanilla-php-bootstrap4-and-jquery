@@ -183,6 +183,32 @@ class register extends Database
 $register = new Register();
 
 if (isset($_POST['register'])) {
+
+    function post_captcha($user_response){
+        $fields_string = '';
+        $fields = array(
+            'secret' => '6Lch-PgaAAAAALVk7SOe2vQfDbmc-TLyTeI86fJm',
+            'response' => $user_response
+        );
+        foreach($fields as $key=>$value)
+        $fields_string .= $key . '=' . $value . '&';
+        $fields_string = rtrim($fields_string, '&');
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, 'https://www.google.com/recaptcha/api/siteverify');
+        curl_setopt($ch, CURLOPT_POST, count($fields));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $fields_string);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, True);
+
+        $result = curl_exec($ch);
+        curl_close($ch);
+
+        return json_decode($result, true);
+    }
+
+    // Call the function post_captcha
+    $res = post_captcha($_POST['g-recaptcha-response']);
+  
     $register->name = trim(htmlspecialchars($_POST['name']));
     $register->email = trim(htmlspecialchars($_POST['email']));
     $register->address = trim(htmlspecialchars($_POST['address']));
@@ -203,11 +229,23 @@ if (isset($_POST['register'])) {
     $register->imageExtesionCheck();
     $register->imageSizeCheck();
     $register->hashPassword();
-    if($register->insertNewPatient() == "register_success"){
-        header("location:../../index.php?RegSuccess=Register_success");
+
+    if (!$res['success']) {
+    
+        header("location:../../register.php?error=check-the-security-CAPTCHA-box&name=$register->name&email=$register->email&address=$register->address&age=$register->age&gender=$register->gender&mobile=$register->mobileNumber");
         exit(0);
-    }else{
-        header("location:../../register.php");
-        exit(0);
+
+    } else {
+
+        if($register->insertNewPatient() == "register_success"){
+            header("location:../../index.php?RegSuccess=Register_success");
+            exit(0);
+        }else{
+            header("location:../../register.php");
+            exit(0);
+        }
+
     }
+
+
 }

@@ -1,10 +1,26 @@
 <?php
 session_start();
-
+require_once("connect.php");
 if (isset($_SESSION['id'])) {
     header("location:home.php");
     exit(0);
 }
+
+if(isset($_GET['password_id'])){
+    $password_id = $_GET['password_id'];
+
+    $sql = "SELECT * FROM patientappointment WHERE pId = :pId";
+    $stmt = $con->prepare($sql);
+    $stmt->bindParam(":pId", $password_id, PDO::PARAM_STR);
+    $stmt->execute();
+
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $_SESSION['email-reset-password'] = $result['pEmail'];
+    header("location:reset-password.php");
+    exit;
+}
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -20,6 +36,7 @@ if (isset($_SESSION['id'])) {
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css" />
     <link rel="icon" href="img/sumc.png">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <title>Patient | Login</title>
 
     <style>
@@ -44,13 +61,22 @@ if (isset($_SESSION['id'])) {
                 <label>Password</label>
                 <?= (isset($_GET['errPass'])) ? '<input type="password" name="password" class="form-control is-invalid" required>' : '<input type="password" name="password" class="form-control" required>'; ?>
                 <?= (isset($_GET['errPass'])) ? '<span class="text-danger">Incorrect Password</span>' : ''; ?><br>
-
             </div>
-        
+
+            <?php if(isset($_GET['errEmail']) || isset($_GET['errPass']) || isset($_GET['error'])): ?>
+            <div class="form-group">
+                <div class="g-recaptcha" data-sitekey="6Lch-PgaAAAAAJ1e7bT25k9ZGKCNcKDaFcczjRQ5"></div>
+            </div>
+            <?= (isset($_GET['error']) && $_GET['error'] == "check-the-security-CAPTCHA-box") ? '<small class="text-danger">*Check the security CAPTCHA box</small>': '' ?>
+            <?php endif; ?>
+
                 <input type="submit" class="btn-block btn-info mt-4" value="Login" name="login">
 
-            <div class="text-center mt-5">
+            <div class="d-flex justify-content-between">
                 <a class="btn btn-danger" href="register.php">No account yet?</a>
+                <div>
+                <a class="btn btn-primary" href="forgot-password.php">Forgot Password?</a>
+                </div>
             </div>
         </form>
 
