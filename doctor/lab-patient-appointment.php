@@ -2,12 +2,12 @@
 session_start();
 require_once '../connect.php';
 
-if (!isset($_SESSION['dId'])) {
+if (!isset($_SESSION['ddId'])) {
     header("location:index.php");
     exit(0);
 }
 
-$_SESSION['log_doctor_lab_walkin'] = true;
+$_SESSION['log_doctor_lab_appointment'] = true;
 
 ?>
 <!doctype html>
@@ -47,13 +47,13 @@ $_SESSION['log_doctor_lab_walkin'] = true;
                     $discharge = 0;
                     $sql = "SELECT * FROM walkinpatient WHERE walkInDoctor = :doctor AND walkInDischarged = :discharge";
                     $stmt = $con->prepare($sql);
-                    $stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);
+                    $stmt->bindParam(":doctor", $_SESSION['ddName'], PDO::PARAM_STR);
                     $stmt->bindParam(":discharge", $discharge, PDO::PARAM_INT);
                     $stmt->execute();
                     $walkinCount = $stmt->rowCount();
                     ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="walkInPatient.php">Walk in Patient&nbsp;<?= ($walkinCount > 0) ? '<span id="walkin-count" class="badge bg-danger">' . $walkinCount . '</span>' : '<span id="walkin-count" class="badge bg-danger"></span>'; ?></a>
+                        <a class="nav-link" href="walkinpatient.php">Walk in Patient&nbsp;<?= ($walkinCount > 0) ? '<span id="walkin-count" class="badge bg-danger">' . $walkinCount . '</span>' : '<span id="walkin-count" class="badge bg-danger"></span>'; ?></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="patient.php">Patient Appointment</a>
@@ -62,22 +62,22 @@ $_SESSION['log_doctor_lab_walkin'] = true;
                     $status1 = "accepted";
                     $sql = "SELECT * FROM appointment WHERE pDoctor = :doctor AND aStatus = :status1";
                     $stmt = $con->prepare($sql);
-                    $stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);
+                    $stmt->bindParam(":doctor", $_SESSION['ddName'], PDO::PARAM_STR);
                     $stmt->bindParam(":status1", $status1, PDO::PARAM_STR);
                     $stmt->execute();
                     $upcomingAppointmentCount = $stmt->rowCount();
                     ?>
                     <div class="btn-group dropbottom">
-                        <a class="nav-link" href="incomingAppointment.php">Upcoming&nbsp;<?= ($upcomingAppointmentCount > 0) ? '<span id="upcoming-count" class="badge bg-danger">' . $upcomingAppointmentCount . '</span>' : '<span id="upcoming-count" class="badge bg-danger"></span>'; ?></a>
+                        <a class="nav-link" href="incoming-appointment.php">Upcoming&nbsp;<?= ($upcomingAppointmentCount > 0) ? '<span id="upcoming-count" class="badge bg-danger">' . $upcomingAppointmentCount . '</span>' : '<span id="upcoming-count" class="badge bg-danger"></span>'; ?></a>
                         <button type="button" class="btn btn-dark dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="sr-only">Toggle Dropright</span>
                         </button>
                         <div class="dropdown-menu bg-dark text-light text-center">
                             <li class="nav-item">
-                                <a class="nav-link" href="cancelledAppointment.php">Cancelled</a>
+                                <a class="nav-link" href="cancelled-appointment.php">Cancelled</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="doneAppointment.php">Finished</a>
+                                <a class="nav-link" href="finished-appointment.php">Finished</a>
                             </li>
                         </div>
                     </div>
@@ -86,9 +86,9 @@ $_SESSION['log_doctor_lab_walkin'] = true;
                             Laboratory
                         </span>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="labPatientAppointment.php">Patient Appointment</a>
+                            <a class="dropdown-item" href="lab-patient-appointment.php">Patient Appointment</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="labPatientWalkin.php">Walk in Patient</a>
+                            <a class="dropdown-item" href="lab-patient-walkin.php">Walk in Patient</a>
                         </div>
                     </div>
                 </ul>
@@ -98,14 +98,14 @@ $_SESSION['log_doctor_lab_walkin'] = true;
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                 </form> -->
                 <ul class="navbar-nav ml-auto">
-                    <img src="../upload/doc_profile_img/<?= $_SESSION['dProfileImg'] ?>" width="50" style="border:1px solid #fff; border-radius: 50%;" alt="">
+                    <img src="../upload/doc_profile_img/<?= $_SESSION['ddProfileImg'] ?>" width="50" style="border:1px solid #fff; border-radius: 50%;" alt="">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <?= $_SESSION['dName'] ?>
+                            <?= $_SESSION['ddName'] ?>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item disabled" href=""><?= $_SESSION['dEmail'] ?></a>
-                            <a class="dropdown-item" href="doctorProfile.php">My account</a>
+                            <a class="dropdown-item disabled" href=""><?= $_SESSION['ddEmail'] ?></a>
+                            <a class="dropdown-item" href="profile.php">My account</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="logout.php">Logout</a>
                         </div>
@@ -120,7 +120,7 @@ $_SESSION['log_doctor_lab_walkin'] = true;
         <div class="container-fluid">
 
             <div class="mt-4 mb-4">
-                <h1 class="Display-4 my-4" id="primaryColor">Laboratory Walk in</h1>
+                <h1 class="Display-4 my-4" id="primaryColor">Laboratory Appointment</h1>
             </div>
 
             <div class="text-center">
@@ -132,11 +132,12 @@ $_SESSION['log_doctor_lab_walkin'] = true;
             </div>
 
             <?php
-            $discharge = 0;
-            $sql = "SELECT * FROM walkinpatient WHERE walkInDoctor = :doctor AND walkInDischarged = :discharge";
+            $doctor = $_SESSION['ddName'];
+            $status = "accepted";
+            $sql = "SELECT * FROM appointment WHERE pDoctor = :doctor AND aStatus = :status";
             $stmt = $con->prepare($sql);
-            $stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);
-            $stmt->bindParam(":discharge", $discharge, PDO::PARAM_INT);
+            $stmt->bindParam(":doctor", $doctor, PDO::PARAM_STR);
+            $stmt->bindParam(":status", $status, PDO::PARAM_STR);
             $stmt->execute();
 
             if($stmt->rowCount() > 0){
@@ -146,7 +147,7 @@ $_SESSION['log_doctor_lab_walkin'] = true;
                 <div class="col">
                     <form class="form-inline">
                         <input class="form-control mb-3" id="search" autocomplete="off" type="search" placeholder="Search Patient" aria-label="Search">
-                        <input type="hidden" name="doctorName" class="doctorName" value="<?= $_SESSION['dName']; ?>">
+                        <input type="hidden" name="doctorName" class="doctorName" value="<?= $_SESSION['ddName']; ?>">
                     </form>
                 </div>
             </div>
@@ -156,7 +157,7 @@ $_SESSION['log_doctor_lab_walkin'] = true;
                     <thead class="bg-info text-light">
                         <tr>
                             <th scope="col">Patient Name</th>
-                            <th scope="col">Patient Address</th>
+                            <th scope="col">Date</th>
                             <th scope="col">Patient Disease</th>
                             <th scope="col">Laboratory Test</th>
                             <th scope="col">Result</th>
@@ -167,19 +168,20 @@ $_SESSION['log_doctor_lab_walkin'] = true;
 
                         <?php
 
-                        while ($walkInPatient = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                        while ($patientAppointment = $stmt->fetch(PDO::FETCH_ASSOC)) :
                         ?>
                             <tr>
-                                <td><?= $walkInPatient['walkInName']; ?></td>
-                                <td><?= $walkInPatient['walkInAddress']; ?></td>
-                                <td><?= $walkInPatient['walkInDisease']; ?></td>
+                                <td><?= $patientAppointment['pName']; ?></td>
+                                <td><?= date("M d, Y", strtotime($patientAppointment['aDate'])); ?> at <?= $patientAppointment['aTime']; ?></td>
+                                <td><?= $patientAppointment['aReason']; ?></td>
                                 <td>
                                     <?php
-                                    if(empty($walkInPatient['labTest'])){
+                                    if(empty($patientAppointment['labTest'])){
                                     ?>
 
-                                    <form action="addTestLabWalkin.php" method="post">
-                                        <input type="hidden" name="walkInId" value="<?= $walkInPatient['walkInId']; ?>">
+                                    <form action="add-testlab-appointment.php" method="post">
+                                        <input type="hidden" name="aId" value="<?= $patientAppointment['aId']; ?>">
+                                        <input type="hidden" name="pId" value="<?= $patientAppointment['pId']; ?>">
                                         <input type="submit" value="Add Test" class="btn btn-primary" name="addTestLab">
                                     </form>
 
@@ -187,8 +189,9 @@ $_SESSION['log_doctor_lab_walkin'] = true;
                                     }else{
                                     ?>
 
-                                    <form action="updateTestLabWalkin.php" method="post">
-                                        <input type="hidden" name="walkInId" value="<?= $walkInPatient['walkInId']; ?>">
+                                    <form action="update-testlab-appointment.php" method="post">
+                                        <input type="hidden" name="aId" value="<?= $patientAppointment['aId']; ?>">
+                                        <input type="hidden" name="pId" value="<?= $patientAppointment['pId']; ?>">
                                         <input type="submit" value="Update Test" class="btn btn-secondary" name="updateTestLab">
                                     </form>
 
@@ -199,7 +202,7 @@ $_SESSION['log_doctor_lab_walkin'] = true;
                                 </td>
                                 <td>
                                     <?php
-                                    if(empty($walkInPatient['labTest'])){
+                                    if(empty($patientAppointment['labTest'])){
                                     ?>
                                     <p class="btn btn-primary disabled">Add Result</p>
                                     <?php
@@ -207,17 +210,19 @@ $_SESSION['log_doctor_lab_walkin'] = true;
                                     ?>
 
                                         <?php
-                                        if(empty($walkInPatient['labResult'])){
+                                        if(empty($patientAppointment['labResult'])){
                                         ?>
-                                        <form action="addResultLabWalkin.php" method="post">
-                                            <input type="hidden" name="walkInId" value="<?= $walkInPatient['walkInId']; ?>">
+                                        <form action="add-result-appointment.php" method="post">
+                                            <input type="hidden" name="aId" value="<?= $patientAppointment['aId']; ?>">
+                                            <input type="hidden" name="pId" value="<?= $patientAppointment['pId']; ?>">
                                             <input type="submit" value="Add Result" class="btn btn-primary" name="addResultLab">
                                         </form>
                                         <?php
                                         }else{
                                         ?>
-                                        <form action="updateResultLabWalkin.php" method="post">
-                                            <input type="hidden" name="walkInId" value="<?= $walkInPatient['walkInId']; ?>">
+                                        <form action="update-result-appointment.php" method="post">
+                                            <input type="hidden" name="aId" value="<?= $patientAppointment['aId']; ?>">
+                                            <input type="hidden" name="pId" value="<?= $patientAppointment['pId']; ?>">
                                             <input type="submit" value="Update Result" class="btn btn-secondary" name="updateResultLab">
                                         </form>
                                         <?php
@@ -240,7 +245,7 @@ $_SESSION['log_doctor_lab_walkin'] = true;
             <?php
             }else{
             ?>
-            <p class="lead text-center text-white display-4">No walk in patient yet</p>
+            <p class="lead text-center text-white display-4">No appointment patient yet</p>
             <?php    
             }
             ?>
@@ -252,8 +257,8 @@ $_SESSION['log_doctor_lab_walkin'] = true;
 
             <!-- FOOTER -->
             <footer class="container">
-                <p class="text-white">&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php" id="primaryColor">Privacy Policy</a> &middot; <a href="aboutUs.php" id="primaryColor">About Us</a></p>
-            </footer>
+            <p class="text-white">&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacy-policy.php" id="primaryColor">Privacy Policy</a> &middot; <a href="about.php" id="primaryColor">About Us</a></p>
+        </footer>
         </div>
     </main>
 
@@ -323,7 +328,7 @@ $_SESSION['log_doctor_lab_walkin'] = true;
                     url: 'action.php',
                     method: 'post',
                     data: {
-                        labWalkin: search,
+                        labPatientName: search,
                         doctorName: doctorName
                     },
                     success: function(response) {

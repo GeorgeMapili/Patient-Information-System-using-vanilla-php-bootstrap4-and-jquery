@@ -9,6 +9,11 @@ if(!isset($_SESSION['email-reset-password'])){
     exit;
 }
 
+if (isset($_SESSION['id'])) {
+    header("location:home.php");
+    exit(0);
+}
+
 ?>
 <!doctype html>
 <html lang="en">

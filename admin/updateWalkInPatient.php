@@ -8,7 +8,7 @@ if (!isset($_SESSION['adId'])) {
     exit(0);
 }
 
-if(isset($_POST['id'])){
+if(isset($_GET['id'])){
 ?>
     <!doctype html>
     <html lang="en">
@@ -122,9 +122,9 @@ if(isset($_POST['id'])){
                 </nav>
 
                 <?php
-                if (isset($_POST['updateWalkInBtn'])) {
+                if (isset($_GET['updateWalkInBtn'])) {
 
-                    $walkInId = $_POST['id'];
+                    $walkInId = $_GET['id'];
 
                     $sql = "SELECT * FROM walkinpatient WHERE walkInId = :id";
                     $stmt = $con->prepare($sql);
@@ -159,13 +159,13 @@ if(isset($_POST['id'])){
                     $doctor = trim(htmlspecialchars($_POST['doctor']));
 
                     if ($name == $_SESSION['walkInPatientName'] && $email == $_SESSION['walkInPatientEmail'] && $address == $_SESSION['walkInPatientAddress'] && $mobile == $_SESSION['walkInPatientMobile'] && $disease == $_SESSION['walkInPatientDisease'] && $age == $_SESSION['walkInPatientAge'] && $gender == $_SESSION['walkInPatientGender'] && $doctor == $_SESSION['walkInPatientDoctor']) {
-                        header("location:walkInPatient.php?errUpdate=Nothing_to_update");
+                        header("location:walkInPatient.php?id=$id&errUpdate=Nothing_to_update");
                         exit(0);
                     }
 
                     // check if name is valid
                     if (!preg_match("/^([a-zA-Z' ]+)$/", $name)) {
-                        header("location:updateWalkInPatient.php?errName=name_is_not_valid");
+                        header("location:updateWalkInPatient.php?id=$id&errName=name_is_not_valid");
                         ob_end_flush();
                         exit(0);
                     }
@@ -180,13 +180,13 @@ if(isset($_POST['id'])){
                     $nameCount = $stmt->rowCount();
 
                     if ($nameCount > 0) {
-                        header("location:updateWalkInPatient.php?errName1=Name_is_already_existed");
+                        header("location:updateWalkInPatient.php?id=$id&errName1=Name_is_already_existed");
                         exit(0);
                     }
 
                     // check if the email is valid
                     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                        header("location:updateWalkInPatient.php?errEmail=email_is_invalid");
+                        header("location:updateWalkInPatient.php?id=$id&errEmail=email_is_invalid");
                         exit(0);
                     }
 
@@ -200,7 +200,7 @@ if(isset($_POST['id'])){
                     $emailCount = $stmt->rowCount();
 
                     if ($emailCount > 0) {
-                        header("location:updateWalkInPatient.php?errEmail1=Email_is_already_existed");
+                        header("location:updateWalkInPatient.php?id=$id&errEmail1=Email_is_already_existed");
                         exit(0);
                     }
 
@@ -214,7 +214,7 @@ if(isset($_POST['id'])){
                     $mobileCount = $stmt->rowCount();
 
                     if ($mobileCount > 0) {
-                        header("location:updateWalkInPatient.php?errMobile=Mobile_number_is_already_existed");
+                        header("location:updateWalkInPatient.php?id=$id&errMobile=Mobile_number_is_already_existed");
                         exit(0);
                     }
 
@@ -260,7 +260,7 @@ if(isset($_POST['id'])){
                             <h1 class="Display-4" id="primaryColor">Update Walk in Patient</h1>
                         </div>
 
-                        <form action="updateWalkInPatient.php" method="post">
+                        <form action="updateWalkInPatient.php?id=$id" method="post">
                             <div class="row my-4">
                                 <input type="hidden" name="id" value="<?= $_SESSION['walkInPatientId'] ?>">
                                 <div class="col">
@@ -283,7 +283,7 @@ if(isset($_POST['id'])){
                                 </div>
                                 <div class="col">
                                     <label>Patient Mobile Number</label>
-                                    <?= (isset($_GET['errMobile']) && $_GET['errMobile'] == "Mobile_number_is_already_existed") ? '<input type="tel" name="mobile" class="form-control is-invalid" required>' : '<input type="tel" name="mobile" class="form-control" value="' . $_SESSION['walkInPatientMobile'] . '" required>' ?>
+                                    <?= (isset($_GET['errMobile']) && $_GET['errMobile'] == "Mobile_number_is_already_existed") ? '<input type="tel" name="mobile" class="form-control is-invalid" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" required>' : '<input type="tel" name="mobile" class="form-control" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" value="' . $_SESSION['walkInPatientMobile'] . '" required>' ?>
                                     <?= (isset($_GET['errMobile']) && $_GET['errMobile'] == "Mobile_number_is_already_existed") ? '<small class="text-danger">Mobile number is already existed!</small>' : '' ?>
                                 </div>
                             </div>

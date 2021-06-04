@@ -2,7 +2,7 @@
 session_start();
 require_once '../connect.php';
 
-if (!isset($_SESSION['dId'])) {
+if (!isset($_SESSION['ddId'])) {
     header("location:index.php");
     exit(0);
 }
@@ -47,13 +47,13 @@ $_SESSION['log_doctor_patient_appointment'] = true;
                     $discharge = 0;
                     $sql = "SELECT * FROM walkinpatient WHERE walkInDoctor = :doctor AND walkInDischarged = :discharge";
                     $stmt = $con->prepare($sql);
-                    $stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);
+                    $stmt->bindParam(":doctor", $_SESSION['ddName'], PDO::PARAM_STR);
                     $stmt->bindParam(":discharge", $discharge, PDO::PARAM_INT);
                     $stmt->execute();
                     $walkinCount = $stmt->rowCount();
                     ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="walkInPatient.php">Walk in Patient&nbsp;<?= ($walkinCount > 0) ? '<span id="walkin-count" class="badge bg-danger">' . $walkinCount . '</span>' : '<span id="walkin-count" class="badge bg-danger"></span>'; ?></a>
+                        <a class="nav-link" href="walkinpatient.php">Walk in Patient&nbsp;<?= ($walkinCount > 0) ? '<span id="walkin-count" class="badge bg-danger">' . $walkinCount . '</span>' : '<span id="walkin-count" class="badge bg-danger"></span>'; ?></a>
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link" href="patient.php">Patient Appointment</a>
@@ -62,22 +62,22 @@ $_SESSION['log_doctor_patient_appointment'] = true;
                     $status1 = "accepted";
                     $sql = "SELECT * FROM appointment WHERE pDoctor = :doctor AND aStatus = :status1";
                     $stmt = $con->prepare($sql);
-                    $stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);
+                    $stmt->bindParam(":doctor", $_SESSION['ddName'], PDO::PARAM_STR);
                     $stmt->bindParam(":status1", $status1, PDO::PARAM_STR);
                     $stmt->execute();
                     $upcomingAppointmentCount = $stmt->rowCount();
                     ?>
                     <div class="btn-group dropbottom">
-                        <a class="nav-link" href="incomingAppointment.php">Upcoming&nbsp;<?= ($upcomingAppointmentCount > 0) ? '<span id="upcoming-count" class="badge bg-danger">' . $upcomingAppointmentCount . '</span>' : '<span id="upcoming-count" class="badge bg-danger"></span>'; ?></a>
+                        <a class="nav-link" href="incoming-appointment.php">Upcoming&nbsp;<?= ($upcomingAppointmentCount > 0) ? '<span id="upcoming-count" class="badge bg-danger">' . $upcomingAppointmentCount . '</span>' : '<span id="upcoming-count" class="badge bg-danger"></span>'; ?></a>
                         <button type="button" class="btn btn-dark dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="sr-only">Toggle Dropright</span>
                         </button>
                         <div class="dropdown-menu bg-dark text-light text-center">
                             <li class="nav-item">
-                                <a class="nav-link" href="cancelledAppointment.php">Cancelled</a>
+                                <a class="nav-link" href="cancelled-appointment.php">Cancelled</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="doneAppointment.php">Finished</a>
+                                <a class="nav-link" href="finished-appointment.php">Finished</a>
                             </li>
                         </div>
                     </div>
@@ -86,9 +86,9 @@ $_SESSION['log_doctor_patient_appointment'] = true;
                             Laboratory
                         </span>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="labPatientAppointment.php">Patient Appointment</a>
+                            <a class="dropdown-item" href="lab-patient-appointment.php">Patient Appointment</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="labPatientWalkin.php">Walk in Patient</a>
+                            <a class="dropdown-item" href="lab-patient-walkin.php">Walk in Patient</a>
                         </div>
                     </div>
                 </ul>
@@ -98,14 +98,14 @@ $_SESSION['log_doctor_patient_appointment'] = true;
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                 </form> -->
                 <ul class="navbar-nav ml-auto">
-                    <img src="../upload/doc_profile_img/<?= $_SESSION['dProfileImg'] ?>" width="50" style="border:1px solid #fff; border-radius: 50%;" alt="">
+                    <img src="../upload/doc_profile_img/<?= $_SESSION['ddProfileImg'] ?>" width="50" style="border:1px solid #fff; border-radius: 50%;" alt="">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <?= $_SESSION['dName'] ?>
+                            <?= $_SESSION['ddName'] ?>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item disabled" href=""><?= $_SESSION['dEmail'] ?></a>
-                            <a class="dropdown-item" href="doctorProfile.php">My account</a>
+                            <a class="dropdown-item disabled" href=""><?= $_SESSION['ddEmail'] ?></a>
+                            <a class="dropdown-item" href="profile.php">My account</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="logout.php">Logout</a>
                         </div>
@@ -132,7 +132,7 @@ $_SESSION['log_doctor_patient_appointment'] = true;
             </div>
 
             <?php
-            $doctor = $_SESSION['dName'];
+            $doctor = $_SESSION['ddName'];
             $status = "accepted";
             $sql = "SELECT * FROM appointment WHERE pDoctor = :doctor AND aStatus = :status";
             $stmt = $con->prepare($sql);
@@ -147,7 +147,7 @@ $_SESSION['log_doctor_patient_appointment'] = true;
                 <div class="col">
                     <form class="form-inline">
                         <input class="form-control mb-3" id="search" autocomplete="off" type="search" placeholder="Search Patient" aria-label="Search">
-                        <input type="hidden" name="doctorName" class="doctorName" value="<?= $_SESSION['dName']; ?>">
+                        <input type="hidden" name="doctorName" class="doctorName" value="<?= $_SESSION['ddName']; ?>">
                     </form>
                 </div>
             </div>
@@ -181,7 +181,7 @@ $_SESSION['log_doctor_patient_appointment'] = true;
                                     <?php
                                     if (empty($patientAppointment['pPrescription'])) {
                                     ?>
-                                        <form action="addPrescription.php" method="post">
+                                        <form action="add-prescription.php" method="post">
                                             <input type="hidden" name="aid" value="<?= $patientAppointment['aId']; ?>">
                                             <input type="hidden" name="pid" value="<?= $patientAppointment['pId']; ?>">
                                             <input type="submit" value="Add Prescription" class="btn btn-info" name="addPrescriptionBtn">
@@ -189,7 +189,7 @@ $_SESSION['log_doctor_patient_appointment'] = true;
                                     <?php
                                     } else {
                                     ?>
-                                        <form action="editPrescription.php" method="post">
+                                        <form action="update-prescription.php" method="post">
                                             <input type="hidden" name="aid" value="<?= $patientAppointment['aId']; ?>">
                                             <input type="hidden" name="pid" value="<?= $patientAppointment['pId']; ?>">
                                             <input type="submit" value="Update Prescription" class="btn btn-secondary" name="updatePrescriptionBtn">
@@ -200,14 +200,14 @@ $_SESSION['log_doctor_patient_appointment'] = true;
 
                                 </td>
                                 <td>
-                                    <form action="updateDisease.php" method="post">
+                                    <form action="update-disease.php" method="post">
                                         <input type="hidden" name="aId" value="<?= $patientAppointment['aId'] ?>">
                                         <input type="hidden" name="pId" value="<?= $patientAppointment['pId'] ?>">
                                         <input type="submit" value="Update Disease" class="btn btn-info" name="updateDisease">
                                     </form>
                                 </td>
                                 <td>
-                                    <form action="patientMedicalHistory.php" method="post">
+                                    <form action="patient-medicalhistory.php" method="post">
                                         <input type="hidden" name="aId" value="<?= $patientAppointment['aId']; ?>">
                                         <input type="hidden" name="pId" value="<?= $patientAppointment['pId']; ?>">
                                         <input type="submit" value="Watch appointment history" class="btn btn-primary" name="watchHistory">
@@ -236,7 +236,7 @@ $_SESSION['log_doctor_patient_appointment'] = true;
 
             <!-- FOOTER -->
             <footer class="container">
-            <p class="text-white">&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php" id="primaryColor">Privacy Policy</a> &middot; <a href="aboutUs.php" id="primaryColor">About Us</a></p>
+            <p class="text-white">&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacy-policy.php" id="primaryColor">Privacy Policy</a> &middot; <a href="about.php" id="primaryColor">About Us</a></p>
         </footer>
         </div>
     </main>

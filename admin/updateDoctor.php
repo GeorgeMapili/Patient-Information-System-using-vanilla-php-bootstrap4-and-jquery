@@ -8,7 +8,7 @@ if (!isset($_SESSION['adId'])) {
     exit(0);
 }
 
-if(isset($_POST['dId'])){
+if(isset($_GET['dId'])){
 ?>
 <!doctype html>
 <html lang="en">
@@ -132,8 +132,8 @@ if(isset($_POST['dId'])){
                     </div>
 
                     <?php
-                    if (isset($_POST['updateDoctorBtn'])) {
-                        $dId = $_POST['dId'];
+                    if (isset($_GET['updateDoctorBtn'])) {
+                        $dId = $_GET['dId'];
 
                         $sql = "SELECT * FROM doctor WHERE dId = :id";
                         $stmt = $con->prepare($sql);
@@ -168,7 +168,7 @@ if(isset($_POST['dId'])){
 
                         // check if nothing changed
                         if ($dName == $_SESSION['dName'] && $dEmail == $_SESSION['dEmail'] && $dAddress == $_SESSION['dAddress'] && $dMobile == $_SESSION['dMobile'] && $dSpecialization == $_SESSION['dSpecialization'] && $dFee == $_SESSION['dFee'] && $specializationInfo == $_SESSION['dSpecializationInfo']) {
-                            header("location:doctor.php?errUpdate=Nothing_to_update");
+                            header("location:doctor.php?dId=$dId&errUpdate=Nothing_to_update");
                             ob_end_flush();
                             exit(0);
                         }
@@ -183,13 +183,13 @@ if(isset($_POST['dId'])){
                         $nameCount = $stmt->rowCount();
 
                         if ($nameCount > 0) {
-                            header("location:updateDoctor.php?errNameUpdate=Doctor_name_is_already_taken");
+                            header("location:updateDoctor.php?dId=$dId&errNameUpdate=Doctor_name_is_already_taken");
                             exit(0);
                         }
 
                         // check if the email is valid
                         if (!filter_var($dEmail, FILTER_VALIDATE_EMAIL)) {
-                            header("location:updateDoctor.php?errEmail=email_is_invalid");
+                            header("location:updateDoctor.php?dId=$dId&errEmail=email_is_invalid");
                             exit(0);
                         }
 
@@ -203,7 +203,7 @@ if(isset($_POST['dId'])){
                         $emailCount = $stmt->rowCount();
 
                         if ($emailCount > 0) {
-                            header("location:updateDoctor.php?errEmail1=Email_is_already_existed");
+                            header("location:updateDoctor.php?dId=$dId&errEmail1=Email_is_already_existed");
                             exit(0);
                         }
 
@@ -217,7 +217,7 @@ if(isset($_POST['dId'])){
                         $mobileCount = $stmt->rowCount();
 
                         if ($mobileCount > 0) {
-                            header("location:updateDoctor.php?errMobile=Mobile_number_is_already_existed");
+                            header("location:updateDoctor.php?dId=$dId&errMobile=Mobile_number_is_already_existed");
                             exit(0);
                         }
 
@@ -238,7 +238,7 @@ if(isset($_POST['dId'])){
                     }
                     ?>
 
-                    <form action="updateDoctor.php" method="post" enctype="multipart/form-data">
+                    <form action="updateDoctor.php?dId=$dId" method="post" enctype="multipart/form-data">
                         <div class="row my-4">
                             <input type="hidden" name="dId" value="<?= $_SESSION['dId'] ?>">
                             <div class="col">
@@ -260,7 +260,7 @@ if(isset($_POST['dId'])){
                             </div>
                             <div class="col">
                                 <label>Doctor Mobile Number</label>
-                                <?= (isset($_GET['errMobile']) && $_GET['errMobile'] == "Mobile_number_is_already_existed") ? '<input type="tel" name="dMobile" class="form-control is-invalid" required>' : '<input type="tel" name="dMobile" class="form-control" value=' . $_SESSION['dMobile'] . ' required>'; ?>
+                                <?= (isset($_GET['errMobile']) && $_GET['errMobile'] == "Mobile_number_is_already_existed") ? '<input type="tel" name="dMobile" class="form-control is-invalid" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" required>' : '<input type="tel" name="dMobile" class="form-control" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" value=' . $_SESSION['dMobile'] . ' required>'; ?>
                                 <?= (isset($_GET['errMobile']) && $_GET['errMobile'] == "Mobile_number_is_already_existed") ? '<small class="text-danger">Mobile number is already existed!</small>' : ''; ?>
                             </div>
                         </div>
@@ -307,13 +307,13 @@ if(isset($_POST['dId'])){
                         $allowed = array('jpg', 'jpeg', 'png');
 
                         if (!in_array(strtolower($extF[1]), $allowed)) {
-                            header("location:updateDoctor.php?errorImgExt=image_is_not_valid");
+                            header("location:updateDoctor.php?dId=$dId&errorImgExt=image_is_not_valid");
                             exit(0);
                         }
 
                         // Check if the image size is valid
                         if ($profileImg['size'] > 5000000) {
-                            header("location:updateDoctor.php?errImgSize=Image_invalid_size");
+                            header("location:updateDoctor.php?dId=$dId&errImgSize=Image_invalid_size");
                             exit(0);
                         }
 
@@ -341,7 +341,7 @@ if(isset($_POST['dId'])){
                         $stmt->bindParam(":id", $dId, PDO::PARAM_INT);
                         $stmt->execute();
 
-                        header("location:doctor.php?succUpdateImg=Successfully_update_the_img");
+                        header("location:doctor.php?dId=$dId&succUpdateImg=Successfully_update_the_img");
                         exit(0);
                     }
 
@@ -372,7 +372,7 @@ if(isset($_POST['dId'])){
 
                             // check if the password and confirm password match
                             if ($newPass !== $confirmNewPass) {
-                                header("location:updateDoctor.php?errConfirmPass=password_did_not_match");
+                                header("location:updateDoctor.php?dId=$dId&errConfirmPass=password_did_not_match");
                                 exit(0);
                             } else {
 
@@ -383,18 +383,18 @@ if(isset($_POST['dId'])){
                                 $stmt->bindParam(":id", $dId, PDO::PARAM_INT);
                                 $stmt->execute();
 
-                                header("location:doctor.php?succUpdatePass=Successfully_updated_password");
+                                header("location:doctor.php?dId=$dId&succUpdatePass=Successfully_updated_password");
                                 exit(0);
                             }
                         } else {
-                            header("location:updateDoctor.php?errCurrPass=incorrect_current_password");
+                            header("location:updateDoctor.php?dId=$dId&errCurrPass=incorrect_current_password");
                             exit(0);
                         }
                     }
 
                     ?>
 
-                    <form action="updateDoctor.php" method="post">
+                    <form action="updateDoctor.php?dId=$dId" method="post">
                         <div>
                             <label for="exampleInputEmail1">Current Password</label>
                             <?= (isset($_GET['errCurrPass']) && $_GET['errCurrPass'] == "incorrect_current_password") ? '<input type="password" name="currentPass" minlength="6" class="form-control is-invalid" required>' : '<input type="password" name="currentPass" minlength="6" class="form-control" required>'; ?>
@@ -424,7 +424,7 @@ if(isset($_POST['dId'])){
                         <h1 class="Display-4" id="primaryColor">Doctor Profile</h1>
                     </div>
 
-                    <form action="updateDoctor.php" method="post" enctype="multipart/form-data">
+                    <form action="updateDoctor.php?dId=$dId" method="post" enctype="multipart/form-data">
                         <label>Doctor Profile Img</label>
                         <input type="hidden" name="dId" value="<?= $_SESSION['dId'] ?>">
                         <?= (isset($_GET['errorImgExt']) && $_GET['errorImgExt'] == "image_is_not_valid") ? '<input type="file" name="doctorProfileImg" class="form-control is-invalid" required>' : '<input type="file" name="doctorProfileImg" class="form-control" required>'; ?>

@@ -204,7 +204,7 @@ if (!isset($_SESSION['adId'])) {
                                     <td>
                                         <div class="row">
                                             <div class="col">
-                                                <form action="updateNurse.php" method="post">
+                                                <form action="updateNurse.php" method="get">
                                                     <input type="hidden" name="id" value="<?= $nurse['nId'] ?>">
                                                     <input type="submit" value="Update" class="btn btn-secondary" name="updateNurseBtn">
                                                 </form>

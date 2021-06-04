@@ -40,6 +40,6 @@ $stmt->execute();
 
 $fourtyOneUp = $stmt->rowCount();
 
-$data = (object) array($tenBelow, $elevToTwen, $twentyOneToFourty, $fourtyOneUp);
+$data = ["tenBelow" => $tenBelow, "elevToTwen" => $elevToTwen, "twentyOneToFourty" => $twentyOneToFourty, "fourtyOneUp" => $fourtyOneUp];
 
-print_r($data);
+echo json_encode($data);

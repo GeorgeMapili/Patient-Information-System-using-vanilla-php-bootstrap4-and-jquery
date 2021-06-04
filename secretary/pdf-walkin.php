@@ -32,6 +32,8 @@ if (isset($_POST['walkInDischargeReceipt'])) {
 
     $pdf->SetFont('Arial', 'B', 14);
 
+    $pdf->Image('./../img/sumc.png', 10, 6, 20);
+    $pdf->Ln(20);
     $pdf->Cell(190, 5, 'SUMC Doctors Clinic', 0, 1);
 
     $pdf->SetFont('Arial', '', 12);

@@ -2,7 +2,7 @@
 session_start();
 require_once '../connect.php';
 
-if (isset($_SESSION['dId'])) {
+if (isset($_SESSION['ddId'])) {
     header("location:dashboard.php");
     exit(0);
 }
@@ -38,15 +38,15 @@ if (isset($_SESSION['dId'])) {
         while ($password = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
             if (password_verify($passwords, $password['dPassword'])) {
-                $_SESSION['dId'] = $password['dId'];
-                $_SESSION['dName'] = $password['dName'];
-                $_SESSION['dEmail'] = $password['dEmail'];
-                $_SESSION['dAddress'] = $password['dAddress'];
-                $_SESSION['dMobile'] = $password['dMobile'];
-                $_SESSION['dSpecialization'] = $password['dSpecialization'];
-                $_SESSION['dSpecializationInfo'] = $password['dSpecializationInfo'];
-                $_SESSION['dProfileImg'] = $password['dProfileImg'];
-                $_SESSION['dFee'] = $password['dFee'];
+                $_SESSION['ddId'] = $password['dId'];
+                $_SESSION['ddName'] = $password['dName'];
+                $_SESSION['ddEmail'] = $password['dEmail'];
+                $_SESSION['ddAddress'] = $password['dAddress'];
+                $_SESSION['ddMobile'] = $password['dMobile'];
+                $_SESSION['ddSpecialization'] = $password['dSpecialization'];
+                $_SESSION['ddSpecializationInfo'] = $password['dSpecializationInfo'];
+                $_SESSION['ddProfileImg'] = $password['dProfileImg'];
+                $_SESSION['ddFee'] = $password['dFee'];
                 $_SESSION['log_doctor_login'] = date("m/d/y h:iA", time());
 
                 $_SESSION['log_doctor_dashboard'] = null;

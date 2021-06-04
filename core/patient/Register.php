@@ -248,4 +248,7 @@ if (isset($_POST['register'])) {
     }
 
 
+}else{
+    header("location:../../register.php");
+    exit;
 }

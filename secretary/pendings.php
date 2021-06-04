@@ -2,6 +2,7 @@
 session_start();
 require_once '../connect.php';
 require_once '../vendor/autoload.php';
+require_once('../PHPMailer/PHPMailerAutoload.php');
 
 if (!isset($_SESSION['nId'])) {
     header("location:index.php");
@@ -131,6 +132,39 @@ $_SESSION['log_secretary_appointment'] = true;
                 $stmt->bindParam(":pid", $pId, PDO::PARAM_INT);
                 $stmt->execute();
 
+                $sql = "SELECT * FROM appointment WHERE aId = :aid AND pId = :pid";
+                $stmt = $con->prepare($sql);
+                $stmt->bindParam(":aid", $aId, PDO::PARAM_INT);
+                $stmt->bindParam(":pid", $pId, PDO::PARAM_INT);
+                $stmt->execute();
+
+                $patient = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                $emailTo = $patient['pEmail'];
+                $doctor_name = $patient['pDoctor'];
+                $time = $patient['aDate']. " at ". $patient['aTime'];
+                $secretary_name = $_SESSION['nName'];
+
+                $subject = "SUMC Appointment";
+                $body = "Greetings, Your appointment have been accepted by Secretary $secretary_name, for $doctor_name on $time.";
+
+                // PHP MAIL
+                $mail = new PHPMailer();
+                $mail->isSMTP();
+                $mail->SMTPDebug = 1; 
+                $mail->SMTPAuth = true;
+                $mail->SMTPSecure = 'ssl';
+                $mail->Host = 'smtp.gmail.com';
+                $mail->Port = '465';
+                $mail->isHTML();
+                $mail->Username = 'bibblethump69@gmail.com';
+                $mail->Password = "Thegamemaker1";
+                $mail->SetFrom('biblethump69@gmail.com');
+                $mail->Subject = $subject;
+                $mail->Body = $body;
+                $mail->AddAddress($emailTo);
+                $mail->Send();
+
                 $data['message'] = 'hello world';
                 $pusher->trigger('my-channel', 'my-event', $data);
                 header("location:pendings.php");
@@ -149,6 +183,39 @@ $_SESSION['log_secretary_appointment'] = true;
                 $stmt->bindParam(":aid", $aId, PDO::PARAM_INT);
                 $stmt->bindParam(":pid", $pId, PDO::PARAM_INT);
                 $stmt->execute();
+
+                $sql = "SELECT * FROM appointment WHERE aId = :aid AND pId = :pid";
+                $stmt = $con->prepare($sql);
+                $stmt->bindParam(":aid", $aId, PDO::PARAM_INT);
+                $stmt->bindParam(":pid", $pId, PDO::PARAM_INT);
+                $stmt->execute();
+
+                $patient = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                $emailTo = $patient['pEmail'];
+                $doctor_name = $patient['pDoctor'];
+                $time = $patient['aDate']. " at ". $patient['aTime'];
+                $secretary_name = $_SESSION['nName'];
+
+                $subject = "SUMC Appointment";
+                $body = "Greetings, We're sorry your appointment have been cancelled by Secretary $secretary_name, for $doctor_name on $time. Try again in another time";
+
+                // PHP MAIL
+                $mail = new PHPMailer();
+                $mail->isSMTP();
+                $mail->SMTPDebug = 1; 
+                $mail->SMTPAuth = true;
+                $mail->SMTPSecure = 'ssl';
+                $mail->Host = 'smtp.gmail.com';
+                $mail->Port = '465';
+                $mail->isHTML();
+                $mail->Username = 'bibblethump69@gmail.com';
+                $mail->Password = "Thegamemaker1";
+                $mail->SetFrom('biblethump69@gmail.com');
+                $mail->Subject = $subject;
+                $mail->Body = $body;
+                $mail->AddAddress($emailTo);
+                $mail->Send();
 
                 header("location:pendings.php");
                 $_SESSION['log_secretary_cancel'] = true;

@@ -3,7 +3,7 @@
 session_start();
 require_once '../connect.php';
 
-if (!isset($_SESSION['dId'])) {
+if (!isset($_SESSION['ddId'])) {
     header("location:index.php");
     exit(0);
 }
@@ -11,7 +11,7 @@ if (!isset($_SESSION['dId'])) {
 $discharge = 0;
 $sql = "SELECT * FROM walkinpatient WHERE walkInDoctor = :doctor AND walkInDischarged = :discharge";
 $stmt = $con->prepare($sql);
-$stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);
+$stmt->bindParam(":doctor", $_SESSION['ddName'], PDO::PARAM_STR);
 $stmt->bindParam(":discharge", $discharge, PDO::PARAM_INT);
 $stmt->execute();
 

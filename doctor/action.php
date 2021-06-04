@@ -16,7 +16,7 @@ if (isset($_POST['sortBy'])) {
             $status = "accepted";
             $sql = "SELECT * FROM appointment WHERE pDoctor = :doctor AND aStatus = :status ORDER BY aDate,aTime ASC";
             $stmt = $con->prepare($sql);
-            $stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);
+            $stmt->bindParam(":doctor", $_SESSION['ddName'], PDO::PARAM_STR);
             $stmt->bindParam(":status", $status, PDO::PARAM_STR);
             $stmt->execute();
 
@@ -46,7 +46,7 @@ if (isset($_POST['sortBy'])) {
                         <div class="row">
                             <div class="col">';
                 if (date("M d, Y") === date("M d, Y", strtotime($default['aDate']))) {
-                    $output .= '   <form action="incomingAppointment.php" method="post">
+                    $output .= '   <form action="incoming-appointment.php" method="post">
                                         <input type="hidden" name="aId" value=' . $default['aId'] . '>
                                         <input type="hidden" name="pId" value=' . $default['pId'] . '>
                                         <input type="submit" value="Done" class="btn btn-success" name="doneAppointment">
@@ -57,7 +57,7 @@ if (isset($_POST['sortBy'])) {
                 $output .= '
                             </div>
                             <div class="col">
-                                <form action="incomingAppointment.php" method="post">
+                                <form action="incoming-appointment.php" method="post">
                                     <input type="hidden" name="aId" value=' . $default['aId'] . '>
                                     <input type="hidden" name="pId" value=' . $default['pId'] . '>
                                     <input type="submit" value="Cancel" class="btn btn-danger" name="cancelAppointment" onclick="return confirm(\'Are you sure to delete ?\')">
@@ -77,7 +77,7 @@ if (isset($_POST['sortBy'])) {
             $status = "accepted";
             $sql = "SELECT * FROM appointment WHERE pDoctor = :doctor AND aStatus = :status AND aDate = DATE(NOW()) ORDER BY aTime ASC";
             $stmt = $con->prepare($sql);
-            $stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);
+            $stmt->bindParam(":doctor", $_SESSION['ddName'], PDO::PARAM_STR);
             $stmt->bindParam(":status", $status, PDO::PARAM_STR);
             $stmt->execute();
 
@@ -107,7 +107,7 @@ if (isset($_POST['sortBy'])) {
                         <div class="row">
                             <div class="col">';
                 if (date("M d, Y") === date("M d, Y", strtotime($today['aDate']))) {
-                    $output .= '   <form action="incomingAppointment.php" method="post">
+                    $output .= '   <form action="incoming-appointment.php" method="post">
                                         <input type="hidden" name="aId" value=' . $today['aId'] . '>
                                         <input type="hidden" name="pId" value=' . $today['pId'] . '>
                                         <input type="submit" value="Done" class="btn btn-success" name="doneAppointment">
@@ -118,7 +118,7 @@ if (isset($_POST['sortBy'])) {
                 $output .= '
                             </div>
                             <div class="col">
-                                <form action="incomingAppointment.php" method="post">
+                                <form action="incoming-appointment.php" method="post">
                                     <input type="hidden" name="aId" value=' . $today['aId'] . '>
                                     <input type="hidden" name="pId" value=' . $today['pId'] . '>
                                     <input type="submit" value="Cancel" class="btn btn-danger" name="cancelAppointment" onclick="return confirm(\'Are you sure to delete ?\')">
@@ -138,7 +138,7 @@ if (isset($_POST['sortBy'])) {
             $status = "accepted";
             $sql = "SELECT * FROM appointment WHERE pDoctor = :doctor AND aStatus = :status AND aDate = curdate() + interval 1 day ORDER BY aTime ASC";
             $stmt = $con->prepare($sql);
-            $stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);
+            $stmt->bindParam(":doctor", $_SESSION['ddName'], PDO::PARAM_STR);
             $stmt->bindParam(':status', $status, PDO::PARAM_STR);
             $stmt->execute();
 
@@ -168,7 +168,7 @@ if (isset($_POST['sortBy'])) {
                         <div class="row">
                             <div class="col">';
                 if (date("M d, Y") === date("M d, Y", strtotime($tomorrow['aDate']))) {
-                    $output .= '   <form action="incomingAppointment.php" method="post">
+                    $output .= '   <form action="incoming-appointment.php" method="post">
                                         <input type="hidden" name="aId" value=' . $tomorrow['aId'] . '>
                                         <input type="hidden" name="pId" value=' . $tomorrow['pId'] . '>
                                         <input type="submit" value="Done" class="btn btn-success" name="doneAppointment">
@@ -179,7 +179,7 @@ if (isset($_POST['sortBy'])) {
                 $output .= '
                             </div>
                             <div class="col">
-                                <form action="incomingAppointment.php" method="post">
+                                <form action="incoming-appointment.php" method="post">
                                     <input type="hidden" name="aId" value=' . $tomorrow['aId'] . '>
                                     <input type="hidden" name="pId" value=' . $tomorrow['pId'] . '>
                                     <input type="submit" value="Cancel" class="btn btn-danger" name="cancelAppointment" onclick="return confirm(\'Are you sure to delete ?\')">
@@ -199,7 +199,7 @@ if (isset($_POST['sortBy'])) {
             $status = "accepted";
             $sql = "SELECT * FROM appointment WHERE pDoctor = :doctor AND aStatus = :status AND YEARWEEK(aDate) = YEARWEEK(NOW()) ORDER BY aDate,aTime ASC";
             $stmt = $con->prepare($sql);
-            $stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);
+            $stmt->bindParam(":doctor", $_SESSION['ddName'], PDO::PARAM_STR);
             $stmt->bindParam(":status", $status, PDO::PARAM_STR);
             $stmt->execute();
 
@@ -229,7 +229,7 @@ if (isset($_POST['sortBy'])) {
                         <div class="row">
                             <div class="col">';
                 if (date("M d, Y") === date("M d, Y", strtotime($thisWeek['aDate']))) {
-                    $output .= '   <form action="incomingAppointment.php" method="post">
+                    $output .= '   <form action="incoming-appointment.php" method="post">
                                         <input type="hidden" name="aId" value=' . $thisWeek['aId'] . '>
                                         <input type="hidden" name="pId" value=' . $thisWeek['pId'] . '>
                                         <input type="submit" value="Done" class="btn btn-success" name="doneAppointment">
@@ -240,7 +240,7 @@ if (isset($_POST['sortBy'])) {
                 $output .= '
                             </div>
                             <div class="col">
-                                <form action="incomingAppointment.php" method="post">
+                                <form action="incoming-appointment.php" method="post">
                                     <input type="hidden" name="aId" value=' . $thisWeek['aId'] . '>
                                     <input type="hidden" name="pId" value=' . $thisWeek['pId'] . '>
                                     <input type="submit" value="Cancel" class="btn btn-danger" name="cancelAppointment" onclick="return confirm(\'Are you sure to delete ?\')">
@@ -260,7 +260,7 @@ if (isset($_POST['sortBy'])) {
             $status = "accepted";
             $sql = "SELECT * FROM appointment WHERE pDoctor = :doctor AND aStatus = :status AND YEARWEEK(aDate) = YEARWEEK(NOW() + INTERVAL 7 DAY) ORDER BY aDate, aTime ASC";
             $stmt = $con->prepare($sql);
-            $stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);
+            $stmt->bindParam(":doctor", $_SESSION['ddName'], PDO::PARAM_STR);
             $stmt->bindParam(":status", $status, PDO::PARAM_STR);
             $stmt->execute();
 
@@ -290,7 +290,7 @@ if (isset($_POST['sortBy'])) {
                         <div class="row">
                             <div class="col">';
                 if (date("M d, Y") === date("M d, Y", strtotime($nextWeek['aDate']))) {
-                    $output .= '   <form action="incomingAppointment.php" method="post">
+                    $output .= '   <form action="incoming-appointment.php" method="post">
                                         <input type="hidden" name="aId" value=' . $nextWeek['aId'] . '>
                                         <input type="hidden" name="pId" value=' . $nextWeek['pId'] . '>
                                         <input type="submit" value="Done" class="btn btn-success" name="doneAppointment">
@@ -301,7 +301,7 @@ if (isset($_POST['sortBy'])) {
                 $output .= '
                             </div>
                             <div class="col">
-                                <form action="incomingAppointment.php" method="post">
+                                <form action="incoming-appointment.php" method="post">
                                     <input type="hidden" name="aId" value=' . $nextWeek['aId'] . '>
                                     <input type="hidden" name="pId" value=' . $nextWeek['pId'] . '>
                                     <input type="submit" value="Cancel" class="btn btn-danger" name="cancelAppointment" onclick="return confirm(\'Are you sure to delete ?\')">
@@ -323,7 +323,7 @@ if (isset($_POST['sortBy'])) {
 
             $sql = "SELECT * FROM appointment WHERE pDoctor = :doctor AND aStatus = :status AND EXTRACT(MONTH FROM aDate) = :months ORDER BY aDate, aTime ASC";
             $stmt = $con->prepare($sql);
-            $stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);
+            $stmt->bindParam(":doctor", $_SESSION['ddName'], PDO::PARAM_STR);
             $stmt->bindParam(":status", $status, PDO::PARAM_STR);
             $stmt->bindParam(":months", $month, PDO::PARAM_INT);
             $stmt->execute();
@@ -354,7 +354,7 @@ if (isset($_POST['sortBy'])) {
                         <div class="row">
                             <div class="col">';
                 if (date("M d, Y") === date("M d, Y", strtotime($thisMonth['aDate']))) {
-                    $output .= '   <form action="incomingAppointment.php" method="post">
+                    $output .= '   <form action="incoming-appointment.php" method="post">
                                         <input type="hidden" name="aId" value=' . $thisMonth['aId'] . '>
                                         <input type="hidden" name="pId" value=' . $thisMonth['pId'] . '>
                                         <input type="submit" value="Done" class="btn btn-success" name="doneAppointment">
@@ -365,7 +365,7 @@ if (isset($_POST['sortBy'])) {
                 $output .= '
                             </div>
                             <div class="col">
-                                <form action="incomingAppointment.php" method="post">
+                                <form action="incoming-appointment.php" method="post">
                                     <input type="hidden" name="aId" value=' . $thisMonth['aId'] . '>
                                     <input type="hidden" name="pId" value=' . $thisMonth['pId'] . '>
                                     <input type="submit" value="Cancel" class="btn btn-danger" name="cancelAppointment" onclick="return confirm(\'Are you sure to delete ?\')">
@@ -432,7 +432,7 @@ if (isset($_POST['patientQuery'])) {
 
             if (empty($patientAppointment['pPrescription'])) {
                 $patientOutput .= '
-                <form action="addPrescription.php" method="post">
+                <form action="add-prescription.php" method="post">
                     <input type="hidden" name="aid" value=' . $patientAppointment['aId'] . '>
                     <input type="hidden" name="pid" value=' . $patientAppointment['pId'] . '>
                     <input type="submit" value="Add Prescription" class="btn btn-info" name="addPrescriptionBtn">
@@ -440,7 +440,7 @@ if (isset($_POST['patientQuery'])) {
                 ';
             } else {
                 $patientOutput .= '
-                <form action="editPrescription.php" method="post">
+                <form action="update-prescription.php" method="post">
                     <input type="hidden" name="aid" value=' . $patientAppointment['aId'] . '>
                     <input type="hidden" name="pid" value=' . $patientAppointment['pId'] . '>
                     <input type="submit" value="Update Prescription" class="btn btn-secondary" name="updatePrescriptionBtn">
@@ -451,14 +451,14 @@ if (isset($_POST['patientQuery'])) {
             $patientOutput .= '
             </td>
                 <td>
-                    <form action="updateDisease.php" method="post">
+                    <form action="update-disease.php" method="post">
                         <input type="hidden" name="aId" value=' . $patientAppointment['aId'] . '>
                         <input type="hidden" name="pId" value=' . $patientAppointment['pId'] . '>
                         <input type="submit" value="Update Disease" class="btn btn-info" name="updateDisease">
                     </form>
                 </td>
                 <td>
-                    <form action="patientMedicalHistory.php" method="post">
+                    <form action="patient-medicalhistory.php" method="post">
                         <input type="hidden" name="aId" value=' . $patientAppointment['aId'] . '>
                         <input type="hidden" name="pId" value=' . $patientAppointment['pId'] . '>
                         <input type="submit" value="Watch appointment history" class="btn btn-primary" name="watchHistory">
@@ -519,12 +519,12 @@ if (isset($_POST['walkInQuery'])) {
                     <td>' . $walkIn['walkInDisease'] . '</td>
                     <td>';
             if (empty($walkIn['walkInPrescription'])) {
-                $walkInOutput .= '    <form action="addPrescriptionWalkIn.php" method="post">
+                $walkInOutput .= '    <form action="prescription-walkin.php" method="post">
                                         <input type="hidden" name="id" value=' . $walkIn['walkInId'] . '>
                                         <input type="submit" value="Add Prescription" class="btn btn-primary" name="addPrescriptionWalkIn">
                                     </form>';
             } else {
-                $walkInOutput .= '    <form action="updatePrescriptionWalkIn.php" method="post">
+                $walkInOutput .= '    <form action="update-prescriptionwalkin.php" method="post">
                                         <input type="hidden" name="id" value=' . $walkIn['walkInId'] . '>
                                         <input type="submit" value="Update Prescription" class="btn btn-secondary" name="updatePrescriptionWalkIn">
                                     </form>';
@@ -532,13 +532,13 @@ if (isset($_POST['walkInQuery'])) {
             $walkInOutput .= '
                             </td>
                             <td>
-                            <form action="updateDiseaseWalkIn.php" method="post">
+                            <form action="update-diseasewalkin.php" method="post">
                                 <input type="hidden" name="id" value=' . $walkIn['walkInId'] . '>
                                 <input type="submit" value="Update Disease" class="btn btn-primary" name="updateDiseaseWalkIn">
                             </form>
                         </td>
                         <td>
-                            <form action="watchMedicalInfo.php" method="post">
+                            <form action="medical-info.php" method="post">
                                 <input type="hidden" name="id" value=' . $walkIn['walkInId'] . '>
                                 <input type="submit" value="Watch Medical Information" class="btn btn-primary" name="watchMedInfo">
                             </form>
@@ -598,7 +598,7 @@ if (isset($_POST['labPatientName'])) {
                     <td>' . $labPatientAppointment['aReason'] . '</td>
                     <td>';
                 if(empty($labPatientAppointment['labTest'])){
-                $labAppointmentInput .= '    <form action="addTestLab.php" method="post">
+                $labAppointmentInput .= '    <form action="add-testlab-appointment.php" method="post">
                                             <input type="hidden" name="aId" value=' . $labPatientAppointment['aId'] . '>
                                             <input type="hidden" name="pId" value=' . $labPatientAppointment['pId'] . '>
                                             <input type="submit" value="Add Test" class="btn btn-primary" name="addTestLab">
@@ -606,7 +606,7 @@ if (isset($_POST['labPatientName'])) {
                                         </td>';
                 } else {
                     $labAppointmentInput .= '
-                                        <form action="updateTestLab.php" method="post">
+                                        <form action="update-testlab-appointment.php" method="post">
                                             <input type="hidden" name="aId" value=' . $labPatientAppointment['aId'] . '>
                                             <input type="hidden" name="pId" value=' . $labPatientAppointment['pId'] . '>
                                                 <input type="submit" value="Update Test" class="btn btn-secondary" name="updateTestLab">
@@ -626,7 +626,7 @@ if (isset($_POST['labPatientName'])) {
                         if(empty($labPatientAppointment['labResult'])){
 
                             $labAppointmentInput .= '
-                            <form action="addResultLab.php" method="post">
+                            <form action="add-result-appointment.php" method="post">
                                 <input type="hidden" name="aId" value=' . $labPatientAppointment['aId'] . '>
                                 <input type="hidden" name="pId" value=' . $labPatientAppointment['pId'] . '>
                                 <input type="submit" value="Add Result" class="btn btn-primary" name="addResultLab">
@@ -636,7 +636,7 @@ if (isset($_POST['labPatientName'])) {
                         }else{
 
                             $labAppointmentInput .= '
-                            <form action="updateResultLab.php" method="post">
+                            <form action="update-result-appointment.php" method="post">
                                 <input type="hidden" name="aId" value=' . $labPatientAppointment['aId'] . '>
                                 <input type="hidden" name="pId" value=' . $labPatientAppointment['pId'] . '>
                                 <input type="submit" value="Update Result" class="btn btn-secondary" name="updateResultLab">
@@ -693,14 +693,14 @@ if (isset($_POST['labWalkin'])) {
                     <td>' . $labWalkIn['walkInDisease'] . '</td>
                     <td>';
                 if(empty($labWalkIn['labTest'])){
-                $labWalkInInput .= '    <form action="addTestLabWalkin.php" method="post">
+                $labWalkInInput .= '    <form action="add-testlab-walkin.php" method="post">
                                             <input type="hidden" name="walkInId" value=' . $labWalkIn['walkInId'] . '>
                                             <input type="submit" value="Add Test" class="btn btn-primary" name="addTestLab">
                                         </form>
                                         </td>';
                 } else {
                     $labWalkInInput .= '
-                                        <form action="updateTestLabWalkin.php" method="post">
+                                        <form action="update-testlab-walkin.php" method="post">
                                             <input type="hidden" name="walkInId" value=' . $labWalkIn['walkInId'] . '>
                                                 <input type="submit" value="Update Test" class="btn btn-secondary" name="updateTestLab">
                                         </form>
@@ -719,7 +719,7 @@ if (isset($_POST['labWalkin'])) {
                         if(empty($labWalkIn['labResult'])){
 
                             $labWalkInInput .= '
-                            <form action="addResultLabWalkin.php" method="post">
+                            <form action="add-result-walkin.php" method="post">
                                 <input type="hidden" name="walkInId" value=' . $labWalkIn['walkInId'] . '>
                                 <input type="submit" value="Add Result" class="btn btn-primary" name="addResultLab">
                             </form>
@@ -728,7 +728,7 @@ if (isset($_POST['labWalkin'])) {
                         }else{
 
                             $labWalkInInput .= '
-                            <form action="updateResultLabWalkin.php" method="post">
+                            <form action="update-result-walkin.php" method="post">
                                 <input type="hidden" name="walkInId" value=' . $labWalkIn['walkInId'] . '>
                                 <input type="submit" value="Update Result" class="btn btn-secondary" name="updateResultLab">
                             </form>

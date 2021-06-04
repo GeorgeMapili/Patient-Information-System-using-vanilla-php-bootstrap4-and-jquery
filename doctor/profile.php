@@ -3,7 +3,7 @@ ob_start();
 session_start();
 require_once '../connect.php';
 
-if (!isset($_SESSION['dId'])) {
+if (!isset($_SESSION['ddId'])) {
     header("location:index.php");
     exit(0);
 }
@@ -48,13 +48,13 @@ $_SESSION['log_doctor_information'] = true;
                     $discharge = 0;
                     $sql = "SELECT * FROM walkinpatient WHERE walkInDoctor = :doctor AND walkInDischarged = :discharge";
                     $stmt = $con->prepare($sql);
-                    $stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);
+                    $stmt->bindParam(":doctor", $_SESSION['ddName'], PDO::PARAM_STR);
                     $stmt->bindParam(":discharge", $discharge, PDO::PARAM_INT);
                     $stmt->execute();
                     $walkinCount = $stmt->rowCount();
                     ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="walkInPatient.php">Walk in Patient&nbsp;<?= ($walkinCount > 0) ? '<span id="walkin-count" class="badge bg-danger">' . $walkinCount . '</span>' : '<span id="walkin-count" class="badge bg-danger"></span>'; ?></a>
+                        <a class="nav-link" href="walkinpatient.php">Walk in Patient&nbsp;<?= ($walkinCount > 0) ? '<span id="walkin-count" class="badge bg-danger">' . $walkinCount . '</span>' : '<span id="walkin-count" class="badge bg-danger"></span>'; ?></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="patient.php">Patient Appointment</a>
@@ -63,22 +63,22 @@ $_SESSION['log_doctor_information'] = true;
                     $status1 = "accepted";
                     $sql = "SELECT * FROM appointment WHERE pDoctor = :doctor AND aStatus = :status1";
                     $stmt = $con->prepare($sql);
-                    $stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);
+                    $stmt->bindParam(":doctor", $_SESSION['ddName'], PDO::PARAM_STR);
                     $stmt->bindParam(":status1", $status1, PDO::PARAM_STR);
                     $stmt->execute();
                     $upcomingAppointmentCount = $stmt->rowCount();
                     ?>
                     <div class="btn-group dropbottom">
-                        <a class="nav-link" href="incomingAppointment.php">Upcoming&nbsp;<?= ($upcomingAppointmentCount > 0) ? '<span id="upcoming-count" class="badge bg-danger">' . $upcomingAppointmentCount . '</span>' : '<span id="upcoming-count" class="badge bg-danger"></span>'; ?></a>
+                        <a class="nav-link" href="incoming-appointment.php">Upcoming&nbsp;<?= ($upcomingAppointmentCount > 0) ? '<span id="upcoming-count" class="badge bg-danger">' . $upcomingAppointmentCount . '</span>' : '<span id="upcoming-count" class="badge bg-danger"></span>'; ?></a>
                         <button type="button" class="btn btn-dark dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="sr-only">Toggle Dropright</span>
                         </button>
                         <div class="dropdown-menu bg-dark text-light text-center">
                             <li class="nav-item">
-                                <a class="nav-link" href="cancelledAppointment.php">Cancelled</a>
+                                <a class="nav-link" href="cancelled-appointment.php">Cancelled</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="doneAppointment.php">Finished</a>
+                                <a class="nav-link" href="finished-appointment.php">Finished</a>
                             </li>
                         </div>
                     </div>
@@ -87,9 +87,9 @@ $_SESSION['log_doctor_information'] = true;
                             Laboratory
                         </span>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="labPatientAppointment.php">Patient Appointment</a>
+                            <a class="dropdown-item" href="lab-patient-appointment.php">Patient Appointment</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="labPatientWalkin.php">Walk in Patient</a>
+                            <a class="dropdown-item" href="lab-patient-walkin.php">Walk in Patient</a>
                         </div>
                     </div>
                 </ul>
@@ -99,14 +99,14 @@ $_SESSION['log_doctor_information'] = true;
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                 </form> -->
                 <ul class="navbar-nav ml-auto">
-                    <img src="../upload/doc_profile_img/<?= $_SESSION['dProfileImg'] ?>" width="50" style="border:1px solid #fff; border-radius: 50%;" alt="">
+                    <img src="../upload/doc_profile_img/<?= $_SESSION['ddProfileImg'] ?>" width="50" style="border:1px solid #fff; border-radius: 50%;" alt="">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <?= $_SESSION['dName'] ?>
+                            <?= $_SESSION['ddName'] ?>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item disabled" href=""><?= $_SESSION['dEmail'] ?></a>
-                            <a class="dropdown-item" href="doctorProfile.php">My account</a>
+                            <a class="dropdown-item disabled" href=""><?= $_SESSION['ddEmail'] ?></a>
+                            <a class="dropdown-item" href="profile.php">My account</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="logout.php">Logout</a>
                         </div>
@@ -141,8 +141,8 @@ $_SESSION['log_doctor_information'] = true;
                 $specializationInfo = trim(htmlspecialchars($_POST['specializationInfo']));
 
                 // check if nothing changed
-                if ($dName == $_SESSION['dName'] && $dEmail == $_SESSION['dEmail'] && $dAddress == $_SESSION['dAddress'] && $dMobile == $_SESSION['dMobile'] && $dSpecialization == $_SESSION['dSpecialization'] && $dFee == $_SESSION['dFee'] && $specializationInfo == $_SESSION['dSpecializationInfo']) {
-                    header("location:doctorProfile.php?errUpdate=Nothing_to_update");
+                if ($dName == $_SESSION['ddName'] && $dEmail == $_SESSION['ddEmail'] && $dAddress == $_SESSION['ddAddress'] && $dMobile == $_SESSION['ddMobile'] && $dSpecialization == $_SESSION['ddSpecialization'] && $dFee == $_SESSION['ddFee'] && $specializationInfo == $_SESSION['ddSpecializationInfo']) {
+                    header("location:profile.php?errUpdate=Nothing_to_update");
                     ob_end_flush();
                     exit(0);
                 }
@@ -157,13 +157,13 @@ $_SESSION['log_doctor_information'] = true;
                 $nameCount = $stmt->rowCount();
 
                 if ($nameCount > 0) {
-                    header("location:doctorProfile.php?errNameUpdate=Doctor_name_is_already_taken");
+                    header("location:profile.php?errNameUpdate=Doctor_name_is_already_taken");
                     exit(0);
                 }
 
                 // check if the email is valid
                 if (!filter_var($dEmail, FILTER_VALIDATE_EMAIL)) {
-                    header("location:doctorProfile.php?errEmail=email_is_invalid");
+                    header("location:profile.php?errEmail=email_is_invalid");
                     exit(0);
                 }
 
@@ -177,7 +177,7 @@ $_SESSION['log_doctor_information'] = true;
                 $emailCount = $stmt->rowCount();
 
                 if ($emailCount > 0) {
-                    header("location:doctorProfile.php?errEmail1=Email_is_already_existed");
+                    header("location:profile.php?errEmail1=Email_is_already_existed");
                     exit(0);
                 }
 
@@ -191,7 +191,7 @@ $_SESSION['log_doctor_information'] = true;
                 $mobileCount = $stmt->rowCount();
 
                 if ($mobileCount > 0) {
-                    header("location:doctorProfile.php?errMobile=Mobile_number_is_already_existed");
+                    header("location:profile.php?errMobile=Mobile_number_is_already_existed");
                     exit(0);
                 }
 
@@ -207,31 +207,31 @@ $_SESSION['log_doctor_information'] = true;
                 $stmt->bindParam(":id", $dId, PDO::PARAM_INT);
                 $stmt->execute();
 
-                $_SESSION['dName'] = $dName;
-                $_SESSION['dEmail'] = $dEmail;
-                $_SESSION['dAddress'] = $dAddress;
-                $_SESSION['dMobile'] = $dMobile;
-                $_SESSION['dSpecialization'] = $dSpecialization;
-                $_SESSION['dSpecializationInfo'] = $specializationInfo;
-                $_SESSION['dFee'] = $dFee;
+                $_SESSION['ddName'] = $dName;
+                $_SESSION['ddEmail'] = $dEmail;
+                $_SESSION['ddAddress'] = $dAddress;
+                $_SESSION['ddMobile'] = $dMobile;
+                $_SESSION['ddSpecialization'] = $dSpecialization;
+                $_SESSION['ddSpecializationInfo'] = $specializationInfo;
+                $_SESSION['ddFee'] = $dFee;
 
-                header("location:doctorProfile.php?updateSuccInfo=Successfully_updated_information");
+                header("location:profile.php?updateSuccInfo=Successfully_updated_information");
                 $_SESSION['log_doctor_update_info'] = true;
                 exit(0);
             }
             ?>
 
-            <form action="doctorProfile.php" method="post" enctype="multipart/form-data" class="shadow p-3 mb-5 bg-white rounded">
+            <form action="profile.php" method="post" enctype="multipart/form-data" class="shadow p-3 mb-5 bg-white rounded">
                 <div class="row my-4">
-                    <input type="hidden" name="dId" value="<?= $_SESSION['dId'] ?>">
+                    <input type="hidden" name="dId" value="<?= $_SESSION['ddId'] ?>">
                     <div class="col">
                         <label>Doctor Name</label>
-                        <?= (isset($_GET['errNameUpdate']) && $_GET['errNameUpdate'] == "Doctor_name_is_already_taken") ? '<input type="text" name="dName" class="form-control is-invalid" required>' : '<input type="text" name="dName" class="form-control" value="' . $_SESSION['dName'] . '" required>' ?>
+                        <?= (isset($_GET['errNameUpdate']) && $_GET['errNameUpdate'] == "Doctor_name_is_already_taken") ? '<input type="text" name="dName" class="form-control is-invalid" required>' : '<input type="text" name="dName" class="form-control" value="' . $_SESSION['ddName'] . '" required>' ?>
                         <?= (isset($_GET['errNameUpdate']) && $_GET['errNameUpdate'] == "Doctor_name_is_already_taken") ? '<small class="text-danger">Name is already taken!</small>' : ''; ?>
                     </div>
                     <div class="col">
                         <label>Doctor Email</label>
-                        <?= ((isset($_GET['errEmail']) && $_GET['errEmail'] == "email_is_invalid") || (isset($_GET['errEmail1']) && $_GET['errEmail1'] == "Email_is_already_existed")) ? '<input type="email" name="dEmail" class="form-control is-invalid" required>' : '<input type="email" name="dEmail" class="form-control" value=' . $_SESSION['dEmail'] . ' required>'; ?>
+                        <?= ((isset($_GET['errEmail']) && $_GET['errEmail'] == "email_is_invalid") || (isset($_GET['errEmail1']) && $_GET['errEmail1'] == "Email_is_already_existed")) ? '<input type="email" name="dEmail" class="form-control is-invalid" required>' : '<input type="email" name="dEmail" class="form-control" value=' . $_SESSION['ddEmail'] . ' required>'; ?>
                         <?= (isset($_GET['errEmail']) && $_GET['errEmail'] == "email_is_invalid") ? '<small class="text-danger">Email is invalid!</small>' : ''; ?>
                         <?= (isset($_GET['errEmail1']) && $_GET['errEmail1'] == "Email_is_already_existed") ? '<small class="text-danger">Email is already existed!</small>' : ''; ?>
                     </div>
@@ -239,11 +239,11 @@ $_SESSION['log_doctor_information'] = true;
                 <div class="row my-4">
                     <div class="col">
                         <label>Doctor Address</label>
-                        <input type="text" name="dAddress" class="form-control" value="<?= $_SESSION['dAddress'] ?>" required>
+                        <input type="text" name="dAddress" class="form-control" value="<?= $_SESSION['ddAddress'] ?>" required>
                     </div>
                     <div class="col">
                         <label>Doctor Mobile Number</label>
-                        <?= (isset($_GET['errMobile']) && $_GET['errMobile'] == "Mobile_number_is_already_existed") ? '<input type="tel" name="dMobile" class="form-control is-invalid" required>' : '<input type="tel" name="dMobile" class="form-control" value=' . $_SESSION['dMobile'] . ' required>'; ?>
+                        <?= (isset($_GET['errMobile']) && $_GET['errMobile'] == "Mobile_number_is_already_existed") ? '<input type="tel" name="dMobile" class="form-control is-invalid" required>' : '<input type="tel" name="dMobile" class="form-control" value=' . $_SESSION['ddMobile'] . ' required>'; ?>
                         <?= (isset($_GET['errMobile']) && $_GET['errMobile'] == "Mobile_number_is_already_existed") ? '<small class="text-danger">Mobile number is already existed!</small>' : ''; ?>
                     </div>
                 </div>
@@ -251,17 +251,17 @@ $_SESSION['log_doctor_information'] = true;
                 <div class="row my-4">
                     <div class="col">
                         <label>Doctor Specialization</label>
-                        <input type="text" name="dSpecialization" class="form-control" value="<?= $_SESSION['dSpecialization'] ?>" required>
+                        <input type="text" name="dSpecialization" class="form-control" value="<?= $_SESSION['ddSpecialization'] ?>" required>
                     </div>
                     <div class="col">
                         <label>Doctor Fee</label>
-                        <input type="text" name="dFee" class="form-control" value="<?= $_SESSION['dFee'] ?>" required>
+                        <input type="text" name="dFee" class="form-control" value="<?= $_SESSION['ddFee'] ?>" required>
                     </div>
                 </div>
 
                 <div class="my-4">
                     <label>Doctor Specialization Information</label>
-                    <textarea name="specializationInfo" class="form-control" id="" cols="30" rows="10" required><?= $_SESSION['dSpecializationInfo'] ?></textarea>
+                    <textarea name="specializationInfo" class="form-control" id="" cols="30" rows="10" required><?= $_SESSION['ddSpecializationInfo'] ?></textarea>
                 </div>
 
                 <div class="text-center my-3">
@@ -290,18 +290,18 @@ $_SESSION['log_doctor_information'] = true;
                 $allowed = array('jpg', 'jpeg', 'png');
 
                 if (!in_array(strtolower($extF[1]), $allowed)) {
-                    header("location:doctorProfile.php?errorImgExt=image_is_not_valid");
+                    header("location:profile.php?errorImgExt=image_is_not_valid");
                     exit(0);
                 }
 
                 // Check if the image size is valid
                 if ($profileImg['size'] > 5000000) {
-                    header("location:doctorProfile.php?errImgSize=Image_invalid_size");
+                    header("location:profile.php?errImgSize=Image_invalid_size");
                     exit(0);
                 }
 
                 // Current Profile Img
-                $currentProfile = $_SESSION['dProfileImg'];
+                $currentProfile = $_SESSION['ddProfileImg'];
 
                 // New Profile Img
                 $newProfile = $profileName;
@@ -316,7 +316,7 @@ $_SESSION['log_doctor_information'] = true;
                 move_uploaded_file($tmpname, $dest);
 
                 // New session Image
-                $_SESSION['dProfileImg'] = $newProfile;
+                $_SESSION['ddProfileImg'] = $newProfile;
 
                 $sql = "UPDATE doctor SET dProfileImg = :profile WHERE dId = :id";
                 $stmt = $con->prepare($sql);
@@ -324,7 +324,7 @@ $_SESSION['log_doctor_information'] = true;
                 $stmt->bindParam(":id", $dId, PDO::PARAM_INT);
                 $stmt->execute();
 
-                header("location:doctorProfile.php?succUpdateImg=Successfully_update_the_img");
+                header("location:profile.php?succUpdateImg=Successfully_update_the_img");
                 $_SESSION['log_doctor_update_img'] = true;
                 exit(0);
             }
@@ -360,7 +360,7 @@ $_SESSION['log_doctor_information'] = true;
 
                     // check if the password and confirm password match
                     if ($newPass !== $confirmNewPass) {
-                        header("location:doctorProfile.php?errConfirmPass=password_did_not_match");
+                        header("location:profile.php?errConfirmPass=password_did_not_match");
                         exit(0);
                     } else {
 
@@ -371,12 +371,12 @@ $_SESSION['log_doctor_information'] = true;
                         $stmt->bindParam(":id", $dId, PDO::PARAM_INT);
                         $stmt->execute();
 
-                        header("location:doctorProfile.php?succUpdatePass=Successfully_updated_password");
+                        header("location:profile.php?succUpdatePass=Successfully_updated_password");
                         $_SESSION['log_doctor_update_pass'] = true;
                         exit(0);
                     }
                 } else {
-                    header("location:doctorProfile.php?errCurrPass=incorrect_current_password");
+                    header("location:profile.php?errCurrPass=incorrect_current_password");
                     ob_end_flush();
                     exit(0);
                 }
@@ -384,7 +384,7 @@ $_SESSION['log_doctor_information'] = true;
 
             ?>
 
-            <form action="doctorProfile.php" method="post" class="shadow p-3 mb-5 bg-white rounded">
+            <form action="profile.php" method="post" class="shadow p-3 mb-5 bg-white rounded">
                 <div>
                     <label for="exampleInputEmail1">Current Password</label>
                     <?= (isset($_GET['errCurrPass']) && $_GET['errCurrPass'] == "incorrect_current_password") ? '<input type="password" name="currentPass" minlength="6" class="form-control is-invalid" required>' : '<input type="password" name="currentPass" minlength="6" class="form-control" required>'; ?>
@@ -403,14 +403,14 @@ $_SESSION['log_doctor_information'] = true;
                 </div>
 
                 <div class="text-center my-3">
-                    <input type="hidden" name="dId" value="<?= $_SESSION['dId'] ?>">
+                    <input type="hidden" name="dId" value="<?= $_SESSION['ddId'] ?>">
                     <input type="submit" class="btn btn-info" value="Update Password" name="updatePassword">
                 </div>
             </form>
 
             <hr>
 
-            <form action="doctorProfile.php" method="post" enctype="multipart/form-data" class="shadow p-3 mb-5 bg-white rounded">
+            <form action="profile.php" method="post" enctype="multipart/form-data" class="shadow p-3 mb-5 bg-white rounded">
             <div class="text-center">
                 <?= (isset($_GET['succUpdateImg']) && $_GET['succUpdateImg'] == "Successfully_update_the_img") ? '<span class="text-success">Successfully updated image!</span>' : ''; ?>
             </div>
@@ -421,10 +421,10 @@ $_SESSION['log_doctor_information'] = true;
 
             <!-- Image -->
             <div>
-                <img src="../upload/doc_profile_img/<?= $_SESSION['dProfileImg'] ?>" class="rounded-circle shadow p-3 mb-5 bg-white rounded" alt="profile" width="150" height="150">
+                <img src="../upload/doc_profile_img/<?= $_SESSION['ddProfileImg'] ?>" class="rounded-circle shadow p-3 mb-5 bg-white rounded" alt="profile" width="150" height="150">
             </div>
                 <label>Doctor Profile Img</label>
-                <input type="hidden" name="dId" value="<?= $_SESSION['dId'] ?>">
+                <input type="hidden" name="dId" value="<?= $_SESSION['ddId'] ?>">
                 <?= (isset($_GET['errorImgExt']) && $_GET['errorImgExt'] == "image_is_not_valid") ? '<input type="file" name="doctorProfileImg" class="form-control is-invalid" required>' : '<input type="file" name="doctorProfileImg" class="form-control" required>'; ?>
                 <?= (isset($_GET['errorImgExt']) && $_GET['errorImgExt'] == "image_is_not_valid") ? '<small class="text-danger">Image is not valid only(JPEG,JPG,PNG)!</small>' : '' ?>
                 <?= (isset($_GET['errImgSize']) && $_GET['errImgSize'] == "Image_invalid_size") ? '<small class="text-danger">Image is not valid only less size(5MB)!</small>' : '' ?>
@@ -447,7 +447,7 @@ $_SESSION['log_doctor_information'] = true;
     <!-- FOOTER -->
     <footer class="container">
         <p class="float-right"><a href="#" class="text-dark">Back to top</a></p>
-        <p class="text-white">&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php" id="primaryColor">Privacy Policy</a> &middot; <a href="aboutUs.php" id="primaryColor">About Us</a></p>
+        <p class="text-white">&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacy-policy.php" id="primaryColor">Privacy Policy</a> &middot; <a href="about.php" id="primaryColor">About Us</a></p>
     </footer>
 
 

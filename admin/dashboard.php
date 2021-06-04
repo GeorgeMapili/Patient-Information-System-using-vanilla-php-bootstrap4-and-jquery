@@ -294,7 +294,6 @@ if (!isset($_SESSION['adId'])) {
                 </div>
 
 
-
                 <form action="report.php" method="post" target="_blank">
                         <div class="d-flex justify-content-start">
                             <div class="w-25 m-2">Starting Month</div>
@@ -365,10 +364,13 @@ if (!isset($_SESSION['adId'])) {
                 url: "stats.php",
                 method: "GET",
                 success: function(datas) {
-                    var tenBelow = datas[29]
-                    var elevToTwen = datas[42]
-                    var twentyOneToFourty = datas[55]
-                    var fourtyOneUp = datas[68]
+                    
+                    datas = JSON.parse(datas);
+                    
+                    var tenBelow = datas.tenBelow;
+                    var elevToTwen = datas.elevToTwen;
+                    var twentyOneToFourty = datas.twentyOneToFourty;
+                    var fourtyOneUp = datas.fourtyOneUp;
 
                     var chartdata = {
                         labels: [
@@ -419,8 +421,11 @@ if (!isset($_SESSION['adId'])) {
                 url: "statsGender.php",
                 method: "GET",
                 success: function(datas) {
-                    var male = datas[29]
-                    var female = datas[42]
+                    
+                    datas = JSON.parse(datas);
+                    
+                    var male = datas.male;
+                    var female = datas.female;
 
                     var chartdata = {
                         labels: [
@@ -460,10 +465,13 @@ if (!isset($_SESSION['adId'])) {
                 url: "statsAgeAppointment.php",
                 method: "GET",
                 success: function(datas) {
-                    var tenBelow = datas[29]
-                    var elevToTwen = datas[42]
-                    var twentyOneToFourty = datas[55]
-                    var fourtyOneUp = datas[68]
+                    
+                    datas = JSON.parse(datas);
+                    
+                    var tenBelow = datas.tenBelow;
+                    var elevToTwen = datas.elevToTwen;
+                    var twentyOneToFourty = datas.twentyOneToFourty;
+                    var fourtyOneUp = datas.fourtyOneUp;
 
                     var chartdata = {
                         labels: [
@@ -514,8 +522,11 @@ if (!isset($_SESSION['adId'])) {
                 url: "statsGenderAppointment.php",
                 method: "GET",
                 success: function(datas) {
-                    var male = datas[29]
-                    var female = datas[42]
+                    
+                    datas = JSON.parse(datas);
+                    
+                    var male = datas.male;
+                    var female = datas.female;
 
                     var chartdata = {
                         labels: [

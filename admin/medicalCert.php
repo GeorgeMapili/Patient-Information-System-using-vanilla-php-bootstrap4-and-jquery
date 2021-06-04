@@ -29,6 +29,8 @@ if (isset($_POST['medicalCertBtn'])) {
 
     $medicalCertificate = $stmt->fetch(PDO::FETCH_ASSOC);
 
+    $pdf->Image('./../img/sumc.png', 10, 6, 20);
+    $pdf->Ln(20);
     $pdf->SetTitle($medicalCertificate['pName'] . " Medical Certificate");
     $pdf->SetFont('Arial', 'B', 14);
 

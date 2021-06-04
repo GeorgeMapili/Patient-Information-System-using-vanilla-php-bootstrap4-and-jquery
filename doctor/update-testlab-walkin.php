@@ -3,7 +3,7 @@ ob_start();
 session_start();
 require_once '../connect.php';
 
-if (!isset($_SESSION['dId'])) {
+if (!isset($_SESSION['ddId'])) {
     header("location:index.php");
     exit(0);
 }
@@ -45,13 +45,13 @@ if (!isset($_SESSION['dId'])) {
                     $discharge = 0;
                     $sql = "SELECT * FROM walkinpatient WHERE walkInDoctor = :doctor AND walkInDischarged = :discharge";
                     $stmt = $con->prepare($sql);
-                    $stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);
+                    $stmt->bindParam(":doctor", $_SESSION['ddName'], PDO::PARAM_STR);
                     $stmt->bindParam(":discharge", $discharge, PDO::PARAM_INT);
                     $stmt->execute();
                     $walkinCount = $stmt->rowCount();
                     ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="walkInPatient.php">Walk in Patient&nbsp;<?= ($walkinCount > 0) ? '<span id="walkin-count" class="badge bg-danger">' . $walkinCount . '</span>' : '<span id="walkin-count" class="badge bg-danger"></span>'; ?></a>
+                        <a class="nav-link" href="walkinpatient.php">Walk in Patient&nbsp;<?= ($walkinCount > 0) ? '<span id="walkin-count" class="badge bg-danger">' . $walkinCount . '</span>' : '<span id="walkin-count" class="badge bg-danger"></span>'; ?></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="patient.php">Patient Appointment</a>
@@ -60,22 +60,22 @@ if (!isset($_SESSION['dId'])) {
                     $status1 = "accepted";
                     $sql = "SELECT * FROM appointment WHERE pDoctor = :doctor AND aStatus = :status1";
                     $stmt = $con->prepare($sql);
-                    $stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);
+                    $stmt->bindParam(":doctor", $_SESSION['ddName'], PDO::PARAM_STR);
                     $stmt->bindParam(":status1", $status1, PDO::PARAM_STR);
                     $stmt->execute();
                     $upcomingAppointmentCount = $stmt->rowCount();
                     ?>
                     <div class="btn-group dropbottom">
-                        <a class="nav-link" href="incomingAppointment.php">Upcoming&nbsp;<?= ($upcomingAppointmentCount > 0) ? '<span id="upcoming-count" class="badge bg-danger">' . $upcomingAppointmentCount . '</span>' : '<span id="upcoming-count" class="badge bg-danger"></span>'; ?></a>
+                        <a class="nav-link" href="incoming-appointment.php">Upcoming&nbsp;<?= ($upcomingAppointmentCount > 0) ? '<span id="upcoming-count" class="badge bg-danger">' . $upcomingAppointmentCount . '</span>' : '<span id="upcoming-count" class="badge bg-danger"></span>'; ?></a>
                         <button type="button" class="btn btn-dark dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="sr-only">Toggle Dropright</span>
                         </button>
                         <div class="dropdown-menu bg-dark text-light text-center">
                             <li class="nav-item">
-                                <a class="nav-link" href="cancelledAppointment.php">Cancelled</a>
+                                <a class="nav-link" href="cancelled-appointment.php">Cancelled</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="doneAppointment.php">Finished</a>
+                                <a class="nav-link" href="finished-appointment.php">Finished</a>
                             </li>
                         </div>
                     </div>
@@ -84,9 +84,9 @@ if (!isset($_SESSION['dId'])) {
                             Laboratory
                         </span>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="labPatientAppointment.php">Patient Appointment</a>
+                            <a class="dropdown-item" href="lab-patient-appointment.php">Patient Appointment</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="labPatientWalkin.php">Walk in Patient</a>
+                            <a class="dropdown-item" href="lab-patient-walkin.php">Walk in Patient</a>
                         </div>
                     </div>
                 </ul>
@@ -96,14 +96,14 @@ if (!isset($_SESSION['dId'])) {
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                 </form> -->
                 <ul class="navbar-nav ml-auto">
-                    <img src="../upload/doc_profile_img/<?= $_SESSION['dProfileImg'] ?>" width="50" style="border:1px solid #fff; border-radius: 50%;" alt="">
+                    <img src="../upload/doc_profile_img/<?= $_SESSION['ddProfileImg'] ?>" width="50" style="border:1px solid #fff; border-radius: 50%;" alt="">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <?= $_SESSION['dName'] ?>
+                            <?= $_SESSION['ddName'] ?>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item disabled" href=""><?= $_SESSION['dEmail'] ?></a>
-                            <a class="dropdown-item" href="doctorProfile.php">My account</a>
+                            <a class="dropdown-item disabled" href=""><?= $_SESSION['ddEmail'] ?></a>
+                            <a class="dropdown-item" href="profile.php">My account</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="logout.php">Logout</a>
                         </div>
@@ -114,27 +114,52 @@ if (!isset($_SESSION['dId'])) {
     </header>
 
     <?php
-    if(isset($_POST['addResult'])){
+    if(isset($_POST['updateTest'])){
 
         $walkInId = $_POST['walkInId'];
-        $addResult = $_POST['addResultValue'];
+        $updateTestsConducted = $_POST['updateTestsConducted'];
 
-        $sql = "UPDATE walkinpatient set labResult = :labResult WHERE walkInId = :walkInId";
+        // Validate that u cant empty the test with having an a result
+        $sql = "SELECT * FROM walkinpatient WHERE walkInId = :walkInId";
         $stmt = $con->prepare($sql);
-        $stmt->bindParam(":labResult", $addResult, PDO::PARAM_STR);
         $stmt->bindParam(":walkInId", $walkInId, PDO::PARAM_INT);
-        
+        $stmt->execute();
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        $labResult = $result['labResult'];
+
+        if(empty($updateTestsConducted) && !empty($labResult)){
+            header("location:lab-patient-walkin.php?error=lab_result_is_not_empty");
+            exit;
+        }
+
+        $sql = "UPDATE walkinpatient set labTest = :labTest WHERE walkInId = :walkInId";
+        $stmt = $con->prepare($sql);
+        $stmt->bindParam(":labTest", $updateTestsConducted, PDO::PARAM_STR);
+        $stmt->bindParam(":walkInId", $walkInId, PDO::PARAM_INT);
+
         if($stmt->execute()){
-            header("location:labPatientWalkin.php?success=successfully_added_labresult");
-            $_SESSION['log_doctor_lab_walkin_add_result'] = true;
+            header("location:lab-patient-walkin.php?success=successfully_updated_labtest");
+            $_SESSION['log_doctor_lab_walkin_update_test'] = true;
             ob_end_flush();
             exit;
         }
 
     }
 
-    if(isset($_POST['addResultLab'])){
+    if(isset($_POST['updateTestLab'])){
         $walkInId = $_POST['walkInId'];
+
+        $sql = "SELECT * FROM walkinpatient WHERE walkInId = :walkInId";
+        $stmt = $con->prepare($sql);
+        $stmt->bindParam(":walkInId", $walkInId, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        $labTest = $result['labTest'];
+
     }else{
         header("location:dashboard.php");
         exit;
@@ -145,29 +170,29 @@ if (!isset($_SESSION['dId'])) {
     <main role="main">
         <div class="container-fluid">
 
-            <h3 class="display-4 mt-5 my-4" id="primaryColor">Add Laboratory Result</h3>
+            <h3 class="display-4 mt-5 my-4" id="primaryColor">Update Laboratory Test</h3>
 
             <div class="container">
-                <form action="addResultLabWalkin.php" method="POST">
+                <form action="update-testlab-walkin.php" method="POST">
                     <input type="hidden" name="walkInId" value="<?= $walkInId ?>">
                     <div class="form-group">
-                        <label for="addResult" class="text-white">Add Result</label>
-                        <input type="text" class="form-control" name="addResultValue" id="addResult" required>
+                        <label for="addTest" class="text-white">Update Test Conducted</label>
+                        <input type="text" class="form-control" name="updateTestsConducted" value="<?= $labTest ?>" id="addTest">
                     </div>
 
                     <div class="text-center">
-                        <input type="submit" name="addResult" value="Add Result" class="btn btn-primary">
+                        <input type="submit" name="updateTest" value="Update Test" class="btn btn-secondary">
                     </div>
                 </form>
             </div>
 
-        <div class="container">
+            <div class="container">
             <hr class="featurette-divider">
-        </div>
+            </div>
 
             <!-- FOOTER -->
             <footer class="container">
-                <p class="text-white">&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php" id="primaryColor">Privacy Policy</a> &middot; <a href="aboutUs.php" id="primaryColor">About Us</a></p>
+                <p class="text-white">&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacy-policy.php" id="primaryColor">Privacy Policy</a> &middot; <a href="about.php" id="primaryColor">About Us</a></p>
             </footer>
         </div>
     </main>

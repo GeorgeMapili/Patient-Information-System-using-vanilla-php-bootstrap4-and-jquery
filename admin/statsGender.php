@@ -24,6 +24,6 @@ $stmt->execute();
 
 $femaleGender = $stmt->rowCount();
 
-$data = (object) array($maleGender, $femaleGender);
+$data = ["male" => $maleGender, "female" => $femaleGender];
 
-print_r($data);
+echo json_encode($data);

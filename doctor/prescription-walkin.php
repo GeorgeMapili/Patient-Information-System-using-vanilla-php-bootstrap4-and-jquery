@@ -2,14 +2,12 @@
 ob_start();
 session_start();
 require_once '../connect.php';
+require_once '../vendor/autoload.php';
 
-if (!isset($_SESSION['dId'])) {
+if (!isset($_SESSION['ddId'])) {
     header("location:index.php");
     exit(0);
 }
-
-$_SESSION['log_doctor_patient_appointment_appointment_history'] = true;
-
 ?>
 <!doctype html>
 <html lang="en">
@@ -23,7 +21,7 @@ $_SESSION['log_doctor_patient_appointment_appointment_history'] = true;
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/main.css" />
     <link rel="icon" href="../img/sumc.png">
-    <title>Doctor | Medical History</title>
+    <title>Doctor | Add Prescription</title>
     <style>
         body{
             background-image: linear-gradient(to right, #205072 , #329D9C);
@@ -48,37 +46,37 @@ $_SESSION['log_doctor_patient_appointment_appointment_history'] = true;
                     $discharge = 0;
                     $sql = "SELECT * FROM walkinpatient WHERE walkInDoctor = :doctor AND walkInDischarged = :discharge";
                     $stmt = $con->prepare($sql);
-                    $stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);
+                    $stmt->bindParam(":doctor", $_SESSION['ddName'], PDO::PARAM_STR);
                     $stmt->bindParam(":discharge", $discharge, PDO::PARAM_INT);
                     $stmt->execute();
                     $walkinCount = $stmt->rowCount();
                     ?>
-                    <li class="nav-item">
-                        <a class="nav-link" href="walkInPatient.php">Walk in Patient&nbsp;<?= ($walkinCount > 0) ? '<span id="walkin-count" class="badge bg-danger">' . $walkinCount . '</span>' : '<span id="walkin-count" class="badge bg-danger"></span>'; ?></a>
-                    </li>
                     <li class="nav-item active">
+                        <a class="nav-link" href="walkinpatient.php">Walk in Patient&nbsp;<?= ($walkinCount > 0) ? '<span id="walkin-count" class="badge bg-danger">' . $walkinCount . '</span>' : '<span id="walkin-count" class="badge bg-danger"></span>'; ?></a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="patient.php">Patient Appointment</a>
                     </li>
                     <?php
                     $status1 = "accepted";
                     $sql = "SELECT * FROM appointment WHERE pDoctor = :doctor AND aStatus = :status1";
                     $stmt = $con->prepare($sql);
-                    $stmt->bindParam(":doctor", $_SESSION['dName'], PDO::PARAM_STR);
+                    $stmt->bindParam(":doctor", $_SESSION['ddName'], PDO::PARAM_STR);
                     $stmt->bindParam(":status1", $status1, PDO::PARAM_STR);
                     $stmt->execute();
                     $upcomingAppointmentCount = $stmt->rowCount();
                     ?>
                     <div class="btn-group dropbottom">
-                        <a class="nav-link" href="incomingAppointment.php">Upcoming&nbsp;<?= ($upcomingAppointmentCount > 0) ? '<span id="upcoming-count" class="badge bg-danger">' . $upcomingAppointmentCount . '</span>' : '<span id="upcoming-count" class="badge bg-danger"></span>'; ?></a>
+                        <a class="nav-link" href="incoming-appointment.php">Upcoming&nbsp;<?= ($upcomingAppointmentCount > 0) ? '<span id="upcoming-count" class="badge bg-danger">' . $upcomingAppointmentCount . '</span>' : '<span id="upcoming-count" class="badge bg-danger"></span>'; ?></a>
                         <button type="button" class="btn btn-dark dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="sr-only">Toggle Dropright</span>
                         </button>
                         <div class="dropdown-menu bg-dark text-light text-center">
                             <li class="nav-item">
-                                <a class="nav-link" href="cancelledAppointment.php">Cancelled</a>
+                                <a class="nav-link" href="cancelled-appointment.php">Cancelled</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="doneAppointment.php">Finished</a>
+                                <a class="nav-link" href="finished-appointment.php">Finished</a>
                             </li>
                         </div>
                     </div>
@@ -87,9 +85,9 @@ $_SESSION['log_doctor_patient_appointment_appointment_history'] = true;
                             Laboratory
                         </span>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="labPatientAppointment.php">Patient Appointment</a>
+                            <a class="dropdown-item" href="lab-patient-appointment.php">Patient Appointment</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="labPatientWalkin.php">Walk in Patient</a>
+                            <a class="dropdown-item" href="lab-patient-walkin.php">Walk in Patient</a>
                         </div>
                     </div>
                 </ul>
@@ -99,14 +97,14 @@ $_SESSION['log_doctor_patient_appointment_appointment_history'] = true;
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                 </form> -->
                 <ul class="navbar-nav ml-auto">
-                    <img src="../upload/doc_profile_img/<?= $_SESSION['dProfileImg'] ?>" width="50" style="border:1px solid #fff; border-radius: 50%;" alt="">
+                    <img src="../upload/doc_profile_img/<?= $_SESSION['ddProfileImg'] ?>" width="50" style="border:1px solid #fff; border-radius: 50%;" alt="">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <?= $_SESSION['dName'] ?>
+                            <?= $_SESSION['ddName'] ?>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item disabled" href=""><?= $_SESSION['dEmail'] ?></a>
-                            <a class="dropdown-item" href="doctorProfile.php">My account</a>
+                            <a class="dropdown-item disabled" href=""><?= $_SESSION['ddEmail'] ?></a>
+                            <a class="dropdown-item" href="profile.php">My account</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="logout.php">Logout</a>
                         </div>
@@ -118,89 +116,104 @@ $_SESSION['log_doctor_patient_appointment_appointment_history'] = true;
 
     <main role="main">
 
-        <div class="container-fluid">
+        <?php
+        if (isset($_POST['submitAddPrescriptionWalkIn'])) {
 
+            $options = array(
+                'cluster' => 'ap1',
+                'useTLS' => true
+            );
+            $pusher = new Pusher\Pusher(
+                '33e38cfddf441ae84e2d',
+                '9d6c92710887d31d41b4',
+                '1149333',
+                $options
+            );
 
+            $id = $_POST['id'];
+            $prescription = trim(htmlspecialchars($_POST['patientPrescription']));
 
-            <div class="mt-4 mb-4">
-                <h1 class="Display-4 my-4" id="primaryColor">Medical History</h1>
-            </div>
-
-            <?php
-
-            $pId = $_POST['pId'];
-            $status = "discharged";
-
-            $sql = "SELECT * FROM appointment WHERE aStatus = :status AND pId = :pid";
+            $sql = "UPDATE walkinpatient SET walkInPrescription = :prescription WHERE walkInId= :id";
             $stmt = $con->prepare($sql);
-            $stmt->bindParam(":status", $status, PDO::PARAM_STR);
-            $stmt->bindParam(":pid", $pId, PDO::PARAM_INT);
+            $stmt->bindParam(":prescription", $prescription, PDO::PARAM_STR);
+            $stmt->bindParam(":id", $id, PDO::PARAM_INT);
             $stmt->execute();
-            if($stmt->rowCount() > 0){
-            ?>
 
-            <div class="table-responsive-xl">
-                <table class="table table-hover shadow p-3 mb-5 bg-white rounded">
-                    <thead class="bg-info text-light">
-                        <tr>
-                            <th scope="col">Patient Name</th>
-                            <th scope="col">Patient Address</th>
-                            <th scope="col">Patient Mobile</th>
-                            <th scope="col">Patient Doctor</th>
-                            <th scope="col">Patient Disease</th>
-                            <th scope="col">Prescription</th>
-                            <th scope="col">Lab Test</th>
-                            <th scope="col">Lab Result</th>
-                            <th scope="col">Dated On</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        if (isset($_POST['watchHistory'])) {
-
-                            while ($history = $stmt->fetch(PDO::FETCH_ASSOC)) :
-                        ?>
-                                <tr>
-                                    <td><?= $history['pName'] ?></td>
-                                    <td><?= $history['pAddress'] ?></td>
-                                    <td><?= $history['pMobile'] ?></td>
-                                    <td><?= $history['pDoctor'] ?></td>
-                                    <td><?= $history['aReason'] ?></td>
-                                    <td><?= $history['pPrescription'] ?></td>
-                                    <td><?= empty($history['labTest']) ? 'N/A': $history['labTest'] ?></td>
-                                    <td><?= empty($history['labResult']) ? 'N/A': $history['labResult'] ?></td>
-                                    <td><?= $history['dischargedOn'] ?></td>
-                                </tr>
-                        <?php
-                            endwhile;
-                        } else {
-                            header("location:dashboard.php");
-                            ob_end_flush();
-                            exit(0);
-                        }
-                        ?>
-                    </tbody>
-                </table>
-            </div>
-            <?php
-            }else{
-            ?>
-            <p class="lead text-center text-white display-4">No medical history yet</p>
-            <?php    
-            }
-            ?>
-
-        </div>
+            $data['message'] = $id;
+            $pusher->trigger('my-channel', 'my-event', $data);
+            header("location:walkinpatient.php?succAddPrescription=Successfully_added_prescription");
+            $_SESSION['log_doctor_walkin_add_prescription'] = true;
+            exit(0);
+            ob_end_flush();
+        }
+        ?>
 
         <div class="container">
-            <hr class="featurette-divider">
+
+            <div class="mt-4 mb-4">
+                <h1 class="Display-4" id="primaryColor">Walk in Patient Prescription</h1>
+            </div>
+
+
+
+            <form action="prescription-walkin.php" method="post" class="shadow p-3 mb-5 bg-white rounded">
+                <div class="row">
+
+                    <?php
+                    if (isset($_POST['addPrescriptionWalkIn'])) {
+                        $id = $_POST['id'];
+
+                        $sql = "SELECT * FROM walkinpatient WHERE walkInId = :id";
+                        $stmt = $con->prepare($sql);
+                        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+                        $stmt->execute();
+
+                        $addPrescription = $stmt->fetch(PDO::FETCH_ASSOC);
+                    } else {
+
+                        header("location:dashboard.php");
+                        exit(0);
+                    }
+                    ?>
+                    <div class="col">
+                        <input type="hidden" name="id" value="<?= $id ?>">
+                        <label>Patient Name</label>
+                        <input type="text" name="patientName" class="form-control" value="<?= $addPrescription['walkInName'] ?>" readonly>
+                    </div>
+                    <div class="col">
+                        <label>Patient Disease</label>
+                        <input type="text" name="patientDisease" class="form-control" value="<?= $addPrescription['walkInDisease'] ?>" readonly>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Address</label>
+                        <input type="text" name="patientAddress" class="form-control" value="<?= $addPrescription['walkInAddress'] ?>" readonly>
+                    </div>
+                    <div class="col">
+                        <label>Mobile Number</label>
+                        <input type="tel" name="patientMobile" class="form-control" value="<?= $addPrescription['walkInMobile'] ?>" readonly>
+                    </div>
+                </div>
+
+                <label for="">Prescription or Medicines</label>
+                <textarea name="patientPrescription" class="form-control resize-0" cols="30" rows="10"></textarea>
+                <div class="text-center mt-3">
+                    <input type="submit" class="btn" id="docBtnApt" value="Submit" name="submitAddPrescriptionWalkIn">
+                </div>
+            </form>
+        </div>
+
+
+        <div class="container">
+        <hr class="featurette-divider">
         </div>
 
 
 
         <!-- FOOTER -->
         <footer class="container">
-            <p class="text-white">&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacyPolicy.php" id="primaryColor">Privacy Policy</a> &middot; <a href="aboutUs.php" id="primaryColor">About Us</a></p>
+            <p class="text-white">&copy; <?= date("Y") ?> SUMC Doctors Clinic &middot; <a href="privacy-policy.php" id="primaryColor">Privacy Policy</a> &middot; <a href="about.php" id="primaryColor">About Us</a></p>
         </footer>
     </main>
 

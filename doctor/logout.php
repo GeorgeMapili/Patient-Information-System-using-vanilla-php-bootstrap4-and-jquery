@@ -5,8 +5,8 @@ require_once '../connect.php';
 $ip = $_SERVER['REMOTE_ADDR']; //Client IP
 $login = $_SESSION['log_doctor_login'];
 $logout = date("m/d/y h:iA", time()); //Client Date
-$id = $_SESSION['dId']; //SESSION_ID
-$name = $_SESSION['dName']; //SESSION_NAME
+$id = $_SESSION['ddId']; //SESSION_ID
+$name = $_SESSION['ddName']; //SESSION_NAME
 
 $opens = array();
 
@@ -150,15 +150,15 @@ $stmt->bindParam(":log_action", $actions, PDO::PARAM_STR);
 $stmt->execute();
 
 // Doctor SESSION
-unset($_SESSION['dId']);
-unset($_SESSION['dName']);
-unset($_SESSION['dEmail']);
-unset($_SESSION['dAddress']);
-unset($_SESSION['dMobile']);
-unset($_SESSION['dSpecialization']);
-unset($_SESSION['dSpecializationInfo']);
-unset($_SESSION['dProfileImg']);
-unset($_SESSION['dFee']);
+unset($_SESSION['ddId']);
+unset($_SESSION['ddName']);
+unset($_SESSION['ddEmail']);
+unset($_SESSION['ddAddress']);
+unset($_SESSION['ddMobile']);
+unset($_SESSION['ddSpecialization']);
+unset($_SESSION['ddSpecializationInfo']);
+unset($_SESSION['ddProfileImg']);
+unset($_SESSION['ddFee']);
 
 // UPDATE PRESCRIPTION PATIENT APPOINTMENT SESSION
 unset($_SESSION['updatePrescription']);

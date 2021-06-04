@@ -29,7 +29,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => '94ae11fa86563260cf17d27f87412c3e046d021f',
+    'reference' => '78a254ba53e3f45916c3800e8cd3209921e3961e',
     'name' => '__root__',
   ),
   'versions' => 
@@ -41,7 +41,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => '94ae11fa86563260cf17d27f87412c3e046d021f',
+      'reference' => '78a254ba53e3f45916c3800e8cd3209921e3961e',
     ),
     'doctrine/instantiator' => 
     array (
@@ -373,12 +373,12 @@ private static $installed = array (
     ),
     'symfony/polyfill-ctype' => 
     array (
-      'pretty_version' => 'v1.22.1',
-      'version' => '1.22.1.0',
+      'pretty_version' => 'v1.23.0',
+      'version' => '1.23.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'c6c942b1ac76c82448322025e084cadc56048b4e',
+      'reference' => '46cd95797e9df938fdd2b03693b5fca5e64b01ce',
     ),
     'theseer/tokenizer' => 
     array (
