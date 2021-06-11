@@ -125,7 +125,6 @@ $_SESSION['log_secretary_add_walkin'] = true;
 
                 $name = trim(htmlspecialchars($_POST['name']));
                 $address = trim(htmlspecialchars($_POST['address']));
-                $email = trim(htmlspecialchars($_POST['email']));
                 $mobileNumber = trim(htmlspecialchars($_POST['mobileNumber']));
                 $disease = trim(htmlspecialchars($_POST['disease']));
                 $age = trim(htmlspecialchars($_POST['age']));
@@ -145,7 +144,7 @@ $_SESSION['log_secretary_add_walkin'] = true;
                 }
 
                 // Check if to fill all fields
-                if (empty($name) || empty($address) || empty($email) || empty($mobileNumber) || empty($disease) || empty($age) || empty($gender) || empty($doctor)) {
+                if (empty($name) || empty($address) || empty($mobileNumber) || empty($disease) || empty($age) || empty($gender) || empty($doctor)) {
                     header("location:add-patient.php?errField=please_input_all_fields");
                     exit(0);
                 }
@@ -166,25 +165,6 @@ $_SESSION['log_secretary_add_walkin'] = true;
 
                 if ($nameCount > 0) {
                     header("location:add-patient.php?errName1=name_is_already_taken&address=$address&email=$email&mobile=$mobileNumber&disease=$disease&age=$age&gender=$gender&doctor=$doctor");
-                    exit(0);
-                }
-
-                // Check if the email is valid
-                if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                    header("location:add-patient.php?errEmail1=email_is_not_valid&address=$address&name=$name&mobile=$mobileNumber&disease=$disease&age=$age&gender=$gender&doctor=$doctor");
-                    exit(0);
-                }
-
-                // Check  if the email is already existed
-                $sql = "SELECT * FROM walkinpatient WHERE walkInEmail = :email";
-                $stmt = $con->prepare($sql);
-                $stmt->bindParam(":email", $email, PDO::PARAM_STR);
-                $stmt->execute();
-
-                $emailCount = $stmt->rowCount();
-
-                if ($emailCount > 0) {
-                    header("location:add-patient.php?errEmail2=email_is_already_taken&address=$address&name=$name&mobile=$mobileNumber&disease=$disease&age=$age&gender=$gender&doctor=$doctor");
                     exit(0);
                 }
 
@@ -212,10 +192,9 @@ $_SESSION['log_secretary_add_walkin'] = true;
                 // Total Pay
                 $totalPay = $doctorfee['dFee'];
 
-                $sql = "INSERT INTO walkinpatient(walkInName,walkInEmail,walkInAddress,walkInAge,walkInGender,walkInDoctor,walkInDisease,walkInMobile,doctorFee,walkInTotalPay)VALUES(:name,:email,:address,:age,:gender,:doctor,:disease,:mobile,:doctorFee,:totalPay)";
+                $sql = "INSERT INTO walkinpatient(walkInName,walkInAddress,walkInAge,walkInGender,walkInDoctor,walkInDisease,walkInMobile,doctorFee,walkInTotalPay)VALUES(:name,:address,:age,:gender,:doctor,:disease,:mobile,:doctorFee,:totalPay)";
                 $stmt = $con->prepare($sql);
                 $stmt->bindParam(":name", $name, PDO::PARAM_STR);
-                $stmt->bindParam(":email", $email, PDO::PARAM_STR);
                 $stmt->bindParam(":address", $address, PDO::PARAM_STR);
                 $stmt->bindParam(":age", $age, PDO::PARAM_STR);
                 $stmt->bindParam(":gender", $gender, PDO::PARAM_STR);
@@ -257,27 +236,14 @@ $_SESSION['log_secretary_add_walkin'] = true;
                     </div>
                     <div class="row">
                         <div class="col m-1">
-                            <label>Email</label>
-                            <?= ((isset($_GET['errEmail1']) && $_GET['errEmail1'] == "email_is_not_valid") || (isset($_GET['errEmail2']) && $_GET['errEmail2'] == "email_is_already_taken")) ? '<input type="text" name="email" class="form-control is-invalid" required>' : ((isset($_GET['email'])) ? '<input type="text" name="email" value="' . $_GET['email'] . '" class="form-control" required>' : '<input type="text" name="email" class="form-control" required>') ?>
-                            <?= (isset($_GET['errEmail1']) && $_GET['errEmail1'] == "email_is_not_valid") ? '<small class="text-danger">Email is not valid!</small>' : ''; ?>
-                            <?= (isset($_GET['errEmail2']) && $_GET['errEmail2'] == "email_is_already_taken") ? '<small class="text-danger">Email is already taken!</small>' : ''; ?>
+                            <label>Disease</label>
+                            <?= (isset($_GET['disease'])) ? '<input type="text" name="disease" value="' . $_GET['disease'] . '" class="form-control" required>' : '<input type="text" name="disease" class="form-control" required>' ?>
                         </div>
                         <div class="col m-1">
                             <label>Mobile Number</label>
                             <!-- <input type="tel" class="form-control" name="mobileNumber" placeholder="+639876543210 or 09876543210" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" required> -->
                             <?= (isset($_GET['errMobile']) && $_GET['errMobile'] == "mobile_number_is_already_taken") ? '<input type="tel" class="form-control is-invalid" name="mobileNumber" placeholder="+639876543210 or 09876543210" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" required>' : ((isset($_GET['mobile'])) ? '<input type="tel" class="form-control" name="mobileNumber" value= "' . str_replace(' ', '+', $_GET['mobile']) . '" placeholder="+639876543210 or 09876543210" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" required>' : '<input type="tel" class="form-control" name="mobileNumber" placeholder="+639876543210 or 09876543210" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" required>') ?>
                             <?= (isset($_GET['errMobile']) && $_GET['errMobile'] == "mobile_number_is_already_taken") ? '<small class="text-danger">Mobile Number is already taken!</small>' : ''; ?>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col m-1">
-                            <label>Disease</label>
-                            <?= (isset($_GET['disease'])) ? '<input type="text" name="disease" value="' . $_GET['disease'] . '" class="form-control" required>' : '<input type="text" name="disease" class="form-control" required>' ?>
-                        </div>
-                        <div class="col m-1">
-                            <label>Age</label>
-                            <?= (isset($_GET['age'])) ? '<input type="number" name="age" value="' . $_GET['age'] . '" class="form-control" min="1" required>' : '<input type="number" name="age" class="form-control" min="1" required>' ?>
                         </div>
                     </div>
 
@@ -325,24 +291,29 @@ $_SESSION['log_secretary_add_walkin'] = true;
                             </div>
                         </div>
                         <div class="col m-1">
-                            <label>Select a Doctor</label>
-                            <select class="form-control" name="doctor" required>
-                                <option value="">select a doctor</option>
-                                <?php
-                                $sql = "SELECT * FROM doctor";
-                                $stmt = $con->prepare($sql);
-                                $stmt->execute();
-
-                                while ($doctors = $stmt->fetch(PDO::FETCH_ASSOC)) :
-                                ?>
-                                    <option value="<?= $doctors['dName'] ?>" <?php
-                                                                                if (isset($_GET['doctor']) && $_GET['doctor'] == $doctors['dName']) {
-                                                                                    echo "selected";
-                                                                                }
-                                                                                ?>><?= $doctors['dName'] ?> -> <?= $doctors['dSpecialization'] ?></option>
-                                <?php endwhile; ?>
-                            </select>
+                            <label>Birthday</label>
+                            <?= (isset($_GET['age'])) ? '<input type="date" name="age" value="' . $_GET['age'] . '" class="form-control" required>' : '<input type="date" name="age" class="form-control" required>' ?>
                         </div>
+                    </div>
+
+                    <div>
+                        <label>Select a Doctor</label>
+                        <select class="form-control" name="doctor" required>
+                            <option value="">select a doctor</option>
+                            <?php
+                            $sql = "SELECT * FROM doctor";
+                            $stmt = $con->prepare($sql);
+                            $stmt->execute();
+
+                            while ($doctors = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                            ?>
+                                <option value="<?= $doctors['dName'] ?>" <?php
+                                                                            if (isset($_GET['doctor']) && $_GET['doctor'] == $doctors['dName']) {
+                                                                                echo "selected";
+                                                                            }
+                                                                            ?>><?= $doctors['dName'] ?> -> <?= $doctors['dSpecialization'] ?></option>
+                            <?php endwhile; ?>
+                        </select>
                     </div>
 
                     <div class="text-center">

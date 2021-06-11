@@ -51,6 +51,7 @@ if(isset($_GET['password_id'])){
 <body>
         <h1 class="display-3 mb-3 text-center welcome_title" style="color: rgb(15, 208, 214);">Welcome to<br> SUMC Doctors Clinic</h1>
         <?= (isset($_GET['RegSuccess'])) ? '<span class="text-success my-4">Register Successfully</span>' : ""; ?>
+        <?= (isset($_GET['errRequired']) && $_GET['errRequired'] == "require_all_fields") ? '<span class="text-danger my-4">Require all fields</span>' : ""; ?>
         <form action="./core/patient/Login.php" method="post">
             <div class="form-group">
                 <label>Email address</label>

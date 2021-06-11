@@ -8,41 +8,29 @@ if (!isset($_SESSION['adId'])) {
     exit(0);
 }
 
-// 10 Below
-$sql = "SELECT * FROM patientappointment WHERE pAge <= 10";
+// Get the age
+$elevToTwen = 0;
+$twentyOneToFourty = 0;
+$fourtyOneUp = 0;
+
+$sql = "SELECT * FROM patientappointment";
 $stmt = $con->prepare($sql);
 $stmt->execute();
 
-$tenBelow = $stmt->rowCount();
+while($result = $stmt->fetch(PDO::FETCH_ASSOC)){
 
-$val1 = 11;
-$val2 = 20;
-$sql = "SELECT * FROM patientappointment WHERE pAge BETWEEN :val1 AND :val2";
-$stmt = $con->prepare($sql);
-$stmt->bindParam(":val1", $val1, PDO::PARAM_INT);
-$stmt->bindParam(":val2", $val2, PDO::PARAM_INT);
-$stmt->execute();
+    if(date_diff(date_create($result['pAge']), date_create('now'))->y > 10 && date_diff(date_create($result['pAge']), date_create('now'))->y < 21){
+        $elevToTwen++;
+    }elseif(date_diff(date_create($result['pAge']), date_create('now'))->y > 20 && date_diff(date_create($result['pAge']), date_create('now'))->y < 41){
+        $twentyOneToFourty++;
+    }elseif(date_diff(date_create($result['pAge']), date_create('now'))->y >= 41){
+        $fourtyOneUp++;
+    }
 
-$elevToTwen = $stmt->rowCount();
+}
 
-$val1 = 21;
-$val2 = 40;
-$sql = "SELECT * FROM patientappointment WHERE pAge BETWEEN :val1 AND :val2";
-$stmt = $con->prepare($sql);
-$stmt->bindParam(":val1", $val1, PDO::PARAM_INT);
-$stmt->bindParam(":val2", $val2, PDO::PARAM_INT);
-$stmt->execute();
+$data = (object) array($elevToTwen, $twentyOneToFourty, $fourtyOneUp);
 
-$twentyOneToFourty = $stmt->rowCount();
-
-$sql = "SELECT * FROM patientappointment WHERE pAge >= 41";
-$stmt = $con->prepare($sql);
-$stmt->execute();
-
-$fourtyOneUp = $stmt->rowCount();
-
-$data = (object) array($tenBelow, $elevToTwen, $twentyOneToFourty, $fourtyOneUp);
-
-$data = ["tenBelow" => $tenBelow, "elevToTwen" => $elevToTwen, "twentyOneToFourty" => $twentyOneToFourty, "fourtyOneUp" => $fourtyOneUp];
+$data = ["elevToTwen" => $elevToTwen, "twentyOneToFourty" => $twentyOneToFourty, "fourtyOneUp" => $fourtyOneUp];
 
 echo json_encode($data);

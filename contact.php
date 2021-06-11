@@ -128,6 +128,7 @@ $_SESSION['log_contact'] = true;
                 $contact->mobileNumber = $_POST['mobileNumber'];
                 $contact->message = trim(htmlspecialchars($_POST['message']));
 
+                $contact->requireAll();
                 if($contact->insertMessage() == "success_message"){
 
                     header("location:contact.php?ContactSuccess=Successully_send_a_message");
@@ -141,6 +142,9 @@ $_SESSION['log_contact'] = true;
             ?>
 
             <form action="contact.php" method="post" class="shadow p-3 mb-5 rounded bg-light text-dark">
+                <div class="text-center my-2">
+                    <?= (isset($_GET['errorMsg']) && $_GET['errorMsg'] == "require_all_fields") ? '<span class="text-danger">Require all fields</span>':'' ?>
+                </div>
                 <div class="row">
                     <input type="hidden" name="id" value="<?= $_SESSION['id']; ?>">
                     <div class="col">

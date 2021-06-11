@@ -8,7 +8,7 @@
         $mysqlHostName      = "localhost";
         $DbName             = "pis";
         $backup_name        = "mybackup.sql";
-        $tables             = array("admin", "appointment", "audit_log", "bloodtype", "discharged_patient", "diseases_treatment", "doctor", "ffmedicaldisease", "loginlog", "medicalinformation", "message", "nurse_receptionist", "patientappointment", "returnee_patient", "rooms", "walkinpatient");
+        $tables             = array("admin", "appointment", "audit_log", "bloodtype", "discharged_patient", "diseases_treatment", "doctor", "ffmedicaldisease", "medicalinformation", "message", "nurse_receptionist", "patientappointment", "returnee_patient", "walkinpatient");
 
     //or add 5th parameter(array) of specific tables:    array("mytable1","mytable2","mytable3") for multiple tables
 

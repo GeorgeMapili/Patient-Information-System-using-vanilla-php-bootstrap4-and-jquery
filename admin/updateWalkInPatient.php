@@ -134,7 +134,6 @@ if(isset($_GET['id'])){
                     $walkIn = $stmt->fetch(PDO::FETCH_ASSOC);
                     $_SESSION['walkInPatientId'] = $walkIn['walkInId'];
                     $_SESSION['walkInPatientName'] = $walkIn['walkInName'];
-                    $_SESSION['walkInPatientEmail'] = $walkIn['walkInEmail'];
                     $_SESSION['walkInPatientAddress'] = $walkIn['walkInAddress'];
                     $_SESSION['walkInPatientMobile'] = $walkIn['walkInMobile'];
                     $_SESSION['walkInPatientDisease'] = $walkIn['walkInDisease'];
@@ -150,7 +149,6 @@ if(isset($_GET['id'])){
 
                     $id = trim(htmlspecialchars($_POST['id']));
                     $name = trim(htmlspecialchars($_POST['name']));
-                    $email = trim(htmlspecialchars($_POST['email']));
                     $address = trim(htmlspecialchars($_POST['address']));
                     $mobile = trim(htmlspecialchars($_POST['mobile']));
                     $disease = trim(htmlspecialchars($_POST['disease']));
@@ -158,7 +156,7 @@ if(isset($_GET['id'])){
                     $gender = trim(htmlspecialchars($_POST['gender']));
                     $doctor = trim(htmlspecialchars($_POST['doctor']));
 
-                    if ($name == $_SESSION['walkInPatientName'] && $email == $_SESSION['walkInPatientEmail'] && $address == $_SESSION['walkInPatientAddress'] && $mobile == $_SESSION['walkInPatientMobile'] && $disease == $_SESSION['walkInPatientDisease'] && $age == $_SESSION['walkInPatientAge'] && $gender == $_SESSION['walkInPatientGender'] && $doctor == $_SESSION['walkInPatientDoctor']) {
+                    if ($name == $_SESSION['walkInPatientName'] && $address == $_SESSION['walkInPatientAddress'] && $mobile == $_SESSION['walkInPatientMobile'] && $disease == $_SESSION['walkInPatientDisease'] && $age == $_SESSION['walkInPatientAge'] && $gender == $_SESSION['walkInPatientGender'] && $doctor == $_SESSION['walkInPatientDoctor']) {
                         header("location:walkInPatient.php?id=$id&errUpdate=Nothing_to_update");
                         exit(0);
                     }
@@ -181,26 +179,6 @@ if(isset($_GET['id'])){
 
                     if ($nameCount > 0) {
                         header("location:updateWalkInPatient.php?id=$id&errName1=Name_is_already_existed");
-                        exit(0);
-                    }
-
-                    // check if the email is valid
-                    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                        header("location:updateWalkInPatient.php?id=$id&errEmail=email_is_invalid");
-                        exit(0);
-                    }
-
-                    // check if the email is already taken
-                    $sql = "SELECT * FROM walkinpatient WHERE walkInEmail = :email AND walkInId <> :id";
-                    $stmt = $con->prepare($sql);
-                    $stmt->bindParam(":email", $email, PDO::PARAM_STR);
-                    $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-                    $stmt->execute();
-
-                    $emailCount = $stmt->rowCount();
-
-                    if ($emailCount > 0) {
-                        header("location:updateWalkInPatient.php?id=$id&errEmail1=Email_is_already_existed");
                         exit(0);
                     }
 
@@ -232,14 +210,13 @@ if(isset($_GET['id'])){
                     $walkInTotalPay = $doctorFee;
 
                     // Update THE WALK IN PATIENT INFO
-                    $sql = "UPDATE walkinpatient SET walkInName = :name, walkInEmail = :email, walkInAddress = :address, walkInAge = :age, walkInGender = :gender, walkInMobile = :mobile, walkInDoctor = :doctor, walkInDisease = :disease, doctorFee = :doctorFee, walkInTotalPay = :walkTotalPay WHERE walkInId = :id";
+                    $sql = "UPDATE walkinpatient SET walkInName = :name, walkInAddress = :address, walkInAge = :age, walkInGender = :gender, walkInMobile = :mobile, walkInDoctor = :doctor, walkInDisease = :disease, doctorFee = :doctorFee, walkInTotalPay = :walkTotalPay WHERE walkInId = :id";
                     $stmt = $con->prepare($sql);
                     $stmt->bindParam(":name", $name, PDO::PARAM_STR);
-                    $stmt->bindParam(":email", $email, PDO::PARAM_STR);
                     $stmt->bindParam(":address", $address, PDO::PARAM_STR);
                     $stmt->bindParam(":mobile", $mobile, PDO::PARAM_STR);
                     $stmt->bindParam(":disease", $disease, PDO::PARAM_STR);
-                    $stmt->bindParam(":age", $age, PDO::PARAM_INT);
+                    $stmt->bindParam(":age", $age, PDO::PARAM_STR);
                     $stmt->bindParam(":gender", $gender, PDO::PARAM_STR);
                     $stmt->bindParam(":doctor", $doctor, PDO::PARAM_STR);
                     $stmt->bindParam(":doctorFee", $doctorFee, PDO::PARAM_STR);
@@ -270,10 +247,9 @@ if(isset($_GET['id'])){
                                     <?= (isset($_GET['errName1']) && $_GET['errName1'] == "Name_is_already_existed") ? '<small class="text-danger">Name is already existed!</small>' : '' ?>
                                 </div>
                                 <div class="col">
-                                    <label>Patient Email</label>
-                                    <?= ((isset($_GET['errEmail']) && $_GET['errEmail'] == "email_is_invalid") || (isset($_GET['errEmail1']) && $_GET['errEmail1'] == "Email_is_already_existed")) ? '<input type="email" name="email" class="form-control is-invalid" required>' : '<input type="email" name="email" class="form-control" value="' . $_SESSION['walkInPatientEmail'] . '" required>' ?>
-                                    <?= (isset($_GET['errEmail']) && $_GET['errEmail'] == "email_is_invalid") ? '<small class="text-danger">Email is invalid!</small>' : '' ?>
-                                    <?= (isset($_GET['errEmail1']) && $_GET['errEmail1'] == "Email_is_already_existed") ? '<small class="text-danger">Email is already existed!</small>' : '' ?>
+                                    <label>Patient Mobile Number</label>
+                                    <?= (isset($_GET['errMobile']) && $_GET['errMobile'] == "Mobile_number_is_already_existed") ? '<input type="tel" name="mobile" class="form-control is-invalid" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" required>' : '<input type="tel" name="mobile" class="form-control" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" value="' . $_SESSION['walkInPatientMobile'] . '" required>' ?>
+                                    <?= (isset($_GET['errMobile']) && $_GET['errMobile'] == "Mobile_number_is_already_existed") ? '<small class="text-danger">Mobile number is already existed!</small>' : '' ?>
                                 </div>
                             </div>
                             <div class="row my-4">
@@ -282,9 +258,8 @@ if(isset($_GET['id'])){
                                     <input type="text" name="address" class="form-control" value="<?= $_SESSION['walkInPatientAddress'] ?>" required>
                                 </div>
                                 <div class="col">
-                                    <label>Patient Mobile Number</label>
-                                    <?= (isset($_GET['errMobile']) && $_GET['errMobile'] == "Mobile_number_is_already_existed") ? '<input type="tel" name="mobile" class="form-control is-invalid" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" required>' : '<input type="tel" name="mobile" class="form-control" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" value="' . $_SESSION['walkInPatientMobile'] . '" required>' ?>
-                                    <?= (isset($_GET['errMobile']) && $_GET['errMobile'] == "Mobile_number_is_already_existed") ? '<small class="text-danger">Mobile number is already existed!</small>' : '' ?>
+                                    <label>Patient Age</label>
+                                    <input type="date" name="age" class="form-control" value="<?= $_SESSION['walkInPatientAge'] ?>" required>
                                 </div>
                             </div>
 
@@ -293,33 +268,6 @@ if(isset($_GET['id'])){
                                     <label>Patient Disease</label>
                                     <input type="text" name="disease" class="form-control" value="<?= $_SESSION['walkInPatientDisease'] ?>" required>
                                 </div>
-                                <div class="col">
-                                    <label>Patient Age</label>
-                                    <input type="number" name="age" class="form-control" value="<?= $_SESSION['walkInPatientAge'] ?>" required>
-                                </div>
-                            </div>
-
-                            <div class="row my-4">
-                                <div class="col">
-                                    <label>Doctor</label>
-                                    <select name="doctor" class="form-control" required>
-                                        <option value="">Select a doctor</option>
-                                        <?php
-                                        $sql = "SELECT * FROM doctor";
-                                        $stmt = $con->prepare($sql);
-                                        $stmt->execute();
-
-                                        while ($doctor = $stmt->fetch(PDO::FETCH_ASSOC)) :
-                                        ?>
-                                            <option value="<?= $doctor['dName'] ?>" <?php
-                                                                                    if ($_SESSION['walkInPatientDoctor'] == $doctor['dName']) {
-                                                                                        echo "selected";
-                                                                                    }
-                                                                                    ?>><?= $doctor['dName'] ?> -> <?= $doctor['dSpecialization'] ?></option>
-                                        <?php endwhile; ?>
-                                    </select>
-                                </div>
-
                                 <div class="col">
                                     <label>Gender</label>
                                     <div class="d-flex justify-content-around">
@@ -360,6 +308,26 @@ if(isset($_GET['id'])){
                                         ?>
                                     </div>
                                 </div>
+                            </div>
+
+                            <div>
+                                <label>Doctor</label>
+                                <select name="doctor" class="form-control" required>
+                                    <option value="">Select a doctor</option>
+                                    <?php
+                                    $sql = "SELECT * FROM doctor";
+                                    $stmt = $con->prepare($sql);
+                                    $stmt->execute();
+
+                                    while ($doctor = $stmt->fetch(PDO::FETCH_ASSOC)) :
+                                    ?>
+                                        <option value="<?= $doctor['dName'] ?>" <?php
+                                                                                if ($_SESSION['walkInPatientDoctor'] == $doctor['dName']) {
+                                                                                    echo "selected";
+                                                                                }
+                                                                                ?>><?= $doctor['dName'] ?> -> <?= $doctor['dSpecialization'] ?></option>
+                                    <?php endwhile; ?>
+                                </select>
                             </div>
                             <div class=" text-center mt-3">
                                 <input type="submit" class="btn btn-info" value="Update Walk in Patient" name="updateWalkIn">

@@ -108,7 +108,7 @@ if (isset($_POST['searchPatientUser'])) {
             <th scope="col">Patient Email</th>
             <th scope="col">Patient Address</th>
             <th scope="col">Patient Mobile</th>
-            <th scope="col">Patient Age</th>
+            <th scope="col">Patient Birthday</th>
             <th scope="col">Patient Gender</th>
             <th scope="col">Action</th>
         </tr>
@@ -130,7 +130,7 @@ if (isset($_POST['searchPatientUser'])) {
             <td>
                 <div class="row">
                     <div class="col">
-                        <form action="updatePatient.php" method="post">
+                        <form action="updatePatient.php" method="get">
                             <input type="hidden" name="pId" value="' . $userPatient['pId'] . '">
                             <input type="submit" value="Update" class="btn btn-secondary" name="updatePatient">
                         </form>
@@ -208,7 +208,7 @@ if (isset($_POST['searchDoctor'])) {
             <td>
                  <div class="row">
                             <div class="col">
-                                <form action="updateDoctor.php" method="post">
+                                <form action="updateDoctor.php" method="get">
                                     <input type="hidden" name="dId" value=' . $doctor['dId'] . '>
                                     <input type="submit" value="Update" class="btn btn-secondary" name="updateDoctorBtn">
                                 </form>
@@ -263,7 +263,7 @@ if (isset($_POST['searchWalkInPatient'])) {
             <th scope="col">Patient Address</th>
             <th scope="col">Patient Mobile</th>
             <th scope="col">Patient Disease</th>
-            <th scope="col">Patient Age</th>
+            <th scope="col">Patient Birthday</th>
             <th scope="col">Patient Gender</th>
             <th scope="col">Patient Doctor</th>
             <th scope="col">Action</th>
@@ -287,8 +287,8 @@ if (isset($_POST['searchWalkInPatient'])) {
             <td>
                 <div class="row">
                     <div class="col">
-                        <form action="updateWalkInPatient.php" method="post">
-                            <input type="hidden" name="walkInId" value="' . $walkInPatient['walkInId'] . '">
+                        <form action="updateWalkInPatient.php" method="get">
+                            <input type="hidden" name="id" value="' . $walkInPatient['walkInId'] . '">
                             <input type="submit" value="Update" class="btn btn-secondary" name="updateWalkInBtn">
                         </form>
                     </div>
@@ -312,76 +312,6 @@ if (isset($_POST['searchWalkInPatient'])) {
         echo '<h3 style="color:red">No Patient Found</h3>';
     }
 }
-
-
-// ROOMS  AJAX
-if (isset($_POST['searchRoom'])) {
-
-    $search = trim(htmlspecialchars($_POST['searchRoom']));
-    $searchNumber = "%" . $search . "%";
-
-    $sql = "SELECT * FROM rooms WHERE room_number LIKE :number";
-    $stmt = $con->prepare($sql);
-    $stmt->bindParam(":number", $searchNumber, PDO::PARAM_STR);
-    $stmt->execute();
-
-    $numRows = $stmt->rowCount();
-
-    $roomsOutput = '';
-
-    if ($stmt->rowCount() > 0) {
-
-
-
-        $roomsOutput .= '
-    <thead class="thead-dark">
-        <tr>
-            <th scope="col">Room ID</th>
-            <th scope="col">Room Number</th>
-            <th scope="col">Room Fee</th>
-            <th scope="col">Action</th>
-        </tr>
-    </thead>
-    <tbody>
-    ';
-
-        while ($rooms = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $roomsOutput .= '
-        <tr>
-            <th scope="row">' . $rooms['room_id'] . '</th>
-            <td>' . $rooms['room_number'] . '</td>
-            <td>₱ ' . number_format($rooms['room_fee'], 2) . '</td>';
-
-            $roomsOutput .= '
-            <td>
-                <div class="row">
-                    <div class="col">
-                        <form action="updateRoom.php" method="post">
-                            <input type="hidden" name="roomId" value=' . $rooms['room_id'] . '>
-                            <input type="submit" value="Update" class="btn btn-secondary" name="updateRoomBtn">
-                        </form>
-                    </div>
-                    <div class="col">
-                        <form action="room.php" method="post">
-                            <input type="hidden" name="roomId" value=' . $rooms['room_id'] . '>
-                            <input type="submit" value="Delete" class="btn btn-danger" name="deleteRoomBtn" onclick="return confirm(\'Are you sure to delete ?\');">
-                        </form>
-                    </div>
-                </div>
-            </td>
-        ';
-        }
-        $roomsOutput .= '
-    </tr>
-    <tbody>
-    ';
-
-        echo $roomsOutput;
-    } else {
-        echo '<h3 style="color:red">No Room Found</h3>';
-    }
-}
-
 
 // NURSE  AJAX
 if (isset($_POST['searchNurse'])) {
@@ -429,7 +359,7 @@ if (isset($_POST['searchNurse'])) {
                 <td>
                     <div class="row">
                         <div class="col">
-                            <form action="updateNurse.php" method="post">
+                            <form action="updateNurse.php" method="get">
                                 <input type="hidden" name="id" value="' . $nurse['nId'] . '">
                                 <input type="submit" value="Update" class="btn btn-secondary" name="updateNurseBtn">
                             </form>

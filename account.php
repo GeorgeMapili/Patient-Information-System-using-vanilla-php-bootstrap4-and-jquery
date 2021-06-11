@@ -110,7 +110,7 @@ $_SESSION['log_update_information'] = true;
                     <?= (isset($_GET['errInfo'])) ? '<span class="text-danger">Nothing to update!</span>' : ''; ?>
                     <?= (isset($_GET['successInfo'])) ? '<span class="text-success">Updated successfully!</span>' : ''; ?>
                 </div>
-                <form action="action.php" method="post">
+                <form action="./core/patient/UpdateProfile.php" method="post">
                     <div class="row">
                         <input type="hidden" name="id" value="<?= $_SESSION['id']; ?>">
                         <div class="col">
@@ -178,7 +178,7 @@ $_SESSION['log_update_information'] = true;
                     <?= (isset($_GET['succPass']) && isset($_GET['succPass']) == 'Successfully_updated_password') ? '<span class="text-success">Successfully updated password!</span>' : ''; ?>
                 </div>
 
-                <form action="action.php" method="post">
+                <form action="./core/patient/UpdateProfile.php" method="post">
 
                     <label>Current Password</label>
                     <?php
@@ -229,7 +229,7 @@ $_SESSION['log_update_information'] = true;
                     <?= (isset($_GET['succUpdateImg']) && isset($_GET['succUpdateImg']) == 'Successfully_update_the_img') ? '<span class="text-success">Successfully updated profile image!</span>' : ''; ?>
                 </div>
 
-                <form action="action.php" method="post" enctype="multipart/form-data">
+                <form action="./core/patient/UpdateProfile.php" method="post" enctype="multipart/form-data">
 
                     <label>Profile Image</label>
                     <?php

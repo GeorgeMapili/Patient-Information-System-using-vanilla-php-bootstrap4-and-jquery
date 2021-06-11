@@ -18,6 +18,14 @@ class Appointment extends Database
     public $aTime;
     public $aReason;
 
+    public function requireAllFields()
+    {
+        if(empty($this->pDoctor) || empty($this->aDate) || empty($this->aTime) || empty($this->aReason)){
+            header("location:appointment.php?errRequired=require_all_fields");
+            exit(0);
+        }
+    }
+
     public function datePassByCheck()
     {
 

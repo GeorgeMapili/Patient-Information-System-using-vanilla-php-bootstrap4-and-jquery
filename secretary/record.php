@@ -117,7 +117,6 @@ $_SESSION['log_secretary_patient_records'] = true;
                             <tr>
                                 <th scope="col">Patient Name</th>
                                 <th scope="col">Patient Address</th>
-                                <th scope="col">Patient Email</th>
                                 <th scope="col">Patient Mobile</th>
                                 <th scope="col">Patient Doctor</th>
                                 <th scope="col">Doctor Prescription</th>
@@ -145,7 +144,6 @@ $_SESSION['log_secretary_patient_records'] = true;
                                     <tr>
                                         <td><?= $returneePatient['pName'] ?></td>
                                         <td><?= $returneePatient['pAddress'] ?></td>
-                                        <td><?= $returneePatient['pEmail'] ?></td>
                                         <td><?= $returneePatient['pMobile'] ?></td>
                                         <td><?= $returneePatient['pDoctor'] ?></td>
                                         <td><?= $returneePatient['pPrescription'] ?></td>

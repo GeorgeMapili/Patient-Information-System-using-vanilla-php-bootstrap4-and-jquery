@@ -8,37 +8,29 @@ if (!isset($_SESSION['adId'])) {
     exit(0);
 }
 
-$sql = "SELECT * FROM walkinpatient WHERE walkInAge <= 10";
+// Get the age
+$tenBelow = 0;
+$elevToTwen = 0;
+$twentyOneToFourty = 0;
+$fourtyOneUp = 0;
+
+$sql = "SELECT * FROM walkinpatient";
 $stmt = $con->prepare($sql);
 $stmt->execute();
 
-$tenBelow = $stmt->rowCount();
+while($result = $stmt->fetch(PDO::FETCH_ASSOC)){
 
-$val1 = 11;
-$val2 = 20;
-$sql = "SELECT * FROM walkinpatient WHERE walkInAge BETWEEN :val1 AND :val2";
-$stmt = $con->prepare($sql);
-$stmt->bindParam(":val1", $val1, PDO::PARAM_INT);
-$stmt->bindParam(":val2", $val2, PDO::PARAM_INT);
-$stmt->execute();
+    if(date_diff(date_create($result['walkInAge']), date_create('now'))->y <= 10){
+        $tenBelow++;
+    }elseif(date_diff(date_create($result['walkInAge']), date_create('now'))->y > 10 && date_diff(date_create($result['walkInAge']), date_create('now'))->y < 21){
+        $elevToTwen++;
+    }elseif(date_diff(date_create($result['walkInAge']), date_create('now'))->y > 20 && date_diff(date_create($result['walkInAge']), date_create('now'))->y < 41){
+        $twentyOneToFourty++;
+    }elseif(date_diff(date_create($result['walkInAge']), date_create('now'))->y >= 41){
+        $fourtyOneUp++;
+    }
 
-$elevToTwen = $stmt->rowCount();
-
-$val1 = 21;
-$val2 = 40;
-$sql = "SELECT * FROM walkinpatient WHERE walkInAge BETWEEN :val1 AND :val2";
-$stmt = $con->prepare($sql);
-$stmt->bindParam(":val1", $val1, PDO::PARAM_INT);
-$stmt->bindParam(":val2", $val2, PDO::PARAM_INT);
-$stmt->execute();
-
-$twentyOneToFourty = $stmt->rowCount();
-
-$sql = "SELECT * FROM walkinpatient WHERE walkInAge >= 41";
-$stmt = $con->prepare($sql);
-$stmt->execute();
-
-$fourtyOneUp = $stmt->rowCount();
+}
 
 $data = ["tenBelow" => $tenBelow, "elevToTwen" => $elevToTwen, "twentyOneToFourty" => $twentyOneToFourty, "fourtyOneUp" => $fourtyOneUp];
 

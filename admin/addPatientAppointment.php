@@ -232,7 +232,7 @@ if (!isset($_SESSION['adId'])) {
                         $stmt->bindParam(":name", $name, PDO::PARAM_STR);
                         $stmt->bindParam(":email", $email, PDO::PARAM_STR);
                         $stmt->bindParam(":address", $address, PDO::PARAM_STR);
-                        $stmt->bindParam(":age", $age, PDO::PARAM_INT);
+                        $stmt->bindParam(":age", $age, PDO::PARAM_STR);
                         $stmt->bindParam(":gender", $gender, PDO::PARAM_STR);
                         $stmt->bindParam(":mobile", $mobile, PDO::PARAM_STR);
                         $stmt->bindParam(":password", $hashPass, PDO::PARAM_STR);
@@ -326,8 +326,8 @@ if (!isset($_SESSION['adId'])) {
                                 </div>
                             </div>
                             <div class="col">
-                                <label>Age</label>
-                                <?= (isset($_GET['age']) ? '<input type="number" class="form-control" name="age" value=' . $_GET['age'] . ' min="1" required>' : '<input type="number" class="form-control" name="age" min="1" required>') ?>
+                                <label>Birthday</label>
+                                <?= (isset($_GET['age']) ? '<input type="date" class="form-control" name="age" value=' . $_GET['age'] . ' required>' : '<input type="date" class="form-control" name="age" required>') ?>
                             </div>
                         </div>
 

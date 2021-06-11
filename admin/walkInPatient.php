@@ -164,11 +164,10 @@ if (!isset($_SESSION['adId'])) {
                             <tr>
                                 <th scope="col">Patient ID</th>
                                 <th scope="col">Patient Name</th>
-                                <th scope="col">Patient Email</th>
                                 <th scope="col">Patient Address</th>
                                 <th scope="col">Patient Mobile</th>
                                 <th scope="col">Patient Disease</th>
-                                <th scope="col">Patient Age</th>
+                                <th scope="col">Patient Birthday</th>
                                 <th scope="col">Patient Gender</th>
                                 <th scope="col">Patient Doctor</th>
                                 <th scope="col">Action</th>
@@ -185,7 +184,6 @@ if (!isset($_SESSION['adId'])) {
                                 <tr>
                                     <th scope="row"><?= $walkInPatient['walkInId'] ?></th>
                                     <td><?= $walkInPatient['walkInName'] ?></td>
-                                    <td><?= $walkInPatient['walkInEmail'] ?></td>
                                     <td><?= $walkInPatient['walkInAddress'] ?></td>
                                     <td><?= $walkInPatient['walkInMobile'] ?></td>
                                     <td><?= $walkInPatient['walkInDisease'] ?></td>

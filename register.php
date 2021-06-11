@@ -29,26 +29,30 @@ if (isset($_SESSION['id'])) {
     <h2 class="display-4 mb-3 text-center" style="color: rgb(15, 208, 214);">Create an account</h2>
 
     <form class="form-registration my-3" action="./core/patient/Register.php" method="post" enctype="multipart/form-data">
+        <div class="text-center text-danger">
+            <?= (isset($_GET['errRequired']) && $_GET['errRequired'] == "require_all_fields") ? "<span>Require all fields</span>" : '' ?>
+        </div>
         <div class="form-group">
             <label for="name">Full Name</label>
-            <?= (isset($_GET['errName']) || isset($_GET['errName1'])) ? '<input type="text" name="name" class="form-control is-invalid" required>' : ((isset($_GET['name'])) ? '<input type="text" name="name" value="' . $_GET['name'] . '" class="form-control" required>' : '<input type="text" name="name" class="form-control" required>'); ?>
+            <?= (isset($_GET['errName']) || isset($_GET['errName1'])) ? '<input type="text" name="name" class="form-control is-invalid" required>' : ((isset($_GET['name'])) ? '<input type="text" name="name" value="' . $_GET['name'] . '" class="form-control" required>' : '<input type="text" name="name" class="form-control" placeholder="John Doe" required>'); ?>
             <?= (isset($_GET['errName'])) ? '<small class="text-danger">Name is not valid!</small>' : ""; ?>
             <?= (isset($_GET['errName1'])) ? '<small class="text-danger">Name is already taken!</small>' : ""; ?>
         </div>
         <div class="form-group">
             <label for="email">Email</label>
-            <?= (isset($_GET['errEmail1']) || isset($_GET['errEmail2'])) ? '<input type="text" name="email" class="form-control is-invalid" required>' : ((isset($_GET['email'])) ? '<input type="text" name="email" class="form-control" value=' . $_GET['email'] . ' required>' : '<input type="text" name="email" class="form-control" required>') ?>
+            <?= (isset($_GET['errEmail1']) || isset($_GET['errEmail2'])) ? '<input type="text" name="email" class="form-control is-invalid" required>' : ((isset($_GET['email'])) ? '<input type="text" name="email" class="form-control" value="' . $_GET['email'] . '" required>' : '<input type="text" name="email" class="form-control" placeholder="johndoe@gmail.com" required>') ?>
             <?= (isset($_GET['errEmail1'])) ? '<small class="text-danger">Email is not valid!</small>' : ""; ?>
             <?= (isset($_GET['errEmail2'])) ? '<small class="text-danger">Email is already taken!</small>' : ""; ?>
         </div>
         <div class="form-group">
             <label for="address">Address</label>
-            <?= (isset($_GET['address']) ? '<input type="text" name="address" class="form-control" value="' . $_GET['address'] . '" required>' : '<input type="text" name="address" class="form-control" required>') ?>
+            <?= (isset($_GET['address']) ? '<input type="text" name="address" class="form-control" value="' . $_GET['address'] . '" required>' : '<input type="text" name="address" class="form-control" placeholder="Address Line1, Address Line 2, City/Municipality" required>') ?>
         </div>
 
         <div class="form-group">
-            <label for="age">Age</label>
-            <?= (isset($_GET['age']) ? '<input type="number" class="form-control" name="age" value=' . $_GET['age'] . ' min="1" required>' : '<input type="number" class="form-control" name="age" min="1" required>') ?>
+            <label for="age">Birthday</label>
+            <?= (isset($_GET['errBirthday']) && $_GET['errBirthday'] == "invalid_date") ? '<input type="date" class="form-control is-invalid" name="age" required>' :(isset($_GET['age']) ? '<input type="date" class="form-control" name="age" value=' . $_GET['age'] . ' required>' : '<input type="date" class="form-control" name="age" required>') ?>
+            <?= (isset($_GET['errBirthday']) && $_GET['errBirthday'] == "invalid_date") ? '<span class="text-danger">Must be a 11 years old and above</span>' : '' ?>
         </div>
 
         <div class="form-group">
@@ -95,13 +99,15 @@ if (isset($_SESSION['id'])) {
 
         <div class="form-group">
             <label for="mobile">Mobile Number</label>
-            <?= (isset($_GET['errMobile'])) ? '<input type="tel" class="form-control is-invalid" name="mobileNumber" placeholder="+639876543210 or 09876543210" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" required>' : ((isset($_GET['mobile'])) ? '<input type="tel" class="form-control" name="mobileNumber" value= "' . str_replace(' ', '+', $_GET['mobile']) . '" placeholder="+639876543210 or 09876543210" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" required>' : '<input type="tel" class="form-control" name="mobileNumber" placeholder="+639876543210 or 09876543210" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" required>'); ?>
+            <?= (isset($_GET['errMobile']) || isset($_GET['errMobileValidation'])) ? '<input type="tel" class="form-control is-invalid" name="mobileNumber" placeholder="+639876543210 or 09876543210" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" required>' : ((isset($_GET['mobile'])) ? '<input type="tel" class="form-control" name="mobileNumber" value= "' . str_replace(' ', '+', $_GET['mobile']) . '" placeholder="+639876543210 or 09876543210" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" required>' : '<input type="tel" class="form-control" name="mobileNumber" placeholder="+639876543210 or 09876543210" pattern="((^(\+)(\d){12}$)|(^\d{11}$))" required>'); ?>
             <?= (isset($_GET['errMobile'])) ? '<small class="text-danger">Mobile number is already taken!</small>' : ""; ?>
+            <?= (isset($_GET['errMobileValidation']) && $_GET['errMobileValidation'] == "incorrect_mobile_number_format") ? '<small class="text-danger">Incorrect mobile number format!</small>' : ""; ?>
         </div>
 
         <div class="form-group">
             <label for="password">Password</label>
-            <input type="password" name="password" minlength="6" class="form-control" placeholder="Minimum of 6 characters" required>
+            <input type="password" name="password" minlength="6" class="form-control <?= (isset($_GET['errPass1']) && $_GET['errPass1'] == "password_minimum_character") ? 'is-invalid': '' ?>" placeholder="Minimum of 6 characters" required>
+            <?= (isset($_GET['errPass1']) && $_GET['errPass1'] == "password_minimum_character") ? '<small class="text-danger">Password is 6 character minimum</small>': '' ?>
         </div>
 
         <div class="form-group">

@@ -135,6 +135,8 @@ $_SESSION['log_appointment'] = true;
             $appointment->aTime = $_POST['selectTime'];
             $appointment->aReason = trim(htmlspecialchars($_POST['reasonAppointment']));
 
+            $appointment->requireAllFields();
+
             $appointment->datePassByCheck();
 
             $appointment->noWeekEndServiceCheck();
@@ -194,6 +196,9 @@ $_SESSION['log_appointment'] = true;
 
 
             <form action="appointment.php" method="post" class="shadow p-3 mb-5 rounded bg-light text-dark">
+                <div class="text-center my-2">
+                <?= (isset($_GET['errRequired']) && $_GET['errRequired'] == "require_all_fields") ? '<span class="text-danger">Require all fields</span>': '' ?>
+                </div>
                 <div class="row">
                     <input type="hidden" name="id" value="<?= $_SESSION['id']; ?>">
                     <div class="col">

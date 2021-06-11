@@ -141,6 +141,16 @@ class Login extends Database
         return json_decode($result, true);
     }
 
+    public function requireAllFields()
+    {
+
+        if(empty($this->email) || empty($this->password)){
+            header("location:../../index.php?errRequired=require_all_fields");
+            exit(0);
+        }
+
+    }
+
 }
 
 $login = new Login();
@@ -151,6 +161,8 @@ if (isset($_POST['login'])) {
 
     $login->email = trim(htmlspecialchars($_POST['email']));
     $login->password = trim(htmlspecialchars($_POST['password']));
+
+    $login->requireAllFields();
 
     if($login->loginUser() == "login_success"){
 

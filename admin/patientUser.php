@@ -152,7 +152,7 @@ if (!isset($_SESSION['adId'])) {
                                 <th scope="col">Patient Email</th>
                                 <th scope="col">Patient Address</th>
                                 <th scope="col">Patient Mobile</th>
-                                <th scope="col">Patient Age</th>
+                                <th scope="col">Patient Birthday</th>
                                 <th scope="col">Patient Gender</th>
                                 <th scope="col">Action</th>
                             </tr>

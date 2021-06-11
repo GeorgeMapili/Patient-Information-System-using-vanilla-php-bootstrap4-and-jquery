@@ -468,14 +468,12 @@ if (!isset($_SESSION['adId'])) {
                     
                     datas = JSON.parse(datas);
                     
-                    var tenBelow = datas.tenBelow;
                     var elevToTwen = datas.elevToTwen;
                     var twentyOneToFourty = datas.twentyOneToFourty;
                     var fourtyOneUp = datas.fourtyOneUp;
 
                     var chartdata = {
                         labels: [
-                            "10 below age",
                             "11 to 21 age",
                             "21 to 40 age",
                             "40 up age"
@@ -487,7 +485,6 @@ if (!isset($_SESSION['adId'])) {
                             hoverBackgroundColor: 'rgba(200,200,200, 1)',
                             hoverBorderColor: 'rgba(200,200,200, 1)',
                             data: [
-                                tenBelow,
                                 elevToTwen,
                                 twentyOneToFourty,
                                 fourtyOneUp

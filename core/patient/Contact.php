@@ -15,6 +15,14 @@ class Contact extends Database
     public $mobileNumber;
     public $message;
 
+    public function requireAll()
+    {
+        if(empty($this->message)){
+            header("location:contact.php?errorMsg=require_all_fields");
+            exit(0);
+        }
+    }
+
     public function insertMessage()
     {
 

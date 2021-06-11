@@ -283,8 +283,8 @@ if(isset($_GET['pId'])){
                         </div>
                         <div class="row my-3">
                             <div class="col">
-                                <label>Age</label>
-                                <input type="number" name="age" class="form-control" min="1" value="<?= $_SESSION['ad_updateAge'] ?>">
+                                <label>Birthday</label>
+                                <input type="date" name="age" class="form-control" value="<?= $_SESSION['ad_updateAge'] ?>" required>
                             </div>
                             <div class="col">
                                 <label>Gender</label>

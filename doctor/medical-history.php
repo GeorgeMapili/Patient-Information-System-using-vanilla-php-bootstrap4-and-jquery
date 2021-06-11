@@ -149,7 +149,6 @@ $_SESSION['log_doctor_medical_history'] = true;
                         <tr>
                             <th scope="col">Patient Name</th>
                             <th scope="col">Patient Address</th>
-                            <th scope="col">Patient Email</th>
                             <th scope="col">Patient Mobile</th>
                             <th scope="col">Patient Doctor</th>
                             <th scope="col">Doctor Prescription</th>
@@ -174,7 +173,6 @@ $_SESSION['log_doctor_medical_history'] = true;
                                 <tr>
                                     <td><?= $history['pName'] ?></td>
                                     <td><?= $history['pAddress'] ?></td>
-                                    <td><?= $history['pEmail'] ?></td>
                                     <td><?= $history['pMobile'] ?></td>
                                     <td><?= $history['pDoctor'] ?></td>
                                     <td><?= $history['pPrescription'] ?></td>

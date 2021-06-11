@@ -26,6 +26,14 @@ class register extends Database
 
     private $con;
 
+    public function allCheckRequired(){
+        if(empty($this->name) || empty($this->email) || empty($this->address) || empty($this->age) || empty($this->gender) | empty($this->mobileNumber) || empty($this->password) || empty($this->confirmPassword) || empty($this->profileImg)/* */){
+            header("location:../../register.php?errRequired=require_all_fields&name=$this->name&email=$this->email&address=$this->address&age=$this->age&gender=$this->gender&mobile=$this->mobileNumber");
+            exit(0);
+        }
+        return "require_all_fields";
+    }
+
     public function nameValid()
     {
         if (!preg_match("/^([a-zA-Z' ]+)$/", $this->name)) {
@@ -80,6 +88,23 @@ class register extends Database
         return "email_is_not_taken";
     }
 
+    public function validateBirthday()
+    {
+        if(date_diff(date_create($this->age), date_create('now'))->y <= 10){
+            header("location:../../register.php?errBirthday=invalid_date&name=$this->name&email=$this->email&address=$this->address&gender=$this->gender&mobile=$this->mobileNumber");
+            exit(0);
+        }
+    }
+
+    public function mobileNumberValidation()
+    {
+        if(!preg_match("/^(09|\+639)\d{9}$/",$this->mobileNumber)){
+            header("location:../../register.php?errMobileValidation=incorrect_mobile_number_format&name=$this->name&email=$this->email&address=$this->address&age=$this->age&gender=$this->gender");
+            exit(0);
+        }
+        return "mobile_number_incorrect_format";
+    }
+
     public function mobileNumberCheckTaken()
     {
 
@@ -96,6 +121,15 @@ class register extends Database
             exit(0);
         }
         return "mobile_number_is_not_taken";
+    }
+
+    public function passwordMinimumCharacter()
+    {
+        if(strlen($this->password) < 6){
+            header("location:../../register.php?errPass1=password_minimum_character&name=$this->name&email=$this->email&address=$this->address&age=$this->age&gender=$this->gender&mobile=$this->mobileNumber");
+            exit(0);
+        }
+        return "password_minimum_character";
     }
 
     public function passwordMatchCheck()
@@ -182,7 +216,7 @@ class register extends Database
 
 $register = new Register();
 
-if (isset($_POST['register'])) {
+if (isset($_POST['register'])){
 
     function post_captcha($user_response){
         $fields_string = '';
@@ -219,11 +253,15 @@ if (isset($_POST['register'])) {
     $register->confirmPassword = trim(htmlspecialchars($_POST['confirmPassword']));
     $register->profileImg = $_FILES['profileImg'];
 
+    $register->allCheckRequired();
     $register->nameValid();
     $register->nameCheckTaken();
     $register->emailValid();
     $register->emailCheckTaken();
+    $register->validateBirthday();
+    $register->mobileNumberValidation();
     $register->mobileNumberCheckTaken();
+    $register->passwordMinimumCharacter();
     $register->passwordMatchCheck();
     $register->imageData();
     $register->imageExtesionCheck();
