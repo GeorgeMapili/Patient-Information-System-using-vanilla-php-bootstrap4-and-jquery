@@ -1,6 +1,6 @@
 # Patient Information System
 
-![Project Image](https://scontent.fceb2-1.fna.fbcdn.net/v/t1.6435-9/186466763_585664745740430_544554918140835438_n.jpg?_nc_cat=108&ccb=1-3&_nc_sid=730e14&_nc_ohc=8JeUYakM_usAX-n2NCU&_nc_ht=scontent.fceb2-1.fna&oh=3bbbe143847e6d8db8f8659b4cd48f47&oe=60C237F5)
+![Project Image](https://drive.google.com/file/d/1lpAzq6rTus3a86Qd9lUQz98D4CQfdp_o/view?usp=sharing)
 
 ---
 
