@@ -36,7 +36,7 @@ class register extends Database
 
     public function nameValid()
     {
-        if (!preg_match("/^([a-zA-Z' ]+)$/", $this->name)) {
+        if (!preg_match("/^[^\s]+( [^\s]+)+$/",$this->name)) { //!preg_match("/^([a-zA-Z' ]+)$/", $this->name)
             header("location:../../register.php?errName=name_is_not_valid&email=$this->email&address=$this->address&age=$this->age&gender=$this->gender&mobile=$this->mobileNumber");
             exit(0);
         }
