@@ -103,13 +103,14 @@ $_SESSION['log_library'] = true;
             <div class="mt-4 mb-4">
                 <h1 class="Display-4" id="primaryColor">Health Library</h1>
             </div>
-            <input class="form-control mr-sm-2" type="search" name="search" id="search" placeholder="Search Treatment or Diseases..." autocomplete="off" aria-label="Search">
-            <div class="list-group" id="data">
+            <div style="position:relative">
+                <input class="form-control mr-sm-2" type="search" name="search" id="search" placeholder="Search Treatment or Diseases..." autocomplete="off" aria-label="Search">
+                <div id="data" style="position:absolute; z-index:1000; width:100%;" class="list-group"></div>
             </div>
 
         </div>
         <div class="container">
-            <hr class="featurette-divider">
+            <hr class="featurette-divider bg-white">
         </div>
 
         <h2 class="text-center my-3 text-white">COVID UPDATE</h2>
@@ -286,7 +287,9 @@ $_SESSION['log_library'] = true;
             </div>
         </div>
 
-        <hr class="featurette-divider">
+        <div class="container">
+            <hr class="featurette-divider bg-white">
+        </div>
 
 
 
