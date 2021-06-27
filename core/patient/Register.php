@@ -222,7 +222,7 @@ if (isset($_POST['register'])){
         $fields_string = '';
         $fields = array(
             // 'secret' => '6Lch-PgaAAAAALVk7SOe2vQfDbmc-TLyTeI86fJm',
-            'secret' => '6Lf0VAIbAAAAABxhUwPrBhW6oWCay42o7K3AUPKT',
+            'secret' => '6LdSbVwbAAAAAI_vqECErBWhMLyJW46HJU51vQv_',
             'response' => $user_response
         );
         foreach($fields as $key=>$value)
