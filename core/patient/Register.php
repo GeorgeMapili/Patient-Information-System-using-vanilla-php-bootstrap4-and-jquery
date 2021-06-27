@@ -221,7 +221,8 @@ if (isset($_POST['register'])){
     function post_captcha($user_response){
         $fields_string = '';
         $fields = array(
-            'secret' => '6Lch-PgaAAAAALVk7SOe2vQfDbmc-TLyTeI86fJm',
+            // 'secret' => '6Lch-PgaAAAAALVk7SOe2vQfDbmc-TLyTeI86fJm',
+            'secret' => '6Lf0VAIbAAAAABxhUwPrBhW6oWCay42o7K3AUPKT',
             'response' => $user_response
         );
         foreach($fields as $key=>$value)

@@ -66,7 +66,8 @@ if(isset($_GET['password_id'])){
 
             <?php if(isset($_GET['errEmail']) || isset($_GET['errPass']) || isset($_GET['error'])): ?>
             <div class="form-group">
-                <div class="g-recaptcha" data-sitekey="6Lch-PgaAAAAAJ1e7bT25k9ZGKCNcKDaFcczjRQ5"></div>
+                <!-- <div class="g-recaptcha" data-sitekey="6Lch-PgaAAAAAJ1e7bT25k9ZGKCNcKDaFcczjRQ5"></div> -->
+                <div class="g-recaptcha" data-sitekey="6Lf0VAIbAAAAAPM8NuqrirSO2Zok3XWdZFCtOtUN"></div>
             </div>
             <?= (isset($_GET['error']) && $_GET['error'] == "check-the-security-CAPTCHA-box") ? '<small class="text-danger">*Check the security CAPTCHA box</small>': '' ?>
             <?php endif; ?>
