@@ -1,6 +1,7 @@
 <?php
 
 namespace core\patient;
+ob_start();
 require_once(dirname(dirname(__DIR__)). "/vendor/autoload.php");
 use PDO;
 use core\db\Database;

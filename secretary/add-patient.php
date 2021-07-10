@@ -181,6 +181,14 @@ $_SESSION['log_secretary_add_walkin'] = true;
                     exit(0);
                 }
 
+                $newAge = strtotime($age);
+                $now = strtotime(date("Y-m-d"));
+
+                if(date_diff(date_create($newAge), date_create(date("Y-m-d")))->y <= 0 && $newAge > $now){
+                    header("location:add-patient.php?errAge=invalid_date&address=$address&name=$name&email=$email&disease=$disease&mobile=$mobileNumber&gender=$gender&doctor=$doctor");
+                    exit(0);
+                }
+
                 // Doctor Fee
                 $sql = "SELECT * FROM doctor WHERE dName = :name";
                 $stmt = $con->prepare($sql);
@@ -292,7 +300,8 @@ $_SESSION['log_secretary_add_walkin'] = true;
                         </div>
                         <div class="col m-1">
                             <label>Birthday</label>
-                            <?= (isset($_GET['age'])) ? '<input type="date" name="age" value="' . $_GET['age'] . '" class="form-control" required>' : '<input type="date" name="age" class="form-control" required>' ?>
+                            <?= (isset($_GET['age'])) ? '<input type="date" name="age" value="' . $_GET['age'] . '" class="form-control" required>' : ((isset($_GET['errAge']) && $_GET['errAge'] == "invalid_date") ? '<input type="date" name="age" class="form-control is-invalid" required>' : '<input type="date" name="age" class="form-control" required>') ?>
+                            <?= (isset($_GET['errAge']) && $_GET['errAge'] == "invalid_date") ? '<small class="text-danger">Invalide date</small>': '' ?>
                         </div>
                     </div>
 

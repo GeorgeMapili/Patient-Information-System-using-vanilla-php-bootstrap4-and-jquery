@@ -10,7 +10,7 @@ if (!isset($_SESSION['nId'])) {
 
 $_SESSION['log_secretary_generate_bill_walkin'] = true;
 
-if(isset($_POST['id'])){
+if(isset($_POST['id']) || isset($_GET['errAmount']) && $_GET['errAmount'] == "too_low_amount"){
 ?>
 <!doctype html>
 <html lang="en">

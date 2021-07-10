@@ -52,12 +52,8 @@ if (isset($_POST['medicalCertBtn'])) {
     $pdf->Cell(34, 5, date("M d, Y"), 0, 1);
 
     $pdf->Cell(130, 5, 'Zip 6200', 0, 0);
-    $pdf->Cell(25, 5, 'Patient ID:', 0, 0);
-    $pdf->Cell(34, 5, $medicalCertificate['pId'], 0, 1);
-
-    $pdf->Cell(130, 5, '', 0, 0);
-    $pdf->Cell(34, 5, 'Appointment ID:', 0, 0);
-    $pdf->Cell(25, 5, $medicalCertificate['aId'], 0, 1);
+    $pdf->Cell(35, 5, 'Appointment ID:', 0, 0);
+    $pdf->Cell(24, 5, $medicalCertificate['aId'], 0, 1);
 
     $pdf->Cell('189', 10, '', 0, 1);
 

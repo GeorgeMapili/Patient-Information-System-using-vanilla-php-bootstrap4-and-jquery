@@ -126,6 +126,9 @@ $_SESSION['log_secretary_patient_records'] = true;
                                 <th scope="col">Patient Amount Pay</th>
                                 <th scope="col">Patient Change</th>
                                 <th scope="col">Date</th>
+                                <th scope="col">Lab Test</th>
+                                <th scope="col">Lab Result</th>
+                                <!-- <th scope="col">Action</th> -->
                             </tr>
                         </thead>
                         <tbody>
@@ -134,7 +137,7 @@ $_SESSION['log_secretary_patient_records'] = true;
                             if (isset($_POST['pName'])) {
                                 $pName = $_POST['pName'];
 
-                                $sql = "SELECT * FROM returnee_patient WHERE pName = :name";
+                                $sql = "SELECT * FROM returnee_patient WHERE pName = :name ORDER BY rpMadeOn DESC";
                                 $stmt = $con->prepare($sql);
                                 $stmt->bindParam(":name", $pName, PDO::PARAM_STR);
                                 $stmt->execute();
@@ -153,6 +156,14 @@ $_SESSION['log_secretary_patient_records'] = true;
                                         <td>₱<?= number_format($returneePatient['pAmountPay'], 2) ?></td>
                                         <td>₱<?= number_format($returneePatient['pChange'], 2) ?></td>
                                         <td><?= date("M d, Y", strtotime($returneePatient['rpMadeOn'])) ?></td>
+                                        <td><?= $returneePatient['labTest'] ?></td>
+                                        <td><?= $returneePatient['labResult'] ?></td>
+                                        <!-- <td>
+                                            <form action="view-medical-information.php" method="POST">
+
+                                                <input type="submit" class="btn btn-primary" value="View Medical Information">
+                                            </form>
+                                        </td> -->
                                     </tr>
                             <?php
                                 }

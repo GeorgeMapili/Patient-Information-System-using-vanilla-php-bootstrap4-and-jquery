@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 require_once '../connect.php';
 
@@ -108,20 +109,19 @@ $_SESSION['log_secretary_discharge_walkin'] = true;
         if (isset($_POST['discharge'])) {
 
             // Data in field
-            $id = $_POST['id'];
-            $name = $_POST['name'];
-            $email = $_POST['email'];
-            $address = $_POST['address'];
-            $mobilenumber = $_POST['mobilenumber'];
+            $id = $_SESSION['walkInId'];
+            $name = $_SESSION['walkInName'];
+            $address = $_SESSION['walkInAddress'];
+            $mobilenumber = $_SESSION['walkInMobile'];
             $patientStatus = $_POST['patientStatus'];
-            $doctorName = $_POST['doctorName'];
-            $doctorFee = $_POST['doctorFee'];
-            $prescribeMed = $_POST['prescribeMed'];
-            $medicineFee = $_POST['medicineFee'];
+            $doctorName = $_SESSION['walkInDoctor'];
+            $doctorFee = $_SESSION['dFee'];
+            $prescribeMed = $_SESSION['walkInPrescription'];
+            $medicineFee = $_SESSION['medicineFee'];
             $amountInput = $_POST['amountInput'];
             $totalAmount = $_POST['totalAmount'];
-            $walkInLabTest = $_POST['walkInLabTest'];
-            $walkInLabResult = $_POST['walkInLabResult'];
+            $walkInLabTest = $_SESSION['walkInLabTest'];
+            $walkInLabResult = $_SESSION['walkInLabResult'];
 
             // Change of the bill
             $changeBill = 0;
@@ -141,11 +141,10 @@ $_SESSION['log_secretary_discharge_walkin'] = true;
                 $stmt->execute();
 
                 // INSERT INTO DISCHARGED PATIENT TABLE
-                $sql = "INSERT INTO discharged_patient(pId,pName,pEmail,pAddress, pMobile, pDoctor, pPrescription, pDisease, pTotalAmount,pStatus,pAmountPay,pChange,labTest,labResult)VALUES(:id,:name,:email,:address,:mobile,:doctor,:prescription,:disease,:totalAmount,:status,:amountPay,:change,:labTest,:labResult)";
+                $sql = "INSERT INTO discharged_patient(pId,pName,pAddress, pMobile, pDoctor, pPrescription, pDisease, pTotalAmount,pStatus,pAmountPay,pChange,labTest,labResult)VALUES(:id,:name,:address,:mobile,:doctor,:prescription,:disease,:totalAmount,:status,:amountPay,:change,:labTest,:labResult)";
                 $stmt = $con->prepare($sql);
                 $stmt->bindParam(":id", $id, PDO::PARAM_INT);
                 $stmt->bindParam(":name", $name, PDO::PARAM_STR);
-                $stmt->bindParam(":email", $email, PDO::PARAM_STR);
                 $stmt->bindParam(":address", $address, PDO::PARAM_STR);
                 $stmt->bindParam(":mobile", $mobilenumber, PDO::PARAM_STR);
                 $stmt->bindParam(":doctor", $doctorName, PDO::PARAM_STR);
@@ -166,11 +165,10 @@ $_SESSION['log_secretary_discharge_walkin'] = true;
                 $stmt->execute();
 
                 // INSERT INTO RETURNEE PATIENT TABLE FOR DOCTOR MEDICAL HISTORY
-                $sql = "INSERT INTO returnee_patient(pId,pName,pEmail,pAddress, pMobile, pDoctor, pPrescription, pDisease, pTotalAmount,pStatus,pAmountPay,pChange,labTest,labResult)VALUES(:id,:name,:email,:address,:mobile,:doctor,:prescription,:disease,:totalAmount,:status,:amountPay,:change,:labTest,:labResult)";
+                $sql = "INSERT INTO returnee_patient(pId,pName,pAddress, pMobile, pDoctor, pPrescription, pDisease, pTotalAmount,pStatus,pAmountPay,pChange,labTest,labResult)VALUES(:id,:name,:address,:mobile,:doctor,:prescription,:disease,:totalAmount,:status,:amountPay,:change,:labTest,:labResult)";
                 $stmt = $con->prepare($sql);
                 $stmt->bindParam(":id", $id, PDO::PARAM_INT);
                 $stmt->bindParam(":name", $name, PDO::PARAM_STR);
-                $stmt->bindParam(":email", $email, PDO::PARAM_STR);
                 $stmt->bindParam(":address", $address, PDO::PARAM_STR);
                 $stmt->bindParam(":mobile", $mobilenumber, PDO::PARAM_STR);
                 $stmt->bindParam(":doctor", $doctorName, PDO::PARAM_STR);
@@ -206,7 +204,6 @@ $_SESSION['log_secretary_discharge_walkin'] = true;
                                 <input type="hidden" name="orderedtotalamount" value="123">
                                 <input type="hidden" name="userId" value="123"> -->
                                 <h1 class=" text-center mt-3">Patient information</h1>
-
                                 <?php
                                 $sql = "SELECT * FROM discharged_patient WHERE pId = :id";
                                 $stmt = $con->prepare($sql);
@@ -218,7 +215,6 @@ $_SESSION['log_secretary_discharge_walkin'] = true;
                                 <div class="text-center">
                                     <h1 class="display-4 mt-2 text-danger">Patient Discharged Successfully</h1>
                                     <h6 class="lead text-center">Patient Name: <?= $dischargePatient['pName'] ?></h6>
-                                    <h6 class="lead text-center">Email: <?= $dischargePatient['pEmail'] ?></h6>
                                     <h6 class="lead text-center">Address: <?= $dischargePatient['pAddress'] ?></h6>
                                     <h6 class="lead text-center">Mobile Number: <?= $dischargePatient['pMobile'] ?></h6>
                                     <h6 class="lead text-center">Patient Status: <?= ucwords($dischargePatient['pStatus']) ?></h6>

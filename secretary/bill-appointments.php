@@ -9,7 +9,7 @@ if (!isset($_SESSION['nId'])) {
 
 $_SESSION['log_secretary_generate_bill_appointment'] = true;
 
-if((isset($_POST['aid']) && isset($_POST['id'])) || isset($_POST['aId']) && isset($_POST['pId'])){
+if((isset($_POST['aid']) && isset($_POST['id'])) || isset($_GET['errAmount']) && $_GET['errAmount'] == "too_low_amount"){
 ?>
 <!doctype html>
 <html lang="en">
