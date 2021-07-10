@@ -5,10 +5,6 @@ require_once(dirname(dirname(__DIR__)). "/vendor/autoload.php");
 use PDO;
 use core\db\Database;
 
-var_dump(ini_set('display_errors', '1'));
-var_dump(ini_set('display_startup_errors', '1'));
-var_dump(error_reporting(E_ALL));exit;
-
 class register extends Database
 {
 

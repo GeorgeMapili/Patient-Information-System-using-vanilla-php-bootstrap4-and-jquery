@@ -7,10 +7,6 @@ if (isset($_SESSION['id'])) {
     exit(0);
 }
 
-ini_set('display_errors', '1');
-ini_set('display_startup_errors', '1');
-error_reporting(E_ALL);
-
 ?>
 <!doctype html>
 <html lang="en">
@@ -33,7 +29,7 @@ error_reporting(E_ALL);
 <body>
     <h2 class="display-4 mb-3 text-center" style="color: rgb(15, 208, 214);">Create an account</h2>
 
-    <form class="form-registration my-3" action="./core/patient/Register.php" method="post" enctype="multipart/form-data">
+    <form class="form-registration my-3" action="<?= __DIR__ ?>./core/patient/Register.php" method="post" enctype="multipart/form-data">
         <div class="text-center text-danger">
             <?= (isset($_GET['errRequired']) && $_GET['errRequired'] == "require_all_fields") ? "<span>Require all fields</span>" : '' ?>
         </div>
