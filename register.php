@@ -125,7 +125,8 @@ if (isset($_SESSION['id'])) {
         </div>
 
         <div class="form-group">
-            <div class="g-recaptcha" data-sitekey="6Lch-PgaAAAAAJ1e7bT25k9ZGKCNcKDaFcczjRQ5"></div>
+            <!-- <div class="g-recaptcha" data-sitekey="6Lch-PgaAAAAAJ1e7bT25k9ZGKCNcKDaFcczjRQ5"></div> -->
+            <div class="g-recaptcha" data-sitekey="6LdSbVwbAAAAAInDJFwLwj1ax0i-dgAx_LAU2FKr"></div>
         </div>
         <?= (isset($_GET['error']) && $_GET['error'] == "check-the-security-CAPTCHA-box") ? '<small class="text-danger">*Check the security CAPTCHA box</small>': '' ?>
 
