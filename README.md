@@ -25,7 +25,7 @@ Created by:
 
 ---
 
-## Deployment
+## Demo
 
 - You can access the website here http://sumc-doctors-clinic.ml -->
 
