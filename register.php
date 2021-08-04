@@ -6,6 +6,7 @@ if (isset($_SESSION['id'])) {
     header("location:home.php");
     exit(0);
 }
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -28,7 +29,7 @@ if (isset($_SESSION['id'])) {
 <body>
     <h2 class="display-4 mb-3 text-center" style="color: rgb(15, 208, 214);">Create an account</h2>
 
-    <form class="form-registration my-3" action="./core/patient/Register.php" method="post" enctype="multipart/form-data">
+    <form class="form-registration my-3" action="/core/patient/Register.php" method="post" enctype="multipart/form-data">
         <div class="text-center text-danger">
             <?= (isset($_GET['errRequired']) && $_GET['errRequired'] == "require_all_fields") ? "<span>Require all fields</span>" : '' ?>
         </div>
@@ -125,7 +126,8 @@ if (isset($_SESSION['id'])) {
         </div>
 
         <div class="form-group">
-            <div class="g-recaptcha" data-sitekey="6Lch-PgaAAAAAJ1e7bT25k9ZGKCNcKDaFcczjRQ5"></div>
+            <!-- <div class="g-recaptcha" data-sitekey="6Lch-PgaAAAAAJ1e7bT25k9ZGKCNcKDaFcczjRQ5"></div> -->
+            <div class="g-recaptcha" data-sitekey="6LdSbVwbAAAAAInDJFwLwj1ax0i-dgAx_LAU2FKr"></div>
         </div>
         <?= (isset($_GET['error']) && $_GET['error'] == "check-the-security-CAPTCHA-box") ? '<small class="text-danger">*Check the security CAPTCHA box</small>': '' ?>
 
