@@ -75,7 +75,7 @@ if (isset($_SESSION['id'])) {
 
             $id = $user['pId'];
 
-            $body = 'Click the link below to reset your password: <a href="http:localhost/pis/index.php?password_id='.$id.'">Reset password</a>';
+            $body = 'Click the link below to reset your password: <a href="localhost/pis/index.php?password_id='.$id.'">Reset password</a>';
 
             // Create a message
             $emailTo = $email;

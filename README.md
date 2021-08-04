@@ -10,9 +10,6 @@ Web based application dedicated for collecting, storing, manipulating, and makin
 
 Created by:
 
-- Aiva Abalos (System Analyst)
-- Kristine Quisel (Designer)
-- Ethyl Distrito (Project Manager)
 - George Mapili (Programmer)
 
 #### Technologies
@@ -30,19 +27,9 @@ Created by:
 
 ---
 
-## How To Use
+## Deployment
 
-#### Installation
-
-- Install xampp
-- Install php 7.\* version
-- Open the htdocs folder and save this repository
-- Rename the folder "Patient-Information-System-using-vanilla-php-bootstrap4-and-jquery" to "pis"
-- Open localhost/phpmyadmin import the file: "pis.sql" located in the sql directory inside pis
-
-<!-- #### Testing
-
-- You can access the website here https://sumc-doctors-clinic.000webhostapp.com -->
+- You can access the website here http://sumc-doctors-clinic.ml -->
 
 ---
 
@@ -74,7 +61,4 @@ SOFTWARE.
 
 ## Author's Info
 
-- Facebook - [Aiva Abalos](https://www.facebook.com/aiva.abalos.1)
-- Facebook - [Kristine Forio Quisel](https://www.facebook.com/kristine.quisel.1)
-- Facebook - [Ethyl Mae Distrito](https://www.facebook.com/ethylmae.distrito)
 - Facebook - [George Mapili](https://www.facebook.com/geo.malik.75839/)
